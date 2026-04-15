@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -47,4 +49,8 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 	            .collect(Collectors.toList());
 	}
 
+	public Page<Usuario> listadoPaginado(Pageable pageable) {
+		
+		return userRepository.findAll(pageable);
+	}
 }
