@@ -1,10 +1,11 @@
 package es.alumno.uned.controller;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import es.alumno.uned.service.UsuarioService;
  * Accedemos al listado y mantenimiento de usuarios para el Administrador.
  * Se accede al registro y la modificación en "mi Perfil" para cada usuario.
  */
+@Slf4j
 @Controller
 public class UsuarioController {
 
@@ -43,11 +45,10 @@ public class UsuarioController {
 	@GetMapping("/admin/usuario/page")
 	public String listaUsuariosPaginada(@RequestParam(name="page", defaultValue = "0") int page, Model model) {
 		Pageable pageRequest= PageRequest.of(page, 10);
-		Page<Usuario> users = userService.listadoPaginado(pageRequest);
-		
-		PaginacionComun<Usuario> paginacion = new PaginacionComun<>("/admin/usuario/page", users);
+		PaginacionComun<Usuario> paginacion = userService.listadoPaginado("/admin/usuario/page", pageRequest);
+		//PaginacionComun<Usuario> paginacion = new PaginacionComun<>("/admin/usuario/page", users);
 		model.addAttribute("titulo", "Usuarios Pag");
-		model.addAttribute("usuarios", users);
+		model.addAttribute("usuarios", userService.users2DTO(paginacion.getPagina().getContent()));
 		model.addAttribute("paginacion", true);
 		model.addAttribute("pagina", paginacion);
 		return "usuarios";

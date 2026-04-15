@@ -16,13 +16,13 @@ public class UsuarioRegistroDTO {
 	}
 
 	public UsuarioRegistroDTO(Long id, String nombre, String email, String apellido1,  String apellido2, String password, String rol) {
-		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.apellido1 = apellido1;
 		this.apellido2 = apellido2;
 		this.email = email;
 		this.password = password;
+		this.rol= rol;
 	}
 
 
@@ -80,8 +80,8 @@ public class UsuarioRegistroDTO {
 		this.rol = rol;
 	}
     public String getNombreCompleto() {
-    	return nombre!=null?nombre:""+ 
-               apellido1 !=null?" ".concat(apellido1):"" +
-    	       apellido2 !=null?" ".concat(apellido2):"";
+    	return (nombre!=null?nombre:"")+ 
+               (apellido1 !=null?" ".concat(apellido1):"") +
+    	       (apellido2 !=null?" ".concat(apellido2):"");
     }
 }

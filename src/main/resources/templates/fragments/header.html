@@ -23,7 +23,7 @@
                        data-bs-toggle="dropdown">Admin</a>
 
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" th:href="@{/admin/usuario}">Géneros</a></li>
+                        <li><a class="dropdown-item" th:href="@{/admin/usuario}" th:text="#{usuario.admin}">traducir</a></li>
                     </ul>
                 </li>
 
@@ -32,8 +32,11 @@
                     <form class="d-flex" th:action="@{/busqueda}" method="get">
                         <input class="form-control me-2" type="search" name="tema"
                                placeholder="Buscar..." aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Buscar</button>
+                        <button class="btn btn-outline-success" type="submit" th:text="#{command.buscar}">Buscar</button>
                     </form>
+                </li>
+                <li class="nav-item" sec:authorize="hasAuthority('ROLE_ESTUD')">
+                    <a class="nav-link" th:href="@{/estudiantes/miperfil}" th:text="#{estudiante.miperfil}">Home</a>
                 </li>
 
 

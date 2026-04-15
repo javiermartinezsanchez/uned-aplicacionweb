@@ -15,9 +15,10 @@ import es.alumno.uned.dto.UsuarioRegistroDTO;
 import es.alumno.uned.model.entities.SecurityUser;
 import es.alumno.uned.model.entities.Usuario;
 import es.alumno.uned.model.repository.UsuarioRepository;
+import es.alumno.uned.model.util.PaginacionComun;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService{
+public class UserDetailsServiceImpl implements UsuarioService, UserDetailsService{
 
 	private UsuarioRepository userRepository;
 
@@ -36,7 +37,11 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 		}
 	}
 	public List<UsuarioRegistroDTO> listarUsuarios() {
-	    return userRepository.findAll().stream()
+	    return users2DTO(userRepository.findAll());
+	}
+
+	public List<UsuarioRegistroDTO> users2DTO(List<Usuario> usuarios){
+		return usuarios.stream()
 	            .map(v -> new UsuarioRegistroDTO(
 	                    v.getId(),
 	                    v.getNombre(),
@@ -48,9 +53,26 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 	            ))
 	            .collect(Collectors.toList());
 	}
-
-	public Page<Usuario> listadoPaginado(Pageable pageable) {
+	public PaginacionComun<Usuario> listadoPaginado(String url, Pageable pageable) {
 		
-		return userRepository.findAll(pageable);
+		return new PaginacionComun<>(url,userRepository.findAll(pageable));
+	}
+
+	@Override
+	public Usuario guardar(UsuarioRegistroDTO registroDTO) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Usuario findById(Long id) {
+		
+		return userRepository.getReferenceById(id);
+	}
+
+	@Override
+	public Usuario findByEmail(String name) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

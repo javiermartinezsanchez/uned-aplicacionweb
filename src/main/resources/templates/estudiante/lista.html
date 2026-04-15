@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre completo</th>
+            <th>Email</th>
+            <th>Población</th>
+            <th>Provincia</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr th:each="e : ${estudiantes}">
+            <td th:text="${e.id}"></td>
+            <td th:text="${e.usuario.nombre + ' ' + e.usuario.apellido1}"></td>
+            <td th:text="${e.usuario.email}"></td>
+            <td th:text="${e.poblacion}"></td>
+            <td th:text="${e.provincia}"></td>
+        </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
