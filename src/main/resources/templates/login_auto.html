@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Acceso a la aplicación</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f5f7fa;
+        }
+        .login-container {
+            max-width: 420px;
+            margin-top: 80px;
+        }
+        .card {
+            border-radius: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container d-flex justify-content-center">
+    <div class="login-container">
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+
+                <h3 class="text-center mb-4">Iniciar sesión</h3>
+
+                <!-- Mensaje de error -->
+                <div th:if="${param.error}" class="alert alert-danger text-center">
+                    Usuario o contraseña incorrectos
+                </div>
+
+                <!-- Mensaje de logout -->
+                <div th:if="${param.logout}" class="alert alert-success text-center">
+                    Has cerrado sesión correctamente
+                </div>
+
+                <form th:action="@{/login}" method="post">
+
+                    <div class="mb-3">
+                        <label class="form-label">Usuario</label>
+                        <input type="text" name="username" class="form-control" required autofocus>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Contraseña</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        Entrar
+                    </button>
+
+                </form>
+
+                <div class="text-center mt-3">
+                    <a th:href="@{/registro}" class="text-decoration-none">¿No tienes cuenta? Regístrate</a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
