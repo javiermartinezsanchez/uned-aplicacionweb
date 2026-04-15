@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+<title></title>
+</head>
+<body>
+  <div th:if = "${totalPaginas > 1}" th:with="pageUrlPostfix = '?sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}" th:fragment="paginacion">
+	<nav>
+		<ul class="pagination justify-content-center flex-wrap">
+			<li th:class="${currentPag > 1 ? 'page-item' : 'page-item-disabled'}">
+				<a th:href="@{${pageUrlPrefix} + '/page/1' + ${pageUrlPostfix}}" class="page-link" th:text="#{paginacion.first}">First</a>
+			</li>
+			<li th:if="${currentPag > 1}" th:class="${currentPag > 1} ? 'page-item' : 'page-item-disabled'">
+				<a th:href="@{${pageUrlPrefix} + '/page/' + ${currentPag - 1} + ${pageUrlPostfix}}" class="page-link" th:text="#{paginacion.previus}">Previus</a>
+			</li>	
+			<li th:each="i: ${#numbers.sequence(1, totalPaginas)}" th:class="${currentPag != i} ? 'page-item' : 'page-item-disabled'">
+				<a th:if="${currentPag != i}" th:href="@{${pageUrlPrefix} + '/page/' + ${i} + ${pageUrlPostfix}}"  class="page-link">[[${i}]]</a>
+			</li>
+			<li th:if="${currentPag < totalPaginas}" th:class="${currentPag < totalPaginas} ? 'page-item' : 'page-item-disabled'">
+				<a th:href="@{${pageUrlPrefix} + '/page/' + ${currentPag + 1} + ${pageUrlPostfix}}" class="page-link" th:text="#{paginacion.next}">Next</a>
+			</li>	
+			<li th:if="${currentPag < totalPaginas}" th:class="${currentPag < totalPaginas} ? 'page-item' : 'page-item-disabled'">
+				<a th:href="@{${pageUrlPrefix} + '/page/' + ${totalPaginas} + ${pageUrlPostfix}}" class="page-link" th:text="#{paginacion.last}">Last</a>
+			</li>	
+			
+		</ul>
+	</nav>	
+  </div>
+</body>
+</html>
