@@ -31,7 +31,7 @@ public class EstudianteController {
     public String mostrarFormulario(Model model) {
     	model.addAttribute("url", "/registro");
         model.addAttribute("form", new RegistroEstudianteDTO());
-        return "estudiantes/editar-perfil";
+        return "estudiante/editar-perfil";
     }
 
 
@@ -43,12 +43,12 @@ public class EstudianteController {
 
         if (result.hasErrors()) {
         	model.addAttribute("url", "/registro");
-            return "/registro";
+            return "estudiante/editar-perfil";
         }
 
         estudianteService.guardar(form);
 
-        return "redirect:/estudiantes/editar-perfil?exito";
+        return "redirect:/estudiante/editar-perfil?exito";
     }
     
     @GetMapping("/estudiantes/miperfil")
@@ -61,7 +61,7 @@ public class EstudianteController {
         
     	model.addAttribute("url", "/estudiantes/miperfil");
         model.addAttribute("form", dto);
-        return "estudiantes/editar-perfil";
+        return "estudiante/editar-perfil";
     }
 
     @PostMapping("/estudiantes/miperfil")
@@ -73,7 +73,7 @@ public class EstudianteController {
 
         if (result.hasErrors()) {
         	model.addAttribute("url", "/estudiantes/miperfil");
-            return "estudiantes/editar-perfil";
+            return "estudiante/editar-perfil";
         }
 
         Usuario usuario = usuarioService.findByEmail(principal.getName());
@@ -86,12 +86,12 @@ public class EstudianteController {
         // TODO enviar el DTO alservice
         //estudianteService.guardar(estudiante);
 
-        return "redirect:/estudiantes/miperfil?exito";
+        return "redirect:/estudiante/miperfil?exito";
     }
     @GetMapping("/estudiantes/lista")
     public String listar(Model model) {
         model.addAttribute("estudiantes", estudianteService.findAll());
-        return "estudiantes/lista-estudiantes";
+        return "estudiante/lista-estudiantes";
     }
 
 }

@@ -12,6 +12,11 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfiguration {
+	
+	private final CustomLoginSuccessHandler customLoginSuccessHandler;
+	public SecurityConfiguration(CustomLoginSuccessHandler customLoginSuccessHandler) {
+		this.customLoginSuccessHandler = customLoginSuccessHandler; 
+	}
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 	    http
@@ -24,8 +29,8 @@ public class SecurityConfiguration {
 	        )
 	        .formLogin(form -> form
 	            .loginPage("/login")
-	            .successHandler(new CustomLoginSuccessHandler())
-	            .defaultSuccessUrl("/home")
+	            .successHandler(customLoginSuccessHandler)
+	            //.defaultSuccessUrl("/home")
 	            .failureUrl("/login?error=true")
 	            .permitAll()
 	        )

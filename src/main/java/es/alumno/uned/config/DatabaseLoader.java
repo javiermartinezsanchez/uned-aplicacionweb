@@ -1,5 +1,7 @@
 package es.alumno.uned.config;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +15,14 @@ import es.alumno.uned.model.repository.UsuarioRepository;
 
 /**
  * Clase inicial de carga de datos.
+ * 
+ * <ul>
+ * <li>Tabla de ROLES de usuario</li>
+ * <li>Tabla de USUARIOS</li>
+ * 
+ * <li>Tabla de ESTUDIANTES (con los datos de los usuarios EST)</li>
+ * <li>Tabla de CURSOS</li>
+ * </ul>
  */
 @Configuration
 public class DatabaseLoader {
@@ -31,17 +41,30 @@ public class DatabaseLoader {
 				
 			}
 			if (userRepo.findByEmail("admin@correo.es").isEmpty()) {
-				userRepo.save(new Usuario("admin", "admin@correo.es", "", "", passEncoder.encode("1234")  , "ADMIN", true));
+				userRepo.save(new Usuario("admin", "admin@correo.es", "", "", passEncoder.encode("1234")  , "ADMIN", true, LocalDateTime.now(), "CARGA INICIAL"));
 				
 			}
 			if (userRepo.findByEmail("profe1@correo.es").isEmpty()) {
-				userRepo.save(new Usuario("Manuel", "profe1@correo.es", "López", "Rodríguez", passEncoder.encode("1234")  , "PROFE", true));
+				userRepo.save(new Usuario("Manuel", "profe1@correo.es", "López", "Rodríguez", passEncoder.encode("1234")  , "PROFE", true, LocalDateTime.now(), "CARGA INICIAL"));
 				
 			}
 			if (userRepo.findByEmail("estudiante1@correo.es").isEmpty()) {
-				userRepo.save(new Usuario("José", "estudiante1@correo.es", "García", "Avellaneda", passEncoder.encode("1234")  , "ESTUD", true));
+				userRepo.save(new Usuario("José", "estudiante1@correo.es", "García", "Avellaneda", passEncoder.encode("1234")  , "ESTUD", true, LocalDateTime.now(), "CARGA INICIAL"));
 				
 			}
+			if (userRepo.findByEmail("luis.estudiante@correo.es").isEmpty()) {
+				userRepo.save(new Usuario("Luís", "luis.estudiante@correo.es", "Condemor", "Sindón", passEncoder.encode("1234")  , "ESTUD", true, LocalDateTime.now(), "CARGA INICIAL"));
+				
+			}
+			if (userRepo.findByEmail("julian.estudiante@correo.es").isEmpty()) {
+				userRepo.save(new Usuario("Julián", "julian.estudiante@correo.es", "SinLuz", "Solar", passEncoder.encode("1234")  , "ESTUD", true, LocalDateTime.now(), "CARGA INICIAL"));
+				
+			}
+			if (userRepo.findByEmail("maria.estudiante@correo.es").isEmpty()) {
+				userRepo.save(new Usuario("Maria", "maria.estudiante@correo.es", "Relaño", "Wilson", passEncoder.encode("1234")  , "ESTUD", true, LocalDateTime.now(), "CARGA INICIAL"));
+				
+			}
+
 		};
 	}
 	

@@ -14,7 +14,7 @@ public class RegistroEstudianteMapper {
         u.setApellido1(dto.getApellido1());
         u.setApellido2(dto.getApellido2());
         u.setEmail(dto.getEmail());
-        u.setPassword(dto.getPassword());
+        u.setPassword(dto.getNewPassword());
         return u;
     }
 

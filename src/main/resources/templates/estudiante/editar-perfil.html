@@ -7,30 +7,41 @@ th:replace="~{plantilla::layout(~{::section})}">
 </head>
 <body>
 <section>
-<form th:action="@{/estudiantes/miperfil}" th:object="${form}" method="post">
+
+<form th:action="@{${url}}" th:object="${form}" method="post">
 
     <h5 class="mt-4">Datos del Estudiante</h5>
-
+    <fieldset>
+     <legend>Identificación</legend>
     <div class="mb-3">
         <label class="form-label">Email</label>
-        <input type="email" th:field="*{email}" class="form-control">
+        <input type="email" th:field="*{email}" class="form-control w-50">
         <div class="text-danger" th:errors="*{email}"></div>
     </div>
-
+   <div class="mb-3">
+        <label class="form-label">Password</label>
+        <div class="input-group w-15">
+        <input type="password" autocomplete="Password" th:field="*{newPassword}" class="form-control">
+        </div> 
+        <div class="text-danger" th:errors="*{newPassword}"></div>
+    </div>
+</fieldset>
     <div class="mb-3">
         <label class="form-label">Nombre</label>
-        <input type="text" th:field="*{nombre}" class="form-control">
+        <div class="input-group w-50">
+        <input type="text" th:field="*{nombre}" class="form-control w-50">
+        </div>
         <div class="text-danger" th:errors="*{nombre}"></div>
     </div>
 
     <div class="mb-3">
         <label class="form-label">Apellido1</label>
-        <input type="text" th:field="*{apellido1}" class="form-control">
+        <input type="text" th:field="*{apellido1}" class="form-control w-35">
         <div class="text-danger" th:errors="*{apellido1}"></div>
     </div>
    <div class="mb-3">
         <label class="form-label">Apellido2</label>
-        <input type="text" th:field="*{apellido2}" class="form-control">
+        <input type="text" th:field="*{apellido2}" class="form-control w-35">
         <div class="text-danger" th:errors="*{apellido2}"></div>
     </div>
 
@@ -42,19 +53,21 @@ th:replace="~{plantilla::layout(~{::section})}">
 
     <div class="mb-3">
         <label class="form-label">Población</label>
-        <input type="text" th:field="*{poblacion}" class="form-control">
+        <input type="text" th:field="*{poblacion}" class="form-control  w-50">
         <div class="text-danger" th:errors="*{poblacion}"></div>
     </div>
 
     <div class="mb-3">
         <label class="form-label">Provincia</label>
-        <input type="text" th:field="*{provincia}" class="form-control">
+        <input type="text" th:field="*{provincia}" class="form-control  w-50">
         <div class="text-danger" th:errors="*{provincia}"></div>
     </div>
 
     <div class="mb-3">
         <label class="form-label">Código Postal</label>
+        <div class="col-5 col-md-5 clo-lg-4">
         <input type="text" th:field="*{codPostal}" class="form-control">
+        </div>
         <div class="text-danger" th:errors="*{codPostal}"></div>
     </div>
 

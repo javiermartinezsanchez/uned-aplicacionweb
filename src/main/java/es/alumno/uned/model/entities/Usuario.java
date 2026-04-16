@@ -1,6 +1,8 @@
 package es.alumno.uned.model.entities;
 
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,6 +42,12 @@ public class Usuario {
 	
 	@Column(name="activo")
 	private boolean activo;
+
+	@Column(name="FECHA_ALTA")
+	private LocalDateTime fAlta;
+
+	@Column(name="USUARIO_ALTA")
+	private String usuarioAlta;
 	
     @OneToOne(mappedBy="usuario",cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
@@ -48,7 +56,8 @@ public class Usuario {
     public Usuario() {
 	}
 
-	public Usuario(String nombre, String email, String apellido1, String apellido2,  String password, String roles, Boolean activo) {
+	public Usuario(String nombre, String email, String apellido1, String apellido2,  String password, String roles, Boolean activo,
+			LocalDateTime fAlta, String userAlta) {
 		super();
 		this.nombre = nombre;
 		this.apellido1 = apellido1;
@@ -57,11 +66,13 @@ public class Usuario {
 		this.password = password;
 		this.rol = roles;
 		this.activo = activo;	
+		this.fAlta = fAlta;
+		this.usuarioAlta = userAlta;
 	}
 
 	public Usuario(Long id, String nombre, String apellido1, String apellido2
-			,String email, String password, String roles, Boolean activo) {
-		this(nombre, email, apellido1, apellido2, password, roles, activo);
+			,String email, String password, String roles, Boolean activo, LocalDateTime fAlta, String userAlta) {
+		this(nombre, email, apellido1, apellido2, password, roles, activo, fAlta, userAlta);
 		this.id = id;
 		/*
 		 * this.nombre = nombre; this.apellido = apellido; this.email = email;
@@ -134,6 +145,23 @@ public class Usuario {
 		this.rol = roles;
 	}
 
+	public LocalDateTime getfAlta() {
+		return fAlta;
+	}
+
+	public void setfAlta(LocalDateTime fAlta) {
+		this.fAlta = fAlta;
+	}
+
+	public String getUsuarioAlta() {
+		return usuarioAlta;
+	}
+
+	public void setUsuarioAlta(String user) {
+		this.usuarioAlta = user;
+	}
+
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

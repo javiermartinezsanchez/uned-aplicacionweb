@@ -9,7 +9,8 @@ public class RegistroEstudianteDTO {
     // -------------------------
     // Datos del Usuario
     // -------------------------
-
+	private Long id;
+	
     @NotBlank(message = "El nombre es obligatorio")
     private String nombre;
 
@@ -17,14 +18,14 @@ public class RegistroEstudianteDTO {
     private String apellido1;
 
     private String apellido2;
-
+    //@Email(message = "{email.invalido}")
     @Email(message = "Debe introducir un email válido")
     @NotBlank(message = "El email es obligatorio")
     private String email;
 
     @NotBlank(message = "La contraseña es obligatoria")
     @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
-    private String password;
+    private String newPassword;
 
     // -------------------------
     // Datos del Estudiante
@@ -58,8 +59,8 @@ public class RegistroEstudianteDTO {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public String getNewPassword() { return newPassword; }
+    public void setNewPassword(String password) { this.newPassword = password; }
 
     public String getDireccion() { return direccion; }
     public void setDireccion(String direccion) { this.direccion = direccion; }
@@ -72,5 +73,12 @@ public class RegistroEstudianteDTO {
 
     public String getCodPostal() { return codPostal; }
     public void setCodPostal(String codPostal) { this.codPostal = codPostal; }
+    
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 }
 
