@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+th:replace="~{plantilla::layout(~{::section})}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<section>
+
+<form th:action="@{${url}}" th:object="${form}" method="post">
+
+    <h5 class="mt-4">Datos de Usuario</h5>
+    <fieldset>
+     <legend>Identificación</legend>
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" th:field="*{email}" class="form-control w-50">
+        <div class="text-danger" th:errors="*{email}"></div>
+    </div>
+   <div class="mb-3">
+        <label class="form-label">Password</label>
+        <div class="input-group w-15">
+        <input type="password" autocomplete="Password" th:field="*{newPassword}" class="form-control">
+        </div> 
+        <div class="text-danger" th:errors="*{newPassword}"></div>
+    </div>
+</fieldset>
+    <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <div class="input-group w-50">
+        <input type="text" th:field="*{nombre}" class="form-control w-50">
+        </div>
+        <div class="text-danger" th:errors="*{nombre}"></div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Apellido1</label>
+        <input type="text" th:field="*{apellido1}" class="form-control w-35">
+        <div class="text-danger" th:errors="*{apellido1}"></div>
+    </div>
+   <div class="mb-3">
+        <label class="form-label">Apellido2</label>
+        <input type="text" th:field="*{apellido2}" class="form-control w-35">
+        <div class="text-danger" th:errors="*{apellido2}"></div>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+</form>
+</section>
+</body>
+</html>

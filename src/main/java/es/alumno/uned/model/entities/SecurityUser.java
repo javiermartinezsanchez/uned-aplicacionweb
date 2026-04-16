@@ -13,6 +13,10 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 public class SecurityUser implements UserDetails{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Usuario user;
 	
 	public SecurityUser(Usuario user) {

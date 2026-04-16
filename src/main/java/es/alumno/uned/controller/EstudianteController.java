@@ -1,7 +1,6 @@
 package es.alumno.uned.controller;
 
 import es.alumno.uned.dto.PerfilEstudianteDTO;
-import es.alumno.uned.dto.RegistroEstudianteDTO;
 import es.alumno.uned.mapper.RegistroEstudianteMapper;
 import es.alumno.uned.model.entities.Estudiante;
 import es.alumno.uned.model.entities.Usuario;
@@ -11,6 +10,8 @@ import jakarta.validation.Valid;
 
 import java.security.Principal;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,23 +31,27 @@ public class EstudianteController {
     @GetMapping("/registro")
     public String mostrarFormulario(Model model) {
     	model.addAttribute("url", "/registro");
-        model.addAttribute("form", new RegistroEstudianteDTO());
+        model.addAttribute("form", new PerfilEstudianteDTO());
         return "estudiante/editar-perfil";
     }
 
-
     @PostMapping("/registro")
-    public String registrar(
-            @Valid @ModelAttribute("form") RegistroEstudianteDTO form,
+    public String registrar(@AuthenticationPrincipal UserDetails usuario,
+            @Valid @ModelAttribute("form") PerfilEstudianteDTO form,
             BindingResult result,
             Model model) {
-
         if (result.hasErrors()) {
         	model.addAttribute("url", "/registro");
             return "estudiante/editar-perfil";
         }
-
-        estudianteService.guardar(form);
+        String usuarioAlta;
+        if (usuario.getUsername() == null) {
+        	usuarioAlta = form.getEmail();
+        }
+        else {
+        	usuarioAlta = usuario.getUsername();
+        }
+        estudianteService.guardar(form, usuarioAlta);
 
         return "redirect:/estudiante/editar-perfil?exito";
     }

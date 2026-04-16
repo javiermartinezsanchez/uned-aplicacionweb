@@ -1,17 +1,38 @@
 package es.alumno.uned.dto;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 /**
  * DTO de Usuario para no propagar "entities" de BD.
  */
 public class UsuarioRegistroDTO {
 
+    // Datos del Usuario
+    // -------------------------
 	private Long id;
-	private String nombre;
-	private String apellido1;
-	private String apellido2;
-	private String email;
-	private String password;
-    private String rol;
+	
+    @NotBlank(message = "El nombre es obligatorio")
+    private String nombre;
 
+    @NotBlank(message = "El primer apellido es obligatorio")
+    private String apellido1;
+
+    private String apellido2;
+    //@Email(message = "{email.invalido}")
+    @Email(message = "Debe introducir un email válido")
+    @NotBlank(message = "El email es obligatorio")
+    private String email;
+
+    @NotBlank(message = "La contraseña es obligatoria")
+    @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
+    private String newPassword;
+
+    @NotBlank(message = "Rol del usuario es obligatorio")
+    private String rol;
+    
+	
 	public UsuarioRegistroDTO() {
 	}
 
@@ -21,7 +42,7 @@ public class UsuarioRegistroDTO {
 		this.apellido1 = apellido1;
 		this.apellido2 = apellido2;
 		this.email = email;
-		this.password = password;
+		this.newPassword = password;
 		this.rol= rol;
 	}
 
@@ -65,12 +86,12 @@ public class UsuarioRegistroDTO {
 		this.email = email;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getNewPassword() {
+		return newPassword;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setNewPassword(String password) {
+		this.newPassword = password;
 	}
 
 	public String getRol() {

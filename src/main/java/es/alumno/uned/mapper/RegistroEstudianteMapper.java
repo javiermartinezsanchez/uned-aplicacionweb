@@ -1,6 +1,5 @@
 package es.alumno.uned.mapper;
 
-import es.alumno.uned.dto.RegistroEstudianteDTO;
 import es.alumno.uned.dto.PerfilEstudianteDTO;
 import es.alumno.uned.model.entities.Estudiante;
 import es.alumno.uned.model.entities.Usuario;
@@ -8,7 +7,7 @@ import es.alumno.uned.model.entities.Usuario;
 public class RegistroEstudianteMapper {
 
     // DTO → Usuario
-    public static Usuario toUsuario(RegistroEstudianteDTO dto) {
+    public static Usuario toUsuario(PerfilEstudianteDTO dto) {
         Usuario u = new Usuario();
         u.setNombre(dto.getNombre());
         u.setApellido1(dto.getApellido1());
@@ -19,7 +18,7 @@ public class RegistroEstudianteMapper {
     }
 
     // DTO → Estudiante
-    public static Estudiante toEstudiante(RegistroEstudianteDTO dto, Usuario usuario) {
+    public static Estudiante toEstudiante(PerfilEstudianteDTO dto, Usuario usuario) {
         Estudiante e = new Estudiante();
         e.setId(usuario.getId());
         e.setUsuario(usuario);

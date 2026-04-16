@@ -1,14 +1,16 @@
 package es.alumno.uned.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.data.domain.Page;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import es.alumno.uned.dto.UsuarioRegistroDTO;
@@ -22,6 +24,8 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 
 	private UsuarioRepository userRepository;
 
+	@Autowired
+	private PasswordEncoder passEncoder;
 	public UserDetailsServiceImpl(UsuarioRepository userRepository) {
 		this.userRepository = userRepository;
 	}
@@ -59,9 +63,20 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 	}
 
 	@Override
-	public Usuario guardar(UsuarioRegistroDTO registroDTO) {
-		// TODO Auto-generated method stub
-		return null;
+	public Usuario grabar(UsuarioRegistroDTO registroDTO, String usuarioAlta) {
+		Usuario user = findByEmail(registroDTO.getEmail());
+		if (user == null) {
+			user = new Usuario();
+			user.setEmail(registroDTO.getEmail());
+			user.setPassword(passEncoder.encode(registroDTO.getNewPassword()));
+			user.setUsuarioAlta(usuarioAlta);
+			user.setfAlta(LocalDateTime.now());
+			user.setActivo(true);
+		}
+		user.setNombre(registroDTO.getNombre());
+		user.setApellido1(registroDTO.getApellido1());
+		user.setApellido2(registroDTO.getApellido2());
+		return userRepository.save(user);
 	}
 
 	@Override
@@ -71,8 +86,11 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 	}
 
 	@Override
-	public Usuario findByEmail(String name) {
-		// TODO Auto-generated method stub
+	public Usuario findByEmail(String email) {
+		Optional<Usuario> user = userRepository.findByEmail(email);
+		if (user.isPresent()) {
+			return user.get();
+		}
 		return null;
 	}
 }

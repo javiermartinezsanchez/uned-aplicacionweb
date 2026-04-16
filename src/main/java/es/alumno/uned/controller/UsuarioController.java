@@ -1,21 +1,24 @@
 package es.alumno.uned.controller;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import es.alumno.uned.dto.UsuarioRegistroDTO;
 import es.alumno.uned.model.entities.Usuario;
 import es.alumno.uned.model.util.PaginacionComun;
 import es.alumno.uned.service.UserDetailsServiceImpl;
 import es.alumno.uned.service.UsuarioService;
+import jakarta.validation.Valid;
 
 /**
  * Controlador de mantenimiento de usuarios.
@@ -28,10 +31,10 @@ import es.alumno.uned.service.UsuarioService;
 public class UsuarioController {
 
 	
-	private UserDetailsServiceImpl userService;
+	private UsuarioService userService;
 	
 	
-	public UsuarioController(UserDetailsServiceImpl userService) {
+	public UsuarioController(UsuarioService userService) {
 		super();
 		this.userService = userService;
 	}
@@ -39,7 +42,7 @@ public class UsuarioController {
     public String listaUsuarios(Model model) {
 		model.addAttribute("usuarios", userService.listarUsuarios());
 		model.addAttribute("paginacion", false);
-		return "usuarios";
+		return "admin/usuarios";
 	}
 	
 	@GetMapping("/admin/usuario/page")
@@ -51,18 +54,27 @@ public class UsuarioController {
 		model.addAttribute("usuarios", userService.users2DTO(paginacion.getPagina().getContent()));
 		model.addAttribute("paginacion", true);
 		model.addAttribute("pagina", paginacion);
-		return "usuarios";
+		return "admin/usuarios";
 	}
 	@GetMapping("/admin/newUser")
-	public String nuevoUsuario() {
-		
-		return "usuario";
+	public String nuevoUsuario(Model model) {
+    	model.addAttribute("url", "/admin/newUser");
+        model.addAttribute("form", new UsuarioRegistroDTO());
+		return "admin/usuario";
 	}
 
 	@PostMapping("/admin/newUser")
-	public String grabarUsuario() {
-		
-		return "usuarios";
+	public String grabarUsuario(@AuthenticationPrincipal UserDetails usuario,
+            @Valid @ModelAttribute("form") UsuarioRegistroDTO form,
+            BindingResult result,
+            Model model) {
+
+        if (result.hasErrors()) {
+        	model.addAttribute("url", "/admin/newUser");
+            return "admin/usuario";
+        }
+        userService.grabar(form,usuario.getUsername());
+		return "admin/usuarios";
 	}
 
 }
