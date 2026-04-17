@@ -11,21 +11,19 @@ th:replace="~{plantilla::layout(~{::section})}">
 <form th:action="@{${url}}" th:object="${form}" method="post">
 
     <h5 class="mt-4">Datos del Estudiante</h5>
-    <fieldset>
-     <legend>Identificación</legend>
+
     <div class="mb-3">
         <label class="form-label">Email</label>
         <input type="email" th:field="*{email}" class="form-control w-50">
         <div class="text-danger" th:errors="*{email}"></div>
     </div>
-   <div class="mb-3">
+   <div class="mb-3" >
         <label class="form-label">Password</label>
         <div class="input-group w-15">
         <input type="password" autocomplete="Password" th:field="*{newPassword}" class="form-control">
         </div> 
         <div class="text-danger" th:errors="*{newPassword}"></div>
     </div>
-</fieldset>
     <div class="mb-3">
         <label class="form-label">Nombre</label>
         <div class="input-group w-50">

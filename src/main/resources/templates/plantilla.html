@@ -6,7 +6,6 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <title th:text="${title} ?: 'Mi Aplicación'"></title>
    <link rel="stylesheet" th:href="@{/webjars/bootstrap/{version}/css/bootstrap.min.css(version=${@webjarsConfig.bootstrap})}" />
    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/{version}/font/bootstrap-icons.css(version=${@webjarsConfig.bootstrapicons})}"/>
-    <script th:src="@{/webjars/bootstrap/{version}/js/bootstrap.min.js(version=${@webjarsConfig.bootstrap})}"></script>
     <script th:src="@{/webjars/bootstrap/{version}/js/bootstrap.bundle.min.js(version=${@webjarsConfig.bootstrap})}"></script>
  </head>
 <body>

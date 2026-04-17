@@ -14,8 +14,11 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
 	
 	private final CustomLoginSuccessHandler customLoginSuccessHandler;
-	public SecurityConfiguration(CustomLoginSuccessHandler customLoginSuccessHandler) {
+	private final CustomLogoutHandler customLogoutHandler;
+	public SecurityConfiguration(CustomLoginSuccessHandler customLoginSuccessHandler, 
+			CustomLogoutHandler customLogoutHandler) {
 		this.customLoginSuccessHandler = customLoginSuccessHandler; 
+		this.customLogoutHandler = customLogoutHandler;
 	}
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -24,6 +27,8 @@ public class SecurityConfiguration {
 	            .requestMatchers("/", "/home", "/registro/**",
 	                             "/webjars/**", "/login", "/login*",
 	                             "/css/**", "/js/**", "/images/**", "/error").permitAll()
+	            .requestMatchers("/estudiante/**").hasAuthority("ROLE_ESTUD")
+	            .requestMatchers("/profesor/**").hasAuthority("ROLE_PROFE")
 	            .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
 	            .anyRequest().authenticated()
 	        )
@@ -36,6 +41,7 @@ public class SecurityConfiguration {
 	        )
 	        .logout(logout -> logout
 	            .logoutUrl("/logout")
+	            .addLogoutHandler(customLogoutHandler)
 	            .logoutSuccessUrl("/login?logout")
 	            .invalidateHttpSession(true)
 	            .clearAuthentication(true)
