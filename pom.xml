@@ -97,6 +97,13 @@
 		    <artifactId>bootstrap</artifactId>
 		    <version>5.3.3</version>
 		</dependency>
+		<!-- Source: https://mvnrepository.com/artifact/org.webjars.npm/bootstrap-icons -->
+		<dependency>
+		    <groupId>org.webjars.npm</groupId>
+		    <artifactId>bootstrap-icons</artifactId>
+		    <version>1.13.1</version>
+		    <scope>compile</scope>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.webjars/webjars-locator-core -->
 		<dependency>
 		    <groupId>org.webjars</groupId>

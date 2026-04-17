@@ -13,23 +13,22 @@ public class UsuarioRegistroDTO {
     // -------------------------
 	private Long id;
 	
-    @NotBlank(message = "El nombre es obligatorio")
+    @NotBlank(message = "{validations.message.nombre.mandatory}")
     private String nombre;
 
-    @NotBlank(message = "El primer apellido es obligatorio")
+    @NotBlank(message = "{validations.message.apellido1.mandatory}")
     private String apellido1;
 
     private String apellido2;
-    //@Email(message = "{email.invalido}")
-    @Email(message = "Debe introducir un email válido")
-    @NotBlank(message = "El email es obligatorio")
+    @Email(message = "{validations.message.email.validformat}")
+    @NotBlank(message = "{validations.message.email.mandatory}")
     private String email;
 
-    @NotBlank(message = "La contraseña es obligatoria")
-    @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
+    @NotBlank(message = "{validations.message.password.mandatory}")
+    @Size(min = 6, message = "{validations.message.password.validformat}")
     private String newPassword;
 
-    @NotBlank(message = "Rol del usuario es obligatorio")
+    @NotBlank(message = "{validations.message.rol.mandatory}")
     private String rol;
     
 	

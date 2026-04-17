@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 public class WebjarsConfig {
 
 	String bootstrap = "5.3.3";
+	String bootstrapicons = "1.13.1";
 	String jquery;
 	public String getBootstrap() {
 		return bootstrap;
@@ -21,6 +22,10 @@ public class WebjarsConfig {
 	public void setBootstrap(String bootstrap) {
 		this.bootstrap = bootstrap;
 	}
+	public String getBootstrapicons() {
+		return bootstrapicons;
+	}
+	
 	public String getJquery() {
 		return jquery;
 	}

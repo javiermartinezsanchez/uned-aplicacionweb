@@ -6,16 +6,16 @@ import jakarta.validation.constraints.Size;
 public class PerfilEstudianteDTO extends UsuarioRegistroDTO {
 
     // Estudiante
-    @NotBlank(message = "La dirección es obligatoria")
+    @NotBlank(message = "{validations.message.direccion.mandatory}")
     private String direccion;
 
-    @NotBlank(message = "La población es obligatoria")
+    @NotBlank(message = "{validations.message.poblacion.mandatory}")
     private String poblacion;
 
-    @NotBlank(message = "La provincia es obligatoria")
+    @NotBlank(message = "{validations.message.provincia.mandatory}")
     private String provincia;
 
-    @Size(min = 5, max = 5, message = "El código postal debe tener 5 dígitos")
+    @Size(min = 5, max = 5, message = "{validations.message.codpostal.format}")
     private String codPostal;
 
 	public String getDireccion() {

@@ -36,10 +36,16 @@ public class HomeController {
 		return "login";
 	}
 	
-	@GetMapping("/admin")
-	@PreAuthorize("hasAuthority('ADMIN')")
-	public String adminHome() {
-		return "Admin";
+	@GetMapping("/admin/home")
+	public String adminHome(Model modelo) {
+		modelo.addAttribute("urlUser", "admin");
+		return "admin/home";
 	}
-	
+
+	@GetMapping("/profesor/home")
+	public String profeHome(Model modelo) {
+		modelo.addAttribute("urlUser", "profesor");
+		return "profesor/home";
+	}
+
 }
