@@ -1,5 +1,14 @@
 # Compiled class file
 *.class
+target/
+.mvn/
+.settings/
+logs/
+
+.classpath
+.factorypath
+
+
 
 # Log file
 *.log

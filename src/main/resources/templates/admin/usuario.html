@@ -9,10 +9,7 @@ th:replace="~{plantilla::layout(~{::section})}">
 <section>
 
 <form th:action="@{${url}}" th:object="${form}" method="post">
-
-    <h5 class="mt-4">Datos de Usuario</h5>
-    <fieldset>
-     <legend>Identificación</legend>
+	<input type="hidden" th:field="*{id}" />
     <div class="mb-3">
         <label class="form-label">Email</label>
         <input type="email" th:field="*{email}" class="form-control w-50">
@@ -25,7 +22,6 @@ th:replace="~{plantilla::layout(~{::section})}">
         </div> 
         <div class="text-danger" th:errors="*{newPassword}"></div>
     </div>
-</fieldset>
     <div class="mb-3">
         <label class="form-label">Nombre</label>
         <div class="input-group w-50">

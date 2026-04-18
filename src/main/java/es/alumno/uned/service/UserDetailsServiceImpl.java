@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import es.alumno.uned.dto.UsuarioRegistroDTO;
+import es.alumno.uned.mapper.UsuarioRegistroMapper;
 import es.alumno.uned.model.entities.SecurityUser;
 import es.alumno.uned.model.entities.Usuario;
 import es.alumno.uned.model.repository.UsuarioRepository;
@@ -92,5 +93,11 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 			return user.get();
 		}
 		return null;
+	}
+
+	@Override
+	public UsuarioRegistroDTO getUsuario(Long id) {
+		
+		return UsuarioRegistroMapper.toDTO(findById(id));
 	}
 }

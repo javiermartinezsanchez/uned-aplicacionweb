@@ -7,7 +7,15 @@ public class UsuarioRegistroMapper {
 
 	public static UsuarioRegistroDTO toDTO(Usuario user) {
 		
-		UsuarioRegistroDTO userDTO = new UsuarioRegistroDTO();
+		UsuarioRegistroDTO userDTO = new UsuarioRegistroDTO(
+				user.getId(),
+				user.getNombre(),
+				user.getEmail(),
+				user.getApellido1(),
+				user.getApellido2(),
+				user.getPassword(),
+				user.getRol()
+        );
 		
 		return userDTO;
 	}

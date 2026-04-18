@@ -37,6 +37,15 @@ public interface UsuarioService extends UserDetailsService{
 	public Usuario findById(Long id);
 
 	/**
+	 * Búsqueda de usuarios por su ID
+	 * Para las vistas devolvemos el DTO
+	 * 
+	 * @param id Valor del id del Usuario
+	 * @return Usuario encontrado.
+	 */
+	public UsuarioRegistroDTO getUsuario(Long id);
+
+	/**
 	 * Búsqueda de usuarios por su email (username para UserDetails)
 	 * 
 	 * @param email Email del usuario
