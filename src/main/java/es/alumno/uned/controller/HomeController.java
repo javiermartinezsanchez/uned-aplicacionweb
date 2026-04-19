@@ -36,7 +36,7 @@ public class HomeController {
 		 modelo.addAttribute("urlUser", "admin");
 		}
 		//modelo.addAttribute("cursos", servicio.listarCursos());
-		System.out.println("Locale actual: " + LocaleContextHolder.getLocale());
+		System.out.println("urlUser: " + urlUser);
 		return urlUser.concat("/home");
 	}
 	@GetMapping("/home")

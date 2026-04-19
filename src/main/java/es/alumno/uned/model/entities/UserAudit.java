@@ -57,11 +57,11 @@ public class UserAudit {
 		this.mensaje = mensaje;
 	}
 	
-	public LocalDateTime getTimeStamp() {
+	public LocalDateTime getFechaAudit() {
 		return fechaAudit;
 	}
 	
-	public void setTimeStamp(LocalDateTime timeStamp) {
-		this.fechaAudit = timeStamp;
+	public void setTimeStamp(LocalDateTime fechaAudit) {
+		this.fechaAudit = fechaAudit;
 	}
 }

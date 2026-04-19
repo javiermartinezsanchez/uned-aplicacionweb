@@ -1,0 +1,49 @@
+<section th:fragment="frmUsuario">
+	<input type="hidden" th:field="*{id}" />
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" th:field="*{email}" class="form-control w-50">
+        <div class="text-danger" th:errors="*{email}"></div>
+    </div>
+   <div class="mb-3">
+        <label class="form-label">Password</label>
+        <div class="input-group w-15">
+        <input type="password" autocomplete="Password" th:field="*{newPassword}" class="form-control">
+        </div> 
+        <div class="text-danger" th:errors="*{newPassword}"></div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <div class="input-group w-50">
+        <input type="text" th:field="*{nombre}" class="form-control w-50">
+        </div>
+        <div class="text-danger" th:errors="*{nombre}"></div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Apellido1</label>
+        <input type="text" th:field="*{apellido1}" class="form-control w-35">
+        <div class="text-danger" th:errors="*{apellido1}"></div>
+    </div>
+   <div class="mb-3">
+        <label class="form-label">Apellido2</label>
+        <input type="text" th:field="*{apellido2}" class="form-control w-35">
+        <div class="text-danger" th:errors="*{apellido2}"></div>
+    </div>
+   <div class="mb-3" sec:authorize="hasAnyRole('ADMIN')">
+        <label class="form-label">Rol</label>
+        <select class="form-select" th:field="*{rol}">
+    		<option value="">-- Selecciona un rol --</option>
+    		<option th:each="r : ${roles}"
+            		th:value="${r.nombre}"
+            		th:text="${r.descripcion}">
+    		</option>
+		</select>
+        <div class="text-danger" th:errors="*{rol}"></div>
+    </div>
+   <div class="mb-3" sec:authorize="not hasAnyRole('ADMIN')">
+        <label class="form-label">Rol</label>
+	    <input type="text" th:field="*{rol}" class="form-control w-35">
+   </div>
+
+</section>

@@ -1,0 +1,42 @@
+<nav th:if="${pagina.totalPag > 1}" th:fragment="paginaciontabla">
+    <div class="d-flex gap-2 flex-wrap">
+
+        <!-- Primera -->
+        <a class="btn btn-sm"
+           th:classappend="${pagina.first} ? 'btn-secondary disabled' : 'btn-outline-primary'"
+           th:href="${pagina.first} ? null : @{${pagina.url}(page=0)}">
+            Primera
+        </a>
+
+        <!-- Anterior -->
+        <a class="btn btn-sm"
+           th:classappend="${not pagina.hasPrevious} ? 'btn-secondary disabled' : 'btn-outline-primary'"
+           th:href="${not pagina.hasPrevious} ? null : @{${pagina.url}(page=${pagina.pagActual-2})}">
+            Anterior
+        </a>
+
+        <!-- Números -->
+        <span th:each="elemento : ${pagina.paginas}">
+            <a class="btn btn-sm"
+               th:classappend="${elemento.actual} ? 'btn-primary' : 'btn-outline-primary'"
+               th:href="${elemento.actual} ? null : @{${pagina.url}(page=${elemento.numero-1})}"
+               th:text="${elemento.numero}">
+            </a>
+        </span>
+
+        <!-- Siguiente -->
+        <a class="btn btn-sm"
+           th:classappend="${not pagina.hasNext} ? 'btn-secondary disabled' : 'btn-outline-primary'"
+           th:href="${not pagina.hasNext} ? null : @{${pagina.url}(page=${pagina.pagActual})}">
+            Siguiente
+        </a>
+
+        <!-- Última -->
+        <a class="btn btn-sm"
+           th:classappend="${pagina.last} ? 'btn-secondary disabled' : 'btn-outline-primary'"
+           th:href="${pagina.last} ? null : @{${pagina.url}(page=${pagina.totalPag-1})}">
+            Última
+        </a>
+
+    </div>
+</nav>

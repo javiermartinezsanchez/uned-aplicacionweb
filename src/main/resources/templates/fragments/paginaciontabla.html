@@ -1,26 +1,51 @@
-<nav th:if = "${pagina.totalPag > 1}" th:fragment="paginaciontabla">
-  <ul>
-  	<li>
-  		<span th:if="${pagina.first}"> primera</span>
-  		<a th:if="${not pagina.first}" th:href="@{${pagina.url}(page=0)}">primera</a>
-  	</li>
-  	<li>
-  		<span th:if="${not pagina.hasPrevious}"> anterior</span>
-  		<a th:if="${pagina.hasPrevious}" th:href="@{${pagina.url}(page=${pagina.pagActual-2})}">anterior</a>
-  	</li>
-  	<li th:each="elemento : ${pagina.paginas}">
-  	<span th:if="${elemento.actual}" th:text="${elemento.numero}"></span>
-  	<a th:if="${not elemento.actual}"
-  	   th:href="@{${pagina.url}(page=${elemento.numero-1})}"
-  	   th:text="${elemento.numero}"></a>
-  	</li>
-	<li><span th:if="${not pagina.hasNext}">siguiente</span>
-	<a th:if="${pagina.hasNext}"
-	   th:href="@{${pagina.url}(page=${pagina.pagActual})}">siguiente</a>
-	</li>
-	<li><span th:if="${pagina.last}">última</span>
-	  <a th:if="${not pagina.last}"
-	  th:href="@{${pagina.url}(page=${pagina.totalPag-1})}">última</a>
-	</li>     
-  </ul>
+<nav th:if="${pagina.totalPag > 1}" th:fragment="paginaciontabla">
+    <ul class="pagination justify-content-center">
+
+        <!-- Primera -->
+        <li class="page-item"
+            th:classappend="${pagina.first} ? ' disabled'">
+            <a class="page-link"
+               th:href="${pagina.first} ? null : @{${pagina.url}(page=0)}">
+                <i class="bi bi-skip-start-fill"></i>
+            </a>
+        </li>
+
+        <!-- Anterior -->
+        <li class="page-item"
+            th:classappend="${not pagina.hasPrevious} ? ' disabled'">
+            <a class="page-link"
+               th:href="${not pagina.hasPrevious} ? null : @{${pagina.url}(page=${pagina.pagActual-2})}">
+                <i class="bi bi-chevron-left"></i>
+            </a>
+        </li>
+
+        <!-- Números -->
+        <li class="page-item"
+            th:each="elemento : ${pagina.paginas}"
+            th:classappend="${elemento.numero == pagina.pagActual} ? ' active'">
+            <a class="page-link"
+               th:href="${elemento.numero == pagina.pagActual} ? null : @{${pagina.url}(page=${elemento.numero-1})}"
+               th:text="${elemento.numero}">
+            </a>
+        </li>
+
+        <!-- Siguiente -->
+        <li class="page-item"
+            th:classappend="${not pagina.hasNext} ? ' disabled'">
+            <a class="page-link"
+               th:href="${not pagina.hasNext} ? null : @{${pagina.url}(page=${pagina.pagActual})}">
+                <i class="bi bi-chevron-right"></i>
+            </a>
+        </li>
+
+        <!-- Última -->
+        <li class="page-item"
+            th:classappend="${pagina.last} ? ' disabled'">
+            <a class="page-link"
+               th:href="${pagina.last} ? null : @{${pagina.url}(page=${pagina.totalPag-1})}">
+                <i class="bi bi-skip-end-fill"></i>
+            </a>
+        </li>
+
+    </ul>
 </nav>

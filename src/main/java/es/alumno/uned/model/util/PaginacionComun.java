@@ -72,7 +72,7 @@ public class PaginacionComun<T> {
 			}
 		}
 		
-		for (int i=1; 1<hasta;i++) {
+		for (int i=1; i<hasta;i++) {
 			paginas.add(new Pagina(desde+i, pagActual == desde+1));
 		}
 		

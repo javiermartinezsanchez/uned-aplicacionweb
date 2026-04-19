@@ -12,10 +12,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
 
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-
-
-                  <!-- Buscador -->
+                <!-- Buscador por temas. -->
                 <li class="nav-item">
                     <form class="d-flex" th:action="@{/busqueda}" method="get">
                         <input class="form-control me-2" type="search" name="tema"
@@ -35,9 +32,10 @@
         		</a>
         		  <ul class="dropdown-menu">
           		<li class="nav-item" sec:authorize="isAuthenticated()">
-            		<a class="dropdown-item" th:href="@{${urlUser}+'/miperfil'}" th:text="#{estudiante.miperfil}"> <i class="bi-person-fill"></i> Perfil
+            		<a class="dropdown-item" th:href="@{/{urlUser}/miperfil(urlUser=${urlUser})}" th:text="#{estudiante.miperfil}"> <i class="bi-person-fill"></i> Perfil
             		</a>
-          		</li>
+          		</li>      
+       
                  <!-- Si es estudiante -->
                 <li class="nav-item" sec:authorize="hasAnyRole('ESTUD')">
                     <a class="nav-link" th:href="@{${urlUser}+'/miscursos'}">Mis Cursos</a>

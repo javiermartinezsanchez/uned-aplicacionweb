@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import es.alumno.uned.dto.UsuarioRegistroDTO;
 import es.alumno.uned.model.entities.Usuario;
 import es.alumno.uned.model.util.PaginacionComun;
+import es.alumno.uned.service.RolService;
 import es.alumno.uned.service.UserDetailsServiceImpl;
 import es.alumno.uned.service.UsuarioService;
 import jakarta.validation.Valid;
@@ -34,10 +35,11 @@ public class UsuarioController {
 	
 	private UsuarioService userService;
 	
-	
-	public UsuarioController(UsuarioService userService) {
+	private RolService rolService;
+	public UsuarioController(UsuarioService userService, RolService rolService) {
 		super();
 		this.userService = userService;
+		this.rolService = rolService;
 	}
 	@GetMapping("/admin/usuario")
     public String listaUsuarios(Model model) {
@@ -59,19 +61,20 @@ public class UsuarioController {
 	}
 	@GetMapping("/admin/newUser")
 	public String nuevoUsuario(Model model) {
-    	model.addAttribute("url", "/admin/newUser");
+    	model.addAttribute("url", "/admin/usuario");
         model.addAttribute("form", new UsuarioRegistroDTO());
+        model.addAttribute("rol", rolService.getList());
 		return "admin/usuario";
 	}
 
-	@PostMapping("/admin/newUser")
+	@PostMapping("/admin/usuario")
 	public String grabarUsuario(@AuthenticationPrincipal UserDetails usuario,
             @Valid @ModelAttribute("form") UsuarioRegistroDTO form,
             BindingResult result,
             Model model) {
 
         if (result.hasErrors()) {
-        	model.addAttribute("url", "/admin/newUser");
+        	model.addAttribute("url", "/admin/usuario");
             return "admin/usuario";
         }
         userService.grabar(form,usuario.getUsername());
@@ -81,6 +84,7 @@ public class UsuarioController {
     public String modUsuario(Model model, @PathVariable("id") Long id) {
 		model.addAttribute("url", "/admin/usuario");
 		model.addAttribute("form", userService.getUsuario(id));
+		model.addAttribute("roles", rolService.getList());
 		return "admin/usuario";
 	}
 }
