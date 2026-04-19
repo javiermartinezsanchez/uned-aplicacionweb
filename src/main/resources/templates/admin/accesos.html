@@ -10,12 +10,34 @@
 	<div class="container">
 		<h1>Accesos</h1>
 		<br>
-		<h4 ><span th:text="#{usuario.title} + ':'"></span>
-			<span sec:authentication="principal.username"></span>
-		</h4>
-		<div class="form-group">
-			<span><a th:href="@{/admin/newuser}" th:text="#{mensaje.nuevo} + ' ' + #{usuario.title} ">pendiente</a></span>
-		</div>
+<form th:action="@{/admin/accesos}" method="get" class="row g-2 mb-3 align-items-end">
+
+    <div class="col-auto">
+        <label for="fechaIni" class="form-label mb-0">Fecha Inicial</label>
+        <input type="date"
+               id="fechaIni"
+               name="fechaIni"
+               class="form-control"
+               th:value="${fechaIni != null ? #temporals.format(fechaIni, 'yyyy-MM-dd') : ''}">
+    </div>
+
+    <div class="col-auto">
+        <label for="fechaFin" class="form-label mb-0">Fecha Final</label>
+        <input type="date"
+               id="fechaFin"
+               name="fechaFin"
+               class="form-control"
+               th:value="${fechaFin != null ? #temporals.format(fechaFin, 'yyyy-MM-dd') : ''}">
+    </div>
+
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">
+            Buscar
+        </button>
+    </div>
+
+</form>
+
 
 		<table class="table table-striped table-bordered">
 			<thead class="table-dark">
@@ -30,7 +52,8 @@
 				<tr th:each="acceso : ${pagina.pagina}">
 					<td th:text="${acceso.nombreUsuario}">ID</td>
 					<td th:text="${acceso.mensaje}">ID</td>
-					<td th:text="${acceso.fechaAudit}">ID</td>
+					<td th:text="${#temporals.format(acceso.fechaAudit, 'dd/MM/yyyy HH:mm:ss')}"></span>
+					
 				</tr>
 			</tbody>
 		</table>

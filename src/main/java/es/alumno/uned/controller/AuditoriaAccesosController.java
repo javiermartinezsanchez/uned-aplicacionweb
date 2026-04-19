@@ -1,7 +1,10 @@
 package es.alumno.uned.controller;
 
+import java.time.LocalDate;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,9 +24,16 @@ public class AuditoriaAccesosController {
 		this.auditService = auditService;
 	}
 	@GetMapping("/admin/accesos")
-    public String listaAccesos(@RequestParam(name="page", defaultValue = "0") int page, Model model) {
+    public String listaAccesos(
+            @RequestParam(required = false)
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fechaIni,
+            @RequestParam(required = false)
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fechaFin,
+    		@RequestParam(name="page", defaultValue = "0") int page, Model model) {
 		Pageable pageRequest= PageRequest.of(page, 10);
-		PaginacionComun<UserAudit> paginacion = auditService.listadoPaginado("/admin/accesos", pageRequest);
+		PaginacionComun<UserAudit> paginacion = auditService.listadoPaginado("/admin/accesos", pageRequest, fechaIni, fechaFin);
+		model.addAttribute("fechaIni", fechaIni);
+	    model.addAttribute("fechaFin", fechaFin);
 		model.addAttribute("titulo", "Auditoria Accesos");
 		model.addAttribute("pagina", paginacion);
 		return "admin/accesos";

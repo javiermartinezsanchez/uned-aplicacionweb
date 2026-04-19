@@ -25,7 +25,7 @@
             th:classappend="${elemento.numero == pagina.pagActual} ? ' active'">
             <a class="page-link"
                th:href="${elemento.numero == pagina.pagActual} ? null : @{${pagina.url}(page=${elemento.numero-1})}"
-               th:text="${elemento.numero}">
+               th:text="${elemento.numero-1}">
             </a>
         </li>
 
