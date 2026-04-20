@@ -1,0 +1,7 @@
+<!-- Fragmento reutilizable para botones-enlace -->
+<div th:fragment="btnLink(texto, url, estilo)">
+    <a th:href="${url}"
+       th:text="${texto}"
+       th:class="'btn ' + ${estilo}">
+    </a>
+</div>

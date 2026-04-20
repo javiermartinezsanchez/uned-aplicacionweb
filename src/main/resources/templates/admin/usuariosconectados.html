@@ -14,12 +14,13 @@
 			<thead class="table-dark">
 				<tr>
 					<th th:text="#{usuario.email}">default</th>
-					<th></th>
+					<th th:text="#{usuario.lastactivity}"></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="usuario : ${usuarios}">
-					<td th:utext="${user}">ID</td>
+					<td th:utext="${usuario.usuario}">ID</td>
+					<td th:utext="${#temporals.format(usuario.lastRequest, 'dd/MM/yyyy HH:mm:ss')}">ID</td>
 				</tr>
 			</tbody>
 		</table>

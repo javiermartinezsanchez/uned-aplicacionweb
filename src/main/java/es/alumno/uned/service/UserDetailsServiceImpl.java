@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import es.alumno.uned.controller.UserSessionInfoDTO;
 import es.alumno.uned.dto.UsuarioRegistroDTO;
 import es.alumno.uned.mapper.UsuarioRegistroMapper;
 import es.alumno.uned.model.entities.SecurityUser;
@@ -111,22 +112,14 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 	}
 
 	@Override
-	public List<String> getConnectedUsers() {
-//		return userActiveStore.getUsers();
-		
-		        return sessionRegistry.getAllPrincipals()
-		            .stream()
-		            .filter((u) -> !sessionRegistry.getAllSessions(u, false)
-		                .isEmpty())
-		            .map(o -> {
-		                if (o instanceof Usuario) {
-		                    return ((Usuario) o).getEmail();
-		                } else {
-		                    return o.toString()
-		            ;
-		                }
-		            }).collect(Collectors.toList());
-		   
+	public List<UserSessionInfoDTO> getConnectedUsers() {
 
+	    return sessionRegistry.getAllPrincipals().stream()
+	        .flatMap(principal -> sessionRegistry.getAllSessions(principal, false).stream())
+	        .map(sessionInfo -> new UserSessionInfoDTO(
+	                ((UserDetails) sessionInfo.getPrincipal()).getUsername(),
+	                sessionInfo.getLastRequest()
+	        ))
+	        .toList();
 	}
 }

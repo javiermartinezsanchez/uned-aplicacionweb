@@ -5,12 +5,18 @@
         <input type="email" th:field="*{email}" class="form-control w-50">
         <div class="text-danger" th:errors="*{email}"></div>
     </div>
-   <div class="mb-3">
+   <div class="mb-3" th:if="not *{id}">
         <label class="form-label">Password</label>
         <div class="input-group w-15">
         <input type="password" autocomplete="Password" th:field="*{newPassword}" class="form-control">
         </div> 
         <div class="text-danger" th:errors="*{newPassword}"></div>
+    </div>
+    <div class="mb-3" th:if="*{id}" th:replace="~{fragments/boton-enlace :: btnLink(
+        #{command.modificar.password},
+        @{/admin/usuario/{id}/password(id=*{id})},
+        'btn btn-warning'
+    )}">
     </div>
     <div class="mb-3">
         <label class="form-label">Nombre</label>

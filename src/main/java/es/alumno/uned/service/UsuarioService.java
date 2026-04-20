@@ -6,6 +6,7 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import es.alumno.uned.controller.UserSessionInfoDTO;
 import es.alumno.uned.dto.UsuarioRegistroDTO;
 import es.alumno.uned.model.entities.Usuario;
 import es.alumno.uned.model.util.PaginacionComun;
@@ -61,6 +62,6 @@ public interface UsuarioService extends UserDetailsService{
 	 * 
 	 * @return Lista de usuarios conectados
 	 */
-	public List<String> getConnectedUsers();
+	public List<UserSessionInfoDTO> getConnectedUsers();
 	
 }

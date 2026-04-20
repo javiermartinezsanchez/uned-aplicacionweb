@@ -9,21 +9,19 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
 
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfiguration {
 	
-	private final CustomLoginSuccessHandler customLoginSuccessHandler;
-	private final CustomLogoutHandler customLogoutHandler;
-	public SecurityConfiguration(CustomLoginSuccessHandler customLoginSuccessHandler, 
-			CustomLogoutHandler customLogoutHandler) {
-		this.customLoginSuccessHandler = customLoginSuccessHandler; 
-		this.customLogoutHandler = customLogoutHandler;
-	}
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain filterChain(HttpSecurity http,
+			CustomLoginSuccessHandler successHandler,
+			CustomLogoutHandler customLogoutHandler
+			) throws Exception {
 	    http
 	        .authorizeHttpRequests((requests) -> requests
 	            .requestMatchers("/", "/home", "/registro/**",
@@ -36,7 +34,7 @@ public class SecurityConfiguration {
 	        )
 	        .formLogin(form -> form
 	            .loginPage("/login")
-	            .successHandler(customLoginSuccessHandler)
+	            .successHandler(successHandler)
 	            //.defaultSuccessUrl("/home")
 	            .failureUrl("/login?error=true")
 	            .permitAll()
@@ -66,5 +64,9 @@ public class SecurityConfiguration {
 	public SessionRegistry sessionRegistry() {
 	        return new SessionRegistryImpl();
     }
-
+	
+	@Bean
+	public SessionAuthenticationStrategy sessionAuthenticationStrategy(SessionRegistry sessionRegistry) {
+	    return new RegisterSessionAuthenticationStrategy(sessionRegistry());
+	}
 }

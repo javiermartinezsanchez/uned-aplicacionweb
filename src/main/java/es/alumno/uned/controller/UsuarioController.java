@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import es.alumno.uned.dto.UserPasswordChangeDTO;
 import es.alumno.uned.dto.UsuarioRegistroDTO;
+import es.alumno.uned.mapper.UsuarioRegistroMapper;
 import es.alumno.uned.model.entities.Usuario;
 import es.alumno.uned.model.repository.UserActiveStore;
 import es.alumno.uned.model.util.PaginacionComun;
@@ -36,7 +38,9 @@ public class UsuarioController {
 
 	
 	private UsuarioService userService;
-	
+	@Autowired
+	private PasswordEncoder passwEncoder;
+
 	private RolService rolService;
 	public UsuarioController(UsuarioService userService, RolService rolService) {
 		super();
@@ -96,5 +100,71 @@ public class UsuarioController {
 		model.addAttribute("usuarios", userService.getConnectedUsers());
 		return "admin/usuariosconectados";
 	}
-	
+	@GetMapping("/cambiopassword")
+	public String showPasswordForm(Model model) {
+	    model.addAttribute("form", new UserPasswordChangeDTO());
+	    return "/comun/cambio-password";
+	}
+
+	@PostMapping("/cambiopassword")
+	public String changePassword(@AuthenticationPrincipal UserDetails userDetails,
+	                             @Valid @ModelAttribute UserPasswordChangeDTO dto,
+	                             BindingResult result,
+	                             Model model) {
+
+	    if (result.hasErrors()) {
+	    	return "/comun/cambio-password";
+	    }
+
+	    Usuario usuario = userService.findByEmail(userDetails.getUsername());
+
+	    // Validar contraseña actual
+	    if (!passwEncoder.matches(dto.getOldPassword(), usuario.getPassword())) {
+	        result.rejectValue("oldPassword", "error.oldPassword", "{password.current.invalid}");
+	        return "/comun/cambio-password";
+	    }
+
+	    // Validar coincidencia
+	    if (!dto.getNewPassword().equals(dto.getConfirmPassword())) {
+	        result.rejectValue("confirmPassword", "error.confirmPassword", "{password.new.mismatch}");
+	        return "/comun/cambio-password";
+	    }
+
+	    // Guardar nueva contraseña
+	    usuario.setPassword(passwEncoder.encode(dto.getNewPassword()));
+	    userService.grabar(UsuarioRegistroMapper.toDTO(usuario), usuario.getEmail());
+
+	    model.addAttribute("success", "{password.change.success}");
+	    return "/comun/cambio-password";
+	}
+	@GetMapping("/admin/usuario/{id}/password")
+	public String showAdminPasswordForm(@PathVariable Long id, Model model) {
+	    model.addAttribute("userId", id);
+	    model.addAttribute("passwordDTO", new UserPasswordChangeDTO());
+	    return "admin/password-change";
+	}
+
+	@PostMapping("/admin/usuario/{id}/password")
+	public String changeUserPassword(@PathVariable Long id,
+	                                 @Valid @ModelAttribute("passwordDTO") UserPasswordChangeDTO dto,
+	                                 BindingResult result,
+	                                 Model model) {
+
+	    if (result.hasErrors()) {
+	        return "admin/password-change";
+	    }
+
+	    if (!dto.getNewPassword().equals(dto.getConfirmPassword())) {
+	        result.rejectValue("confirmPassword", "error.confirmPassword", "{password.new.mismatch}");
+	        return "admin/password-change";
+	    }
+
+	    Usuario usuario = userService.findById(id);
+	    usuario.setPassword(passwEncoder.encode(dto.getNewPassword()));
+	    userService.grabar(UsuarioRegistroMapper.toDTO(usuario), usuario.getEmail());
+
+	    model.addAttribute("success", "{password.change.success}");
+	    return "admin/password-change";
+	}
+
 }

@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +24,10 @@ public class CustomLogoutHandler implements LogoutHandler {
     @Autowired
 	UserAuditRepository audit;
     
+    private final SessionRegistry sessionRegistry;
+    
+    private CustomLogoutHandler(SessionRegistry sessionRegistry) {
+    	this.sessionRegistry = sessionRegistry ;   }
     @Override
     public void logout(HttpServletRequest request,
                        HttpServletResponse response,
@@ -31,8 +36,9 @@ public class CustomLogoutHandler implements LogoutHandler {
         if (authentication != null && authentication.getName() != null) {
             String username = authentication.getName();
             String ip = request.getRemoteAddr();
+            String sessionId = request.getSession().getId();
+            sessionRegistry.removeSessionInformation(sessionId);
     		audit.save(new UserAudit(username, "Logout usuario desde la IP: " + ip, LocalDateTime.now()));
-
             log.info("Logout | usuario={} | ip={}", username, ip);
         }
     }
