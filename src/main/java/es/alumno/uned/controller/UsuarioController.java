@@ -1,6 +1,7 @@
 package es.alumno.uned.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import es.alumno.uned.dto.UsuarioRegistroDTO;
 import es.alumno.uned.model.entities.Usuario;
+import es.alumno.uned.model.repository.UserActiveStore;
 import es.alumno.uned.model.util.PaginacionComun;
 import es.alumno.uned.service.RolService;
 import es.alumno.uned.service.UserDetailsServiceImpl;
@@ -87,4 +89,12 @@ public class UsuarioController {
 		model.addAttribute("roles", rolService.getList());
 		return "admin/usuario";
 	}
+	@GetMapping("/admin/usuarioconnected")
+    public String modUsuario(Model model) {
+
+		//model.addAttribute("usuarios", userService.getConnectedUsers());
+		model.addAttribute("usuarios", userService.getConnectedUsers());
+		return "admin/usuariosconectados";
+	}
+	
 }

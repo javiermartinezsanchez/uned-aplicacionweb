@@ -3,11 +3,14 @@ package es.alumno.uned.model.repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 /**
  * Para guardar los usuarios en sesión (activos), generamos esta Lista para mantenerlos.
  * 
  * 
  */
+@Component
 public class UserActiveStore {
 
     public List<String> users;

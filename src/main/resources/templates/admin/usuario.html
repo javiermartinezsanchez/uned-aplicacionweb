@@ -11,7 +11,8 @@ th:replace="~{plantilla::layout(~{::section})}">
 <form th:action="@{${url}}" th:object="${form}" method="post">
 <frmUsuario th:replace="~{fragments/frmUsuario :: frmUsuario}"></frmUsuario>
     <button type="submit" class="btn btn-primary">Guardar cambios</button>
-</form>
 </frmUsuario>
+</form>
+</section>
 </body>
 </html>

@@ -56,5 +56,11 @@ public interface UsuarioService extends UserDetailsService{
 	public @Nullable Object users2DTO(List<Usuario> content);
 
 
+	/**
+	 * Nos devuelve la lista de usuarios conectados (en sesión)
+	 * 
+	 * @return Lista de usuarios conectados
+	 */
+	public List<String> getConnectedUsers();
 	
 }

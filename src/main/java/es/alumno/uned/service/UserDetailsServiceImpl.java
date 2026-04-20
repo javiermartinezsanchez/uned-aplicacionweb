@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,6 +18,7 @@ import es.alumno.uned.dto.UsuarioRegistroDTO;
 import es.alumno.uned.mapper.UsuarioRegistroMapper;
 import es.alumno.uned.model.entities.SecurityUser;
 import es.alumno.uned.model.entities.Usuario;
+import es.alumno.uned.model.repository.UserActiveStore;
 import es.alumno.uned.model.repository.UsuarioRepository;
 import es.alumno.uned.model.util.PaginacionComun;
 
@@ -27,6 +29,13 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 
 	@Autowired
 	private PasswordEncoder passEncoder;
+	
+	@Autowired
+	private UserActiveStore userActiveStore;
+
+	 @Autowired
+	private SessionRegistry sessionRegistry;
+	 
 	public UserDetailsServiceImpl(UsuarioRepository userRepository) {
 		this.userRepository = userRepository;
 	}
@@ -99,5 +108,25 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 	public UsuarioRegistroDTO getUsuario(Long id) {
 		
 		return UsuarioRegistroMapper.toDTO(findById(id));
+	}
+
+	@Override
+	public List<String> getConnectedUsers() {
+//		return userActiveStore.getUsers();
+		
+		        return sessionRegistry.getAllPrincipals()
+		            .stream()
+		            .filter((u) -> !sessionRegistry.getAllSessions(u, false)
+		                .isEmpty())
+		            .map(o -> {
+		                if (o instanceof Usuario) {
+		                    return ((Usuario) o).getEmail();
+		                } else {
+		                    return o.toString()
+		            ;
+		                }
+		            }).collect(Collectors.toList());
+		   
+
 	}
 }

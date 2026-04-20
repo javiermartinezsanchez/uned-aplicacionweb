@@ -10,31 +10,19 @@
 	<div class="container">
 		<h1 th:text="#{usuario.lista}">Título</h1>
 		<br>
-		<div class="form-group">
-			<span><a th:href="@{/admin/newuser}" th:text="#{mensaje.nuevo} + ' ' + #{usuario.title} ">pendiente</a></span>
-		</div>
-
 		<table class="table table-striped table-bordered">
 			<thead class="table-dark">
 				<tr>
 					<th th:text="#{usuario.email}">default</th>
-					<th th:text="#{usuario.nombre}">default</th>
-					<th th:text="#{usuario.role}">default</th>
 					<th></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="usuario : ${usuarios}">
-					<td th:text="${usuario.email}">ID</td>
-					<td th:text="${usuario.nombreCompleto}">ID</td>
-					<td th:text="${usuario.rol}">ID</td>
-					<td><a th:href="@{/admin/usuario/{id}(id=${usuario.id})}" class="btn btn-primary" th:text="#{command.modificar}">traduciones</a></td>
+					<td th:utext="${user}">ID</td>
 				</tr>
 			</tbody>
 		</table>
-		<th:block th:if="${paginacion}">
-		<nav th:replace="~{fragments/paginaciontabla :: paginaciontabla}"></nav>
-		</th:block>
 	</div>
 </section>
 </body>
