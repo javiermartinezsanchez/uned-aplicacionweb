@@ -19,7 +19,6 @@ import es.alumno.uned.dto.UserPasswordChangeDTO;
 import es.alumno.uned.dto.UsuarioRegistroDTO;
 import es.alumno.uned.mapper.UsuarioRegistroMapper;
 import es.alumno.uned.model.entities.Usuario;
-import es.alumno.uned.model.repository.UserActiveStore;
 import es.alumno.uned.model.util.PaginacionComun;
 import es.alumno.uned.service.RolService;
 import es.alumno.uned.service.UserDetailsServiceImpl;
@@ -48,18 +47,11 @@ public class UsuarioController {
 		this.rolService = rolService;
 	}
 	@GetMapping("/admin/usuario")
-    public String listaUsuarios(Model model) {
-		model.addAttribute("usuarios", userService.listarUsuarios());
-		model.addAttribute("paginacion", false);
-		return "admin/usuarios";
-	}
-	
-	@GetMapping("/admin/usuario/page")
 	public String listaUsuariosPaginada(@RequestParam(name="page", defaultValue = "0") int page, Model model) {
 		Pageable pageRequest= PageRequest.of(page, 10);
-		PaginacionComun<Usuario> paginacion = userService.listadoPaginado("/admin/usuario/page", pageRequest);
+		PaginacionComun<Usuario> paginacion = userService.listadoPaginado("/admin/usuario", pageRequest);
 		//PaginacionComun<Usuario> paginacion = new PaginacionComun<>("/admin/usuario/page", users);
-		model.addAttribute("titulo", "Usuarios Pag");
+		model.addAttribute("titulo", "{usuario.lista}");
 		model.addAttribute("usuarios", userService.users2DTO(paginacion.getPagina().getContent()));
 		model.addAttribute("paginacion", true);
 		model.addAttribute("pagina", paginacion);

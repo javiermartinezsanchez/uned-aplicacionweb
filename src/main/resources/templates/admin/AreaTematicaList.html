@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+	th:replace="~{plantilla::layout(~{::section})}"><head>
+<meta charset="utf-8">
+<title th:text="#{areatematica.lista}">Título</title>
+</head>
+<body>
+<section>
+	<div class="container">
+		<h1 th:text="#{areatematica.lista}">Título</h1>
+		<br>
+		<div class="form-group">
+			<span><a th:href="@{/admin/newAreaTematica}" th:text="#{mensaje.nuevo} + ' ' + #{areaTematica.title} ">pendiente</a></span>
+		</div>
+
+		<table class="table table-striped table-bordered">
+			<thead class="table-dark">
+				<tr>
+					<th th:text="#{areaTematica.title}">default</th>
+					<th th:text="#{areaTematica.descripcion}">default</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="tema : ${pagina.pagina.content}">
+					<td th:text="${tema.titulo}">ID</td>
+					<td th:text="${tema.descripcion}">ID</td>
+					<td><a th:href="@{/admin/areatematica/{id}(id=${tema.id})}" class="btn btn-primary" th:text="#{command.modificar}">traduciones</a></td>
+				</tr>
+			</tbody>
+		</table>
+		<th:block th:if="${paginacion}">
+		<nav th:replace="~{fragments/paginaciontabla :: paginaciontabla}"></nav>
+		</th:block>
+	</div>
+</section>
+</body>
+</html>

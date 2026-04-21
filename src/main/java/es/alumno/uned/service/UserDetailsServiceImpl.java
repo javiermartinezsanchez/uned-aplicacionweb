@@ -19,7 +19,6 @@ import es.alumno.uned.dto.UsuarioRegistroDTO;
 import es.alumno.uned.mapper.UsuarioRegistroMapper;
 import es.alumno.uned.model.entities.SecurityUser;
 import es.alumno.uned.model.entities.Usuario;
-import es.alumno.uned.model.repository.UserActiveStore;
 import es.alumno.uned.model.repository.UsuarioRepository;
 import es.alumno.uned.model.util.PaginacionComun;
 
@@ -31,8 +30,6 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 	@Autowired
 	private PasswordEncoder passEncoder;
 	
-	@Autowired
-	private UserActiveStore userActiveStore;
 
 	 @Autowired
 	private SessionRegistry sessionRegistry;
