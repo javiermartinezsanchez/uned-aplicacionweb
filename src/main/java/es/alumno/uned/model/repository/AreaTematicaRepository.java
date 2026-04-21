@@ -6,4 +6,5 @@ import es.alumno.uned.model.entities.AreaTematica;
 
 public interface AreaTematicaRepository extends JpaRepository<AreaTematica, Long>{
 
+	AreaTematica findByTitulo(String titulo);
 }

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+th:replace="~{plantilla::layout(~{::section})}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<section>
+<h1 th:text="#{areatematica.title}">Título</h1>
+		<br>
+<form th:action="@{${url}}" th:object="${form}" method="post">
+	<input type="hidden" th:field="*{id}" />
+    <div class="mb-3">
+        <label class="form-label" th:text="#{areatematica.title}">Email</label>
+        <input type="text" th:field="*{titulo}" class="form-control w-50">
+        <div class="text-danger" th:errors="*{titulo}"></div>
+    </div>
+   <div class="mb-3">
+        <label class="form-label" th:text="#{areatematica.descripcion}">Password</label>
+        <div class="input-group w-15">
+        <input type="text" autocomplete="" th:field="*{descripcion}" class="form-control">
+        </div> 
+        <div class="text-danger" th:errors="*{descripcion}"></div>
+    </div>
+    <button type="submit" class="btn btn-primary" th:text="#{command.save}">Guardar cambios</button>
+</form>
+</section>
+</body>
+</html>

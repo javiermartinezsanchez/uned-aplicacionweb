@@ -11,14 +11,19 @@
 		<h1 th:text="#{areatematica.lista}">Título</h1>
 		<br>
 		<div class="form-group">
-			<span><a th:href="@{/admin/newAreaTematica}" th:text="#{mensaje.nuevo} + ' ' + #{areaTematica.title} ">pendiente</a></span>
+		    <div class="mb-3" th:replace="~{fragments/boton-enlace :: btnLink(
+		        #{mensaje.nueva} + ' ' + #{areatematica.title},
+		        @{/admin/newAreaTematica},
+		        'btn btn-success'
+		    )}">
+		    </div>
 		</div>
 
 		<table class="table table-striped table-bordered">
 			<thead class="table-dark">
 				<tr>
-					<th th:text="#{areaTematica.title}">default</th>
-					<th th:text="#{areaTematica.descripcion}">default</th>
+					<th th:text="#{areatematica.title}">default</th>
+					<th th:text="#{areatematica.descripcion}">default</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -26,7 +31,7 @@
 				<tr th:each="tema : ${pagina.pagina.content}">
 					<td th:text="${tema.titulo}">ID</td>
 					<td th:text="${tema.descripcion}">ID</td>
-					<td><a th:href="@{/admin/areatematica/{id}(id=${tema.id})}" class="btn btn-primary" th:text="#{command.modificar}">traduciones</a></td>
+					<td><a th:href="@{/admin/areaTematica/{id}(id=${tema.id})}" class="btn btn-primary" th:text="#{command.modificar}">traduciones</a></td>
 				</tr>
 			</tbody>
 		</table>
