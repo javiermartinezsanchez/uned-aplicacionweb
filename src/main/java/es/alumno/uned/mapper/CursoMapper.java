@@ -24,6 +24,7 @@ public class CursoMapper {
         entity.setTitulo(dto.getTitulo());
         entity.setDescripcion(dto.getDescripcion());
         entity.setNivel(dto.getNivel());
+        entity.setDuracion(dto.getDuracion());
         entity.setfIni(dto.getfIni());
         entity.setfFin(dto.getfFin());
 
@@ -56,6 +57,7 @@ public class CursoMapper {
         dto.setTitulo(entity.getTitulo());
         dto.setDescripcion(entity.getDescripcion());
         dto.setNivel(entity.getNivel());
+        dto.setDuracion(entity.getDuracion());
         dto.setfIni(entity.getfIni());
         dto.setfFin(entity.getfFin());
 

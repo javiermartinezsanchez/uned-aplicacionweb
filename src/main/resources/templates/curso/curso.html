@@ -7,7 +7,7 @@ th:replace="~{plantilla::layout(~{::section})}">
 </head>
 <body>
 <section>
-<h1 th:text="#{curso.title}">Título</h1>
+<h1 th:text="#{curso.titulo}">Título</h1>
 		<br>
 <form th:action="@{/curso/guardar}"
       th:object="${curso}"
@@ -18,7 +18,7 @@ th:replace="~{plantilla::layout(~{::section})}">
 
     <!-- Título -->
     <div class="mb-3">
-        <label class="form-label" th:text="#{areatematica.title}">Título</label>
+        <label class="form-label" th:text="#{curso.titulo}">Título</label>
         <input type="text" class="form-control" th:field="*{titulo}">
         <div class="text-danger" th:errors="*{titulo}"></div>
     </div>
@@ -29,35 +29,40 @@ th:replace="~{plantilla::layout(~{::section})}">
         <textarea class="form-control" th:field="*{descripcion}" rows="3"></textarea>
         <div class="text-danger" th:errors="*{descripcion}"></div>
     </div>
+    <div class="row g-3">
+      <div class="col-md-4">
 
-    <!-- Nivel -->
-    <div class="mb-3">
-        <label class="form-label" th:text="#{areatematica.nivel}">Nivel</label>
-        <input type="number" class="form-control" th:field="*{nivel}">
-        <div class="text-danger" th:errors="*{nivel}"></div>
-    </div>
-
-    <!-- Área Temática -->
-    <div class="mb-3">
+      <!-- Área Temática -->
         <label class="form-label" th:text="#{areatematica.title}">Área Temática</label>
         <select class="form-select" th:field="*{areaTematicaId}">
-            <option value="">-- Selecciona un área --</option>
+            <option th:value="${''}" th:text="#{areatematica.select}"></option>
             <option th:each="a : ${areas}"
                     th:value="${a.id}"
                     th:text="${a.titulo}">
             </option>
         </select>
         <div class="text-danger" th:errors="*{areaTematicaId}"></div>
+      </div>
+    <!-- Nivel -->
+      <div class="col-md-4">
+        <label class="form-label" th:text="#{curso.nivel}">Nivel</label>
+        <input type="number" class="form-control" th:field="*{nivel}">
+        <div class="text-danger" th:errors="*{nivel}"></div>
     </div>
-
+    <!-- Área Temática -->
+      <div class="col-md-4">
+        <label class="form-label" th:text="#{curso.duracion}">Área Temática</label>
+ <input type="number" class="form-control" th:field="*{duracion}">        <div class="text-danger" th:errors="*{areaTematicaId}"></div>
+    </div>
+    </div>
     <!-- Responsable -->
     <div class="mb-3">
-        <label class="form-label" th:text="#{areatematica.responsable}">Responsable</label>
+        <label class="form-label" th:text="#{curso.responsable}">Responsable</label>
         <select class="form-select" th:field="*{responsableId}">
-            <option value="">-- Selecciona un responsable --</option>
+            <option th:value="${''}" th:text="#{responsable.select}"></option>
             <option th:each="u : ${usuarios}"
                     th:value="${u.id}"
-                    th:text="${u.username}">
+                    th:text="${u.nombreCompleto}">
             </option>
         </select>
         <div class="text-danger" th:errors="*{responsableId}"></div>
@@ -66,13 +71,13 @@ th:replace="~{plantilla::layout(~{::section})}">
     <!-- Fechas -->
     <div class="row">
         <div class="col-md-6 mb-3">
-            <label class="form-label" th:text="#{curso.fini}">Fecha Inicio</label>
+            <label class="form-label" th:text="#{comun.fini}">Fecha Inicio</label>
             <input type="datetime-local" class="form-control" th:field="*{fIni}">
             <div class="text-danger" th:errors="*{fIni}"></div>
         </div>
 
         <div class="col-md-6 mb-3">
-            <label class="form-label"th:text="#{curso.fFin}">Fecha Fin</label>
+            <label class="form-label"th:text="#{comun.fFin}">Fecha Fin</label>
             <input type="datetime-local" class="form-control" th:field="*{fFin}">
             <div class="text-danger" th:errors="*{fFin}"></div>
         </div>

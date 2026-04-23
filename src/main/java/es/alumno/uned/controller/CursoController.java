@@ -1,9 +1,11 @@
 package es.alumno.uned.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -62,7 +64,7 @@ public class CursoController {
 	    cursoService.nuevoCurso(dto, imagen, userDetails.getUsername());
 	    return "redirect:/curso/lista";
 	}
-    @GetMapping("/curso")
+    
     public String listadoCurso(@AuthenticationPrincipal UserDetails userDetails,
     		@RequestParam(name="page", defaultValue = "0") int page,
     		Model model) {
@@ -72,6 +74,57 @@ public class CursoController {
     	model.addAttribute("titulo", "{curso.lista}");
     	model.addAttribute("pagina", paginacion);
     	return "curso/cursos";
+    }
+    @GetMapping("/curso")
+    public String ListadoGeneral(
+            @RequestParam(required = false) String titulo,
+            @RequestParam(required = false) Integer nivel,
+            @RequestParam(required = false) Long areaId,
+            @RequestParam(required = false) Long responsableId,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fIni,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fFin,
+            Pageable pageable,
+            Model model) {
+
+        Paginacion<Curso, CursoDTO> paginacion;
+
+        // ============================
+        //   LÓGICA DE BÚSQUEDA
+        // ============================
+
+        if (titulo != null && !titulo.isBlank()) {
+            paginacion = cursoService.listadoPaginadoPorTitulo("/curso", pageable, titulo);
+        }
+        else if (nivel != null) {
+            paginacion = cursoService.listadoPaginadoPorNivel("/curso", pageable, nivel);
+        }
+        else if (areaId != null) {
+            paginacion = cursoService.listadoPaginadoPorArea("/curso", pageable, areaId);
+        }
+        else if (responsableId != null) {
+            paginacion = cursoService.listadoPaginadoPorResponsable("/curso", pageable, responsableId);
+        }
+        else if (fIni != null && fFin != null) {
+            paginacion = cursoService.listadoPaginadoPorFechaInicio(
+                    "/curso", pageable,
+                    fIni.atStartOfDay(),
+                    fFin.atTime(23, 59)
+            );
+        }
+        else {
+            paginacion = cursoService.listadoPaginado("/curso", pageable);
+        }
+
+        // ============================
+        //   DATOS PARA EL FORMULARIO
+        // ============================
+        model.addAttribute("urlAlta", "/curso/nuevo");
+        model.addAttribute("paginacion", paginacion);
+        model.addAttribute("areas", areaTematicaService.listAll());
+        model.addAttribute("responsables", usuarioService.listarProfesores());
+
+        return "curso/cursos"; 
+    	
     }
 	
 }

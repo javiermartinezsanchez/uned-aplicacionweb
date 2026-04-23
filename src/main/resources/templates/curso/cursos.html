@@ -14,8 +14,86 @@
 			<span><a th:href="@{${urlAlta}}" th:text="#{mensaje.nuevo} + ' ' + #{curso.titulo} ">pendiente</a></span>
 		</div>
 		<div class="form-group">
+		<form class="row g-3 mb-4" method="get" th:action="@{/curso}">
+
+    <!-- TÍTULO -->
+    <div class="col-md-3">
+        <label class="form-label">Título</label>
+        <input type="text" name="titulo" class="form-control"
+               th:value="${param.titulo}">
+    </div>
+
+    <!-- NIVEL -->
+    <div class="col-md-2">
+        <label class="form-label">Nivel</label>
+        <select name="nivel" class="form-select">
+            <option value="">-- Todos --</option>
+            <option th:each="n : ${#numbers.sequence(1,5)}"
+                    th:value="${n}"
+                    th:text="'Nivel ' + ${n}"
+                    th:selected="${param.nivel == n}">
+            </option>
+        </select>
+    </div>
+
+    <!-- ÁREA TEMÁTICA -->
+    <div class="col-md-3">
+        <label class="form-label">Área temática</label>
+        <select name="areaId" class="form-select">
+            <option value="">-- Todas --</option>
+            <option th:each="a : ${areas}"
+                    th:value="${a.id}"
+                    th:text="${a.titulo}"
+                    th:selected="${param.areaId == a.id}">
+            </option>
+        </select>
+    </div>
+
+    <!-- RESPONSABLE -->
+    <div class="col-md-3">
+        <label class="form-label">Responsable</label>
+        <select name="responsableId" class="form-select">
+            <option value="">-- Todos --</option>
+            <option th:each="u : ${responsables}"
+                    th:value="${u.id}"
+                    th:text="${u.nombreCompleto}"
+                    th:selected="${param.responsableId == u.id}">
+            </option>
+        </select>
+    </div>
+
+    <!-- FECHAS -->
+    <div class="col-md-2">
+        <label class="form-label">Fecha inicio</label>
+        <input type="date" name="fIni" class="form-control"
+               th:value="${param.fIni}">
+    </div>
+
+    <div class="col-md-2">
+        <label class="form-label">Fecha fin</label>
+        <input type="date" name="fFin" class="form-control"
+               th:value="${param.fFin}">
+    </div>
+
+    <!-- BOTONES -->
+    <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">
+            Buscar
+        </button>
+    </div>
+
+    <div class="col-md-2 d-flex align-items-end">
+        <a th:href="@{/curso}" class="btn btn-secondary w-100">
+            Limpiar
+        </a>
+    </div>
+
+</form>
+		
+		</div>
+		<div class="form-group">
 		    <div class="mb-3" th:replace="~{fragments/boton-enlace :: btnLink(
-		        #{mensaje.nueva} + ' ' + #{curso.titulo},
+		        #{mensaje.nuevo} + ' ' + #{curso.titulo},
 		        @{${urlAlta}},
 		        'btn btn-success'
 		    )}">
@@ -32,7 +110,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="curso : ${pagina.contenido}">
+				<tr th:each="curso : ${paginacion.contenido}">
 					<td th:text="${curso.titulo}">ID</td>
 					<td th:text="${curso.descripcion}">ID</td>
 					<td th:text="${#temporals.format(curso.fIni, 'dd/MM/yyyy HH:mm:ss')}">ID</td>
@@ -41,9 +119,10 @@
 				</tr>
 			</tbody>
 		</table>
-		<th:block th:if="${paginacion}">
-		<nav th:replace="~{fragments/paginaciontabla :: paginaciontabla}"></nav>
-		</th:block>
+        <div th:replace="fragments/paginacionComun :: paginador(paginacion=${paginacion})"></div>
+
+		<!--  <nav th:replace="~{fragments/paginaciontabla :: paginaciontabla}"></nav>
+	-->
 	</div>
 </section>
 </body>

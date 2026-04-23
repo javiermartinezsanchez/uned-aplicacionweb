@@ -2,69 +2,57 @@ package es.alumno.uned.model.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 import org.springframework.data.domain.Page;
 
+/**
+ * Clase de utilidad para gestionar la paginación de valores
+ * en nuestra vistas de datos.
+ * 
+ * Utilizamos el patrón Builder para generar un código más legible evitando 
+ * constructores complejos.
+ * 
+ * @param <E> Tipo de dato de la Entidad JPA
+ * @param <D> Tipo de dato del DTO 
+ */
 public class Paginacion<E, D> {
 
-    private String url;
+    private final String url;
+    private final Page<E> paginaEntidad;
+    private final List<D> contenido;
+    private final List<Pagina> paginas;
+    private final int totalPag;
+    private final int numRows;
+    private final int pagActual;
 
-    /**
-     * Página original de JPA (entidades)
-     */
-    private Page<E> paginaEntidad;
-
-    /**
-     * Lista de DTOs ya convertidos
-     */
-    private List<D> contenido;
-
-    /**
-     * Lista de páginas con el control de la actual.
-     */
-    private List<Pagina> paginas;
-
-    /**
-     * Total de páginas
-     */
-    private int totalPag;
-
-    /**
-     * Número de registros por página
-     */
-    private int numRows;
-
-    /**
-     * Número de página actual (1‑based)
-     */
-    private int pagActual;
-
-    /**
-     * Constructor genérico:
-     * 
-     * - Recibe Page<E> Una página de las entidades a consultar
-     * - Convierte E → D mediante mapper 
-     */
-    public Paginacion(String url, Page<E> paginaEntidad, Function<E, D> mapper) {
-        this.url = url;
-        this.paginaEntidad = paginaEntidad;
+    private Paginacion(Builder<E, D> builder) {
+        this.url = builder.url;
+        this.paginaEntidad = builder.paginaEntidad;
 
         // Convertimos entidades a DTOs
-        this.contenido = paginaEntidad.getContent()
-                                      .stream()
-                                      .map(mapper)
-                                      .toList();
+        this.contenido = builder.paginaEntidad.getContent()
+                .stream()
+                .map(builder.mapper)
+                .toList();
 
         this.numRows = paginaEntidad.getSize();
         this.totalPag = paginaEntidad.getTotalPages();
         this.pagActual = paginaEntidad.getNumber() + 1;
 
-        creaListaPaginas();
+        this.paginas = crearListaPaginas();
     }
 
-    private void creaListaPaginas() {
-        paginas = new ArrayList<>();
+    /**
+     * 
+     * Método que nos genera la lista de páginas y define cual es la actual.
+     * 
+     * @return Lista de páginas según los datos obtenidos
+     */
+    private List<Pagina> crearListaPaginas() {
+        List<Pagina> lista = new ArrayList<>();
+
         int desde = 1;
         int hasta = 1;
 
@@ -84,8 +72,10 @@ public class Paginacion<E, D> {
 
         for (int i = 0; i < hasta; i++) {
             int numero = desde + i;
-            paginas.add(new Pagina(numero, pagActual == numero));
+            lista.add(new Pagina(numero, pagActual == numero));
         }
+
+        return lista;
     }
 
     // GETTERS
@@ -114,8 +104,6 @@ public class Paginacion<E, D> {
         return pagActual;
     }
 
-    // Métodos auxiliares (para el control de la paginación en la vista)
-
     public boolean isFirst() {
         return paginaEntidad.isFirst();
     }
@@ -130,6 +118,40 @@ public class Paginacion<E, D> {
 
     public boolean isHasPrevious() {
         return paginaEntidad.hasPrevious();
+    }
+
+    // ============================
+    //         BUILDER
+    // ============================
+
+    public static class Builder<E, D> {
+
+        private String url;
+        private Page<E> paginaEntidad;
+        private Function<E, D> mapper;
+
+        public Builder<E, D> url(String url) {
+            this.url = url;
+            return this;
+        }
+
+        public Builder<E, D> pagina(Page<E> pagina) {
+            this.paginaEntidad = pagina;
+            return this;
+        }
+
+        public Builder<E, D> mapper(Function<E, D> mapper) {
+            this.mapper = mapper;
+            return this;
+        }
+
+        public Paginacion<E, D> build() {
+            Objects.requireNonNull(url, "url no puede ser null");
+            Objects.requireNonNull(paginaEntidad, "paginaEntidad no puede ser null");
+            Objects.requireNonNull(mapper, "mapper no puede ser null");
+
+            return new Paginacion<>(this);
+        }
     }
 }
 

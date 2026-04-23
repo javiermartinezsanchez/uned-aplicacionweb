@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
-import es.alumno.uned.model.entities.AreaTematica;
-import es.alumno.uned.model.entities.Usuario;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -35,7 +33,9 @@ public class CursoDTO {
     @NotNull(message = "{validations.curso.responsable.mandatory}")
     private Long responsableId;
 
-    @NotNull(message = "{validations.curso.fechaIni.mandatory}")
+    @NotNull(message = "{validations.curso.duracion.mandatory}")
+    private Integer duracion;
+ 	@NotNull(message = "{validations.curso.fechaIni.mandatory}")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime fIni;
 
@@ -115,6 +115,13 @@ public class CursoDTO {
 
 	public void setImagen(MultipartFile imagen) {
 		this.imagen = imagen;
+	}
+    public Integer getDuracion() {
+		return duracion;
+	}
+
+	public void setDuracion(Integer duracion) {
+		this.duracion = duracion;
 	}
 
 	public LocalDateTime getfIni() {

@@ -124,7 +124,7 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 	@Override
 	public List<UsuarioRegistroDTO> listarProfesores() {
 		return listarUsuarios().stream()
-				.filter(a -> a.getRol() == "PROFE")
+				.filter(a -> a.getRol().equals("PROFE"))
 				.toList()
 				;
 	}

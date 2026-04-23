@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,47 +41,82 @@ public class CursoServiceImpl implements CursoService{
 	    Curso curso = (dto.getId() != null)
 	            ? cursoRepository.findById(dto.getId()).orElse(new Curso())
 	            : new Curso();
-
-	    curso.setTitulo(dto.getTitulo());
-	    curso.setDescripcion(dto.getDescripcion());
-	    curso.setNivel(dto.getNivel());
-	    curso.setfIni(dto.getfIni());
-	    curso.setfFin(dto.getfFin());
+	    cursoMapper.toEntity(dto, curso);
 	    if (curso.getfIns() == null) {
 	    	curso.setfIns(LocalDateTime.now());
 	    	curso.setUserIns(usuario);
 	    }
-	    // Área temática
-	    AreaTematica area = areaTematicaRepository.findById(dto.getAreaTematicaId())
-	            .orElseThrow();
-	    curso.setAreaTematica(area);
-
-	    // Responsable
-	    Usuario responsable = usuarioRepository.findById(dto.getResponsableId())
-	            .orElseThrow();
-	    curso.setResponsable(responsable);
-
 	    // Subida de imagen
 	    if (imagen != null && !imagen.isEmpty()) {
 
-	        String nombreArchivo = UUID.randomUUID() + "_" + imagen.getOriginalFilename();
-
-	        Path ruta = Paths.get("src/main/resources/static/images/curso")
-	                .resolve(nombreArchivo)
-	                .toAbsolutePath();
-
-	        Files.copy(imagen.getInputStream(), ruta, StandardCopyOption.REPLACE_EXISTING);
-
-	        curso.setUriImagen(nombreArchivo);
+	        curso.setUriImagen(saveFile(imagen));
 	    }
 
 	    cursoRepository.save(curso);
 
 		
 	}
+	private String saveFile(MultipartFile imagen) throws IOException {
+		String nombreArchivo = UUID.randomUUID() + "_" + imagen.getOriginalFilename();
+
+		Path ruta = Paths.get("src/main/resources/static/images/curso")
+		        .resolve(nombreArchivo)
+		        .toAbsolutePath();
+
+		Files.copy(imagen.getInputStream(), ruta, StandardCopyOption.REPLACE_EXISTING);
+		return nombreArchivo;
+	}
 	@Override
 	public Paginacion<Curso, CursoDTO> listadoPaginado(String url,  Pageable pageable){
 		
-		return new Paginacion<>(url, cursoRepository.findAll(pageable), cursoMapper::toDTO);
+		return construirPaginacion(url, cursoRepository.findAll(pageable));
 	}
+	
+    @Override
+    public Paginacion<Curso, CursoDTO> listadoPaginadoPorResponsable(
+            String url, Pageable pageable, Long responsableId) {
+
+        Page<Curso> page = cursoRepository.findByResponsableId(responsableId, pageable);
+        return construirPaginacion(url, page);
+    }
+    @Override
+    public Paginacion<Curso, CursoDTO> listadoPaginadoPorArea(
+            String url, Pageable pageable, Long areaId) {
+
+        Page<Curso> page = cursoRepository.findByAreaTematicaId(areaId, pageable);
+        return construirPaginacion(url, page);
+    }
+    
+    @Override
+    public Paginacion<Curso, CursoDTO> listadoPaginadoPorNivel(
+            String url, Pageable pageable, int nivel) {
+
+        Page<Curso> page = cursoRepository.findByNivel(nivel, pageable);
+        return construirPaginacion(url, page);
+    }
+    
+    @Override
+    public Paginacion<Curso, CursoDTO> listadoPaginadoPorTitulo(
+            String url, Pageable pageable, String titulo) {
+
+        Page<Curso> page = cursoRepository.findByTituloContainingIgnoreCase(titulo, pageable);
+        return construirPaginacion(url, page);
+    }
+    
+    @Override
+    public Paginacion<Curso, CursoDTO> listadoPaginadoPorFechaInicio(
+            String url, Pageable pageable, LocalDateTime desde, LocalDateTime hasta) {
+
+        Page<Curso> page = cursoRepository.findByFIniBetween(desde, hasta, pageable);
+        return construirPaginacion(url, page);
+    }
+    
+	private Paginacion<Curso, CursoDTO> construirPaginacion(String url, Page<Curso> page) {
+	        return new Paginacion.Builder<Curso, CursoDTO>()
+	                .url(url)
+	                .pagina(page)
+	                .mapper(cursoMapper::toDTO)
+	                .build();
+	    }
+	
 }

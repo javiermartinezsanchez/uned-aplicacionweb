@@ -52,6 +52,7 @@ public class UsuarioController {
 		PaginacionComun<Usuario> paginacion = userService.listadoPaginado("/admin/usuario", pageRequest);
 		//PaginacionComun<Usuario> paginacion = new PaginacionComun<>("/admin/usuario/page", users);
 		model.addAttribute("titulo", "{usuario.lista}");
+		model.addAttribute("urlAlta", "/admin/newUser");
 		model.addAttribute("usuarios", userService.users2DTO(paginacion.getPagina().getContent()));
 		model.addAttribute("paginacion", true);
 		model.addAttribute("pagina", paginacion);

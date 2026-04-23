@@ -27,7 +27,7 @@ public class Curso {
 	@Column(name="Imagen_Curso", length=255, nullable=true)
 	private String uriImagen;
 	@Column(name="Nivel", nullable=false)
-	private int nivel;
+	private Integer nivel;
 
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "area_tematica_id", nullable = false)
@@ -36,6 +36,9 @@ public class Curso {
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "responsable_id", nullable = false)
 	private Usuario responsable;
+	
+	@Column(name="DURACION")
+	private Integer duracion;
 	
 	@Column(name="FECHA_INI")
 	private LocalDateTime fIni;
@@ -48,14 +51,15 @@ public class Curso {
 
 	public Curso() {}
 	
-	public Curso(Long id, String titulo, String descripcion, String uriImagen, int nivel, AreaTematica areaTematica, LocalDateTime fIni,
-			LocalDateTime fFin, LocalDateTime fIns, String userIns) {
+	public Curso(Long id, String titulo, String descripcion, String uriImagen, Integer nivel, AreaTematica areaTematica, LocalDateTime fIni,
+			Integer duracion, LocalDateTime fFin, LocalDateTime fIns, String userIns) {
 		this.id = id;
 		this.titulo = titulo;
 		this.descripcion = descripcion;
 		this.uriImagen = uriImagen;
 		this.nivel = nivel;
 		this.areaTematica = areaTematica;
+		this.duracion= duracion;
 		this.fIni = fIni;
 		this.fFin = fFin;
 		this.fIns = fIns;
@@ -86,12 +90,20 @@ public class Curso {
 		this.descripcion = descripcion;
 	}
 
-	public int getNivel() {
+	public Integer getNivel() {
 		return nivel;
 	}
 
 	public void setNivel(int nivel) {
 		this.nivel = nivel;
+	}
+
+	public Integer getDuracion() {
+		return duracion;
+	}
+
+	public void setDuracion(Integer duracion) {
+		this.duracion = duracion;
 	}
 
 	public AreaTematica getAreaTematica() {
