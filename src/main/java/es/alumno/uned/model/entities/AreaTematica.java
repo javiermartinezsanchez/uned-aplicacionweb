@@ -1,12 +1,16 @@
 package es.alumno.uned.model.entities;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -20,8 +24,11 @@ public class AreaTematica {
 	private String titulo;
 	@Column(name="Descripcion", length=255, nullable=false)
 	private String descripcion;
+    
+	@OneToMany(mappedBy = "areaTematica", cascade = CascadeType.ALL, orphanRemoval = false)
+	private List<Curso> cursos = new ArrayList<>();
 	
-	public AreaTematica() {};
+    public AreaTematica() {};
 	public AreaTematica(Long id, String titulo, String descripcion) {
 		this.id = id;
 		this.titulo = titulo;

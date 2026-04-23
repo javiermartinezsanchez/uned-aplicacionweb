@@ -1,6 +1,8 @@
 package es.alumno.uned.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +67,14 @@ public class AreaTematicaServiceImpl implements AreaTematicaService {
 	 */
 	private boolean isExistByTitulo(String titulo) {
 		return repo.findByTitulo(titulo) != null;
+	}
+
+	@Override
+	public List<AreaTematicaDTO> listAll() {
+		return repo.findAll().stream()
+		.map(a-> new AreaTematicaDTO(a.getId(), a.getTitulo(), a.getDescripcion())
+				)
+		.collect(Collectors.toList());
 	}
 	
 	

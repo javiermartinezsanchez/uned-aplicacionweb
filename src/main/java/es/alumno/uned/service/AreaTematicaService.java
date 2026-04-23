@@ -1,5 +1,7 @@
 package es.alumno.uned.service;
 
+import java.util.List;
+
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Pageable;
 
@@ -27,4 +29,10 @@ public interface AreaTematicaService {
 	 * @return Los nuevos datos modificados
 	 */
 	AreaTematicaDTO grabar(AreaTematicaDTO area);
+	
+	/**
+	 * Nos devuelve todas las areas temáticas existentes convertidas en su DTO
+	 * @return Lista de las áreas
+	 */
+	List<AreaTematicaDTO> listAll();
 }

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+th:replace="~{plantilla::layout(~{::section})}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<section>
+<form th:action="@{/curso/guardar}"
+      th:object="${curso}"
+      method="post"
+      enctype="multipart/form-data">
+
+    <input type="hidden" th:field="*{id}"/>
+
+    <!-- Título -->
+    <div class="mb-3">
+        <label class="form-label" th:text="#{areatematica.title}">Título</label>
+        <input type="text" class="form-control" th:field="*{titulo}">
+        <div class="text-danger" th:errors="*{titulo}"></div>
+    </div>
+
+    <!-- Descripción -->
+    <div class="mb-3">
+        <label class="form-label" th:text="#{etiqueta.descripcion}">Descripción</label>
+        <textarea class="form-control" th:field="*{descripcion}" rows="3"></textarea>
+        <div class="text-danger" th:errors="*{descripcion}"></div>
+    </div>
+
+    <!-- Nivel -->
+    <div class="mb-3">
+        <label class="form-label" th:text="#{areatematica.nivel}">Nivel</label>
+        <input type="number" class="form-control" th:field="*{nivel}">
+        <div class="text-danger" th:errors="*{nivel}"></div>
+    </div>
+
+    <!-- Área Temática -->
+    <div class="mb-3">
+        <label class="form-label" th:text="#{areatematica.title}">Área Temática</label>
+        <select class="form-select" th:field="*{areaTematicaId}">
+            <option value="">-- Selecciona un área --</option>
+            <option th:each="a : ${areas}"
+                    th:value="${a.id}"
+                    th:text="${a.nombre}">
+            </option>
+        </select>
+        <div class="text-danger" th:errors="*{areaTematicaId}"></div>
+    </div>
+
+    <!-- Responsable -->
+    <div class="mb-3">
+        <label class="form-label" th:text="#{areatematica.responsable}">Responsable</label>
+        <select class="form-select" th:field="*{responsableId}">
+            <option value="">-- Selecciona un responsable --</option>
+            <option th:each="u : ${usuarios}"
+                    th:value="${u.id}"
+                    th:text="${u.username}">
+            </option>
+        </select>
+        <div class="text-danger" th:errors="*{responsableId}"></div>
+    </div>
+
+    <!-- Fechas -->
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label" th:text="#{curso.fini}">Fecha Inicio</label>
+            <input type="datetime-local" class="form-control" th:field="*{fIni}">
+            <div class="text-danger" th:errors="*{fIni}"></div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label class="form-label"th:text="#{curso.fFin}">Fecha Fin</label>
+            <input type="datetime-local" class="form-control" th:field="*{fFin}">
+            <div class="text-danger" th:errors="*{fFin}"></div>
+        </div>
+    </div>
+
+    <!-- Imagen -->
+    <div class="mb-3">
+        <label class="form-label" th:text="#{curso.imagen}">Imagen del curso</label>
+        <input type="file" class="form-control" name="imagen" accept="image/*">
+
+        <div class="mt-2" th:if="*{uriImagen}">
+            <img th:src="@{/images/curso/{img}(img=*{uriImagen})}"
+                 class="img-thumbnail"
+                 style="max-width: 200px;">
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" th:text="#{command.save}">Guardar</button>
+</form>
+
+</section>
+</body>
+</html>

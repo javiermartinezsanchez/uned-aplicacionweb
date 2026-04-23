@@ -64,4 +64,10 @@ public interface UsuarioService extends UserDetailsService{
 	 */
 	public List<UserSessionInfoDTO> getConnectedUsers();
 	
+	/**
+	 * Listado de Usuarios-PROFE convertidos en DTO para no exponer las entidades.
+	 * 
+	 * @return List de UsuarioRegistroDTO de los profesores.
+	 */
+	public List<UsuarioRegistroDTO> listarProfesores();
 }

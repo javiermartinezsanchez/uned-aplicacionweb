@@ -70,6 +70,7 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 		return new PaginacionComun<>(url,userRepository.findAll(pageable));
 	}
 
+
 	@Override
 	public Usuario grabar(UsuarioRegistroDTO registroDTO, String usuarioAlta) {
 		Usuario user = findByEmail(registroDTO.getEmail());
@@ -118,5 +119,13 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 	                sessionInfo.getLastRequest()
 	        ))
 	        .toList();
+	}
+
+	@Override
+	public List<UsuarioRegistroDTO> listarProfesores() {
+		return listarUsuarios().stream()
+				.filter(a -> a.getRol() == "PROFE")
+				.toList()
+				;
 	}
 }
