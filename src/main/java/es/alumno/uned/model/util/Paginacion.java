@@ -42,8 +42,9 @@ public class Paginacion<E, D> {
 
     /**
      * Constructor genérico:
-     * - Recibe Page<E>
-     * - Convierte E → D mediante mapper
+     * 
+     * - Recibe Page<E> Una página de las entidades a consultar
+     * - Convierte E → D mediante mapper 
      */
     public Paginacion(String url, Page<E> paginaEntidad, Function<E, D> mapper) {
         this.url = url;
@@ -113,7 +114,7 @@ public class Paginacion<E, D> {
         return pagActual;
     }
 
-    // Métodos auxiliares (igual que antes)
+    // Métodos auxiliares (para el control de la paginación en la vista)
 
     public boolean isFirst() {
         return paginaEntidad.isFirst();

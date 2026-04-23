@@ -11,21 +11,28 @@
 		<h1 th:text="#{curso.lista}">Título</h1>
 		<br>
 		<div class="form-group">
-			<span><a th:href="@{/admin/newCurso}" th:text="#{mensaje.nuevo} + ' ' + #{curso.titulo} ">pendiente</a></span>
+			<span><a th:href="@{${urlAlta}}" th:text="#{mensaje.nuevo} + ' ' + #{curso.titulo} ">pendiente</a></span>
 		</div>
-
+		<div class="form-group">
+		    <div class="mb-3" th:replace="~{fragments/boton-enlace :: btnLink(
+		        #{mensaje.nueva} + ' ' + #{curso.titulo},
+		        @{${urlAlta}},
+		        'btn btn-success'
+		    )}">
+		    </div>
+		</div>
 		<table class="table table-striped table-bordered">
 			<thead class="table-dark">
 				<tr>
 					<th th:text="#{curso.titulo}">default</th>
-					<th th:text="#{curso.descripcion}">default</th>
-					<th th:text="#{curso.fini}">default</th>
-					<th th:text="#{curso.fFin}">default</th>
+					<th th:text="#{comun.descripcion}">default</th>
+					<th th:text="#{comun.fini}">default</th>
+					<th th:text="#{comun.fFin}">default</th>
 					<th></th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="curso : ${lista}">
+				<tr th:each="curso : ${pagina.contenido}">
 					<td th:text="${curso.titulo}">ID</td>
 					<td th:text="${curso.descripcion}">ID</td>
 					<td th:text="${#temporals.format(curso.fIni, 'dd/MM/yyyy HH:mm:ss')}">ID</td>

@@ -2,6 +2,8 @@ package es.alumno.uned.controller;
 
 import java.io.IOException;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import es.alumno.uned.dto.CursoDTO;
+import es.alumno.uned.model.entities.Curso;
+import es.alumno.uned.model.util.Paginacion;
 import es.alumno.uned.service.AreaTematicaService;
 import es.alumno.uned.service.CursoService;
 import es.alumno.uned.service.UsuarioService;
@@ -30,6 +34,7 @@ public class CursoController {
 			UsuarioService usuarioService) {
 		this.cursoService = cursoService;
 		this.areaTematicaService = areaTematicaService;
+		this.usuarioService = usuarioService;
 	}
 	
 	@GetMapping("/curso/nuevo")
@@ -57,6 +62,16 @@ public class CursoController {
 	    cursoService.nuevoCurso(dto, imagen, userDetails.getUsername());
 	    return "redirect:/curso/lista";
 	}
-
+    @GetMapping("/curso")
+    public String listadoCurso(@AuthenticationPrincipal UserDetails userDetails,
+    		@RequestParam(name="page", defaultValue = "0") int page,
+    		Model model) {
+    	Pageable pageRequest= PageRequest.of(page, 10);
+    	Paginacion<Curso, CursoDTO> paginacion =  cursoService.listadoPaginado("/curso", pageRequest);
+    	model.addAttribute("urlAlta", "/curso/nuevo");
+    	model.addAttribute("titulo", "{curso.lista}");
+    	model.addAttribute("pagina", paginacion);
+    	return "curso/cursos";
+    }
 	
 }

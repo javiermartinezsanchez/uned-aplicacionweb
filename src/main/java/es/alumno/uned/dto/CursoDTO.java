@@ -90,7 +90,7 @@ public class CursoDTO {
 	public void setUriImagen(String uriImagen) {
 		this.uriImagen = uriImagen;
 	}
-	public int getNivel() {
+	public Integer getNivel() {
 		return nivel;
 	}
 	public void setNivel(int nivel) {

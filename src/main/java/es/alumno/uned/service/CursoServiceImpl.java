@@ -78,7 +78,7 @@ public class CursoServiceImpl implements CursoService{
 
 		
 	}
-
+	@Override
 	public Paginacion<Curso, CursoDTO> listadoPaginado(String url,  Pageable pageable){
 		
 		return new Paginacion<>(url, cursoRepository.findAll(pageable), cursoMapper::toDTO);

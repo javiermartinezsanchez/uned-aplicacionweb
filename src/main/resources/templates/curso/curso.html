@@ -7,6 +7,8 @@ th:replace="~{plantilla::layout(~{::section})}">
 </head>
 <body>
 <section>
+<h1 th:text="#{curso.title}">Título</h1>
+		<br>
 <form th:action="@{/curso/guardar}"
       th:object="${curso}"
       method="post"
@@ -23,7 +25,7 @@ th:replace="~{plantilla::layout(~{::section})}">
 
     <!-- Descripción -->
     <div class="mb-3">
-        <label class="form-label" th:text="#{etiqueta.descripcion}">Descripción</label>
+        <label class="form-label" th:text="#{comun.descripcion}">Descripción</label>
         <textarea class="form-control" th:field="*{descripcion}" rows="3"></textarea>
         <div class="text-danger" th:errors="*{descripcion}"></div>
     </div>
@@ -42,7 +44,7 @@ th:replace="~{plantilla::layout(~{::section})}">
             <option value="">-- Selecciona un área --</option>
             <option th:each="a : ${areas}"
                     th:value="${a.id}"
-                    th:text="${a.nombre}">
+                    th:text="${a.titulo}">
             </option>
         </select>
         <div class="text-danger" th:errors="*{areaTematicaId}"></div>
