@@ -37,7 +37,7 @@ public class CursoServiceImpl implements CursoService{
 	@Autowired
 	CursoMapper cursoMapper;
 	@Override
-	public void nuevoCurso(CursoDTO dto, MultipartFile imagen, String usuario) throws IOException {
+	public void saveCurso(CursoDTO dto, MultipartFile imagen, String usuario) throws IOException {
 	    Curso curso = (dto.getId() != null)
 	            ? cursoRepository.findById(dto.getId()).orElse(new Curso())
 	            : new Curso();

@@ -29,10 +29,15 @@ public class AreaTematica {
 	private List<Curso> cursos = new ArrayList<>();
 	
     public AreaTematica() {};
-	public AreaTematica(Long id, String titulo, String descripcion) {
-		this.id = id;
+	public AreaTematica(String titulo, String descripcion) {
 		this.titulo = titulo;
 		this.descripcion = descripcion;
+	}
+
+    
+	public AreaTematica(Long id, String titulo, String descripcion) {
+		this(titulo,descripcion);
+		this.id = id;
 	}
 	public Long getId() {
 		return id;

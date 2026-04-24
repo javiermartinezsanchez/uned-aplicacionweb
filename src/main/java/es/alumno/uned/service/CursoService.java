@@ -12,7 +12,7 @@ import es.alumno.uned.model.util.Paginacion;
 
 public interface CursoService {
 
-	void nuevoCurso(CursoDTO dto, MultipartFile imagen, String usuario) throws IOException;
+	void saveCurso(CursoDTO dto, MultipartFile imagen, String usuario) throws IOException;
 
 	public Paginacion<Curso, CursoDTO> listadoPaginado(String url,  Pageable pageable);
 	

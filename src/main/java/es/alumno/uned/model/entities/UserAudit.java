@@ -36,7 +36,7 @@ public class UserAudit {
 		this.mensaje = mensaje;
 		this.fechaAudit = timeStamp;
 	}
-	
+    public void setId(Long id) {this.id=id;}
 	public Long getId() {
 		return id;
 	}
@@ -61,7 +61,7 @@ public class UserAudit {
 		return fechaAudit;
 	}
 	
-	public void setTimeStamp(LocalDateTime fechaAudit) {
+	public void setFechaAudit(LocalDateTime fechaAudit) {
 		this.fechaAudit = fechaAudit;
 	}
 }

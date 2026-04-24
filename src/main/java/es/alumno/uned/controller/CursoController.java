@@ -2,6 +2,7 @@ package es.alumno.uned.controller;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Map;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import es.alumno.uned.dto.CursoDTO;
 import es.alumno.uned.model.entities.Curso;
+import es.alumno.uned.model.util.ControllerUtil;
 import es.alumno.uned.model.util.Paginacion;
 import es.alumno.uned.service.AreaTematicaService;
 import es.alumno.uned.service.CursoService;
@@ -61,7 +63,7 @@ public class CursoController {
 	        return "cursoform";
 	    }
 
-	    cursoService.nuevoCurso(dto, imagen, userDetails.getUsername());
+	    cursoService.saveCurso(dto, imagen, userDetails.getUsername());
 	    return "redirect:/curso/lista";
 	}
     
@@ -77,42 +79,43 @@ public class CursoController {
     }
     @GetMapping("/curso")
     public String ListadoGeneral(
+    		@RequestParam Map<String, String> params,
             @RequestParam(required = false) String titulo,
             @RequestParam(required = false) Integer nivel,
             @RequestParam(required = false) Long areaId,
             @RequestParam(required = false) Long responsableId,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fIni,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fFin,
-            Pageable pageable,
+            @RequestParam(name="page", defaultValue = "0") int page,
             Model model) {
-
+    	Pageable pageRequest= PageRequest.of(page, 10);
         Paginacion<Curso, CursoDTO> paginacion;
-
+        var filtros = ControllerUtil.paramsToMap(params);
         // ============================
         //   LÓGICA DE BÚSQUEDA
         // ============================
 
         if (titulo != null && !titulo.isBlank()) {
-            paginacion = cursoService.listadoPaginadoPorTitulo("/curso", pageable, titulo);
+            paginacion = cursoService.listadoPaginadoPorTitulo("/curso", pageRequest, titulo);
         }
         else if (nivel != null) {
-            paginacion = cursoService.listadoPaginadoPorNivel("/curso", pageable, nivel);
+            paginacion = cursoService.listadoPaginadoPorNivel("/curso", pageRequest, nivel);
         }
         else if (areaId != null) {
-            paginacion = cursoService.listadoPaginadoPorArea("/curso", pageable, areaId);
+            paginacion = cursoService.listadoPaginadoPorArea("/curso", pageRequest, areaId);
         }
         else if (responsableId != null) {
-            paginacion = cursoService.listadoPaginadoPorResponsable("/curso", pageable, responsableId);
+            paginacion = cursoService.listadoPaginadoPorResponsable("/curso", pageRequest, responsableId);
         }
         else if (fIni != null && fFin != null) {
             paginacion = cursoService.listadoPaginadoPorFechaInicio(
-                    "/curso", pageable,
+                    "/curso", pageRequest,
                     fIni.atStartOfDay(),
                     fFin.atTime(23, 59)
             );
         }
         else {
-            paginacion = cursoService.listadoPaginado("/curso", pageable);
+            paginacion = cursoService.listadoPaginado("/curso", pageRequest);
         }
 
         // ============================
@@ -122,6 +125,7 @@ public class CursoController {
         model.addAttribute("paginacion", paginacion);
         model.addAttribute("areas", areaTematicaService.listAll());
         model.addAttribute("responsables", usuarioService.listarProfesores());
+        model.addAttribute("query", ControllerUtil.mapToQuery(filtros));
 
         return "curso/cursos"; 
     	

@@ -8,7 +8,7 @@
 <body>
 <section>
 	<div class="container">
-		<h1 th:text="#{usuario.lista}">Título</h1>
+		<h1 th:text="#{usuarios.conectados}">Título</h1>
 		<br>
 		<table class="table table-striped table-bordered">
 			<thead class="table-dark">
@@ -20,7 +20,9 @@
 			<tbody>
 				<tr th:each="usuario : ${usuarios}">
 					<td th:utext="${usuario.usuario}">ID</td>
-					<td th:utext="${#temporals.format(usuario.lastRequest, 'dd/MM/yyyy HH:mm:ss')}">ID</td>
+		 			<td th:utext="${#dates.format(usuario.lastRequest, 'dd/MM/yyyy HH:mm:ss')}">ID</td>
+
+
 				</tr>
 			</tbody>
 		</table>

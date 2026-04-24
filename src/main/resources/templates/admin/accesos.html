@@ -13,7 +13,7 @@
 <form th:action="@{/admin/accesos}" method="get" class="row g-2 mb-3 align-items-end">
 
     <div class="col-auto">
-        <label for="fechaIni" class="form-label mb-0">Fecha Inicial</label>
+        <label for="fechaIni" class="form-label mb-0" th:text="#{comun.fini}">Fecha Inicial</label>
         <input type="date"
                id="fechaIni"
                name="fechaIni"
@@ -22,7 +22,7 @@
     </div>
 
     <div class="col-auto">
-        <label for="fechaFin" class="form-label mb-0">Fecha Final</label>
+        <label for="fechaFin" class="form-label mb-0" th:text="#{comun.fFin}">Fecha Final</label>
         <input type="date"
                id="fechaFin"
                name="fechaFin"
@@ -31,7 +31,7 @@
     </div>
 
     <div class="col-auto">
-        <button type="submit" class="btn btn-primary">
+        <button type="submit" class="btn btn-primary" th:text="#{command.buscar}">
             Buscar
         </button>
     </div>
@@ -48,7 +48,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="acceso : ${pagina.pagina}">
+				<tr th:each="acceso : ${paginacion.contenido}">
 					<td th:text="${acceso.nombreUsuario}">ID</td>
 					<td th:text="${acceso.mensaje}">ID</td>
 					<td th:text="${#temporals.format(acceso.fechaAudit, 'dd/MM/yyyy HH:mm:ss')}"></span>
@@ -56,9 +56,9 @@
 				</tr>
 			</tbody>
 		</table>
-		<th:block th:if="${pagina.totalPag>1}">
-		<nav th:replace="~{fragments/paginaciontabla :: paginaciontabla}"></nav>
-		</th:block>
+		
+     <div th:replace="~{fragments/paginacionComun :: paginador(${paginacion}, ${query})}"></div>
+		
 	</div>
 </section>
 </body>

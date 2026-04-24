@@ -50,7 +50,6 @@ public class UsuarioController {
 	public String listaUsuariosPaginada(@RequestParam(name="page", defaultValue = "0") int page, Model model) {
 		Pageable pageRequest= PageRequest.of(page, 10);
 		PaginacionComun<Usuario> paginacion = userService.listadoPaginado("/admin/usuario", pageRequest);
-		//PaginacionComun<Usuario> paginacion = new PaginacionComun<>("/admin/usuario/page", users);
 		model.addAttribute("titulo", "{usuario.lista}");
 		model.addAttribute("urlAlta", "/admin/newUser");
 		model.addAttribute("usuarios", userService.users2DTO(paginacion.getPagina().getContent()));
@@ -89,7 +88,7 @@ public class UsuarioController {
 	@GetMapping("/admin/usuarioconnected")
     public String modUsuario(Model model) {
 
-		//model.addAttribute("usuarios", userService.getConnectedUsers());
+		
 		model.addAttribute("usuarios", userService.getConnectedUsers());
 		return "admin/usuariosconectados";
 	}
