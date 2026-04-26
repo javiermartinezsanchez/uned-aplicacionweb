@@ -23,6 +23,7 @@ public class UsuarioRegistroDTO {
     private String apellido1;
 
     private String apellido2;
+
     @Email(message = "{validations.message.email.validformat}")
     @NotBlank(message = "{validations.message.email.mandatory}")
     private String email;
@@ -31,13 +32,16 @@ public class UsuarioRegistroDTO {
     @Size(min = 6, message = "{validations.message.password.validformat}",groups = OnCreate.class)
     private String newPassword;
 
+    @NotBlank(message = "{validations.message.password.mandatory}")
+    @Size(min = 6, message = "{validations.message.password.validformat}",groups = OnCreate.class)
+    private String confirmPassword;
+
     @NotBlank(message = "{validations.message.rol.mandatory}")
     private String rol;
     
     private boolean activo;
     private LocalDateTime fAlta;
     private String usuarioAlta;
-    
 	
 	public UsuarioRegistroDTO() {
 	}
@@ -102,6 +106,14 @@ public class UsuarioRegistroDTO {
 
 	public void setNewPassword(String password) {
 		this.newPassword = password;
+	}
+
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
 	}
 
 	public String getRol() {

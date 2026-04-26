@@ -4,8 +4,9 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import es.alumno.uned.dto.PerfilEstudianteDTO;
+import es.alumno.uned.dto.EstudianteDTO;
 import es.alumno.uned.dto.UsuarioRegistroDTO;
+import es.alumno.uned.exception.UserAlreadyExistException;
 import es.alumno.uned.model.entities.Estudiante;
 import es.alumno.uned.model.entities.Usuario;
 import es.alumno.uned.model.repository.EstudianteRepository;
@@ -19,7 +20,7 @@ public class EstudianteServiceImpl implements EstudianteService {
 	private EstudianteRepository estudianteRepository;
 	
 	@Override
-	public void guardar(PerfilEstudianteDTO estudianteDTO, String usuarioAlta) {
+	public void guardar(EstudianteDTO estudianteDTO, String usuarioAlta) {
 		
 		/* 
 		 * 
@@ -34,7 +35,7 @@ public class EstudianteServiceImpl implements EstudianteService {
 		 * - REGISTRO
 		 * 		El idEstudiante debe de ser nulo y el email NOEXISTENTE
 		 * 		(Se dá de alta el usuario y la información del Estudiante),
-		 * 		en caso contrario se debe de generar un error.
+		 * 		en caso contrario se genera una excepción.
 		 * 
 		 * - MIPERFIL
 		 *      El idEstudiante no es nulo.
@@ -60,14 +61,12 @@ public class EstudianteServiceImpl implements EstudianteService {
 		 Si existe updatear Usuario
 		Usuario user = usuarioService.findByEmail(estudianteDTO.getEmail());
 		*/ 
-		Long userId = estudianteDTO.getId(); 
 		Estudiante estudiante = new Estudiante();
-		if ( userId == null) {
-			estudiante = estudianteRepository.getReferenceById(userId);
+		if (estudianteDTO.getId() == null) {
+			findByUsuarioEmail(estudianteDTO.getEmail());
 		}
-		Usuario user = usuarioService.findByEmail(estudianteDTO.getEmail());
-		if (user != null) {
-			
+		else {
+			estudiante = estudianteRepository.getReferenceById(estudianteDTO.getId());
 		}
 		// 1. Crear usuario
         UsuarioRegistroDTO usuario = new UsuarioRegistroDTO();
@@ -96,8 +95,8 @@ public class EstudianteServiceImpl implements EstudianteService {
 	}
 
 	@Override
-	public Estudiante findById(Long id) {
-		// TODO Auto-generated method stub
+	public EstudianteDTO findById(Long id) {
+		// TODO añadir la búsqueda y el mapper 
 		return null;
 	}
 
@@ -107,4 +106,17 @@ public class EstudianteServiceImpl implements EstudianteService {
 		return null;
 	}
 
+	/**
+	 * Método privado para la búsqueda de un estudiante mediante su e-mail.
+	 * 
+	 * Si lo encuentra nos lanza la excepción {@code UserAlreadyExistException}
+	 * @param email Email del estudiante a buscar.
+	 */
+	private void findByUsuarioEmail(String email){
+		
+		var estudiantes = estudianteRepository.findByUsuarioEmail(email);
+		if (estudiantes.isPresent()) {
+			throw new UserAlreadyExistException("{usuario.existente.exception}");
+		}
+	}	
 }

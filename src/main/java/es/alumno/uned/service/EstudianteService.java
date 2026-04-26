@@ -2,7 +2,7 @@ package es.alumno.uned.service;
 
 import org.jspecify.annotations.Nullable;
 
-import es.alumno.uned.dto.PerfilEstudianteDTO;
+import es.alumno.uned.dto.EstudianteDTO;
 import es.alumno.uned.model.entities.Estudiante;
 
 public interface EstudianteService {
@@ -13,16 +13,16 @@ public interface EstudianteService {
     * @param estudiante DTO con la información del Estudiante
     * @param usuario UserName (email), del usuario que genera el proceso (para altas)
     */
-	void guardar(PerfilEstudianteDTO estudiante, String usuario);
+	void guardar(EstudianteDTO estudiante, String usuario);
 
 	/**
 	 * Búsqueda de Estudiantes por su Id.
 	 * 
 	 * @param id Id del Estudiante
-	 * @return Estudiante encontrado.
+	 * @return Estudiante encontrado (DTO).
 	 */
 	
-	Estudiante findById(Long id);
+	EstudianteDTO findById(Long id);
 
 	/**
 	 * Devuelve el listado de Estudiantes
@@ -31,4 +31,6 @@ public interface EstudianteService {
 	@Nullable
 	Object findAll();
 
+	
+	//Optional<Estudiante> findByUsuarioEmail(String email);
 }

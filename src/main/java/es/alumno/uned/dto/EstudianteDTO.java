@@ -3,9 +3,14 @@ package es.alumno.uned.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public class PerfilEstudianteDTO extends UsuarioRegistroDTO {
-
-    // Estudiante
+public class EstudianteDTO extends UsuarioRegistroDTO {
+	public EstudianteDTO(String rol) {
+		super.setRol(rol);
+	}
+    public EstudianteDTO() {
+    	super();
+    }
+	// Estudiante
     @NotBlank(message = "{validations.message.direccion.mandatory}")
     private String direccion;
 

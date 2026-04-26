@@ -1,13 +1,13 @@
 package es.alumno.uned.mapper;
 
-import es.alumno.uned.dto.PerfilEstudianteDTO;
+import es.alumno.uned.dto.EstudianteDTO;
 import es.alumno.uned.model.entities.Estudiante;
 import es.alumno.uned.model.entities.Usuario;
 
 public class RegistroEstudianteMapper {
 
     // DTO → Usuario
-    public static Usuario toUsuario(PerfilEstudianteDTO dto) {
+    public static Usuario toUsuario(EstudianteDTO dto) {
         Usuario u = new Usuario();
         u.setNombre(dto.getNombre());
         u.setApellido1(dto.getApellido1());
@@ -18,7 +18,7 @@ public class RegistroEstudianteMapper {
     }
 
     // DTO → Estudiante
-    public static Estudiante toEstudiante(PerfilEstudianteDTO dto, Usuario usuario) {
+    public static Estudiante toEstudiante(EstudianteDTO dto, Usuario usuario) {
         Estudiante e = new Estudiante();
         e.setId(usuario.getId());
         e.setUsuario(usuario);
@@ -29,9 +29,9 @@ public class RegistroEstudianteMapper {
         return e;
     }
 
-    // Usuario + Estudiante → PerfilEstudianteDTO
-    public static PerfilEstudianteDTO toPerfilDTO(Usuario u, Estudiante e) {
-        PerfilEstudianteDTO dto = new PerfilEstudianteDTO();
+    // Usuario + Estudiante → EstudianteDTO
+    public static EstudianteDTO toPerfilDTO(Usuario u, Estudiante e) {
+        EstudianteDTO dto = new EstudianteDTO();
         dto.setNombre(u.getNombre());
         dto.setApellido1(u.getApellido1());
         dto.setApellido2(u.getApellido2());
@@ -43,8 +43,8 @@ public class RegistroEstudianteMapper {
         return dto;
     }
 
-    // PerfilEstudianteDTO → actualizar entidades
-    public static void updateFromPerfilDTO(PerfilEstudianteDTO dto, Usuario u, Estudiante e) {
+    // EstudianteDTO → actualizar entidades
+    public static void updateFromPerfilDTO(EstudianteDTO dto, Usuario u, Estudiante e) {
         u.setNombre(dto.getNombre());
         u.setApellido1(dto.getApellido1());
         u.setApellido2(dto.getApellido2());
