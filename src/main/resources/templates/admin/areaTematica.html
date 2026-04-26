@@ -9,6 +9,7 @@ th:replace="~{plantilla::layout(~{::section})}">
 <section>
 <h1 th:text="#{areatematica.title}">Título</h1>
 		<br>
+<div th:replace="~{fragments/mensajesresultado :: mensajes}"></div>		
 <form th:action="@{${url}}" th:object="${form}" method="post">
 	<input type="hidden" th:field="*{id}" />
     <div class="mb-3">
@@ -23,8 +24,9 @@ th:replace="~{plantilla::layout(~{::section})}">
         </div> 
         <div class="text-danger" th:errors="*{descripcion}"></div>
     </div>
-    <button type="submit" class="btn btn-primary" th:text="#{command.save}">Guardar cambios</button>
+    <div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, @{${urlCancel}})}"></div>
 </form>
+<div th:replace="~{fragments/mensajesresultado :: errorgeneral}"></div>
 </section>
 </body>
 </html>

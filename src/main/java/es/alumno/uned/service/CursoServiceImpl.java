@@ -36,11 +36,24 @@ public class CursoServiceImpl implements CursoService{
 	
 	@Autowired
 	CursoMapper cursoMapper;
+	
+	@Override
+	public CursoDTO getCurso(Long id) {
+		return cursoMapper.toDTO(getValidCurso(id));
+	}
+	
+	private Curso getValidCurso(Long id) {
+		Curso curso = (id != null)
+				? cursoRepository.findById(id).orElse(new Curso())
+				: new Curso();
+		return curso;
+	}
 	@Override
 	public void saveCurso(CursoDTO dto, MultipartFile imagen, String usuario) throws IOException {
-	    Curso curso = (dto.getId() != null)
-	            ? cursoRepository.findById(dto.getId()).orElse(new Curso())
-	            : new Curso();
+//	    Curso curso = (dto.getId() != null)
+//	            ? cursoRepository.findById(dto.getId()).orElse(new Curso())
+//	            : new Curso();
+		var curso = getValidCurso(dto.getId());
 	    cursoMapper.toEntity(dto, curso);
 	    if (curso.getfIns() == null) {
 	    	curso.setfIns(LocalDateTime.now());
@@ -118,5 +131,6 @@ public class CursoServiceImpl implements CursoService{
 	                .mapper(cursoMapper::toDTO)
 	                .build();
 	    }
+
 	
 }

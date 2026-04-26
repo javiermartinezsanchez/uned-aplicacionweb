@@ -12,6 +12,13 @@ import es.alumno.uned.model.util.Paginacion;
 
 public interface CursoService {
 
+	/**
+	 * Devolvemos un curso según del Id enviado
+	 * @param id Id del curso
+	 * @return DTO del curso
+	 */
+	public CursoDTO getCurso(Long id);
+	
 	void saveCurso(CursoDTO dto, MultipartFile imagen, String usuario) throws IOException;
 
 	public Paginacion<Curso, CursoDTO> listadoPaginado(String url,  Pageable pageable);

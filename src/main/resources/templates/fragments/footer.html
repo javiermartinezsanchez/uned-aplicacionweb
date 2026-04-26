@@ -1,7 +1,7 @@
-<footer th:fragment="footer">
-	<div class="footer clearfix text-muted">
-		<div class="float-start">
-			<p>2026 &copy; UNED Aplicaciones Web Fco.Javier Martínez</p>
-		</div>
-	</div>
+<footer th:fragment="footer" class="mt-5">
+    <div class="text-center text-muted small py-3 border-top">
+        <span>&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span>
+            UNED · Aplicaciones Web · Fco. Javier Martínez
+        </span>
+    </div>
 </footer>

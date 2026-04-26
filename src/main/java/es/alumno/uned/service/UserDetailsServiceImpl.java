@@ -15,12 +15,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import es.alumno.uned.controller.UserSessionInfoDTO;
+import es.alumno.uned.dto.UserPasswordAdminChangeDTO;
+import es.alumno.uned.dto.UserPasswordChangeDTO;
 import es.alumno.uned.dto.UsuarioRegistroDTO;
+import es.alumno.uned.exception.UserPasswordNotMatchException;
 import es.alumno.uned.mapper.UsuarioRegistroMapper;
 import es.alumno.uned.model.entities.SecurityUser;
 import es.alumno.uned.model.entities.Usuario;
 import es.alumno.uned.model.repository.UsuarioRepository;
-import es.alumno.uned.model.util.PaginacionComun;
+import es.alumno.uned.model.util.Paginacion;
 
 @Service
 public class UserDetailsServiceImpl implements UsuarioService, UserDetailsService{
@@ -28,10 +31,13 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 	private UsuarioRepository userRepository;
 
 	@Autowired
+	UsuarioRegistroMapper usuarioMapper;
+	
+	@Autowired
 	private PasswordEncoder passEncoder;
 	
 
-	 @Autowired
+	@Autowired
 	private SessionRegistry sessionRegistry;
 	 
 	public UserDetailsServiceImpl(UsuarioRepository userRepository) {
@@ -40,6 +46,9 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		
+		return new SecurityUser(getUserOrNotByEmail(username));
+		/*
 		Optional<Usuario> user = userRepository.findByEmail(username);
 		if (user.isPresent()) {
 			return new SecurityUser(user.get());
@@ -47,30 +56,28 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 		else {
 			throw new UsernameNotFoundException("User not found");
 		}
+		*/
 	}
 	public List<UsuarioRegistroDTO> listarUsuarios() {
 	    return users2DTO(userRepository.findAll());
 	}
 
-	public List<UsuarioRegistroDTO> users2DTO(List<Usuario> usuarios){
+	private List<UsuarioRegistroDTO> users2DTO(List<Usuario> usuarios){
 		return usuarios.stream()
-	            .map(v -> new UsuarioRegistroDTO(
-	                    v.getId(),
-	                    v.getNombre(),
-	                    v.getEmail(),
-	                    v.getApellido1(),
-	                    v.getApellido2(),
-	                    v.getPassword(),
-	                    v.getRol()
-	            ))
+	            .map(usuarioMapper::toDTO)
 	            .collect(Collectors.toList());
 	}
-	public PaginacionComun<Usuario> listadoPaginado(String url, Pageable pageable) {
+
+	@Override
+	public Paginacion<Usuario, UsuarioRegistroDTO> listadoPaginado(String url, Pageable pageRequest) {
 		
-		return new PaginacionComun<>(url,userRepository.findAll(pageable));
+		return new Paginacion.Builder<Usuario, UsuarioRegistroDTO>()
+				.url(url)
+				.pagina(userRepository.findAll(pageRequest))
+				.mapper(usuarioMapper::toDTO)
+				.build()
+				;
 	}
-
-
 	@Override
 	public Usuario grabar(UsuarioRegistroDTO registroDTO, String usuarioAlta) {
 		Usuario user = findByEmail(registroDTO.getEmail());
@@ -82,6 +89,7 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 			user.setfAlta(LocalDateTime.now());
 			user.setActivo(true);
 		}
+		user.setRol(registroDTO.getRol());
 		user.setNombre(registroDTO.getNombre());
 		user.setApellido1(registroDTO.getApellido1());
 		user.setApellido2(registroDTO.getApellido2());
@@ -106,7 +114,7 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 	@Override
 	public UsuarioRegistroDTO getUsuario(Long id) {
 		
-		return UsuarioRegistroMapper.toDTO(findById(id));
+		return usuarioMapper.toDTO(findById(id));
 	}
 
 	@Override
@@ -128,4 +136,44 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 				.toList()
 				;
 	}
+
+	@Override
+	public Long getIdByEmail(String email) {
+		return findByEmail( email).getId();
+	}
+
+	@Override
+	public void cambioPassword(UserPasswordChangeDTO dto, String email) {
+		Usuario usuario = getUserOrNotByEmail(email);	    
+		if (!passEncoder.matches(dto.getOldPassword(), usuario.getPassword())) {
+	    	throw new UserPasswordNotMatchException("Contraseña actual no es correcta");
+	    }
+	    this.cambioPasswordUserAdmin(new UserPasswordAdminChangeDTO(dto.getNewPassword(), dto.getConfirmPassword()), usuario.getId());
+	}
+
+	@Override
+	public void cambioPasswordUserAdmin(UserPasswordAdminChangeDTO dto, Long id) {
+		Usuario usuario = getUserOrNotById(id);	    
+		if (!dto.getNewPassword().matches(dto.getConfirmPassword())) {
+	    	throw new UserPasswordNotMatchException("Las contraseñas no coinciden}");
+	    }
+	    usuario.setPassword(passEncoder.encode(dto.getNewPassword()));
+	    userRepository.save(usuario);
+	}
+	private Usuario getUserOrNotByEmail(String email) {
+		Optional<Usuario> usuario = userRepository.findByEmail(email);
+		if (usuario.isEmpty()) {
+			throw new UsernameNotFoundException("User not found");
+		}
+		return usuario.get();
+	}
+	
+	private Usuario getUserOrNotById(Long id) {
+		Optional<Usuario> usuario = userRepository.findById(id);
+		if (usuario.isEmpty()) {
+			throw new UsernameNotFoundException("User not found");
+		}
+		return usuario.get();
+	}
+
 }

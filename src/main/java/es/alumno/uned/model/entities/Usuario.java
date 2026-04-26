@@ -16,9 +16,15 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-
+/**
+ * Entidad de usuario para la persistencia de datos.
+ * 
+ * <p>Mapea la tabla de usuarios de la BD.
+ * 
+ * <p>Genera la PK (id) y el índice único por "EMAIL"
+ */
 @Entity
-@Table(name = "usuarios", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@Table(name = "usuarios", uniqueConstraints = @UniqueConstraint(name="INDEX_USUARIO_EMAIL", columnNames = "email"))
 public class Usuario {
 
 	@Id
@@ -64,7 +70,6 @@ public class Usuario {
 
 	public Usuario(String nombre, String email, String apellido1, String apellido2,  String password, String roles, Boolean activo,
 			LocalDateTime fAlta, String userAlta) {
-		super();
 		this.nombre = nombre;
 		this.apellido1 = apellido1;
 		this.apellido2 = apellido2;
@@ -80,13 +85,7 @@ public class Usuario {
 			,String email, String password, String roles, Boolean activo, LocalDateTime fAlta, String userAlta) {
 		this(nombre, email, apellido1, apellido2, password, roles, activo, fAlta, userAlta);
 		this.id = id;
-		/*
-		 * this.nombre = nombre; this.apellido = apellido; this.email = email;
-		 * this.password = password; this.roles = roles;
-		 */	}
-
-	
-	
+	}	
 	public Long getId() {
 		return id;
 	}

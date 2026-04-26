@@ -1,5 +1,8 @@
 package es.alumno.uned.dto;
 
+import java.time.LocalDateTime;
+
+import es.alumno.uned.validation.OnCreate;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -25,17 +28,23 @@ public class UsuarioRegistroDTO {
     private String email;
 
     @NotBlank(message = "{validations.message.password.mandatory}")
-    @Size(min = 6, message = "{validations.message.password.validformat}")
+    @Size(min = 6, message = "{validations.message.password.validformat}",groups = OnCreate.class)
     private String newPassword;
 
     @NotBlank(message = "{validations.message.rol.mandatory}")
     private String rol;
     
+    private boolean activo;
+    private LocalDateTime fAlta;
+    private String usuarioAlta;
+    
 	
 	public UsuarioRegistroDTO() {
 	}
 
-	public UsuarioRegistroDTO(Long id, String nombre, String email, String apellido1,  String apellido2, String password, String rol) {
+	public UsuarioRegistroDTO(Long id, String nombre, String email, 
+			String apellido1,  String apellido2, String password, String rol,
+			boolean activo, LocalDateTime fAlta, String usuarioAlta) {
 		this.id = id;
 		this.nombre = nombre;
 		this.apellido1 = apellido1;
@@ -43,8 +52,10 @@ public class UsuarioRegistroDTO {
 		this.email = email;
 		this.newPassword = password;
 		this.rol= rol;
+		this.activo = activo;
+		this.fAlta = fAlta;
+		this.usuarioAlta = usuarioAlta;
 	}
-
 
 	public Long getId() {
 		return id;
@@ -99,6 +110,31 @@ public class UsuarioRegistroDTO {
 	public void setRol(String rol) {
 		this.rol = rol;
 	}
+	
+	public boolean isActivo() {
+		return activo;
+	}
+
+	public void setActivo(boolean activo) {
+		this.activo = activo;
+	}
+
+	public LocalDateTime getfAlta() {
+		return fAlta;
+	}
+
+	public void setfAlta(LocalDateTime fAlta) {
+		this.fAlta = fAlta;
+	}
+
+	public String getUsuarioAlta() {
+		return usuarioAlta;
+	}
+
+	public void setUsuarioAlta(String usuarioAlta) {
+		this.usuarioAlta = usuarioAlta;
+	}
+	
     public String getNombreCompleto() {
     	return (nombre!=null?nombre:"")+ 
                (apellido1 !=null?" ".concat(apellido1):"") +

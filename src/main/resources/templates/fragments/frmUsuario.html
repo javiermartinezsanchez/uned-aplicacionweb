@@ -1,45 +1,46 @@
 <section th:fragment="frmUsuario">
 	<input type="hidden" th:field="*{id}" />
     <div class="mb-3">
-        <label class="form-label">Email</label>
+        <label class="form-label" th:text="#{usuario.email}">Email</label>
         <input type="email" th:field="*{email}" class="form-control w-50">
         <div class="text-danger" th:errors="*{email}"></div>
     </div>
    <div class="mb-3" th:if="not *{id}">
-        <label class="form-label">Password</label>
+        <label class="form-label" th:text="#{usuario.password}">Password</label>
         <div class="input-group w-15">
         <input type="password" autocomplete="Password" th:field="*{newPassword}" class="form-control">
         </div> 
         <div class="text-danger" th:errors="*{newPassword}"></div>
     </div>
-    <div class="mb-3" th:if="*{id}" th:replace="~{fragments/boton-enlace :: btnLink(
+    <div class="mb-3" th:if="*{id} != ''" th:insert="~{fragments/botones :: btnLink(
         #{command.modificar.password},
         @{/admin/usuario/{id}/password(id=*{id})},
-        'btn btn-warning'
+        'btn-warning', 'bi bi-pencil-square'
     )}">
     </div>
     <div class="mb-3">
-        <label class="form-label">Nombre</label>
+        <label class="form-label" th:text="#{usuario.nombre}">Nombre</label>
         <div class="input-group w-50">
         <input type="text" th:field="*{nombre}" class="form-control w-50">
         </div>
         <div class="text-danger" th:errors="*{nombre}"></div>
     </div>
-
-    <div class="mb-3">
-        <label class="form-label">Apellido1</label>
+    <div class="row">
+    <div class="col-md-6 mb-3">
+        <label class="form-label" th:text="#{usuario.apellido1}">Apellido1</label>
         <input type="text" th:field="*{apellido1}" class="form-control w-35">
         <div class="text-danger" th:errors="*{apellido1}"></div>
     </div>
-   <div class="mb-3">
-        <label class="form-label">Apellido2</label>
+   <div class="col-md-6 mb-3">
+        <label class="form-label" th:text="#{usuario.apellido2}">Apellido2</label>
         <input type="text" th:field="*{apellido2}" class="form-control w-35">
         <div class="text-danger" th:errors="*{apellido2}"></div>
     </div>
+    </div>
    <div class="mb-3" sec:authorize="hasAnyRole('ADMIN')">
-        <label class="form-label">Rol</label>
+        <label class="form-label" th:text="#{usuario.role}">Rol</label>
         <select class="form-select" th:field="*{rol}">
-    		<option value="">-- Selecciona un rol --</option>
+        <option th:value="${''}" th:text="#{responsable.select}"></option>
     		<option th:each="r : ${roles}"
             		th:value="${r.nombre}"
             		th:text="${r.descripcion}">
@@ -48,7 +49,7 @@
         <div class="text-danger" th:errors="*{rol}"></div>
     </div>
    <div class="mb-3" sec:authorize="not hasAnyRole('ADMIN')">
-        <label class="form-label">Rol</label>
+        <label class="form-label" th:text="#{usuario.rol}">Rol</label>
 	    <input type="text" th:field="*{rol}" class="form-control w-35">
    </div>
 

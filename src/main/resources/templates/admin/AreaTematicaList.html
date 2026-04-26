@@ -11,10 +11,10 @@
 		<h1 th:text="#{areatematica.lista}">Título</h1>
 		<br>
 		<div class="form-group">
-		    <div class="mb-3" th:replace="~{fragments/boton-enlace :: btnLink(
+		    <div  th:replace="~{fragments/botones :: btnLink(
 		        #{mensaje.nueva} + ' ' + #{areatematica.title},
-		        @{/admin/newAreaTematica},
-		        'btn btn-success'
+		        @{${urlAlta}},
+		        'btn-success', 'bi bi-plus-circle'
 		    )}">
 		    </div>
 		</div>
@@ -28,16 +28,14 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="tema : ${pagina.pagina.content}">
+				<tr th:each="tema : ${paginacion.contenido}">
 					<td th:text="${tema.titulo}">ID</td>
 					<td th:text="${tema.descripcion}">ID</td>
-					<td><a th:href="@{/admin/areaTematica/{id}(id=${tema.id})}" class="btn btn-primary" th:text="#{command.modificar}">traduciones</a></td>
+					<td><a th:href="@{|${paginacion.url}/${tema.id}|}" class="btn btn-primary" ><i class="bi bi-pencil-square"></i></a></td>
 				</tr>
 			</tbody>
 		</table>
-		<th:block th:if="${paginacion}">
-		<nav th:replace="~{fragments/paginaciontabla :: paginaciontabla}"></nav>
-		</th:block>
+        <div th:replace="~{fragments/paginacionComun :: paginador(${paginacion}, ${query})}"></div>
 	</div>
 </section>
 </body>

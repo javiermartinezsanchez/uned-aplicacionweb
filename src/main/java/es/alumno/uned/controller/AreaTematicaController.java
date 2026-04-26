@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import es.alumno.uned.dto.AreaTematicaDTO;
-import es.alumno.uned.dto.PerfilEstudianteDTO;
-import es.alumno.uned.model.entities.AreaTematica;
-import es.alumno.uned.model.util.PaginacionComun;
 import es.alumno.uned.service.AreaTematicaService;
 import jakarta.validation.Valid;
 
@@ -29,6 +26,7 @@ public class AreaTematicaController {
 	@GetMapping("/admin/newAreaTematica")
 	public String nuevaArea(Model model) {
 		model.addAttribute("url", "/admin/areaTematica");
+		model.addAttribute("urlCancel", "/admin/areaTematica");
 		model.addAttribute("form", new AreaTematicaDTO());
 		return "admin/areaTematica";
 	}
@@ -36,6 +34,7 @@ public class AreaTematicaController {
 	@GetMapping("/admin/areaTematica/{id}")
 	public String consultaArea(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("url", "/admin/areaTematica");
+		model.addAttribute("urlCancel", "/admin/areaTematica");
 		model.addAttribute("form", areaTematicaService.getAreaTematica(id));
 		return "admin/areaTematica";
 	}
@@ -53,16 +52,16 @@ public class AreaTematicaController {
         else {
         	model.addAttribute("form",areaTematicaService.grabar(form));
         }
-		//model.addAttribute("url", "/admin/areaTematica");
-		//model.addAttribute("form", areaTematicaService.getAreaTematica(id));
 		return "admin/areaTematica";
 	}
 
-	@GetMapping("/admin/AreaTematica")
+	@GetMapping("/admin/areaTematica")
 	public String list(@RequestParam(name="page", defaultValue = "0") int page, Model model) {
 		Pageable pageRequest= PageRequest.of(page, 10);
-		PaginacionComun<AreaTematica> paginacion = areaTematicaService.listadoPaginado("/admin/areaTematica", pageRequest);
-		model.addAttribute("pagina", paginacion);
+		var paginacion = areaTematicaService.listadoPaginado("/admin/areaTematica", pageRequest);
+		model.addAttribute("urlAlta", "/admin/newAreaTematica");
+	    model.addAttribute("paginacion", paginacion);
+	    model.addAttribute("query","");
 		return "admin/AreaTematicaList";
 	}
 

@@ -70,6 +70,8 @@ public class DatabaseLoader {
 				userRepo.save(new Usuario("Maria", "maria.estudiante@correo.es", "Relaño", "Wilson", passEncoder.encode("1234")  , "ESTUD", true, LocalDateTime.now(), "CARGA INICIAL"));
 				
 			}
+		
+			
 			if (areaRepo.findByTitulo("Sanidad y Salud") == null) {
 				areaRepo.save(new AreaTematica("Sanidad y Salud","cursos online de sanidad y salud"));
 			}

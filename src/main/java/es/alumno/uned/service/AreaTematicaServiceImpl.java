@@ -11,8 +11,10 @@ import org.springframework.stereotype.Service;
 
 import es.alumno.uned.dto.AreaTematicaDTO;
 import es.alumno.uned.exception.AreaTematicaAlreadyExistException;
+import es.alumno.uned.mapper.AreaTematicaMapper;
 import es.alumno.uned.model.entities.AreaTematica;
 import es.alumno.uned.model.repository.AreaTematicaRepository;
+import es.alumno.uned.model.util.Paginacion;
 import es.alumno.uned.model.util.PaginacionComun;
 import jakarta.transaction.Transactional;
 
@@ -22,10 +24,17 @@ public class AreaTematicaServiceImpl implements AreaTematicaService {
 
 	@Autowired
 	AreaTematicaRepository repo;
+	
+	@Autowired
+	AreaTematicaMapper mapper;
 	@Override
-	public PaginacionComun<AreaTematica> listadoPaginado(String url, Pageable pageRequest) {
+	public Paginacion<AreaTematica, AreaTematicaDTO> listadoPaginado(String url, Pageable pageRequest) {
 		
-		return new PaginacionComun<>(url,repo.findAll(pageRequest));
+		return new Paginacion.Builder<AreaTematica, AreaTematicaDTO>()
+				.url(url)
+                .pagina(repo.findAll(pageRequest))
+                .mapper(mapper::toDTO)
+                .build();
 	}
 
 	@Override

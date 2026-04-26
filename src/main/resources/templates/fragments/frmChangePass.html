@@ -1,9 +1,11 @@
-<section th:fragment="frmChangePass">
-    <div class="mb-3">
+<section th:fragment="frmChangePassOld">
+    <div class="mb-3" th:if="*{oldPassword}">
         <label class="form-label" th:text="#{mensaje.antigua} + ' ' + #{usuario.password}"></label>
         <input type="password" th:field="*{oldPassword}" class="form-control"/>
         <div class="text-danger" th:errors="*{oldPassword}"></div>
     </div>
+</section>
+<section th:fragment="frmChangePass">
     <div class="mb-3">
        <label class="form-label" th:text="#{mensaje.nueva} + ' ' + #{usuario.password}"></label>
 
@@ -16,7 +18,6 @@
 	    <input type="password" th:field="*{confirmPassword}" class="form-control"/>
 	    <div class="text-danger" th:errors="*{confirmPassword}"></div>
     </div>
-    <button type="submit" class="btn btn-primary" th:text="#{command.modificar}">Actualizar contraseña</button>
+    <div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, @{${urlCancel}})}"></div>
 
-    <div th:if="${success}" th:text="${success}" class="alert alert-success"></div>
 </section>    
