@@ -1,0 +1,19 @@
+<!-- Fragmento para mensajes de errores globales definidos por excepciones generales -->
+<div th:fragment="errorgeneral">
+	<div th:if="${errorGlobal}" class="alert alert-danger">
+	    <span th:text="${errorGlobal}"></span>
+	</div>
+</div>
+<!-- Fragmento para mensajes de éxito(success) o error (error) -->
+<div th:fragment="mensajes">
+
+    <div th:if="${success}" class="alert alert-success">
+        <span th:text="${success}"></span>
+    </div>
+
+    <div th:if="${error}" class="alert alert-danger">
+        <span th:text="${error}"></span>
+    </div>
+
+</div>
+

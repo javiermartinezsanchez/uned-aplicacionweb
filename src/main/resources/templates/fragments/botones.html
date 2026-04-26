@@ -1,0 +1,69 @@
+<!-- templates/fragments/botones.html -->
+
+<!-- ========================================================= -->
+<!--  BOTONES ENLACE (btnLink)                                 -->
+<!--  Uso: th:insert="fragments/botones :: btnLink('Texto', '/ruta', 'btn-primary', 'bi-save')" -->
+<!-- ========================================================= -->
+<div th:fragment="btnLink(texto, url, estilo, icono)">
+    <a th:href="@{${url}}"
+       th:class="'btn ' + ${estilo}">
+        <i th:if="${icono != null}" th:class="${icono}"></i>
+        <span th:text="${texto}"></span>
+    </a>
+</div>
+
+
+<!-- ========================================================= -->
+<!--  BOTÓN SUBMIT (btnSubmit)                                 -->
+<!--  Uso: th:insert="fragments/botones :: btnSubmit('Guardar', 'btn-success', 'bi-check')" -->
+<!-- ========================================================= -->
+<div th:fragment="btnSubmit(texto, estilo, icono)">
+    <button type="submit"
+            th:class="'btn ' + ${estilo}">
+        <i th:if="${icono != null}" th:class="${icono}"></i>
+        <span th:text="${texto}"></span>
+    </button>
+</div>
+
+
+<!-- ========================================================= -->
+<!--  BOTÓN VOLVER (btnVolver)                                 -->
+<!--  Uso: th:insert="fragments/botones :: btnVolver('/admin/usuario')" -->
+<!-- ========================================================= -->
+<div th:fragment="btnVolver(url)">
+    <a th:href="@{${url}}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left-circle"></i> Volver
+    </a>
+</div>
+
+
+<!-- ========================================================= -->
+<!--  BOTÓN ELIMINAR (btnEliminar)                             -->
+<!--  Uso: th:insert="fragments/botones :: btnEliminar('/admin/usuario/eliminar/7')" -->
+<!-- ========================================================= -->
+<div th:fragment="btnEliminar(url)">
+    <a th:href="@{${url}}" class="btn btn-danger">
+        <i class="bi bi-trash"></i> Eliminar
+    </a>
+</div>
+
+
+<!-- ========================================================= -->
+<!--  GRUPO DE BOTONES (btnGroup)                              -->
+<!--  Uso: th:replace="fragments/botones :: btnGroup('Guardar', '/cancelar')" -->
+<!-- ========================================================= -->
+<div th:fragment="btnGroup(textoSubmit, textoCancelar, urlCancelar)">
+    <div class="row g-3">
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save"></i> <span th:text="${textoSubmit}"></span>
+            </button>
+        </div>
+
+        <div class="col-auto">
+            <a th:href="@{${urlCancelar}}" class="btn btn-danger" >
+                <i class="bi bi-x-circle"></i> <span th:text="${textoCancelar}"></span>
+            </a>
+        </div>
+    </div>
+</div>
