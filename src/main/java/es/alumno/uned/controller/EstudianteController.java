@@ -35,6 +35,30 @@ public class EstudianteController {
         model.addAttribute("form", new EstudianteDTO("ESTUD"));
         return "estudiante/editar-perfil";
     }
+    @GetMapping("/estudiantes/miperfil")
+    public String editarPerfil(Principal principal, 
+    		Model model) {
+
+        EstudianteDTO dto = estudianteService.findById(
+        		usuarioService.getIdByEmail(principal.getName()));
+        
+    	model.addAttribute("url", "/estudiantes/miperfil");
+       	model.addAttribute("urlCancel", "/");
+        model.addAttribute("form", dto);
+        return "estudiante/editar-perfil";
+    }
+
+    @GetMapping("/estudiantes/estudiante/{id}")
+    public String modificarPerfil(@PathVariable Long id,Principal principal, 
+    		Model model) {
+
+        EstudianteDTO dto = estudianteService.findById(id);
+        
+    	model.addAttribute("url", String.format("/estudiantes/estudiante/%d", id));
+       	model.addAttribute("urlCancel", "/");
+        model.addAttribute("form", dto);
+        return "estudiante/editar-perfil";
+    }
 
     @PostMapping("/registro")
     public String registrar(@AuthenticationPrincipal UserDetails usuario,
@@ -53,23 +77,11 @@ public class EstudianteController {
         else {
         	usuarioAlta = usuario.getUsername();
         }
-        estudianteService.guardar(form, usuarioAlta);
+        estudianteService.grabar(form, usuarioAlta);
 
         return "redirect:/estudiante/editar-perfil?sucess";
     }
     
-    @GetMapping("/estudiantes/miperfil")
-    public String editarPerfil(Principal principal, 
-    		Model model) {
-
-        EstudianteDTO dto = estudianteService.findById(
-        		usuarioService.getIdByEmail(principal.getName()));
-        
-    	model.addAttribute("url", "/estudiantes/miperfil");
-        model.addAttribute("form", dto);
-        return "estudiante/editar-perfil";
-    }
-
     @PostMapping("/estudiantes/miperfil")
     public String actualizarPerfil(
             @Valid @ModelAttribute("form") EstudianteDTO form,

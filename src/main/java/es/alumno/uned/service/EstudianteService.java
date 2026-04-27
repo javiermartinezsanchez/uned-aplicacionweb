@@ -13,7 +13,7 @@ public interface EstudianteService {
     * @param estudiante DTO con la información del Estudiante
     * @param usuario UserName (email), del usuario que genera el proceso (para altas)
     */
-	void guardar(EstudianteDTO estudiante, String usuario);
+	void grabar(EstudianteDTO estudiante, String usuario);
 
 	/**
 	 * Búsqueda de Estudiantes por su Id.

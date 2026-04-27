@@ -157,7 +157,7 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 		if (!dto.getNewPassword().matches(dto.getConfirmPassword())) {
 	    	throw new UserPasswordNotMatchException("Las contraseñas no coinciden}");
 	    }
-	    usuario.setPassword(passEncoder.encode(dto.getNewPassword()));
+	    usuario.setPassword(getEncriptedPass(dto.getNewPassword()));
 	    userRepository.save(usuario);
 	}
 	private Usuario getUserOrNotByEmail(String email) {
@@ -174,6 +174,12 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 			throw new UsernameNotFoundException("User not found");
 		}
 		return usuario.get();
+	}
+
+	@Override
+	public String getEncriptedPass(String password) {
+		
+		return passEncoder.encode(password);
 	}
 
 }

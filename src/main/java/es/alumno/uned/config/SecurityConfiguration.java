@@ -32,10 +32,12 @@ public class SecurityConfiguration {
 	            .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
 	            .anyRequest().authenticated()
 	        )
+	        .exceptionHandling(ex -> ex
+	                .accessDeniedPage("/error/error-403")
+	            )
 	        .formLogin(form -> form
 	            .loginPage("/login")
 	            .successHandler(successHandler)
-	            //.defaultSuccessUrl("/home")
 	            .failureUrl("/login?error=true")
 	            .permitAll()
 	        )

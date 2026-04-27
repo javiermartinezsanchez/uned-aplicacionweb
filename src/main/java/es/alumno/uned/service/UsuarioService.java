@@ -119,4 +119,12 @@ public interface UsuarioService extends UserDetailsService{
 	 * @return Id del Usuario si existe.
 	 */
 	public Long getIdByEmail(String email);
+	
+	/**
+	 * Nos devuelve una password encriptada según el método que se defina en la implementación.
+	 * 
+	 * @param password Cadena "limpia" de la contraseña
+	 * @return Cadena encriptada.
+	 */
+	public String getEncriptedPass(String password);
 }
