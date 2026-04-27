@@ -16,9 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import es.alumno.uned.dto.CursoDTO;
 import es.alumno.uned.mapper.CursoMapper;
-import es.alumno.uned.model.entities.AreaTematica;
 import es.alumno.uned.model.entities.Curso;
-import es.alumno.uned.model.entities.Usuario;
 import es.alumno.uned.model.repository.AreaTematicaRepository;
 import es.alumno.uned.model.repository.CursoRepository;
 import es.alumno.uned.model.repository.UsuarioRepository;
@@ -29,6 +27,7 @@ public class CursoServiceImpl implements CursoService{
 
 	@Autowired
 	CursoRepository cursoRepository;
+	
 	@Autowired
 	AreaTematicaRepository areaTematicaRepository;
 	@Autowired
@@ -41,7 +40,18 @@ public class CursoServiceImpl implements CursoService{
 	public CursoDTO getCurso(Long id) {
 		return cursoMapper.toDTO(getValidCurso(id));
 	}
-	
+	/**
+	 * Obtenemos un curso válido.
+	 * <ul>
+	 * <li>Si el id es null -> Nuevo Curso</li>
+	 * <li>Si el id no es nulo</li>
+	 * <ul><li>Si se encuentra -> Curso de la BD</li>
+	 * <li>Si no se encuentra -> Nuevo Curso</li>
+	 * </ul>
+	 * </ul>
+	 * @param id Id del curso a buscar
+	 * @return {@code Curso}
+	 */
 	private Curso getValidCurso(Long id) {
 		Curso curso = (id != null)
 				? cursoRepository.findById(id).orElse(new Curso())
@@ -49,10 +59,7 @@ public class CursoServiceImpl implements CursoService{
 		return curso;
 	}
 	@Override
-	public void saveCurso(CursoDTO dto, MultipartFile imagen, String usuario) throws IOException {
-//	    Curso curso = (dto.getId() != null)
-//	            ? cursoRepository.findById(dto.getId()).orElse(new Curso())
-//	            : new Curso();
+	public void grabar(CursoDTO dto, MultipartFile imagen, String usuario) throws IOException {
 		var curso = getValidCurso(dto.getId());
 	    cursoMapper.toEntity(dto, curso);
 	    if (curso.getfIns() == null) {
@@ -66,7 +73,6 @@ public class CursoServiceImpl implements CursoService{
 	    }
 
 	    cursoRepository.save(curso);
-
 		
 	}
 	private String saveFile(MultipartFile imagen) throws IOException {
@@ -131,6 +137,5 @@ public class CursoServiceImpl implements CursoService{
 	                .mapper(cursoMapper::toDTO)
 	                .build();
 	    }
-
 	
 }

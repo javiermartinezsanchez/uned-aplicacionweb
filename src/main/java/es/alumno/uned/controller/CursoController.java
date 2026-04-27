@@ -75,7 +75,7 @@ public class CursoController {
 	        return "redirect:/curso";
 	    }
 
-	    cursoService.saveCurso(dto, imagen, userDetails.getUsername());
+	    cursoService.grabar(dto, imagen, userDetails.getUsername());
 	    return "redirect:/curso";
 	}
     

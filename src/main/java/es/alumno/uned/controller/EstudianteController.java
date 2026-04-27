@@ -47,7 +47,7 @@ public class EstudianteController {
             return "estudiante/editar-perfil";
         }
         String usuarioAlta;
-        if (usuario.getUsername() == null) {
+        if (usuario == null) {
         	usuarioAlta = form.getEmail();
         }
         else {

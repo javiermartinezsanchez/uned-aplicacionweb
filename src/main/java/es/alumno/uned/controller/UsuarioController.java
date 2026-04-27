@@ -6,7 +6,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,9 +23,7 @@ import es.alumno.uned.exception.UserPasswordNotMatchException;
 import es.alumno.uned.mapper.UsuarioRegistroMapper;
 import es.alumno.uned.model.entities.Usuario;
 import es.alumno.uned.model.util.Paginacion;
-import es.alumno.uned.model.util.PaginacionComun;
 import es.alumno.uned.service.RolService;
-import es.alumno.uned.service.UserDetailsServiceImpl;
 import es.alumno.uned.service.UsuarioService;
 import es.alumno.uned.validation.OnCreate;
 import es.alumno.uned.validation.OnUpdate;
@@ -47,8 +44,7 @@ public class UsuarioController {
 
 	@Autowired
 	UsuarioRegistroMapper usuarioMapper;
-	@Autowired
-	private PasswordEncoder passwEncoder;
+
 	@Autowired
 	private Validator validator;
 	
@@ -66,6 +62,7 @@ public class UsuarioController {
 		Paginacion<Usuario, UsuarioRegistroDTO> paginacion = userService.listadoPaginado("/admin/usuario", pageRequest);
 		model.addAttribute("titulo", "{usuario.lista}");
 		model.addAttribute("urlAlta", "/admin/newUser");
+		model.addAttribute("urlBack", "/home");
 		model.addAttribute("paginacion", paginacion);
 		model.addAttribute("query", "");
 		return "admin/usuarios";
@@ -101,7 +98,7 @@ public class UsuarioController {
 
 		  // 1) Para utilizar el mismo DTO sea 
 		  //     Creación (con password)
-		  //     Modificación (sin password) y que  no salte el @NotBlank del valitor
+		  //     Modificación (sin password) y que  no salte el @NotBlank del validator
 	    Class<?> grupo = (form.getId() == null) ? OnCreate.class : OnUpdate.class;
 
 	    // 2) Validar dinámicamente según el grupo

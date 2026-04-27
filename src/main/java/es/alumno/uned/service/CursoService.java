@@ -19,7 +19,7 @@ public interface CursoService {
 	 */
 	public CursoDTO getCurso(Long id);
 	
-	void saveCurso(CursoDTO dto, MultipartFile imagen, String usuario) throws IOException;
+	void grabar(CursoDTO dto, MultipartFile imagen, String usuario) throws IOException;
 
 	public Paginacion<Curso, CursoDTO> listadoPaginado(String url,  Pageable pageable);
 	
