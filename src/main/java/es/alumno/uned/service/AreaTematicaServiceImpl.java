@@ -39,35 +39,31 @@ public class AreaTematicaServiceImpl implements AreaTematicaService {
 
 	@Override
 	public @Nullable AreaTematicaDTO getAreaTematica(Long id) {
-		AreaTematica at = repo.getReferenceById(id);
-		return new AreaTematicaDTO(at.getId(), at.getTitulo(), at.getDescripcion());
-	}
-
-	@Override
-	public AreaTematicaDTO nuevaArea(AreaTematicaDTO area) {
-		if (isExistByTitulo(area.getTitulo()) ) {
-            throw new AreaTematicaAlreadyExistException("{areaTematica.error.existente}" + area.getTitulo());
-
-		}
-		AreaTematica areaTematica = new AreaTematica();
-		areaTematica.setTitulo(area.getTitulo());
-		areaTematica.setDescripcion(area.getDescripcion());
-		areaTematica =  repo.save(areaTematica);
-		return new AreaTematicaDTO(areaTematica.getId(), areaTematica.getTitulo(), areaTematica.getDescripcion()) ;
+		AreaTematica areatematica = repo.getReferenceById(id);
+		return mapper.toDTO(areatematica);
 	}
 
 	@Override
 	public AreaTematicaDTO grabar(AreaTematicaDTO area) {
-		Optional<AreaTematica> areaTematica = repo.findById(area.getId());
-		if ((areaTematica.isPresent()) && (isExistByTitulo(area.getTitulo()))) {
-			AreaTematica atsave = areaTematica.get();
-			atsave.setDescripcion(area.getDescripcion());
-			atsave.setTitulo(area.getTitulo());
-			atsave = repo.save(atsave);
-			return new AreaTematicaDTO(atsave.getId(), atsave.getTitulo(), atsave.getDescripcion()) ;
+		AreaTematica areaTematica;
+		if (area.getId() == null) {
+			if (isExistByTitulo(area.getTitulo())) {
+			   throw new AreaTematicaAlreadyExistException("{areaTematica.error.existente}" + " " + area.getTitulo());
+		    }
+			areaTematica = new AreaTematica();
 		}
-		return area;
+		else {
+			areaTematica = repo.findById(area.getId()).get();	
+		}
+		
+//		if ((areaTematica.isPresent()) && (isExistByTitulo(area.getTitulo()))) {
+//			AreaTematica atsave = areaTematica.get();
+		areaTematica.setDescripcion(area.getDescripcion());
+		areaTematica.setTitulo(area.getTitulo());
+		areaTematica = repo.save(areaTematica);
+		return mapper.toDTO(areaTematica) ;
 	}
+		
     
 	/**
 	 * Busca si existe una Area por su titulo
@@ -81,12 +77,8 @@ public class AreaTematicaServiceImpl implements AreaTematicaService {
 	@Override
 	public List<AreaTematicaDTO> listAll() {
 		return repo.findAll().stream()
-		.map(a-> new AreaTematicaDTO(a.getId(), a.getTitulo(), a.getDescripcion())
-				)
+		.map(mapper :: toDTO)
 		.collect(Collectors.toList());
 	}
 	
-	
-	
-
 }

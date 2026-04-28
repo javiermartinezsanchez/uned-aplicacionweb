@@ -20,6 +20,15 @@ public class GlobalExceptionHandler {
         return "usuario/form";
     }
     
+    @ExceptionHandler(AreaTematicaAlreadyExistException.class)
+    public String handleAreaExistente(AreaTematicaAlreadyExistException ex,
+    		HttpServletRequest request,
+			Model model) {
+       	String backUrl = request.getHeader("Referer");
+        model.addAttribute("backUrl", backUrl != null ? backUrl : "/");
+        model.addAttribute("errorGlobal", ex.getMessage());
+   	    return "admin/areaTematica";
+    }
     
 }
 

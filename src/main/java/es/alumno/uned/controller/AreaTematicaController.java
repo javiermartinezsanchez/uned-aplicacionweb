@@ -46,12 +46,12 @@ public class AreaTematicaController {
         	model.addAttribute("url", "/admin/areaTematica");
             return "admin/areaTematica";
         }
-        if (form.getId() == null) {
-        	model.addAttribute("form",areaTematicaService.nuevaArea(form));
-        }
-        else {
+        //if (form.getId() == null) {
+        //	model.addAttribute("form",areaTematicaService.nuevaArea(form));
+        //}
+        //else {
         	model.addAttribute("form",areaTematicaService.grabar(form));
-        }
+        //}
 		return "admin/areaTematica";
 	}
 
