@@ -16,6 +16,15 @@ public class CustomErrorController implements ErrorController {
 
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
 
+        Object uri = request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI);
+        Object servlet = request.getAttribute(RequestDispatcher.ERROR_SERVLET_NAME);
+        Object exception = request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
+
+        System.out.println(">>> ERROR STATUS: " + status);
+        System.out.println(">>> ERROR URI: " + uri);
+        System.out.println(">>> ERROR SERVLET: " + servlet);
+        System.out.println(">>> ERROR EXCEPTION: " + exception);
+        
         if (status != null) {
             int statusCode = Integer.parseInt(status.toString());
             model.addAttribute("status", statusCode);

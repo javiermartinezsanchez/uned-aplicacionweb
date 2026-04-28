@@ -46,28 +46,13 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		
 		return new SecurityUser(getUserOrNotByEmail(username));
-		/*
-		Optional<Usuario> user = userRepository.findByEmail(username);
-		if (user.isPresent()) {
-			return new SecurityUser(user.get());
-		}
-		else {
-			throw new UsernameNotFoundException("User not found");
-		}
-		*/
 	}
 	public List<UsuarioRegistroDTO> listarUsuarios() {
-	    return users2DTO(userRepository.findAll());
-	}
-
-	private List<UsuarioRegistroDTO> users2DTO(List<Usuario> usuarios){
-		return usuarios.stream()
-	            .map(usuarioMapper::toDTO)
+	    return userRepository.findAll().stream()
+	    		.map(usuarioMapper::toDTO)
 	            .collect(Collectors.toList());
 	}
-
 	@Override
 	public Paginacion<Usuario, UsuarioRegistroDTO> listadoPaginado(String url, Pageable pageRequest) {
 		

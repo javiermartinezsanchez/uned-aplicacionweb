@@ -16,53 +16,49 @@ import es.alumno.uned.service.AreaTematicaService;
 import jakarta.validation.Valid;
 
 @Controller
-public class AreaTematicaController {
+public class AreaTematicaController extends BaseCrudController{
 
 	AreaTematicaService areaTematicaService;
 	
 	public AreaTematicaController(AreaTematicaService areaTematicaService) {
 		this.areaTematicaService = areaTematicaService;
 	}
-	@GetMapping("/admin/newAreaTematica")
-	public String nuevaArea(Model model) {
-		model.addAttribute("url", "/admin/areaTematica");
-		model.addAttribute("urlCancel", "/admin/areaTematica");
+	@GetMapping("/admin/areaTematica/nueva")
+	public String nueva(Model model) {
+		preparaArea(model);
 		model.addAttribute("form", new AreaTematicaDTO());
-		return "admin/areaTematica";
+		return model.getAttribute("viewName").toString();
 	}
 
 	@GetMapping("/admin/areaTematica/{id}")
-	public String consultaArea(@PathVariable("id") Long id, Model model) {
-		model.addAttribute("url", "/admin/areaTematica");
-		model.addAttribute("urlCancel", "/admin/areaTematica");
+	public String modifica(@PathVariable("id") Long id, Model model) {
+		preparaArea(model);
 		model.addAttribute("form", areaTematicaService.getAreaTematica(id));
-		return "admin/areaTematica";
+		return model.getAttribute("viewName").toString();
 	}
 	
 	@PostMapping("/admin/areaTematica")
-	public String altaArea(@Valid @ModelAttribute("form") AreaTematicaDTO form,
+	public String graba(@Valid @ModelAttribute("form") AreaTematicaDTO form,
             BindingResult result,Model model) {
+			preparaArea(model);
         if (result.hasErrors()) {
-        	model.addAttribute("url", "/admin/areaTematica");
-            return "admin/areaTematica";
+            return model.getAttribute("viewName").toString();
         }
-        //if (form.getId() == null) {
-        //	model.addAttribute("form",areaTematicaService.nuevaArea(form));
-        //}
-        //else {
-        	model.addAttribute("form",areaTematicaService.grabar(form));
-        //}
-		return "admin/areaTematica";
+        model.addAttribute("form",areaTematicaService.grabar(form));
+		return "redirect:/admin/areaTematica?sucess";
 	}
 
 	@GetMapping("/admin/areaTematica")
-	public String list(@RequestParam(name="page", defaultValue = "0") int page, Model model) {
+	public String lista(@RequestParam(name="page", defaultValue = "0") int page, Model model) {
 		Pageable pageRequest= PageRequest.of(page, 10);
 		var paginacion = areaTematicaService.listadoPaginado("/admin/areaTematica", pageRequest);
-		model.addAttribute("urlAlta", "/admin/newAreaTematica");
+		model.addAttribute("urlAlta", "/admin/areaTematica/nueva");
+		model.addAttribute("urlBack", "/home");
 	    model.addAttribute("paginacion", paginacion);
 	    model.addAttribute("query","");
 		return "admin/AreaTematicaList";
 	}
-
+	private void preparaArea(Model model) {
+		prepararModeloFormulario(model, "admin/areaTematica", "admin/areaTematica","admin/areaTematica");
+	}
 }

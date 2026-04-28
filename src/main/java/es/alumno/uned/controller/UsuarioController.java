@@ -55,7 +55,7 @@ public class UsuarioController {
 		this.rolService = rolService;
 	}
 	@GetMapping("/admin/usuario")
-	public String listaUsuariosPaginada(
+	public String listar(
 			@RequestParam(name="page", defaultValue = "0") int page, 
 			Model model) {
 		Pageable pageRequest= PageRequest.of(page, 10);
@@ -68,12 +68,12 @@ public class UsuarioController {
 		return "admin/usuarios";
 	}
 	@GetMapping("/admin/newUser")
-	public String nuevoUsuario(Model model) {
+	public String nuevo(Model model) {
         model.addAttribute("form", new UsuarioRegistroDTO());
 		return getUsuario(model);
 	}
 	@GetMapping("/admin/usuario/{id}")
-    public String modUsuario(@RequestParam(required = false) String success, 
+    public String modificar(@RequestParam(required = false) String success, 
     		@PathVariable("id") Long id, 
     		Model model) {
 		if (success != null) {

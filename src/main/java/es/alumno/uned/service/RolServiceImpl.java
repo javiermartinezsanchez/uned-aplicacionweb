@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import es.alumno.uned.dto.RolDTO;
-import es.alumno.uned.model.entities.Rol;
 import es.alumno.uned.model.repository.RolRepository;
 
 @Service

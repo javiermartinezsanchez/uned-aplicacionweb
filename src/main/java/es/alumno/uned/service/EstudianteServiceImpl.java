@@ -1,15 +1,20 @@
 package es.alumno.uned.service;
 
+import java.util.Optional;
+
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.alumno.uned.dto.EstudianteDTO;
-import es.alumno.uned.exception.UserAlreadyExistException;
+import es.alumno.uned.exception.AreaTematicaAlreadyExistException;
+import es.alumno.uned.exception.EstudianteAlreadyExistException;
 import es.alumno.uned.mapper.EstudianteMapper;
 import es.alumno.uned.model.entities.Estudiante;
 import es.alumno.uned.model.repository.EstudianteRepository;
+import es.alumno.uned.model.util.Paginacion;
 
 
 @Service
@@ -52,16 +57,35 @@ public class EstudianteServiceImpl implements EstudianteService {
 		 * 
 		 */
 		if (estudianteDTO.getId() == null) {
+			checkEmail(estudianteDTO);
 			estudiante.getUsuario().setPassword(usuarioService.getEncriptedPass(estudianteDTO.getNewPassword()));
 		}
         // Habrá que salvar el estudiante con su repositorio
 		estudianteRepository.save(estudiante);
 	}
+	/**
+	 * Comprobamos si el nuevo e-mail ya existe en Estudiantes o en Usuarios.
+	 * <p>Si existe se genera una excepción
+	 * 
+	 * @param estudianteDTO Estudiante a comprobar.
+	 */
+	private void checkEmail(EstudianteDTO estudianteDTO) {
+		if (estudianteRepository.findByUsuarioEmail(estudianteDTO.getEmail()).isPresent()) {
+		//if (estudianteRepository.findByUsuarioEmail(estudianteDTO.getEmail()).isPresent()) {
+			throw new EstudianteAlreadyExistException("usuario.existente.exception",
+					estudianteDTO, estudianteDTO.getEmail());
+		}
+		if (usuarioService.getIdByEmail(estudianteDTO.getEmail()) != null) {
+			throw new EstudianteAlreadyExistException("usuario.existente.exception",
+					estudianteDTO, estudianteDTO.getEmail());
+			
+		}
+		
+	}
 
 	@Override
 	public EstudianteDTO findById(Long id) {
-		// TODO añadir la búsqueda y el mapper 
-		return null;
+		return estudianteMapper.toDTO(estudianteRepository.getReferenceById(id));
 	}
 
 	@Override
@@ -70,17 +94,15 @@ public class EstudianteServiceImpl implements EstudianteService {
 		return null;
 	}
 
-	/**
-	 * Método privado para la búsqueda de un estudiante mediante su e-mail.
-	 * 
-	 * Si lo encuentra nos lanza la excepción {@code UserAlreadyExistException}
-	 * @param email Email del estudiante a buscar.
-	 */
-	private void findByUsuarioEmail(String email){
+	@Override
+	public Paginacion<Estudiante, EstudianteDTO> listadoPaginado(String url, Pageable pageRequest) {
 		
-		var estudiantes = estudianteRepository.findByUsuarioEmail(email);
-		if (estudiantes.isPresent()) {
-			throw new UserAlreadyExistException("{usuario.existente.exception}");
-		}
-	}	
+		return new Paginacion.Builder<Estudiante, EstudianteDTO>()
+				.url(url)
+				.pagina(estudianteRepository.findAll(pageRequest))
+				.mapper(estudianteMapper :: toDTO)
+				.build();
+	}
+
+	
 }

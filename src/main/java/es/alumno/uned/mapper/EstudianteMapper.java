@@ -11,7 +11,6 @@ import es.alumno.uned.model.repository.EstudianteRepository;
 
 @Component
 public class EstudianteMapper {
-
 	
 	private EstudianteRepository estudianteRepo;
 	
@@ -37,9 +36,26 @@ public class EstudianteMapper {
 		estudiante.getUsuario().setApellido1(estudianteDTO.getApellido1());
 		estudiante.getUsuario().setApellido2(estudianteDTO.getApellido2());
 		estudiante.setDireccion(estudianteDTO.getDireccion());
-		estudiante.setPoblacion(estudiante.getPoblacion());
+		estudiante.setPoblacion(estudianteDTO.getPoblacion());
 		estudiante.setProvincia(estudianteDTO.getProvincia());
 		estudiante.setCodPostal(estudianteDTO.getCodPostal());
 		return estudiante;
+	}
+	public EstudianteDTO toDTO(Estudiante estudiante) {
+		EstudianteDTO eDTO = new EstudianteDTO();
+		eDTO.setId(estudiante.getId());
+		eDTO.setNombre(estudiante.getUsuario().getNombre());
+		eDTO.setApellido1(estudiante.getUsuario().getApellido1());
+		eDTO.setApellido2(estudiante.getUsuario().getApellido2());
+		eDTO.setRol(estudiante.getUsuario().getRol());
+		eDTO.setEmail(estudiante.getUsuario().getEmail());
+		eDTO.setActivo(estudiante.getUsuario().isActivo());
+		eDTO.setfAlta(estudiante.getUsuario().getfAlta());
+		eDTO.setUsuarioAlta(estudiante.getUsuario().getUsuarioAlta());
+		eDTO.setDireccion(estudiante.getDireccion());
+		eDTO.setPoblacion(estudiante.getPoblacion());
+		eDTO.setProvincia(estudiante.getProvincia());
+		eDTO.setCodPostal(estudiante.getCodPostal());
+	return eDTO;
 	}
 }

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+	th:replace="~{plantilla::layout(~{::section})}"><head>
+<meta charset="utf-8">
+<title th:text="#{usuario.lista}">Título</title>
+</head>
+<body>
+<section>
+	<div class="container">
+		<h1 th:text="#{estudiante.lista}">Título</h1>
+
+		<div class="row g-3">
+          <div class="col-auto">
+		    <div  th:replace="~{fragments/botones :: btnLink(
+		        #{mensaje.nuevo} + ' ' + #{estudiante.title},
+		        @{${urlAlta}},
+		        'btn-success', 'bi bi-plus-circle'
+		    )}">
+		    </div>
+		  </div>
+		   <div class="col-auto">
+		   		    <div  th:replace="~{fragments/botones :: btnLink(
+		        #{command.volver}, 
+		        ${urlBack}, 
+		        'btn-outline-secondary', 'bi-arrow-left'
+		    )}">
+		   
+		   </div>
+		</div>   
+		<br>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th th:text="#{usuario.nombre}">Nombre completo</th>
+            <th>Email</th>
+            <th th:text="#{usuario.poblacion}">Población</th>
+            <th th:text="#{usuario.provincia}">Provincia</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr th:each="e : ${paginacion.contenido}">
+            <td th:text="${e.id}"></td>
+            <td th:text="${e.nombre + ' ' + e.apellido1}"></td>
+            <td th:text="${e.email}"></td>
+            <td th:text="${e.poblacion}"></td>
+            <td th:text="${e.provincia}"></td>
+			<td><a th:href="@{/estudiante/editar/{id}(id=${e.id})}" class="btn btn-primary" ><i class="bi bi-pencil-square"></i></a></td>
+        </tr>
+    </tbody>
+</table>
+     	<div th:replace="~{fragments/paginacionComun :: paginador(${paginacion}, ${query})}"></div>
+	</div>
+</section>
+</body>
+</html>

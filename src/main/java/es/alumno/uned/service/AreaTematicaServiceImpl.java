@@ -1,7 +1,6 @@
 package es.alumno.uned.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.jspecify.annotations.Nullable;
@@ -15,7 +14,6 @@ import es.alumno.uned.mapper.AreaTematicaMapper;
 import es.alumno.uned.model.entities.AreaTematica;
 import es.alumno.uned.model.repository.AreaTematicaRepository;
 import es.alumno.uned.model.util.Paginacion;
-import es.alumno.uned.model.util.PaginacionComun;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -48,16 +46,14 @@ public class AreaTematicaServiceImpl implements AreaTematicaService {
 		AreaTematica areaTematica;
 		if (area.getId() == null) {
 			if (isExistByTitulo(area.getTitulo())) {
-			   throw new AreaTematicaAlreadyExistException("{areaTematica.error.existente}" + " " + area.getTitulo());
+			   throw new AreaTematicaAlreadyExistException("areaTematica.error.existente",
+					   area, area.getTitulo());
 		    }
 			areaTematica = new AreaTematica();
 		}
 		else {
 			areaTematica = repo.findById(area.getId()).get();	
 		}
-		
-//		if ((areaTematica.isPresent()) && (isExistByTitulo(area.getTitulo()))) {
-//			AreaTematica atsave = areaTematica.get();
 		areaTematica.setDescripcion(area.getDescripcion());
 		areaTematica.setTitulo(area.getTitulo());
 		areaTematica = repo.save(areaTematica);

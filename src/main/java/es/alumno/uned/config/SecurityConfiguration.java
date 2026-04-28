@@ -27,9 +27,9 @@ public class SecurityConfiguration {
 	            .requestMatchers("/", "/home", "/registro/**",
 	                             "/webjars/**", "/login", "/login*","/invalidSession",
 	                             "/css/**", "/js/**", "/images/**", "/error").permitAll()
-	            .requestMatchers("/estudiante/**").hasAuthority("ROLE_ESTUD")
+	            //.requestMatchers("/estudiante/**").hasAuthority("ROLE_ESTUD")
 	            .requestMatchers("/profesor/**").hasAuthority("ROLE_PROFE")
-	            .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+	            .requestMatchers("/admin/**", "/estudiante*", "/estudiante/**").hasAuthority("ROLE_ADMIN")
 	            .anyRequest().authenticated()
 	        )
 	        .exceptionHandling(ex -> ex
