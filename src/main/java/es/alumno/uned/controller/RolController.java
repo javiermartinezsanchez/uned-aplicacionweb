@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Controlador de mantenimiento de ROLES (Sólo a efectos de admin).
  * 
- * Accedemos al listado y mantenimiento de usuarios para el Administrador.
+ * Accedemos al listado y mantenimiento de roles para el Administrador.
  * Se accede al registro y la modificación en "mi Perfil" para cada usuario.
  */
 @Slf4j

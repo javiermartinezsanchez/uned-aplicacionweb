@@ -46,6 +46,7 @@ public class AuditoriaAccesosController {
 		var paginacion = auditService.listadoPaginado("/admin/accesos", pageRequest, fechaIni, fechaFin);
 
 		model.addAttribute("titulo", "Auditoria Accesos");
+		model.addAttribute("urlBack", "/home");
 		model.addAttribute("paginacion", paginacion);
 		model.addAttribute("fechaIni", fechaIni);
 		model.addAttribute("fechaFin", fechaFin);

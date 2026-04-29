@@ -35,8 +35,6 @@ public class HomeController {
 		 urlUser =  UserUtil.defineHome(UserUtil.getRol(authentication));
 		 modelo.addAttribute("urlUser", "admin");
 		}
-		//modelo.addAttribute("cursos", servicio.listarCursos());
-		System.out.println("urlUser: " + urlUser);
 		return urlUser.concat("/home");
 	}
 	@GetMapping("/home")

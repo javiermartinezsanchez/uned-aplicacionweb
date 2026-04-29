@@ -8,7 +8,7 @@
 <div th:fragment="mensajes">
 
     <div th:if="${success}" class="alert alert-success">
-        <span th:text="${success}"></span>
+        <span th:text="#{${success}}"></span>
     </div>
 
     <div th:if="${error}" class="alert alert-danger">

@@ -119,6 +119,7 @@ public class UsuarioController {
 	@GetMapping("/admin/usuarioconnected")
     public String modUsuario(Model model) {
 		model.addAttribute("usuarios", userService.getConnectedUsers());
+		model.addAttribute("urlBack", "/home");
 		return "admin/usuariosconectados";
 	}
 	@GetMapping("/cambiopassword")

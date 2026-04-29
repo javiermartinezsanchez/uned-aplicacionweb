@@ -8,7 +8,7 @@
 <body>
 <section>
 	<div class="container">
-		<h1 th:text="#{comun.lista(${valor})}">Accesos</h1>
+		<h1 th:text="#{comun.lista(#{usuario.accesos})}">Accesos</h1>
 		<br>
 		<!-- FORMULARIO DE BÚSQUEDA -->
 		<form th:action="@{/admin/accesos}" method="get" class="row g-2 mb-3 align-items-end">
@@ -32,7 +32,7 @@
 		    </div>
 		
 		    <div class="col-auto">
-		        <boton th:replace="~{btnSubmit(#{command.buscar}, 'btn-primary', 'bi-search')}"/>
+		        <boton th:replace="~{fragments/botones :: btnSubmit(#{command.buscar}, 'btn-primary', 'bi-search')}"/>
 		    </div>
 			<div class="col-auto">
 				<boton  th:replace="~{fragments/botones :: btnLink(

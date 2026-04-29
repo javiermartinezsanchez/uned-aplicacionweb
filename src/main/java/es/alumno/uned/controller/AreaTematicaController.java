@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import es.alumno.uned.dto.AreaTematicaDTO;
 import es.alumno.uned.service.AreaTematicaService;
@@ -31,7 +32,12 @@ public class AreaTematicaController extends BaseCrudController{
 	}
 
 	@GetMapping("/admin/areaTematica/{id}")
-	public String modifica(@PathVariable("id") Long id, Model model) {
+	public String modifica(@PathVariable("id") Long id, 
+			@ModelAttribute("successStr") String successStr,
+			Model model) {
+		if (successStr != null && "true".equalsIgnoreCase(successStr)) {
+			model.addAttribute("success", "mensaje.grabacionOK");
+		}
 		preparaArea(model);
 		model.addAttribute("form", areaTematicaService.getAreaTematica(id));
 		return model.getAttribute("viewName").toString();
@@ -39,13 +45,17 @@ public class AreaTematicaController extends BaseCrudController{
 	
 	@PostMapping("/admin/areaTematica")
 	public String graba(@Valid @ModelAttribute("form") AreaTematicaDTO form,
-            BindingResult result,Model model) {
+            BindingResult result, 
+            RedirectAttributes redirectAttributes, 
+            Model model) {
 			preparaArea(model);
         if (result.hasErrors()) {
             return model.getAttribute("viewName").toString();
         }
-        model.addAttribute("form",areaTematicaService.grabar(form));
-		return "redirect:/admin/areaTematica?sucess";
+        var areaGrabada = areaTematicaService.grabar(form);
+        model.addAttribute("form", areaGrabada);
+        redirectAttributes.addFlashAttribute("successStr", "true");
+		return String.format("redirect:/admin/areaTematica/%d", areaGrabada.getId());
 	}
 
 	@GetMapping("/admin/areaTematica")
@@ -59,6 +69,6 @@ public class AreaTematicaController extends BaseCrudController{
 		return "admin/AreaTematicaList";
 	}
 	private void preparaArea(Model model) {
-		prepararModeloFormulario(model, "admin/areaTematica", "admin/areaTematica","admin/areaTematica");
+		prepararModeloFormulario(model, "admin/areaTematica", "/admin/areaTematica","/admin/areaTematica");
 	}
 }
