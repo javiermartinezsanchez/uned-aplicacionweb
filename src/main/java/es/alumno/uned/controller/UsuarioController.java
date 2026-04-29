@@ -77,7 +77,7 @@ public class UsuarioController {
     		@PathVariable("id") Long id, 
     		Model model) {
 		if (success != null) {
-			model.addAttribute("success", "{}");
+			model.addAttribute("success", "\"mensaje.grabacionOK\"");
 			}
 		model.addAttribute("form", userService.getUsuario(id));
 		return getUsuario(model);

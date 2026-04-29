@@ -58,7 +58,7 @@ public class EstudianteController extends BaseCrudController {
         return "redirect:/estudiante/editar-perfil?sucess";
     }
     
-    @GetMapping("/estudiante/miperfil")
+    @GetMapping({"/estudiante/miperfil","/admin/miperfil"})
     public String perfil(Principal principal, 
     		Model model) {
 
