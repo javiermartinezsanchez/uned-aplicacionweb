@@ -26,7 +26,7 @@ public class SecurityConfiguration {
 	        .authorizeHttpRequests((requests) -> requests
 	            .requestMatchers("/", "/home", "/registro/**",
 	                             "/webjars/**", "/login", "/login*","/invalidSession",
-	                             "/css/**", "/js/**", "/images/**", "/error").permitAll()
+	                             "/css/**", "/js/**", "/images/**", "/error", "/valoracionCurso").permitAll()
 	            //.requestMatchers("/estudiante/**").hasAuthority("ROLE_ESTUD")
 	            .requestMatchers("/profesor/**").hasAuthority("ROLE_PROFE")
 	            .requestMatchers("/admin/**", "/estudiante*", "/estudiante/**").hasAuthority("ROLE_ADMIN")

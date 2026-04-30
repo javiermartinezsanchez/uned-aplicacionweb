@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- Fragmento con parámetros -->
+<div th:fragment="componenteValoracion(idElemento, valoracionActual)" class="w-100 text-start">
+    
+    <!-- 1. Contenedor de los corazones interactivos (para valorar) -->
+    <!-- Añadimos flex-wrap para que los corazones bajen de línea si no caben -->
+    <div th:id="'corazones-container-' + ${idElemento}" class="d-flex flex-wrap justify-content-start mb-2">
+		<span th:each="i : ${#numbers.sequence(1, 5)}"
+		      th:attr="id='corazon-' + ${idElemento} + '-' + ${i}"
+		      th:onclick="'enviarValoracion(' + ${idElemento} + ', ' + ${i} + ', ' + ${idElemento} + ')'"
+		      class="bi bi-heart text-secondary fs-6 me-1" 
+		      style="cursor: pointer; transition: transform 0.2s;"
+		      th:title="'Valorar con ' + ${i} + ' corazones'">
+		</span>
+    </div>
+
+    <!-- 2. Visualización de la media actual (Solo lectura) -->
+    <!-- Añadimos flex-wrap y ajustamos el tamaño de los corazones -->
+    <div class="d-flex flex-wrap align-items-center text-muted small justify-content-start">
+        <span>Media: </span>
+        
+        <!-- Bucle para pintar la media visualmente -->
+		<span th:each="j : ${#numbers.sequence(1, 5)}"
+		      class="bi bi-heart-fill fs-7 me-1" 
+		      th:classappend="${j} <= ${valoracionActual} ? 'text-warning' : 'text-secondary'"
+		      th:title="'Valoración media: ' + ${valoracionActual}">
+		</span>
+        
+        <span th:text="${valoracionActual}">0</span>
+    </div>
+
+    <!-- Mensaje de feedback -->
+    <div th:id="'mensaje-' + ${idElemento}" class="text-center text-success d-none mt-2 w-100">
+        ¡Gracias por tu valoración!
+    </div>
+</div>
+
+</body>
+</html>
