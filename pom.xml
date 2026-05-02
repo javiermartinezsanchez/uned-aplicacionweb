@@ -113,46 +113,26 @@
 
 	<build>
 		<finalName>app</finalName>
-		<resources>
-		    <resource>
-		        <directory>src/main/resources</directory>
-		        <filtering>false</filtering>
-		    </resource>
-		
-		    <resource>
-		        <directory>src/main/profiles/${profile.name}/resources</directory>
-		        <filtering>true</filtering>
-		    </resource>
-		</resources>
-
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<plugin>
-			    <groupId>org.apache.maven.plugins</groupId>
-			    <artifactId>maven-resources-plugin</artifactId>
-			    <configuration>
-			        <encoding>UTF-8</encoding>
-			    </configuration>
-			</plugin>
 		</plugins>
-		
-
-		
+	
 	</build>
 	<profiles>
 	    <profile>
 	     	<id>dev</id>
 	     	<properties>
 	     		<profile.name>dev</profile.name>
+	     		<spring.profiles.active>dev</spring.profiles.active>
 	     	</properties>
 	    </profile> 	
 		<profile>
 			<id>uned</id>
 	     	<properties>
-	     		<profile.name>dev</profile.name>
+	     		<profile.name>uned</profile.name>
 	     	</properties>
 	     	<activation>
 				<activeByDefault>true</activeByDefault>

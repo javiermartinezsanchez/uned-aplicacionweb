@@ -7,6 +7,7 @@ th:replace="~{plantilla::layout(~{::section})}">
 </head>
 <body>
 <section>
+<h1 th:text="#{usuario.title}">Título</h1>
 <div th:replace="~{fragments/mensajesresultado :: mensajes}"></div>
 
 <form th:action="@{${url}}" th:object="${form}" method="post">

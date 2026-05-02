@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -26,15 +27,37 @@ public class AreaTematicaServiceImpl implements AreaTematicaService {
 	@Autowired
 	AreaTematicaMapper mapper;
 	@Override
-	public Paginacion<AreaTematica, AreaTematicaDTO> listadoPaginado(String url, Pageable pageRequest) {
+	public Paginacion<AreaTematica, AreaTematicaDTO> listadoPaginado(String url, String titulo, String descripcion, Pageable pageRequest) {
 		
 		return new Paginacion.Builder<AreaTematica, AreaTematicaDTO>()
 				.url(url)
-                .pagina(repo.findAll(pageRequest))
+                .pagina(getPaginaBusqueda(pageRequest, titulo, descripcion))
                 .mapper(mapper::toDTO)
                 .build();
 	}
-
+    /**
+     * Devolvemos una búsqueda de acuerdo a los datos enviados por el filtro.
+     * 
+     * Dependendiendo de la existencia o no de los mismos llamamos a diferenentens métodos de nuestro repositorio.
+     * 
+     * 
+     * @param pageable Definición de la {@code Page} a devolver.
+     * @param titulo Texto para buscar en título
+     * @param descripcion Texto para buscar en Descripción
+     * @return Página de datos obtenida con los datos solicitados.
+     */
+	private Page<AreaTematica> getPaginaBusqueda(Pageable pageable, String titulo, String descripcion){
+		if ((titulo !=null) && (descripcion != null)) {
+			return repo.findByTituloContainingIgnoreCaseAndDescripcionContainingIgnoreCase(titulo, descripcion, pageable);
+		}
+		if (titulo != null){
+			return repo.findByTituloContainingIgnoreCase(titulo, pageable);
+		}
+		if (descripcion != null){
+			return repo.findByDescripcionContainingIgnoreCase(descripcion, pageable);
+		}
+		return repo.findAll(pageable);
+	}
 	@Override
 	public @Nullable AreaTematicaDTO getAreaTematica(Long id) {
 		AreaTematica areatematica = repo.getReferenceById(id);

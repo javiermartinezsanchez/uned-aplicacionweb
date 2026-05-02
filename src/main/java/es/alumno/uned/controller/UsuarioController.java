@@ -154,10 +154,12 @@ public class UsuarioController {
 			@RequestParam(required = false) String success,
 			Model model) {
 	    model.addAttribute("userId", id);
-	    model.addAttribute("passwordDTO", new UserPasswordAdminChangeDTO());
+	    model.addAttribute("passwordDTO", new UserPasswordAdminChangeDTO(userService.getUsuario(id).getEmail()));
 	    if (success != null) {
 	        model.addAttribute("success", "password.change.success");
 	    }
+	    model.addAttribute("url", "/admin/usuario");
+	    model.addAttribute("urlCancel", String.format("/admin/usuario/%d", id));
 	    return "admin/password-change";
 	}
 
@@ -177,9 +179,11 @@ public class UsuarioController {
 			result.rejectValue("oldPassword", "error.oldPassword", ex.getMessage());
 		}
 	    if (!result.hasErrors()) {
-	    	model.addAttribute("success", "{password.change.success}");
+	    	model.addAttribute("success", "password.change.success");
 	    }
-	    
+	    model.addAttribute("userId", id);
+	    model.addAttribute("url", "/admin/usuario");
+	    model.addAttribute("urlCancel", String.format("/admin/usuario/%d", id));
 	    return "admin/password-change";
 	}
 

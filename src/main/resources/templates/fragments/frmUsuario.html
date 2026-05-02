@@ -5,8 +5,8 @@
         <input type="email" th:field="*{email}" class="form-control w-50">
         <div class="text-danger" th:errors="*{email}"></div>
     </div>
-    <div th:if="not *{id}" th:replace="~{fragments/frmChangePass :: frmChangePass}"/>
-
+    <frmPart th:if="*{id}==null" th:insert="~{fragments/frmChangePass :: frmChangePass}">
+    </frmPart>
     <div class="mb-3" th:if="*{id} != null">
         <div th:replace="~{fragments/botones :: btnLink(
         #{command.modificar.password},

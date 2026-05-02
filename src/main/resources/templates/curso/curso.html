@@ -7,11 +7,11 @@ th:replace="~{plantilla::layout(~{::section})}">
 </head>
 <body>
 <section>
-<h1 th:text="#{curso.titulo}">Título</h1>
+<h1 th:text="#{curso.title}">Título</h1>
 		<br>
-<form th:action="@{/curso/guardar}"
-      th:object="${curso}"
-      method="post"
+<div th:replace="~{fragments/mensajesresultado :: mensajes}"></div>
+	
+<form th:action="@{${url}}" th:object="${form}" method="post"
       enctype="multipart/form-data">
 
     <input type="hidden" th:field="*{id}"/>
@@ -35,7 +35,7 @@ th:replace="~{plantilla::layout(~{::section})}">
       <!-- Área Temática -->
         <label class="form-label" th:text="#{areatematica.title}">Área Temática</label>
         <select class="form-select" th:field="*{areaTematicaId}">
-            <option th:value="${''}" th:text="#{areatematica.select}"></option>
+            <option th:value="${''}" th:text="#{comun.select.any}"></option>
             <option th:each="a : ${areas}"
                     th:value="${a.id}"
                     th:text="${a.titulo}">
@@ -72,14 +72,13 @@ th:replace="~{plantilla::layout(~{::section})}">
     <div class="row">
         <div class="col-md-6 mb-3">
             <label class="form-label" th:text="#{comun.fini}">Fecha Inicio</label>
-            <input type="date" class="form-control" th:field="*{fIni}"
-            th:value="${#temporals.format(fIni, 'yyyy-MM-dd')}">
+            <input type="date" class="form-control" th:field="*{fIni}">
             <div class="text-danger" th:errors="*{fIni}"></div>
         </div>
 
         <div class="col-md-6 mb-3">
             <label class="form-label"th:text="#{comun.fFin}">Fecha Fin</label>
-            <input type="datetime-local" class="form-control" th:field="*{fFin}">
+            <input type="date" class="form-control" th:field="*{fFin}">
             <div class="text-danger" th:errors="*{fFin}"></div>
         </div>
     </div>
@@ -89,15 +88,16 @@ th:replace="~{plantilla::layout(~{::section})}">
         <label class="form-label" th:text="#{curso.imagen}">Imagen del curso</label>
         <input type="file" class="form-control" name="imagen" accept="image/*">
 
-        <div class="mt-2" th:if="*{uriImagen}">
+        <div class="mt-2" th:if="*{uriImagen} != null and *{uriImagen} != ''">
             <img th:src="@{/images/curso/{img}(img=*{uriImagen})}"
                  class="img-thumbnail"
                  style="max-width: 200px;">
         </div>
     </div>
-    <div th:replace="~{fragments/mensajesresultado :: errorgeneral}"></div>
-    <button type="submit" class="btn btn-primary" th:text="#{command.save}">Guardar</button>
+    
+    <div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, @{${urlCancel}})}"></div>
 </form>
+<div th:replace="~{fragments/mensajesresultado :: errorgeneral}"></div>
 
 </section>
 </body>

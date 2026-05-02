@@ -1,5 +1,7 @@
 package es.alumno.uned.dto;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -36,23 +38,25 @@ public class CursoDTO {
     @NotNull(message = "{validations.curso.duracion.mandatory}")
     private Integer duracion;
  	@NotNull(message = "{validations.curso.fechaIni.mandatory}")
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime fIni;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fIni;
 
     @NotNull(message = "{validations.curso.fechaFin.mandatory}")
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime fFin;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fFin;
 
     private LocalDateTime fIns;
     private String userIns;
-
+    private BigDecimal valoracion;
+    private Integer usuariosRegistrados;
+    
     public CursoDTO() {}
 	
 	public CursoDTO(Long id, String titulo,
 			String descripcion, String uriImagen,
 			int nivel, Long areaTematicaID,
-			Long responsableID, LocalDateTime fIni,
-			LocalDateTime fFin, LocalDateTime fIns,
+			Long responsableID, LocalDate fIni,
+			LocalDate fFin, LocalDateTime fIns,
 			String userIns) {
 		this.id = id;
 		this.titulo = titulo;
@@ -124,19 +128,19 @@ public class CursoDTO {
 		this.duracion = duracion;
 	}
 
-	public LocalDateTime getfIni() {
+	public LocalDate getFIni() {
 		return fIni;
 	}
 
-	public void setfIni(LocalDateTime fIni) {
+	public void setFIni(LocalDate fIni) {
 		this.fIni = fIni;
 	}
 
-	public LocalDateTime getfFin() {
+	public LocalDate getFFin() {
 		return fFin;
 	}
 
-	public void setfFin(LocalDateTime fFin) {
+	public void setFFin(LocalDate fFin) {
 		this.fFin = fFin;
 	}
 
@@ -157,6 +161,38 @@ public class CursoDTO {
 	}
 	public void setUserIns(String userIns) {
 		this.userIns = userIns;
+	}
+
+	public LocalDate getfIni() {
+		return fIni;
+	}
+
+	public void setfIni(LocalDate fIni) {
+		this.fIni = fIni;
+	}
+
+	public LocalDate getfFin() {
+		return fFin;
+	}
+
+	public void setfFin(LocalDate fFin) {
+		this.fFin = fFin;
+	}
+
+	public BigDecimal getValoracion() {
+		return valoracion;
+	}
+
+	public void setValoracion(BigDecimal valoracion) {
+		this.valoracion = valoracion;
+	}
+
+	public Integer getUsuariosRegistrados() {
+		return usuariosRegistrados;
+	}
+
+	public void setUsuariosRegistrados(Integer usuariosRegistrados) {
+		this.usuariosRegistrados = usuariosRegistrados;
 	}
 
 }

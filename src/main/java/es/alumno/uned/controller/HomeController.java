@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import es.alumno.uned.model.util.UserUtil;
+import es.alumno.uned.service.CursoService;
 
 /**
  * Controlador inicial de la aplicación.
@@ -19,7 +20,11 @@ import es.alumno.uned.model.util.UserUtil;
 @Controller
 public class HomeController {
 
+	private CursoService cursoService;
 	
+	public HomeController(CursoService cursoService) {
+		this.cursoService = cursoService;
+	}
 	/**
 	 * Acceso a la página principal.
 	 * @param modelo Modelo de la vista
@@ -34,6 +39,9 @@ public class HomeController {
 		//System.out.println("getCredentials: " + authentication.getCredentials().toString());
 		 urlUser =  UserUtil.defineHome(UserUtil.getRol(authentication));
 		 modelo.addAttribute("urlUser", "admin");
+		}
+		else {
+			modelo.addAttribute("cursos", cursoService.listadoHome());
 		}
 		return urlUser.concat("/home");
 	}

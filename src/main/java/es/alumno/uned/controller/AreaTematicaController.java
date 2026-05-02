@@ -1,5 +1,7 @@
 package es.alumno.uned.controller;
 
+import java.util.Map;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import es.alumno.uned.dto.AreaTematicaDTO;
+import es.alumno.uned.model.util.ControllerUtil;
 import es.alumno.uned.service.AreaTematicaService;
 import jakarta.validation.Valid;
 
@@ -48,7 +51,7 @@ public class AreaTematicaController extends BaseCrudController{
             BindingResult result, 
             RedirectAttributes redirectAttributes, 
             Model model) {
-			preparaArea(model);
+		preparaArea(model);
         if (result.hasErrors()) {
             return model.getAttribute("viewName").toString();
         }
@@ -59,13 +62,24 @@ public class AreaTematicaController extends BaseCrudController{
 	}
 
 	@GetMapping("/admin/areaTematica")
-	public String lista(@RequestParam(name="page", defaultValue = "0") int page, Model model) {
+	public String lista(
+			@RequestParam Map<String, String> params,
+			@RequestParam(defaultValue = "0") int page, 
+			Model model) {
 		Pageable pageRequest= PageRequest.of(page, 10);
-		var paginacion = areaTematicaService.listadoPaginado("/admin/areaTematica", pageRequest);
+		
+		var filtros = ControllerUtil.paramsToMap(params);
+		
+		String titulo = filtros.containsKey("titulo") ? filtros.get("titulo") : null;
+		String descripcion = filtros.containsKey("descripcion") ? filtros.get("descripcion") : null;
+		var paginacion = areaTematicaService.listadoPaginado("/admin/areaTematica", titulo, descripcion, pageRequest);
 		model.addAttribute("urlAlta", "/admin/areaTematica/nueva");
 		model.addAttribute("urlBack", "/home");
 	    model.addAttribute("paginacion", paginacion);
-	    model.addAttribute("query","");
+		model.addAttribute("titulo", titulo);
+		model.addAttribute("descripcion", descripcion);
+
+	    model.addAttribute("query", ControllerUtil.mapToQuery(filtros));
 		return "admin/AreaTematicaList";
 	}
 	private void preparaArea(Model model) {

@@ -19,7 +19,7 @@ public interface AreaTematicaService {
 	 * @param pageRequest Definición de la página.
 	 * @return Página de los datos solicitados.
 	 */
-	Paginacion<AreaTematica, AreaTematicaDTO> listadoPaginado(String urlDetalle, Pageable pageRequest);
+	Paginacion<AreaTematica, AreaTematicaDTO> listadoPaginado(String urlDetalle, String titulo, String descripcion, Pageable pageRequest);
 
 	@Nullable
 	Object getAreaTematica(Long id);

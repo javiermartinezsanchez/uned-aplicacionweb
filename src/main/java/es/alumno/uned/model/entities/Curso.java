@@ -1,5 +1,7 @@
 package es.alumno.uned.model.entities;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,27 +47,43 @@ public class Curso {
 	private Integer duracion;
 	
 	@Column(name="FECHA_INI")
-	private LocalDateTime fIni;
+	private LocalDate fIni;
 	@Column(name="FECHA_FIN")
-	private LocalDateTime fFin;
+	private LocalDate fFin;
 	@Column(name="FECHA_INS")
 	private LocalDateTime fIns;
 	@Column(name="USER_INS")
 	private String userIns;
 	
+	@Column(precision = 2, scale = 1)
+	private BigDecimal valoracion;
+
+	@Column(name="USUARIOS_REGISTRADOS", nullable=false)
+	private Integer usuariosRegistrados = 0;
+	
 	@OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Modulo> modulos = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<CursoValoracion> valoraciones = new ArrayList<>();
+	
+	
+
+
 	public Curso() {}
 	
-	public Curso(Long id, String titulo, String descripcion, String uriImagen, Integer nivel, AreaTematica areaTematica, LocalDateTime fIni,
-			Integer duracion, LocalDateTime fFin, LocalDateTime fIns, String userIns) {
+
+	public Curso(Long id, String titulo, String descripcion, String uriImagen, Integer nivel, AreaTematica areaTematica,
+			Usuario responsable, Integer duracion, LocalDate fIni, LocalDate fFin, LocalDateTime fIns,
+			String userIns) {
 		this.id = id;
 		this.titulo = titulo;
 		this.descripcion = descripcion;
 		this.uriImagen = uriImagen;
 		this.nivel = nivel;
 		this.areaTematica = areaTematica;
-		this.duracion= duracion;
+		this.responsable = responsable;
+		this.duracion = duracion;
 		this.fIni = fIni;
 		this.fFin = fFin;
 		this.fIns = fIns;
@@ -120,19 +138,19 @@ public class Curso {
 		this.areaTematica = areaTematica;
 	}
 
-	public LocalDateTime getfIni() {
+	public LocalDate getfIni() {
 		return fIni;
 	}
 
-	public void setfIni(LocalDateTime fIni) {
+	public void setfIni(LocalDate fIni) {
 		this.fIni = fIni;
 	}
 
-	public LocalDateTime getfFin() {
+	public LocalDate getfFin() {
 		return fFin;
 	}
 
-	public void setfFin(LocalDateTime fFin) {
+	public void setfFin(LocalDate fFin) {
 		this.fFin = fFin;
 	}
 
@@ -167,6 +185,30 @@ public class Curso {
 
 	public Usuario getResponsable() {
 		return responsable;
+	}
+	public List<CursoValoracion> getValoraciones() {
+		return valoraciones;
+	}
+
+	public BigDecimal getValoracion() {
+		return valoracion;
+	}
+
+	public void setValoracion(BigDecimal valoracion) {
+		this.valoracion = valoracion;
+	}
+
+
+	public Integer getUsuariosRegistrados() {
+		return usuariosRegistrados;
+	}
+
+	public void setUsuariosRegistrados(Integer usuariosRegistrados) {
+		this.usuariosRegistrados = usuariosRegistrados;
+	}
+
+	public List<Modulo> getModulos() {
+		return modulos;
 	}
 	
 }

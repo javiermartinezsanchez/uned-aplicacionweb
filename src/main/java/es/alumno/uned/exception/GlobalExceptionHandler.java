@@ -46,7 +46,11 @@ public class GlobalExceptionHandler {
     		HttpServletRequest request,
     		Model model) {
 
-    	String backUrl = request.getHeader("Referer");
+    	return putDataException(ex, request, model);
+    }
+
+	private String putDataException(AlreadyExistException ex, HttpServletRequest request, Model model) {
+		String backUrl = request.getHeader("Referer");
 		model.addAttribute("url", (String) model.getAttribute("url"));
 		model.addAttribute("urlCancel", (String) model.getAttribute("urlCancel"));
     	model.addAttribute("backUrl", backUrl != null ? backUrl : "/");
@@ -57,6 +61,6 @@ public class GlobalExceptionHandler {
             ));
         model.addAttribute("form", ex.getDto());
         return (String) model.getAttribute("urlVista");
-    }
+	}
 }
 

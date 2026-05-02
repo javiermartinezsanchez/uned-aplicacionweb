@@ -1,6 +1,7 @@
 package es.alumno.uned.model.repository;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -131,5 +132,11 @@ public interface CursoRepository extends JpaRepository<Curso, Long>{
 	 * @return Página de datos encontrados.
 	 */
 	Page<Curso> findByFFinBefore(LocalDateTime fecha, Pageable pageable);
-
+	/**
+	 * Búsqueda individual por titulo del curso
+	 * @param titulo Título del curso
+	 * @return {@code Optional<Curso>) Encontrado
+	 */
+	Optional<Curso> findByTitulo(String titulo);
+	
 }

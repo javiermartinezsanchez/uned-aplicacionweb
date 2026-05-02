@@ -28,7 +28,7 @@ public class ControllerUtil {
 	/**
 	 * Genera una queryString tipo &clave=valor&clave1=valor1 de acuerdo al mapa
 	 * de filtros que recibe.
-	 * 
+	 * <p>Para las listas con campos de búsqueda.
 	 * @param filtros Mapa de filtros.
 	 * @return Cadena en formato QueryString
 	 */

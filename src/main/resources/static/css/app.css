@@ -1,0 +1,12 @@
+.card-img-fixed {
+    height: 180px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.descripcion-limitada {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}

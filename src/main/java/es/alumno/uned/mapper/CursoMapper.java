@@ -1,5 +1,8 @@
 package es.alumno.uned.mapper;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,8 +28,8 @@ public class CursoMapper {
         entity.setDescripcion(dto.getDescripcion());
         entity.setNivel(dto.getNivel());
         entity.setDuracion(dto.getDuracion());
-        entity.setfIni(dto.getfIni());
-        entity.setfFin(dto.getfFin());
+        entity.setfIni(dto.getFIni());
+        entity.setfFin(dto.getFFin());
 
         // Área Temática
         AreaTematica area = areaTematicaRepository.findById(dto.getAreaTematicaId())
@@ -40,10 +43,10 @@ public class CursoMapper {
 
         // Imagen (solo el nombre del fichero)
         entity.setUriImagen(dto.getUriImagen());
-
+        
         // Auditoría
-        entity.setfIns(dto.getfIni());
-        entity.setUserIns(dto.getUserIns());
+        //entity.setfIns(dto.getfIns());
+        //entity.setUserIns(dto.getUserIns());
 
         return entity;
     }
@@ -58,17 +61,15 @@ public class CursoMapper {
         dto.setDescripcion(entity.getDescripcion());
         dto.setNivel(entity.getNivel());
         dto.setDuracion(entity.getDuracion());
-        dto.setfIni(entity.getfIni());
-        dto.setfFin(entity.getfFin());
-
+        dto.setFIni(entity.getfIni());
+        dto.setFFin(entity.getfFin());
         dto.setAreaTematicaId(entity.getAreaTematica().getId());
         dto.setResponsableId(entity.getResponsable().getId());
-
         dto.setUriImagen(entity.getUriImagen());
-
         dto.setfIns(entity.getfIns());
         dto.setUserIns(entity.getUserIns());
-
+        dto.setValoracion(entity.getValoracion());
+        dto.setUsuariosRegistrados(entity.getUsuariosRegistrados());
         return dto;
     }
 

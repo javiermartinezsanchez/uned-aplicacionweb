@@ -30,8 +30,6 @@
 				<tr th:each="usuario : ${usuarios}">
 					<td th:utext="${usuario.usuario}">ID</td>
 		 			<td th:utext="${#dates.format(usuario.lastRequest, 'dd/MM/yyyy HH:mm:ss')}">ID</td>
-
-
 				</tr>
 			</tbody>
 		</table>
