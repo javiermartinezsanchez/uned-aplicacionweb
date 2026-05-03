@@ -1,8 +1,6 @@
 package es.alumno.uned.controller;
 
-import java.security.Principal;
 
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;

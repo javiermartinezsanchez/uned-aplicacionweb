@@ -2,6 +2,7 @@ package es.alumno.uned.controller;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -69,6 +70,15 @@ public class CursoController {
 	    model.addAttribute("usuarios", usuarioService.listarProfesores());
 		return "curso/curso";
 	}
+	@GetMapping("/viewcurso/{id}")
+    public String verFicha(Model model, 
+    		@PathVariable("id") Long id) {
+		model.addAttribute("url", "/curso/guardar");
+		model.addAttribute("urlBack", "/");
+		model.addAttribute("curso", cursoService.getCurso(id));
+		return "curso/fichacurso";
+	}
+
 	@PostMapping("/curso/guardar")
 	public String guarda(@AuthenticationPrincipal UserDetails userDetails,
 	        @ModelAttribute("curso") @Valid CursoDTO dto,
@@ -168,7 +178,7 @@ public class CursoController {
             return ResponseEntity.badRequest().body(error);
         }
 
-        // 2. Lógica de Negocio (Simulada)
+        // 2. Guardamos valoración y devolvemos nuevo cálculo de media.
         BigDecimal mediaValoracion = cursoService.guardarValoracion(datos.getIdElemento(), datos.getValoracion(), userDetails.getUsername());
         // 3. Construcción de la respuesta JSON
         Map<String, Object> respuesta = new HashMap<>();
@@ -178,10 +188,5 @@ public class CursoController {
             // Opcional: devolver la nueva valoración promedio si quieres actualizarla en el frontend
             respuesta.put("nuevaPromedio", mediaValoracion); 
             return ResponseEntity.ok(respuesta);
-//        } else {
-//            respuesta.put("success", false);
-//            respuesta.put("mensaje", "Hubo un error al guardar la valoración.");
-//            return ResponseEntity.internalServerError().body(respuesta);
-//        }
     }
 }

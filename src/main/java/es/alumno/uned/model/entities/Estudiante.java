@@ -1,11 +1,14 @@
 package es.alumno.uned.model.entities;
 
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 @Entity
@@ -33,6 +36,11 @@ public class Estudiante {
 		@JoinColumn(name="usuario_id")
 		private Usuario usuario;
 
+		@OneToMany(mappedBy = "estudiante")
+		private List<EstudianteCurso> cursos;
+
+
+		
 		public Estudiante() {
 			
 		}

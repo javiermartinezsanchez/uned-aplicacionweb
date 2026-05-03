@@ -12,10 +12,19 @@
     <div class="album py-5 bg-body-tertiary"> 
       <div class="container"> 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"> 
-           <div th:each="curso : ${cursos}" th:replace="~{fragments/curso-card :: cursoCard1(${curso})}"></div>
-<!--  		   <div>ahora con Card2</div>
-           <div th:each="curso : ${cursos}" th:replace="~{fragments/curso-card :: cursoCard2(${curso)}}"></div>
--->        </div> 
+        <div class="col" th:each="curso : ${cursos}" th:insert="~{fragments/curso-card :: cursoCard1(${curso})}"></div>
+<!-- 
+               <div th:each="curso : ${cursos}">
+                    <div th:text="${curso.titulo}">ID</div>
+					<div th:text="${curso.descripcion}">ID</div>
+					<div th:text="${#temporals.format(curso.fIni, 'dd/MM/yyyy')}">ID</div>
+					<div th:text="${#temporals.format(curso.fFin, 'dd/MM/yyyy')}">ID</div>
+ -->               
+               </div>        					
+        
+        
+        
+        </div> 
       </div> 
     </div> 
     <script th:src="@{/js/enviarvaloracion.js}"></script>

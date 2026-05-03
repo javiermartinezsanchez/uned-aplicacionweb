@@ -144,10 +144,10 @@ public class UsuarioController {
 			result.rejectValue("oldPassword", "error.oldPassword", ex.getMessage());
 		}
 	    if (result.hasErrors()) {
-	    	return "/comun/cambio-password";
+	    	return "comun/cambio-password";
 	    }
 	    model.addAttribute("success", "{password.change.success}");
-	    return "/comun/cambio-password";
+	    return "comun/cambio-password";
 	}
 	@GetMapping("/admin/usuario/{id}/password")
 	public String showAdminPasswordForm(@PathVariable Long id, 

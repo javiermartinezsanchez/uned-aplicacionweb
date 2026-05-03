@@ -26,10 +26,10 @@ public class SecurityConfiguration {
 	        .authorizeHttpRequests((requests) -> requests
 	            .requestMatchers("/", "/home", "/registro/**",
 	                             "/webjars/**", "/login", "/login*","/invalidSession",
-	                             "/css/**", "/js/**", "/images/**", "/error", "/valoracionCurso").permitAll()
-	            //.requestMatchers("/estudiante/**").hasAuthority("ROLE_ESTUD")
+	                             "/css/**", "/js/**", "/images/**", "/error", "/valoracionCurso", "/viewcurso/**").permitAll()
+	            .requestMatchers("/estudiante*", "/estudiante/**").hasAnyAuthority("ROLE_ESTUD", "ROLE_ADMIN")
 	            .requestMatchers("/profesor/**").hasAuthority("ROLE_PROFE")
-	            .requestMatchers("/admin/**", "/estudiante*", "/estudiante/**").hasAuthority("ROLE_ADMIN")
+	            .requestMatchers("/admin/**" ).hasAuthority("ROLE_ADMIN")
 	            .anyRequest().authenticated()
 	        )
 	        .exceptionHandling(ex -> ex

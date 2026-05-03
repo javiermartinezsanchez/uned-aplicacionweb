@@ -1,3 +1,4 @@
+
 package es.alumno.uned.model.entities;
 
 import java.math.BigDecimal;
@@ -67,7 +68,9 @@ public class Curso {
 	@OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CursoValoracion> valoraciones = new ArrayList<>();
 	
-	
+	@OneToMany(mappedBy = "curso")
+	private List<EstudianteCurso> estudiantes;
+
 
 
 	public Curso() {}

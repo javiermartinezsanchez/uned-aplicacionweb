@@ -1,9 +1,9 @@
 package es.alumno.uned.exception;
 
-import es.alumno.uned.dto.ModuloCursoDTO;
+import es.alumno.uned.dto.ModuloDTO;
 
 public class ModuloAlreadyExistException extends AlreadyExistException {
-    public ModuloAlreadyExistException(String messageKey, ModuloCursoDTO dto, Object... args) {
+    public ModuloAlreadyExistException(String messageKey, ModuloDTO dto, Object... args) {
         super(messageKey, dto, args);
     }
 }

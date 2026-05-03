@@ -6,7 +6,9 @@ import es.alumno.uned.dto.ModuloDTO;
 import es.alumno.uned.model.entities.Curso;
 import es.alumno.uned.model.entities.Modulo;
 
-
+/**
+ * Clase Mapper de la entidad Moduulo
+ */
 @Component
 public class ModuloMapper {
 

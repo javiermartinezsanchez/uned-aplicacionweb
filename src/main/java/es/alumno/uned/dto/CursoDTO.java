@@ -3,10 +3,12 @@ package es.alumno.uned.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
+import es.alumno.uned.model.entities.Modulo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -35,6 +37,9 @@ public class CursoDTO {
     @NotNull(message = "{validations.curso.responsable.mandatory}")
     private Long responsableId;
 
+    private String nombreResponsable; 
+      
+    
     @NotNull(message = "{validations.curso.duracion.mandatory}")
     private Integer duracion;
  	@NotNull(message = "{validations.curso.fechaIni.mandatory}")
@@ -49,7 +54,10 @@ public class CursoDTO {
     private String userIns;
     private BigDecimal valoracion;
     private Integer usuariosRegistrados;
-    
+
+    private List<ModuloDTO> modulos;
+
+    private List<String> extras;
     public CursoDTO() {}
 	
 	public CursoDTO(Long id, String titulo,
@@ -111,6 +119,15 @@ public class CursoDTO {
 	}
 	public void setResponsableId(Long responsableID) {
 		this.responsableId = responsableID;
+	}
+
+	
+	public String getNombreResponsable() {
+		return nombreResponsable;
+	}
+
+	public void setNombreResponsable(String nombreResponsable) {
+		this.nombreResponsable = nombreResponsable;
 	}
 
 	public MultipartFile getImagen() {
@@ -195,4 +212,17 @@ public class CursoDTO {
 		this.usuariosRegistrados = usuariosRegistrados;
 	}
 
+	public List<ModuloDTO> getModulos() {
+		return modulos;
+	}
+
+	public void setModulos(List<ModuloDTO> modulos) {
+		this.modulos = modulos;
+	}
+
+	public List<String> getExtras() {
+		return extras;
+	}
+
+	
 }

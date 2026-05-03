@@ -65,6 +65,7 @@ public class CursoMapper {
         dto.setFFin(entity.getfFin());
         dto.setAreaTematicaId(entity.getAreaTematica().getId());
         dto.setResponsableId(entity.getResponsable().getId());
+        dto.setNombreResponsable(getNombreCompleto(entity.getResponsable()));       
         dto.setUriImagen(entity.getUriImagen());
         dto.setfIns(entity.getfIns());
         dto.setUserIns(entity.getUserIns());
@@ -73,6 +74,11 @@ public class CursoMapper {
         return dto;
     }
 
+    private String getNombreCompleto(Usuario responsableCurso) {
+    	return (responsableCurso.getNombre()!=null?responsableCurso.getNombre():"")+ 
+               (responsableCurso.getApellido1() !=null?" ".concat(responsableCurso.getApellido1()):"") +
+    	       (responsableCurso.getApellido2() !=null?" ".concat(responsableCurso.getApellido2()):"");
+    }
     
 }
 
