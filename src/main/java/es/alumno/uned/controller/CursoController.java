@@ -2,7 +2,6 @@ package es.alumno.uned.controller;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.security.Principal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -83,7 +82,7 @@ public class CursoController {
 	public String guarda(@AuthenticationPrincipal UserDetails userDetails,
 	        @ModelAttribute("curso") @Valid CursoDTO dto,
 	        BindingResult result,
-	        @RequestParam("imagen") MultipartFile imagen,
+	        MultipartFile imagen,
 	        RedirectAttributes redirectAttributes, 
 	        Model model) throws IOException {
 

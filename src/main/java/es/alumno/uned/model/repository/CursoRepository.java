@@ -101,7 +101,7 @@ public interface CursoRepository extends JpaRepository<Curso, Long>{
 	 * Búsqueda combinada de cursos por título, área y Responsable.
 	 * @param titulo Texto del curso a buscar (título)
 	 * @param areaId Identificador del Área a buscar.
-	 * @param nivel Valor del nivel del curso a buscar.
+	 * @param responsableId Id del responsable el curso.
 	 * @param pageable Definición de la paginación, (número de página solicitada y tamaño de la página)
 	 * @return Página de datos encontrados.
 	 */
@@ -135,7 +135,7 @@ public interface CursoRepository extends JpaRepository<Curso, Long>{
 	/**
 	 * Búsqueda individual por titulo del curso
 	 * @param titulo Título del curso
-	 * @return {@code Optional<Curso>) Encontrado
+	 * @return {@code Optional<Curso>} Encontrado
 	 */
 	Optional<Curso> findByTitulo(String titulo);
 	

@@ -26,7 +26,7 @@ public class HomeController {
 	/**
 	 * Acceso a la página principal.
 	 * @param modelo Modelo de la vista
-	 * @param Authentication Injectada por Spring
+	 * @param authentication {@code Authentication} Injectada por Spring
 	 * @return Invocamos a la página "home" dependiendo de quién esté accediendo.
 	 */
 	@GetMapping("/")

@@ -5,7 +5,8 @@ package es.alumno.uned.exception;
  * 
  * <p>Se generarán en las post-validaciones de los formularios.
  * 
- * <ul>Atributos
+ * <p><b>Atributos</b>
+ * <ul>
  * <li><b>dto:</b> Clase DTO con los datos del formulario</li>
  * <li><b>args:</b> Array de valores a mostrar en el mensajes de la excepción</li>
  * </ul>
@@ -14,6 +15,9 @@ package es.alumno.uned.exception;
 public abstract class AlreadyExistException extends RuntimeException {
 
 	private static final long serialVersionUID = -4028748522198142783L;
+	/**
+	 * Objeto del modelo que ha generado el error, normalmente un DTO con los campos y sus valores.
+	 */
 	private final Object dto;
     private final Object[] args;
 
