@@ -121,14 +121,23 @@
 	<build>
 		<finalName>app</finalName>
 		<plugins>
-
 			<!-- Plugin estándar de Spring Boot -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 
 			</plugin>
-			<!-- Generación de Javadocs -->
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+		   <id>dev</id>
+		   <properties>
+		   	   <profile.name>dev</profile.name>
+		   </properties>
+		   <build>
+		   <plugins>
+		   			<!-- Generación de Javadocs -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
@@ -141,8 +150,8 @@
 						</goals>
 						<configuration>
 						    <release>21</release>
-						     <javadocExecutable>${env.JAVA_21_HOME}/bin/javadoc</javadocExecutable>
-							<!-- DESTINO EXACTO -->
+						<!--     <javadocExecutable>${env.JAVA_21_HOME}/bin/javadoc</javadocExecutable>
+							 DESTINO EXACTO -->
 							<outputDirectory>
 								${project.basedir}/src/main/resources/static/javadocs
 							</outputDirectory>
@@ -159,47 +168,15 @@
 					</execution>
 				</executions>
 			</plugin>
-
-		</plugins>
-	</build>
-	<profiles>
-		<profile>
-			<id>dev</id>
-			<properties>
-				<profile.name>dev</profile.name>
-				<spring.profiles.active>dev</spring.profiles.active>
-			</properties>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-		<build>
-			<plugins>
-				<plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <configuration>
-                <release>21</release>
-                <source>21</source>
-                <target>21</target>
-                <!-- FORZAR EL USO DE JDK 21 PARA LA COMPILACIÓN -->
-		        <fork>true</fork>
-		        <executable>C:/Program Files/Java/jdk-21.0.2/bin/javac</executable>
-		        
-		        <!-- Asegura que se usen las opciones correctas -->
-		        <compilerArgs>
-		            <arg>-parameters</arg>
-		        </compilerArgs>
-
-            </configuration>
-        </plugin>
-</plugins>
-			</build>
+		   </plugins>
+		   </build>
 		</profile>
 		<profile>
-			<id>uned</id>
+			<id>pro</id>
 			<properties>
-				<profile.name>uned</profile.name>
+				<profile.name>pro</profile.name>
 			</properties>
+			
 			<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -12,7 +12,7 @@
     <!-- CABECERA -->
     <div class="row mb-4">
         <div class="col-md-5">
-            <img th:src="@{'/images/curso/' + *{uriImagen}}"
+            <img th:src="@{/images/curso/{img}(img=*{uriImagen})}"
                  class="img-fluid rounded shadow-sm"
                  alt="Imagen del curso">
         </div>

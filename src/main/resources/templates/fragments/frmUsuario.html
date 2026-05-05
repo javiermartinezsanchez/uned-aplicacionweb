@@ -35,10 +35,10 @@
 	        <div class="text-danger" th:errors="*{apellido2}"></div>
 	    </div>
     </div>
-   <div class="mb-3" sec:authorize="hasAnyRole('ADMIN')">
+   <div class="mb-3" sec:authorize="hasRole('ADMIN')">
         <label class="form-label" th:text="#{usuario.role}">Rol</label>
         <select class="form-select" th:field="*{rol}">
-        <option th:value="${''}" th:text="#{responsable.select}"></option>
+        <option th:value="${''}" th:text="#{rol.select}"></option>
     		<option th:each="r : ${roles}"
             		th:value="${r.nombre}"
             		th:text="${r.descripcion}">
@@ -46,7 +46,7 @@
 		</select>
         <div class="text-danger" th:errors="*{rol}"></div>
     </div>
-   <div class="mb-3" sec:authorize="not hasAnyRole('ADMIN')" th:if="*{id} != null">
+   <div class="mb-3" sec:authorize="not hasRole('ADMIN')" th:if="*{id} != null">
         <label class="form-label" th:text="#{usuario.role}">Rol</label>
 	    <input type="text" th:field="*{rol}" th:readonly="true" class="form-control w-35">
 	    

@@ -22,7 +22,7 @@ public class CursoDTO {
     @NotBlank(message = "{validations.curso.descripcion.mandatory}")
     private String descripcion;
 
-    // Nombre del fichero guardado en /static/images/curso
+    // Nombre del fichero guardado en /curso/images/
     private String uriImagen;
 
     // Archivo subido desde el formulario

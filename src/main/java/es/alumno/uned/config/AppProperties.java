@@ -15,21 +15,31 @@ import org.springframework.stereotype.Component;
 public class AppProperties {
 
 	/**
-	 * Definición del directorio en el que guardamos las imágenes y los ficheros
+	 * Definición del directorio en el que guardamos las imágenes y los documentos
 	 * que nos envían los estudiantes (entregables) y profesores
 	 * (recursos de cursos).
 	 * 
+	 * Posteriormente se mapean a direcciones lógicas.
+	 * 
 	 */
-	private String uploadDir;
+	private String uploadImgDir;
+	private String uploadDocDir;
 	
-	public String getUploadDir() {
+	public String getUploadImgDir() {
 		
-		return this.uploadDir;
+		return this.uploadImgDir;
 	}
 
-	public void setUploadDir(String uploadDir) {
-		this.uploadDir = uploadDir;
+	public void setUploadImgDir (String uploadImgDir) {
+		this.uploadImgDir = uploadImgDir;
 	}
 	
-	
+	public String getUploadDocDir() {
+		
+		return this.uploadDocDir;
+	}
+
+	public void setUploadDocDir(String uploadDocDir) {
+		this.uploadDocDir = uploadDocDir;
+	}
 }

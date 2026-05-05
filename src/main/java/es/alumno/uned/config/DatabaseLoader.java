@@ -10,10 +10,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import es.alumno.uned.model.entities.AreaTematica;
 import es.alumno.uned.model.entities.Curso;
+import es.alumno.uned.model.entities.Estudiante;
 import es.alumno.uned.model.entities.Rol;
 import es.alumno.uned.model.entities.Usuario;
 import es.alumno.uned.model.repository.AreaTematicaRepository;
 import es.alumno.uned.model.repository.CursoRepository;
+import es.alumno.uned.model.repository.EstudianteRepository;
 import es.alumno.uned.model.repository.RolRepository;
 import es.alumno.uned.model.repository.UsuarioRepository;
 
@@ -39,6 +41,7 @@ public class DatabaseLoader {
 	public CommandLineRunner initializeDatabase(
 			RolRepository rolRepo, 
 			UsuarioRepository userRepo, 
+			EstudianteRepository estudianteRepo, 
 			AreaTematicaRepository areaRepo,
 			CursoRepository cursoRepo,
 			PasswordEncoder passEncoder) {
@@ -64,7 +67,6 @@ public class DatabaseLoader {
 			}
 			if (userRepo.findByEmail("luis.estudiante@correo.es").isEmpty()) {
 				userRepo.save(new Usuario("Luís", "luis.estudiante@correo.es", "Condemor", "Sindón", passEncoder.encode("1234")  , "ESTUD", true, LocalDateTime.now(), "CARGA INICIAL"));
-				
 			}
 			if (userRepo.findByEmail("julian.estudiante@correo.es").isEmpty()) {
 				userRepo.save(new Usuario("Julián", "julian.estudiante@correo.es", "SinLuz", "Solar", passEncoder.encode("1234")  , "ESTUD", true, LocalDateTime.now(), "CARGA INICIAL"));
@@ -74,8 +76,24 @@ public class DatabaseLoader {
 				userRepo.save(new Usuario("Maria", "maria.estudiante@correo.es", "Relaño", "Wilson", passEncoder.encode("1234")  , "ESTUD", true, LocalDateTime.now(), "CARGA INICIAL"));
 				
 			}
+            // Añadimos a los estudiantes
+			if (estudianteRepo.findByUsuarioEmail("estudiante1@correo.es").isEmpty()) {
+				Usuario u1 = userRepo.findByEmail("estudiante1@correo.es").get();
+				estudianteRepo.save(new Estudiante(null , "Direccion1", "Población1", "Provincia1", "00000", u1));
+			}
+			if (estudianteRepo.findByUsuarioEmail("luis.estudiante@correo.es").isEmpty()) {
+				Usuario u1 = userRepo.findByEmail("luis.estudiante@correo.es").get();
+				estudianteRepo.save(new Estudiante(null , "Direccion2", "Población2", "Provincia2", "00002", u1));
+			}
+			if (estudianteRepo.findByUsuarioEmail("julian.estudiante@correo.es").isEmpty()) {
+				Usuario u1 = userRepo.findByEmail("julian.estudiante@correo.es").get();
+				estudianteRepo.save(new Estudiante(null , "Direccion3", "Población3", "Provincia2", "00003", u1));
+			}
+			if (estudianteRepo.findByUsuarioEmail("maria.estudiante@correo.es").isEmpty()) {
+				Usuario u1 = userRepo.findByEmail("maria.estudiante@correo.es").get();
+				estudianteRepo.save(new Estudiante(null , "Direccion4", "Población4", "Provincia4", "00004", u1));
+			}
 		
-			
 			if (areaRepo.findByTitulo("Sanidad y Salud") == null) {
 				areaRepo.save(new AreaTematica("Sanidad y Salud","cursos online de sanidad y salud"));
 			}

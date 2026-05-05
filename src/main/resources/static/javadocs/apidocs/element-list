@@ -1,0 +1,11 @@
+es.alumno.uned
+es.alumno.uned.config
+es.alumno.uned.controller
+es.alumno.uned.dto
+es.alumno.uned.exception
+es.alumno.uned.mapper
+es.alumno.uned.model.entities
+es.alumno.uned.model.repository
+es.alumno.uned.model.util
+es.alumno.uned.service
+es.alumno.uned.validation

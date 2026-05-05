@@ -1,6 +1,8 @@
 package es.alumno.uned.config;
 
 
+import java.util.Locale;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.LocaleResolver;
@@ -9,8 +11,6 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-
-import java.util.Locale;
 /**
  * Clase utilitaria para la "customización" de SpringMVC.
  * 
@@ -50,7 +50,8 @@ public class WebConfig implements WebMvcConfigurer {
  * Añadimos las rutas de las imágenes.
  * 
  * <ul><li>
- * 1.- Las ruta "externa" para guardar tanto imágenes como documentos que 
+ * 1.- La ruta "externa" para guardar tanto imágenes 
+ * 2.- La ruta "externa" para guardar documentos que 
  * son enviados por el admin, profesor o los alumnos
  * </li>
  * <li>
@@ -62,11 +63,13 @@ public class WebConfig implements WebMvcConfigurer {
 
     	
         registry.addResourceHandler("/images/curso/**")
-        .addResourceLocations("file:" + appProperties.getUploadDir());
-        
+        .addResourceLocations("file:" + appProperties.getUploadImgDir());
+
+        registry.addResourceHandler("/docs/curso/**")
+        .addResourceLocations("file:" + appProperties.getUploadDocDir());
+
         registry.addResourceHandler("/images/**")
                 .addResourceLocations("classpath:/static/images/");
 
     }
-
 }

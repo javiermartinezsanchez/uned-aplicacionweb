@@ -109,9 +109,6 @@ public class EstudianteController extends BaseCrudController {
 	    model.addAttribute("query","");
         return "estudiante/estudiantes";
     }
-	private void preparaModelo(Model modelo) {
-		prepararModeloFormulario(modelo, "admin/areaTematica", "admin/areaTematica","admin/areaTematica");
-	}
 
 	private void preparaRegistro(Model modelo) {
 		prepararModeloFormulario(modelo,"estudiante/editar-perfil","/registro","/home");

@@ -38,69 +38,10 @@ public class Estudiante {
 
 		@OneToMany(mappedBy = "estudiante")
 		private List<EstudianteCurso> cursos;
-
-
 		
-		public Estudiante() {
-			
-		}
+		public Estudiante() {}
 
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + ((codPostal == null) ? 0 : codPostal.hashCode());
-			result = prime * result + ((direccion == null) ? 0 : direccion.hashCode());
-			result = prime * result + ((id == null) ? 0 : id.hashCode());
-			result = prime * result + ((poblacion == null) ? 0 : poblacion.hashCode());
-			result = prime * result + ((provincia == null) ? 0 : provincia.hashCode());
-			result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
-			return result;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			Estudiante other = (Estudiante) obj;
-			if (codPostal == null) {
-				if (other.codPostal != null)
-					return false;
-			} else if (!codPostal.equals(other.codPostal))
-				return false;
-			if (direccion == null) {
-				if (other.direccion != null)
-					return false;
-			} else if (!direccion.equals(other.direccion))
-				return false;
-			if (id == null) {
-				if (other.id != null)
-					return false;
-			} else if (!id.equals(other.id))
-				return false;
-			if (poblacion == null) {
-				if (other.poblacion != null)
-					return false;
-			} else if (!poblacion.equals(other.poblacion))
-				return false;
-			if (provincia == null) {
-				if (other.provincia != null)
-					return false;
-			} else if (!provincia.equals(other.provincia))
-				return false;
-			if (usuario == null) {
-				if (other.usuario != null)
-					return false;
-			} else if (!usuario.equals(other.usuario))
-				return false;
-			return true;
-		}
-
-		public Estudiante(Long id, String apellidos, String direccion, String poblacion, String provincia, String codPostal,
+		public Estudiante(Long id, String direccion, String poblacion, String provincia, String codPostal,
 				Usuario usuario) {
 			super();
 			this.id = id;
@@ -159,6 +100,60 @@ public class Estudiante {
 			this.usuario = usuario;
 		}
 		
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((codPostal == null) ? 0 : codPostal.hashCode());
+			result = prime * result + ((direccion == null) ? 0 : direccion.hashCode());
+			result = prime * result + ((id == null) ? 0 : id.hashCode());
+			result = prime * result + ((poblacion == null) ? 0 : poblacion.hashCode());
+			result = prime * result + ((provincia == null) ? 0 : provincia.hashCode());
+			result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Estudiante other = (Estudiante) obj;
+			if (codPostal == null) {
+				if (other.codPostal != null)
+					return false;
+			} else if (!codPostal.equals(other.codPostal))
+				return false;
+			if (direccion == null) {
+				if (other.direccion != null)
+					return false;
+			} else if (!direccion.equals(other.direccion))
+				return false;
+			if (id == null) {
+				if (other.id != null)
+					return false;
+			} else if (!id.equals(other.id))
+				return false;
+			if (poblacion == null) {
+				if (other.poblacion != null)
+					return false;
+			} else if (!poblacion.equals(other.poblacion))
+				return false;
+			if (provincia == null) {
+				if (other.provincia != null)
+					return false;
+			} else if (!provincia.equals(other.provincia))
+				return false;
+			if (usuario == null) {
+				if (other.usuario != null)
+					return false;
+			} else if (!usuario.equals(other.usuario))
+				return false;
+			return true;
+		}
 		
 	}
 

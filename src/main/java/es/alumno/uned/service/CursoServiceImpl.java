@@ -3,13 +3,8 @@ package es.alumno.uned.service;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import es.alumno.uned.config.AppProperties;
 import es.alumno.uned.dto.CursoDTO;
 import es.alumno.uned.mapper.CursoMapper;
 import es.alumno.uned.model.entities.Curso;
@@ -27,15 +21,9 @@ import es.alumno.uned.model.repository.CursoRepository;
 import es.alumno.uned.model.repository.CursoValoracionRepository;
 import es.alumno.uned.model.repository.UsuarioRepository;
 import es.alumno.uned.model.util.Paginacion;
-import jakarta.annotation.PostConstruct;
 
 @Service
 public class  CursoServiceImpl implements CursoService{
-
-	private final AppProperties appProperties;
-	public CursoServiceImpl(AppProperties appProperties){
-		this.appProperties = appProperties;
-	}
 
 	
 	@Autowired
@@ -52,6 +40,8 @@ public class  CursoServiceImpl implements CursoService{
 	@Autowired
 	CursoMapper cursoMapper;
 	
+	@Autowired
+	FileStorageService fileStorageService;
 	
 	@Override
 	public CursoDTO getCurso(Long id) {
@@ -90,28 +80,13 @@ public class  CursoServiceImpl implements CursoService{
 	    // Subida de imagen
 	    if (imagen != null && !imagen.isEmpty()) {
 
-	        curso.setUriImagen(saveFile(imagen));
+	        curso.setUriImagen(fileStorageService.saveImagen(imagen));
 	    }
 
 	    return cursoMapper.toDTO(cursoRepository.save(curso));
 		
 	}
-	private String saveFile(MultipartFile imagen) throws IOException {
-		String nombreArchivo = UUID.randomUUID() + "_" + imagen.getOriginalFilename();
 
-//		Path ruta = Paths.get("src/main/resources/static/images/curso")
-//		        .resolve(nombreArchivo)
-//		        .toAbsolutePath();
-
-        Path ruta = Paths.get(appProperties.getUploadDir());
-        if (!Files.exists(ruta)) {
-        	Files.createDirectories(ruta);
-        }
-                
-        
-		Files.copy(imagen.getInputStream(), ruta.resolve(nombreArchivo), StandardCopyOption.REPLACE_EXISTING);
-		return nombreArchivo;
-	}
 	@Override
 	public Paginacion<Curso, CursoDTO> listadoPaginado(String url,  Pageable pageable){
 		
