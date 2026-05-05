@@ -24,12 +24,11 @@ import jakarta.servlet.http.HttpServletRequest;
  * 
  * Se implementa el {@code MessageSource} para poder mostrar el mensaje de i18n 
  * 
- *  <p><b>Requisitos</b>
- *  Definir el el controlador (normalmente en el POST) los siguientes atributos:
- *  <ul>
+ *  <p><u>Requisitos</u>
+ *  <ul>Definir el el controlador (normalmente en el POST) los siguientes atributos:
  *  <li>url: Url para el commit</li>
  *  <li>urlCancel: Url para el cancel</li>
- *  <li>urlVista: La vista (thymeleaf que se va a mostrar)</li>
+ *  <li>urlVista: La vista (thymeleaf que se va a mostrar</li>
  *  </ul>
  * 
  */

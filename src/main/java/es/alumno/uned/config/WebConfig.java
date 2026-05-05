@@ -12,11 +12,7 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.util.Locale;
 /**
- * Clase utilitaria para la "customización" de SpringMVC.
  * 
- * <p>Añadimos un interceptor para la detección del lenguaje del usuario (Locale).
- * <p>Añadimos los manejadores de recursos para los documentos e imágenes que son subidos por alumnos y profesores.
- *  
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {

@@ -59,7 +59,6 @@ public class EstudianteCursoId implements Serializable {
 			return false;
 		return true;
 	}
-
    
 }
 

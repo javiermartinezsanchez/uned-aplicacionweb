@@ -2,6 +2,7 @@ package es.alumno.uned.service;
 
 import java.util.List;
 
+import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -11,6 +12,7 @@ import es.alumno.uned.dto.UserPasswordChangeDTO;
 import es.alumno.uned.dto.UsuarioRegistroDTO;
 import es.alumno.uned.model.entities.Usuario;
 import es.alumno.uned.model.util.Paginacion;
+import es.alumno.uned.model.util.PaginacionComun;
 import jakarta.validation.Valid;
 
 public interface UsuarioService extends UserDetailsService{
@@ -18,8 +20,8 @@ public interface UsuarioService extends UserDetailsService{
 	/**
 	 * Guardamos la información de un usuario a través del POJO UsuarioRegistroDTO.
 	 * 
-	 * @param form La informacion del usuario encapsulada en el DTO ({@code UsuarioRegistroDTO})
-	 * @param username Usuario que genera el Usuario (en el Alta).
+	 * @param registroDTO La informacion del usuario encapsulada en el DTO
+	 * @param usuarioAlta Usuario que genera el Usuario (en el Alta).
 	 * @return Devolvemos el usuario guardado
 	 */
 	public Usuario grabar(@Valid UsuarioRegistroDTO form, String username);

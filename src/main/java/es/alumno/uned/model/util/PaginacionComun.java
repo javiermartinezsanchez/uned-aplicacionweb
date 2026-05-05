@@ -9,8 +9,7 @@ import org.springframework.data.domain.Page;
  * Clase de utilidad de Paginación para controlar el número de páginas de nuestros
  * datos.
  * 
- * @param <T> Entidad que se pagina. 
- * 
+ * Se calcula para que se puedan visualizar en footer de la tabla.
  */
 public class PaginacionComun<T> {
 

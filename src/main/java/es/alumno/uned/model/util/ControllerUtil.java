@@ -13,15 +13,8 @@ import org.springframework.web.util.UriUtils;
 public class ControllerUtil {
 
 	/**
-	 * Limpia el mapa de parametros que llegan desde el formulario.
-	 * <p>Genera un nuevo mapa de valores:
-	 * <ul>
-	 * <li>Elimina los parámetro sin valor </li>
-	 * <li>Elimina el parámetro "page".</li>
-	 * </ul>
-	 * <p>Nos sirve para mantener los campos de búsqueda en el modelo y no tener que generar "n" variables.
-	 * 
-	 * <p>El "Service" lo recibirá y nos devuele la consulta adecuada a los mismos.
+	 * Nos genera un mapa de valores de acuerdo al mapa de parámetros recibidos.
+	 * Elimina el parámetro "page" para no duplicarlo.
 	 * @param params Mapa de parámetros recibidos por el controller.
 	 * @return Mapa de clave-valor sin "page" y sin los parámetros vacios.
 	 */
@@ -33,9 +26,9 @@ public class ControllerUtil {
 		return filtros;
 	}
 	/**
-	 * Genera una queryString tipo &amp;clave=valor&amp;clave1=valor1 de acuerdo al mapa
+	 * Genera una queryString tipo &clave=valor&clave1=valor1 de acuerdo al mapa
 	 * de filtros que recibe.
-	 * <p>Necesario para mantener los campos de búsqueda en la paginación.
+	 * <p>Para las listas con campos de búsqueda.
 	 * @param filtros Mapa de filtros.
 	 * @return Cadena en formato QueryString
 	 */

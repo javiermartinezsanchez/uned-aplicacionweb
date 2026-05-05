@@ -59,16 +59,12 @@ public class  CursoServiceImpl implements CursoService{
 	}
 	/**
 	 * Obtenemos un curso válido.
-     *
 	 * <ul>
-	 *     <li>Si el id es null -> Nuevo Curso</li>
-	 *     <li>
-	 *         Si el id no es nulo:
-	 *         <ul>
-	 *             <li>Si se encuentra -> Curso de la BD</li>
-	 *             <li>Si no se encuentra -> Nuevo Curso</li>
-	 *         </ul>
-	 *     </li>
+	 * <li>Si el id es null -> Nuevo Curso</li>
+	 * <li>Si el id no es nulo</li>
+	 * <ul><li>Si se encuentra -> Curso de la BD</li>
+	 * <li>Si no se encuentra -> Nuevo Curso</li>
+	 * </ul>
 	 * </ul>
 	 * @param id Id del curso a buscar
 	 * @return {@code Curso}
