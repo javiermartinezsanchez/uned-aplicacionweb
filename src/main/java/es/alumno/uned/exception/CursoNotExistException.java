@@ -1,8 +1,8 @@
 package es.alumno.uned.exception;
 
-public class CursoNotExistException extends RuntimeException{
+public class CursoNotExistException extends NotDataFoundException{
 
-	public CursoNotExistException(final String message) {
-		super(message);
+	public CursoNotExistException(String messageKey, Object dto, String ... args) {
+		super(messageKey, dto, args);
 	}
 }

@@ -52,7 +52,7 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 
         // 2. Buscar curso por ID
         Curso curso = cursoRepository.findById(cursoId)
-                .orElseThrow(() -> new CursoNotExistException("El curso no existe."));
+                .orElseThrow(() -> new CursoNotExistException("El curso no existe.", null, username));
 
         // 3. Validar si ya está suscrito
         boolean yaSuscrito = estudianteCursoRepository
@@ -105,7 +105,7 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 
         case TipoModulo.ENTREGA_OBLIGATORIA:
             if (entregable == null || entregable.isEmpty()) {
-                throw new ModuloException("Debe subir un archivo para completar este módulo");
+                throw new MandatoryDataException("Debe subir un archivo para completar este módulo", );
             }
             guardarArchivo(entregable);
             marcarComoCompletado(estudiante, modulo);

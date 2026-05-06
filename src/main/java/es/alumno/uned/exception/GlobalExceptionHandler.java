@@ -42,15 +42,15 @@ public class GlobalExceptionHandler {
         this.messageSource = messageSource;
     }
     
-    @ExceptionHandler(AlreadyExistException.class)
-    public String handleAlreadyExist(AlreadyExistException ex, 
+    @ExceptionHandler(AppGlobalException.class)
+    public String handleAppException(AppGlobalException ex, 
     		HttpServletRequest request,
     		Model model) {
 
     	return putDataException(ex, request, model);
     }
 
-	private String putDataException(AlreadyExistException ex, HttpServletRequest request, Model model) {
+	private String putDataException(AppGlobalException ex, HttpServletRequest request, Model model) {
 		String backUrl = request.getHeader("Referer");
 		model.addAttribute("url", (String) model.getAttribute("url"));
 		model.addAttribute("urlCancel", (String) model.getAttribute("urlCancel"));

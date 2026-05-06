@@ -40,7 +40,7 @@ public class ModuloServiceImpl implements ModuloService {
 
 	        // Validación: el curso debe existir
 	        Curso curso = cursoRepository.findById(dto.cursoId())
-	                .orElseThrow(() -> new CursoNotExistException("curso.no.encontrado"));
+	                .orElseThrow(() -> new CursoNotExistException("curso.no.encontrado", dto, dto.cursoId().toString()));
 
 	        Modulo modulo;
 
