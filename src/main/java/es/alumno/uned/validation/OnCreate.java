@@ -1,5 +1,7 @@
 package es.alumno.uned.validation;
 
-public interface OnCreate {
+import jakarta.validation.groups.Default;
+
+public interface OnCreate extends Default {
 
 }

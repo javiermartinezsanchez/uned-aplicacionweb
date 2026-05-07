@@ -1,5 +1,7 @@
 package es.alumno.uned.validation;
 
-public interface OnUpdate {
+import jakarta.validation.groups.Default;
+
+public interface OnUpdate extends Default{
 
 }

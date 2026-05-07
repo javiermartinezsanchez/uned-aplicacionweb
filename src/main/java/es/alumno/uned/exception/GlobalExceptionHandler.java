@@ -61,7 +61,7 @@ public class GlobalExceptionHandler {
                 LocaleContextHolder.getLocale()
             ));
         model.addAttribute("form", ex.getDto());
-        return (String) model.getAttribute("urlVista");
+        return (String) model.getAttribute("viewName");
 	}
 }
 

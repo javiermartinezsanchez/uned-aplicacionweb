@@ -6,7 +6,7 @@
 	        <input type="email" th:field="*{email}" class="form-control w-50">
 	        <div class="text-danger" th:errors="*{email}"></div>
         </div>
-	    <div class="col-md-6 mb-3" sec:authorize="hasRole('ADMIN')">
+	    <div class="col-md-6 mb-3" th:if="${isUser == true}" sec:authorize="hasRole('ADMIN')">
 	        <label class="form-label" th:text="#{usuario.role}">Rol</label>
 	        <select class="form-select" th:field="*{rol}">
 	        <option th:value="${''}" th:text="#{rol.select}"></option>
@@ -85,50 +85,48 @@
 	    </div>
     </div>
     <div class="row border rounded p-3">
-            
-            <!-- Columna Izquierda: Áreas Seleccionadas -->
-            <div class="col-md-6">
-                <h5>Áreas de Interés Seleccionadas</h5>
-                <div class="area-list" id="listaSeleccionadas">
-                    <!-- Aquí se renderizarán los checkboxes dinámicamente o estáticamente -->
-                    <div th:each="area : ${form.areasInteres}" class="area-item">
-                        <input type="checkbox" name="areasSeleccionadas" 
-                               th:value="${area.id}" 
-                               th:data-nombre="${area.titulo}"
-                               checked disabled>
-                        <span th:text="${area.titulo}"></span>
-                        <!-- Botón pequeño para eliminar (opcional, requiere lógica extra) -->
-                        <button type="button" class="btn btn-sm btn-outline-danger ms-2" 
-                                th:onclick="eliminarArea(this, ${area.id}, '${area.titulo}')" title="Eliminar">
-                            &times;
-                        </button>
-                    </div>
-                    <p id="mensajeSinAreas" th:if="${form.areasInteres == null or form.areasInteres.isEmpty()}" class="text-muted">
-                        No hay áreas seleccionadas.
-                    </p>
+        <!-- Columna Izquierda: Áreas Seleccionadas -->
+        <div class="col-md-6">
+            <h5 th:text="#{areatematica.estudiante.select}">Áreas de Interés Seleccionadas</h5>
+            <div class="area-list" id="listaSeleccionadas">
+                <!-- Aquí se renderizarán los checkboxes dinámicamente o estáticamente -->
+                <div th:each="area : ${form.areasInteres}" class="area-item">
+                    <input type="checkbox" name="areasSeleccionadas" 
+                           th:value="${area.id}" 
+                           th:data-nombre="${area.titulo}"
+                           checked disabled>
+                    <span th:text="${area.titulo}"></span>
+                    <!-- Botón pequeño para eliminar (opcional, requiere lógica extra) -->
+                    <button type="button" class="btn btn-sm btn-outline-danger ms-2" 
+                            th:onclick="eliminarArea(this, ${area.id}, '${area.titulo}')" title="Eliminar">
+                        &times;
+                    </button>
                 </div>
-            </div>
-
-            <!-- Columna Derecha: Áreas Disponibles -->
-            <div class="col-md-6">
-                <h5>Áreas Disponibles</h5>
-                <div class="mb-3">
-                    <select id="selectAreasDisponibles" class="form-select">
-                        <option value="">-- Seleccionar una área --</option>
-                        <!-- Iteramos sobre las áreas disponibles que NO están seleccionadas -->
-                        <option th:each="area : ${areasDisponibles}" 
-                                th:value="${area.id}" 
-                                th:text="${area.titulo}"
-                                >
-                        </option>
-                    </select>
-                </div>
-                <button type="button" class="btn btn-primary btn-add" onclick="agregarArea()">
-                    Añadir a la lista
-                </button>
+                <p id="mensajeSinAreas" th:if="${form.areasInteres == null or form.areasInteres.isEmpty()}" class="text-muted">
+                    No hay áreas seleccionadas.
+                </p>
             </div>
         </div>
-        <script>
+
+        <!-- Columna Derecha: Áreas Disponibles -->
+        <div class="col-md-6">
+            <h5 th:text="#{areatematica.estudiante.disponibles}">Áreas Disponibles</h5>
+            <div class="mb-3">
+                <select id="selectAreasDisponibles" class="form-select">
+                    <option th:value="${''}" th:text="#{areatematica.select}"></option>
+                    <option th:each="area : ${areasDisponibles}" 
+                            th:value="${area.id}" 
+                            th:text="${area.titulo}"
+                            >
+                    </option>
+                </select>
+            </div>
+            <button type="button" class="btn btn-primary btn-add" onclick="agregarArea()">
+                Añadir a la lista
+            </button>
+        </div>
+    </div>
+    <script>
     // Función para agregar una área del select a la lista de checkboxes
     function agregarArea() {
         const select = document.getElementById('selectAreasDisponibles');
@@ -168,13 +166,13 @@
                 <button type="button" class="btn btn-sm btn-outline-danger" onclick="eliminarArea(this, '${areaId}', '${areaNombre}')" title="Eliminar">&times;</button>
         `;
 
-    const inputHidden = document.createElement('input');
-    inputHidden.type = 'hidden';
-    inputHidden.name = 'areasSeleccionadas'; // ¡Mismo nombre que espera Spring!
-    inputHidden.value = areaId;
-
-    listaContainer.appendChild(divItem);
-    listaContainer.appendChild(inputHidden);
+	    const inputHidden = document.createElement('input');
+	    inputHidden.type = 'hidden';
+	    inputHidden.name = 'areasSeleccionadas'; // ¡Mismo nombre que espera Spring!
+	    inputHidden.value = areaId;
+	
+	    listaContainer.appendChild(divItem);
+	    listaContainer.appendChild(inputHidden);
 
         // Deshabilitar la opción en el select para que no se pueda volver a seleccionar
         select.options[select.selectedIndex].disabled = true;
@@ -209,5 +207,5 @@
         	mensaje.classList.remove('d-none');
         }
     }
-</script>
+	</script>
 </div>

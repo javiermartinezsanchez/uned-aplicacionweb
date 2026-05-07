@@ -3,6 +3,7 @@ package es.alumno.uned.dto;
 import java.time.LocalDateTime;
 
 import es.alumno.uned.validation.OnCreate;
+import es.alumno.uned.validation.OnUpdate;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -36,7 +37,8 @@ public class UsuarioRegistroDTO {
     @Size(min = 6, message = "{validations.message.password.validformat}",groups = OnCreate.class)
     private String confirmPassword;
 
-    @NotBlank(message = "{validations.message.rol.mandatory}")
+    @NotBlank(message = "{validations.message.rol.mandatory}",groups = OnCreate.class)
+    @NotBlank(message = "{validations.message.rol.mandatory}",groups = OnUpdate.class)
     private String rol;
     
     private boolean activo;

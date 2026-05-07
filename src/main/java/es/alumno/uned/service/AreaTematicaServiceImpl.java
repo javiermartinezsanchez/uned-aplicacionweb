@@ -69,7 +69,7 @@ public class AreaTematicaServiceImpl implements AreaTematicaService {
 		AreaTematica areaTematica;
 		if (area.getId() == null) {
 			if (isExistByTitulo(area.getTitulo())) {
-			   throw new AreaTematicaAlreadyExistException("areaTematica.error.existente",
+			   throw new AreaTematicaAlreadyExistException("areatematica.error.existente",
 					   area, area.getTitulo());
 		    }
 			areaTematica = new AreaTematica();

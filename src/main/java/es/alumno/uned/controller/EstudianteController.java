@@ -3,6 +3,7 @@ package es.alumno.uned.controller;
 import java.security.Principal;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +25,7 @@ import es.alumno.uned.service.AreaTematicaService;
 import es.alumno.uned.service.EstudianteService;
 import es.alumno.uned.service.UsuarioService;
 import jakarta.validation.Valid;
+import jakarta.validation.groups.Default;
 
 @Controller
 public class EstudianteController extends BaseCrudController {
@@ -30,6 +33,9 @@ public class EstudianteController extends BaseCrudController {
     private final EstudianteService estudianteService;
     private final UsuarioService usuarioService;
     private final AreaTematicaService areaService;
+    
+    @Autowired 
+    SmartValidator validator;
     
     public EstudianteController(EstudianteService estudianteService, UsuarioService usuarioService, 
     		AreaTematicaService areaService) {
@@ -47,12 +53,12 @@ public class EstudianteController extends BaseCrudController {
     }
     @PostMapping("/registro")
     public String registrar(@AuthenticationPrincipal UserDetails usuario,
-    		@RequestParam("areasSeleccionadas") List<Long> areasIds,
-            @Valid @ModelAttribute("form") EstudianteDTO form,
-           
+    		@RequestParam(required = false) List<Long> areasSeleccionadas,
+            EstudianteDTO form,
             BindingResult result,
             Model model) {
     	preparaRegistro(model);
+    	validator.validate(form, result, Default.class); 
         if (result.hasErrors()) {
             return model.getAttribute("viewName").toString();
         }
@@ -63,8 +69,10 @@ public class EstudianteController extends BaseCrudController {
         else {
         	usuarioAlta = usuario.getUsername();
         }
-        List<AreaTematicaDTO> nuevasAreas = areaService.findAllById(areasIds);
-        form.setAreasInteres(nuevasAreas);
+        if (areasSeleccionadas != null) {
+	        List<AreaTematicaDTO> nuevasAreas = areaService.findAllById(areasSeleccionadas);
+	        form.setAreasInteres(nuevasAreas);
+        }
         estudianteService.grabar(form, usuarioAlta);
 
         return "redirect:/estudiante/editar-perfil?sucess";
@@ -94,7 +102,7 @@ public class EstudianteController extends BaseCrudController {
     
     @PostMapping("/estudiante/miperfil")
     public String actualizarPerfil(
-            @Valid @ModelAttribute("form") EstudianteDTO form,
+            @Valid EstudianteDTO form,
             BindingResult result,
             Principal principal,
             Model model) {
@@ -122,6 +130,7 @@ public class EstudianteController extends BaseCrudController {
     }
 
 	private void preparaRegistro(Model modelo) {
+		modelo.addAttribute("isUser", false);
 		setModeloFormulario(modelo,"estudiante/editar-perfil","/registro","/home");
 		
 	}

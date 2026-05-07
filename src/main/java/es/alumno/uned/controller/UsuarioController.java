@@ -1,5 +1,4 @@
 package es.alumno.uned.controller;
-import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -92,6 +91,7 @@ public class UsuarioController extends BaseCrudController {
 	}
 	private String getUsuario(Model model) {
 		setModeloFormulario(model, "admin/usuario", "/admin/usuario","/admin/usuario");
+		model.addAttribute("isUser", true);
         model.addAttribute("roles", rolService.getList());
     	return model.getAttribute("viewName").toString();
     }
