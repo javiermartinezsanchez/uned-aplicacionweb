@@ -96,8 +96,22 @@ public class AreaTematicaServiceImpl implements AreaTematicaService {
 	@Override
 	public List<AreaTematicaDTO> listAll() {
 		return repo.findAll().stream()
-		.map(mapper :: toDTO)
-		.collect(Collectors.toList());
+				.map(mapper :: toDTO)
+				.collect(Collectors.toList());
+	}
+	/**
+	 * Consulta de Areas Temáticas por una lista de id.
+	 * @param areasIds Lista de ids a consultar
+	 * 
+	 * @return Lista de Areas encontradas.
+	 * 
+	 */
+	@Override
+	public List<AreaTematicaDTO> findAllById(List<Long> areasIds) {
+		
+		return repo.findAllById(areasIds).stream()
+				.map(mapper :: toDTO)
+				.collect(Collectors.toList());
 	}
 	
 }

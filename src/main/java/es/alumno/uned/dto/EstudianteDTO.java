@@ -1,5 +1,8 @@
 package es.alumno.uned.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -23,10 +26,12 @@ public class EstudianteDTO extends UsuarioRegistroDTO {
     @Size(min = 5, max = 5, message = "{validations.message.codpostal.format}")
     private String codPostal;
 
-	public String getDireccion() {
-		return direccion;
+    public List<AreaTematicaDTO> areasInteres = new ArrayList<>();
+    
+	public List<AreaTematicaDTO> getAreasInteres() {
+		return areasInteres;
 	}
-
+	
 	public void setDireccion(String direccion) {
 		this.direccion = direccion;
 	}
@@ -55,6 +60,12 @@ public class EstudianteDTO extends UsuarioRegistroDTO {
 		this.codPostal = codPostal;
 	}
 
-  
+	public void setAreasInteres(List<AreaTematicaDTO> areasInteres) {
+		this.areasInteres = areasInteres;
+	}
+	public String getDireccion() {
+		return direccion;
+	}
+
 }
 

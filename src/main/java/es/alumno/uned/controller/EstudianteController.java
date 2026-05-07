@@ -1,6 +1,7 @@
 package es.alumno.uned.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import es.alumno.uned.dto.AreaTematicaDTO;
 import es.alumno.uned.dto.EstudianteDTO;
 import es.alumno.uned.model.entities.SecurityUser;
+import es.alumno.uned.service.AreaTematicaService;
 import es.alumno.uned.service.EstudianteService;
 import es.alumno.uned.service.UsuarioService;
 import jakarta.validation.Valid;
@@ -26,21 +29,27 @@ public class EstudianteController extends BaseCrudController {
 
     private final EstudianteService estudianteService;
     private final UsuarioService usuarioService;
-
-    public EstudianteController(EstudianteService estudianteService, UsuarioService usuarioService) {
+    private final AreaTematicaService areaService;
+    
+    public EstudianteController(EstudianteService estudianteService, UsuarioService usuarioService, 
+    		AreaTematicaService areaService) {
         this.estudianteService = estudianteService;
         this.usuarioService = usuarioService;
+        this.areaService= areaService;
     }
 
     @GetMapping("/registro")
     public String nuevo(Model model) {
     	preparaRegistro(model);
         model.addAttribute("form", new EstudianteDTO("ESTUD"));
+        model.addAttribute("areasDisponibles", areaService.listAll());
         return model.getAttribute("viewName").toString();
     }
     @PostMapping("/registro")
     public String registrar(@AuthenticationPrincipal UserDetails usuario,
+    		@RequestParam("areasSeleccionadas") List<Long> areasIds,
             @Valid @ModelAttribute("form") EstudianteDTO form,
+           
             BindingResult result,
             Model model) {
     	preparaRegistro(model);
@@ -54,6 +63,8 @@ public class EstudianteController extends BaseCrudController {
         else {
         	usuarioAlta = usuario.getUsername();
         }
+        List<AreaTematicaDTO> nuevasAreas = areaService.findAllById(areasIds);
+        form.setAreasInteres(nuevasAreas);
         estudianteService.grabar(form, usuarioAlta);
 
         return "redirect:/estudiante/editar-perfil?sucess";
@@ -66,6 +77,7 @@ public class EstudianteController extends BaseCrudController {
         EstudianteDTO dto = estudianteService.findById(userConnected.getId());
         setModeloFormulario(model, "estudiante/editar-perfil","/estudiante/miperfil","/");
         model.addAttribute("form", dto);
+        model.addAttribute("areasDisponibles", areaService.listAll());
         return model.getAttribute("viewName").toString();
     }
 
@@ -76,6 +88,7 @@ public class EstudianteController extends BaseCrudController {
         EstudianteDTO dto = estudianteService.findById(id);
         setModeloFormulario(model,"estudiante/editar-perfil", "/registro", "/");
         model.addAttribute("form", dto);
+        model.addAttribute("areasDisponibles", areaService.listAll());
         return model.getAttribute("viewName").toString();
     }
     

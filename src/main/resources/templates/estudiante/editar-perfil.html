@@ -10,7 +10,7 @@
 <div th:replace="~{fragments/mensajesresultado :: mensajes}"></div>
 <form th:action="@{${url}}" th:object="${form}" method="post">
 	<frmUsuario th:replace="~{fragments/frmUsuario :: frmUsuario}"></frmUsuario>
-	<frmUsuario th:replace="~{fragments/frmUsuario :: frmEstudiante}"></frmUsuario>
+	<frmUsuario th:replace="~{fragments/frmUsuario :: frmEstudiante(${areasDisponibles})}"></frmUsuario>
 	<div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, @{${urlCancel}})}"></div>
 </form>
 </section>

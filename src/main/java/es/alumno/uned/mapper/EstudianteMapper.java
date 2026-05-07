@@ -13,9 +13,12 @@ import es.alumno.uned.model.repository.EstudianteRepository;
 public class EstudianteMapper {
 	
 	private EstudianteRepository estudianteRepo;
+	private AreaTematicaMapper areaMapper;
 	
-	public EstudianteMapper(EstudianteRepository estudianteRepo) {
+	public EstudianteMapper(EstudianteRepository estudianteRepo, 
+			AreaTematicaMapper areaMapper) {
 		this.estudianteRepo = estudianteRepo;
+		this.areaMapper = areaMapper;
 	}
 
 	public Estudiante toEntity(EstudianteDTO estudianteDTO, String userAlta) {
@@ -28,6 +31,7 @@ public class EstudianteMapper {
 			estudiante.getUsuario().setRol("ESTUD");
 			estudiante.getUsuario().setfAlta(LocalDateTime.now());
 			estudiante.getUsuario().setUsuarioAlta(userAlta);
+
 		}
 		else {
 			estudiante = estudianteRepo.getReferenceById(estudianteDTO.getId());
@@ -39,6 +43,7 @@ public class EstudianteMapper {
 		estudiante.setPoblacion(estudianteDTO.getPoblacion());
 		estudiante.setProvincia(estudianteDTO.getProvincia());
 		estudiante.setCodPostal(estudianteDTO.getCodPostal());
+		estudiante.setAreasInteres(estudianteDTO.getAreasInteres().stream().map(areaMapper :: toEntity).toList());
 		return estudiante;
 	}
 	public EstudianteDTO toDTO(Estudiante estudiante) {
@@ -56,6 +61,7 @@ public class EstudianteMapper {
 		eDTO.setPoblacion(estudiante.getPoblacion());
 		eDTO.setProvincia(estudiante.getProvincia());
 		eDTO.setCodPostal(estudiante.getCodPostal());
+		eDTO.setAreasInteres(estudiante.getAreasInteres().stream().map(areaMapper :: toDTO).toList());
 	return eDTO;
 	}
 }

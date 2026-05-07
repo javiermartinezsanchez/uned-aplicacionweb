@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import es.alumno.uned.exception.CursoNotExistException;
+import es.alumno.uned.exception.EstudianteNotExistException;
 import es.alumno.uned.exception.MandatoryModuloException;
 import es.alumno.uned.model.entities.Curso;
 import es.alumno.uned.model.entities.Estudiante;
@@ -45,14 +46,14 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
     }
 
     @Override
-    public void subscribirAlumnoACurso(String username, Long cursoId) {
+    public void subscribirAlumnoACurso(Long estudianteId, Long cursoId) {
         // 1. Buscar estudiante por username
-        Estudiante estudiante = estudianteRepository.findByUsuarioEmail(username)
-                .orElseThrow(() -> new IllegalStateException("El estudiante no existe."));
+        Estudiante estudiante = estudianteRepository.findById(estudianteId)
+                .orElseThrow(() -> new EstudianteNotExistException("msg.exception.notfound", null, "estudiante.titulo"));
 
         // 2. Buscar curso por ID
         Curso curso = cursoRepository.findById(cursoId)
-                .orElseThrow(() -> new CursoNotExistException("El curso no existe.", null, username));
+                .orElseThrow(() -> new CursoNotExistException("msg.exception.notfound.", null, "curso.title"));
 
         // 3. Validar si ya está suscrito
         boolean yaSuscrito = estudianteCursoRepository

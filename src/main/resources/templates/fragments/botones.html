@@ -52,8 +52,8 @@
 <!--  GRUPO DE BOTONES (btnGroup)                              -->
 <!--  Uso: th:replace="fragments/botones :: btnGroup('Guardar', '/cancelar')" -->
 <!-- ========================================================= -->
-<div th:fragment="btnGroup(textoSubmit, textoCancelar, urlCancelar)">
-    <div class="row g-3">
+<div th:fragment="btnGroup(textoSubmit, textoCancelar, urlCancelar)" class="row g-3 mt-2">
+      <!-- <div >-->
         <div class="col-auto">
             <button type="submit" class="btn btn-primary">
                 <i class="bi bi-save"></i> <span th:text="${textoSubmit}"></span>
@@ -65,5 +65,5 @@
                 <i class="bi bi-x-circle"></i> <span th:text="${textoCancelar}"></span>
             </a>
         </div>
-    </div>
+    <!-- </div>-->
 </div>

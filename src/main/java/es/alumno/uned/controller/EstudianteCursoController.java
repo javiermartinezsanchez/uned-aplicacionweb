@@ -3,11 +3,13 @@ package es.alumno.uned.controller;
 import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import es.alumno.uned.model.entities.SecurityUser;
 import es.alumno.uned.service.EstudianteCursoService;
 
 @Controller
@@ -18,12 +20,12 @@ public class EstudianteCursoController {
 	
 	@GetMapping("/subscribircurso/{id}")
 	public String subscribirCurso(@PathVariable Long id,
-	                              Principal principal,
+							     @AuthenticationPrincipal SecurityUser userConnected,
 	                              RedirectAttributes redirectAttributes) {
 
 	    try {
-	        String username = principal.getName();
-	        estudianteCursoService.subscribirAlumnoACurso(username, id);
+	        
+	        estudianteCursoService.subscribirAlumnoACurso(userConnected.getId(), id);
 	        redirectAttributes.addFlashAttribute("success",
 	                "Te has suscrito correctamente al curso.");
 

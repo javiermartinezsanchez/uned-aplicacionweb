@@ -36,4 +36,6 @@ public interface AreaTematicaService {
 	 * @return Lista de las áreas
 	 */
 	List<AreaTematicaDTO> listAll();
+
+	List<AreaTematicaDTO> findAllById(List<Long> areasIds);
 }

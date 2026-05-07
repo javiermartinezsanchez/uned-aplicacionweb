@@ -7,7 +7,7 @@ import es.alumno.uned.model.entities.Modulo;
 
 public interface EstudianteCursoService {
 
-	void subscribirAlumnoACurso(String username, Long cursoId);
+	void subscribirAlumnoACurso(Long estudianteId, Long cursoId);
 
     void actualizarUltimoAcceso(String username, Long cursoId);
 

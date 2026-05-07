@@ -1,12 +1,15 @@
 package es.alumno.uned.model.entities;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -38,6 +41,14 @@ public class Estudiante {
 
 		@OneToMany(mappedBy = "estudiante")
 		private List<EstudianteCurso> cursos;
+		
+		@ManyToMany
+	    @JoinTable(
+	        name = "estudiante_areas", // Tabla intermedia
+	        joinColumns = @JoinColumn(name = "usuario_id"),
+	        inverseJoinColumns = @JoinColumn(name = "area_id")
+	    )
+	    private List<AreaTematica> areasInteres = new ArrayList<>();
 		
 		public Estudiante() {}
 
@@ -100,6 +111,15 @@ public class Estudiante {
 			this.usuario = usuario;
 		}
 		
+		// Getter y Setter para la lista
+	    public List<AreaTematica> getAreasInteres() {
+	        return areasInteres;
+	    }
+
+	    public void setAreasInteres(List<AreaTematica> areasInteres) {
+	        this.areasInteres = areasInteres;
+	    }
+	    
 		@Override
 		public int hashCode() {
 			final int prime = 31;
