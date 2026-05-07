@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesión inválida</title>
+
+    <!-- Bootstrap desde WebJars -->
+    <link rel="stylesheet"
+          th:href="@{/webjars/bootstrap/{version}/css/bootstrap.min.css(version=${@webjarsConfig.bootstrap})}" />
+
+    <!-- Bootstrap Icons desde WebJars -->
+    <link rel="stylesheet"
+          th:href="@{/webjars/bootstrap-icons/{version}/font/bootstrap-icons.css(version=${@webjarsConfig.bootstrapIcons})}" />
+
+    <style>
+        body {
+            background-color: #f5f7fa;
+        }
+        .card {
+            border-radius: 12px;
+        }
+        .icon-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: #dc3545;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px auto;
+        }
+        .icon-circle i {
+            font-size: 32px;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card shadow p-4" style="max-width: 450px; width: 100%;">
+
+        <div class="icon-circle">
+            <i class="bi bi-x-circle"></i>
+        </div>
+
+        <h3 class="text-center mb-3">Sesión inválida</h3>
+
+        <p class="text-center text-muted">
+            Tu sesión ha expirado o no es válida.  
+            Por seguridad, debes iniciar sesión de nuevo.
+        </p>
+
+        <div class="d-grid mt-4">
+            <a href="/login" class="btn btn-primary">
+                <i class="bi bi-box-arrow-in-right me-2"></i> Iniciar sesión
+            </a>
+        </div>
+
+        <div class="text-center mt-3">
+            <a href="/" class="text-decoration-none text-secondary">
+                <i class="bi bi-house-door me-1"></i> Volver al inicio
+            </a>
+        </div>
+
+    </div>
+</div>
+
+<!-- JS de Bootstrap desde WebJars -->
+<script th:src="@{/webjars/bootstrap/{version}/js/bootstrap.bundle.min.js(version=${@webjarsConfig.bootstrap})}"></script>
+
+</body>
+</html>

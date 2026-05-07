@@ -9,9 +9,8 @@ th:replace="~{plantilla::layout(~{::section})}">
 <section>
 <h1 th:text="#{usuario.title}">Título</h1>
 <div th:replace="~{fragments/mensajesresultado :: mensajes}"></div>
-
 <form th:action="@{${url}}" th:object="${form}" method="post">
-<frmUsuario th:replace="~{fragments/frmUsuario :: frmUsuario}"></frmUsuario>
+<div th:replace="~{fragments/frmUsuario :: frmUsuario}"></div>
 <div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, @{${urlCancel}})}"></div>
 </form>
 <div th:replace="~{fragments/mensajesresultado :: errorgeneral}"></div>

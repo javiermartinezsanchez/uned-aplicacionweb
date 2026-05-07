@@ -14,13 +14,13 @@ import org.springframework.ui.Model;
  */
 public abstract class BaseCrudController {
 	/**
-	 * Define en el modelo {@link Model} los valores de la vista y las URL necesarias en cada formulario.
+	 * Define en el {@link Model} la vista y las URL necesarias en cada formulario.
 	 * @param model Modelo de la vista.
 	 * @param viewName Vista a mostrar.
 	 * @param urlGuardar Url para el comando de "Guardar" 
 	 * @param urlCancelar Url para el comando "Cancelar"
 	 */
-    protected void prepararModeloFormulario(
+    protected void setModeloFormulario(
             Model model,
             String viewName,
             String urlGuardar,
@@ -29,6 +29,27 @@ public abstract class BaseCrudController {
         model.addAttribute("viewName", viewName);
         model.addAttribute("url", urlGuardar);
         model.addAttribute("urlCancel", urlCancelar);
+    }
+    /**
+     * Define en el {@link Model} la vista y las url comunes a todos los listados.
+     * <p>Se añade la query para mantener los campos de búsqueda (si existen) en la paginación.
+     * @param model Modelo de la vista.
+     * @param viewName Vista a mostrar.
+     * @param urlAlta Url para un nuevo registro
+     * @param urlDetalle Url para el comando de ver/modificar
+     * @param urlBack Url para el comando "volver"
+     * @param query Query con los parámetro de búsqueda para la paginación.
+     */
+    protected void setModeloListado(Model model, String viewName, 
+    		String urlAlta,
+    		String urlDetalle, 
+    		String urlBack, 
+    		String query) {
+        model.addAttribute("urlAlta", urlAlta);
+        model.addAttribute("viewName", viewName);
+        model.addAttribute("url", urlDetalle);
+        model.addAttribute("urlBack", urlBack);
+        model.addAttribute("query", query);
     }
 }
 

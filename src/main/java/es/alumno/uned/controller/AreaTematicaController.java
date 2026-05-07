@@ -83,6 +83,6 @@ public class AreaTematicaController extends BaseCrudController{
 		return "admin/AreaTematicaList";
 	}
 	private void preparaArea(Model model) {
-		prepararModeloFormulario(model, "admin/areaTematica", "/admin/areaTematica","/admin/areaTematica");
+		setModeloFormulario(model, "admin/areaTematica", "/admin/areaTematica","/admin/areaTematica");
 	}
 }

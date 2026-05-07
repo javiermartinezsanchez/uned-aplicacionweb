@@ -41,7 +41,8 @@ public class SecurityConfiguration {
 	            .failureUrl("/login?error=true")
 	            .permitAll()
 	        )
-            .sessionManagement((sessionManagement) -> sessionManagement.invalidSessionUrl("/invalidSession.html")
+	        // (sessionManagement) -> sessionManagement.invalidSessionUrl("/invalidSession.html")
+            .sessionManagement(session -> session
                     .maximumSessions(1)
                     .sessionRegistry(sessionRegistry()))
 	        .logout(logout -> logout

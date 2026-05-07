@@ -5,7 +5,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-
+/**
+ * Clase de utilidad para determinar según el rol del usuario su "prefijo" para la navegación.
+ */
 public class UserUtil {
 
 	/**

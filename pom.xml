@@ -96,7 +96,6 @@
 		    <artifactId>spring-boot-configuration-processor</artifactId>
 		    <optional>true</optional>
 		</dependency>
-
 		<!-- https://mvnrepository.com/artifact/org.webjars/bootstrap -->
 		<dependency>
 			<groupId>org.webjars</groupId>
@@ -135,6 +134,13 @@
 		   <properties>
 		   	   <profile.name>dev</profile.name>
 		   </properties>
+	       <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-devtools</artifactId>
+                <optional>true</optional>
+            </dependency>
+           </dependencies>
 		   <build>
 		   <plugins>
 		   			<!-- Generación de Javadocs -->

@@ -1,13 +1,27 @@
-<section th:fragment="frmUsuario">
+<div th:fragment="frmUsuario">
 	<input type="hidden" th:field="*{id}" />
-    <div class="mb-3">
-        <label class="form-label" th:text="#{usuario.email}">Email</label>
-        <input type="email" th:field="*{email}" class="form-control w-50">
-        <div class="text-danger" th:errors="*{email}"></div>
+    <div class="row">
+	    <div class="col-md-6 mb-3">
+	        <label class="form-label" th:text="#{usuario.email}">Email</label>
+	        <input type="email" th:field="*{email}" class="form-control w-50">
+	        <div class="text-danger" th:errors="*{email}"></div>
+        </div>
+	    <div class="col-md-6 mb-3" sec:authorize="hasRole('ADMIN')">
+	        <label class="form-label" th:text="#{usuario.role}">Rol</label>
+	        <select class="form-select" th:field="*{rol}">
+	        <option th:value="${''}" th:text="#{rol.select}"></option>
+	    		<option th:each="r : ${roles}"
+	            		th:value="${r.nombre}"
+	            		th:text="${r.descripcion}">
+	    		</option>
+			</select>
+	        <div class="text-danger" th:errors="*{rol}"></div>
+	    </div>
     </div>
-    <frmPart th:if="*{id}==null" th:insert="~{fragments/frmChangePass :: frmChangePass}">
-    </frmPart>
-    <div class="mb-3" th:if="*{id} != null">
+    <div th:if="*{id} == null">
+    <div  th:replace="~{fragments/frmChangePass :: frmChangePass}"></div>
+    </div>
+    <div class="mb-3" th:if="*{id} != null and *{id} != ''">
         <div th:replace="~{fragments/botones :: btnLink(
         #{command.modificar.password},
         @{/admin/usuario/{id}/password(id=*{id})},
@@ -16,71 +30,58 @@
     	</div>
     
     </div>
-    <div class="mb-3">
-        <label class="form-label" th:text="#{usuario.nombre}">Nombre</label>
-        <div class="input-group w-50">
-        <input type="text" th:field="*{nombre}" class="form-control w-50">
-        </div>
-        <div class="text-danger" th:errors="*{nombre}"></div>
-    </div>
     <div class="row">
-	    <div class="col-md-6 mb-3">
+	    <div class="col-md-4 mb-3">
+	        <label class="form-label" th:text="#{usuario.nombre}">Nombre</label>
+	        <input type="text" th:field="*{nombre}" class="form-control">
+	        <div class="text-danger" th:errors="*{nombre}"></div>
+	    </div>
+	    <div class="col-md-4 mb-3">
 	        <label class="form-label" th:text="#{usuario.apellido1}">Apellido1</label>
-	        <input type="text" th:field="*{apellido1}" class="form-control w-35">
+	        <input type="text" th:field="*{apellido1}" class="form-control">
 	        <div class="text-danger" th:errors="*{apellido1}"></div>
 	    </div>
-	    <div class="col-md-6 mb-3">
+	    <div class="col-md-4 mb-3">
 	        <label class="form-label" th:text="#{usuario.apellido2}">Apellido2</label>
-	        <input type="text" th:field="*{apellido2}" class="form-control w-35">
+	        <input type="text" th:field="*{apellido2}" class="form-control">
 	        <div class="text-danger" th:errors="*{apellido2}"></div>
 	    </div>
     </div>
-   <div class="mb-3" sec:authorize="hasRole('ADMIN')">
-        <label class="form-label" th:text="#{usuario.role}">Rol</label>
-        <select class="form-select" th:field="*{rol}">
-        <option th:value="${''}" th:text="#{rol.select}"></option>
-    		<option th:each="r : ${roles}"
-            		th:value="${r.nombre}"
-            		th:text="${r.descripcion}">
-    		</option>
-		</select>
-        <div class="text-danger" th:errors="*{rol}"></div>
-    </div>
    <div class="mb-3" sec:authorize="not hasRole('ADMIN')" th:if="*{id} != null">
         <label class="form-label" th:text="#{usuario.role}">Rol</label>
-	    <input type="text" th:field="*{rol}" th:readonly="true" class="form-control w-35">
+	    <input type="text" th:value="*{rol}" readonly class="form-control-plaintext w-50">
 	    
    </div>
    <div class="mb-3" sec:authorize="!isAuthenticated()" th:if="not *{id}">
 	    <input type="hidden" th:field="*{rol}" />
    </div>
 
-</section>
-<section th:fragment="frmEstudiante">
+</div>
+<div th:fragment="frmEstudiante">
     <div class="mb-3">
-        <label class="form-label" th="#{usuario.direccion}">Dirección</label>
+        <label class="form-label" th:text="#{usuario.direccion}">Dirección</label>
         <input type="text" th:field="*{direccion}" class="form-control">
         <div class="text-danger" th:errors="*{direccion}"></div>
     </div>
 	<div class="row g-3">
 	    <div class="col-md-4">
-	        <label class="form-label" th="#{usuario.poblacion}">Población</label>
+	        <label class="form-label" th:text="#{usuario.poblacion}">Población</label>
 	        <input type="text" th:field="*{poblacion}" class="form-control  w-50">
 	        <div class="text-danger" th:errors="*{poblacion}"></div>
 	    </div>
 	
 	    <div class="col-md-4">
-	        <label class="form-label" th="#{usuario.provincia}">Provincia</label>
+	        <label class="form-label" th:text="#{usuario.provincia}">Provincia</label>
 	        <input type="text" th:field="*{provincia}" class="form-control  w-50">
 	        <div class="text-danger" th:errors="*{provincia}"></div>
 	    </div>
 	
 	    <div class="col-md-4">
-	        <label class="form-label" th="#{usuario.codpostal}">Código Postal</label>
+	        <label class="form-label" th:text="#{usuario.codpostal}">Código Postal</label>
 	        <div class="col-5 col-md-5 clo-lg-4">
 	        <input type="text" th:field="*{codPostal}" class="form-control">
 	        </div>
 	        <div class="text-danger" th:errors="*{codPostal}"></div>
 	    </div>
     </div>
-</section>
+</div>

@@ -69,5 +69,9 @@ public class HomeController {
 		modelo.addAttribute("urlUser", "estudiante");
 		return "estudiante/home";
 	}
+	@GetMapping("/miperfil")
+	public String miperfil(Authentication authentication) {
+		return String.format("redirect:/%s/miperfil", UserUtil.defineHome(UserUtil.getRol(authentication)));
+	}
 
 }

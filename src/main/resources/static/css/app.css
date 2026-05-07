@@ -10,3 +10,6 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
+.input-small {
+    max-width: 250px;
+}

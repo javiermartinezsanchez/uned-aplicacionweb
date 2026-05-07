@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import es.alumno.uned.dto.EstudianteDTO;
+import es.alumno.uned.model.entities.SecurityUser;
 import es.alumno.uned.service.EstudianteService;
 import es.alumno.uned.service.UsuarioService;
 import jakarta.validation.Valid;
@@ -58,13 +59,12 @@ public class EstudianteController extends BaseCrudController {
         return "redirect:/estudiante/editar-perfil?sucess";
     }
     
-    @GetMapping({"/estudiante/miperfil","/admin/miperfil"})
-    public String perfil(Principal principal, 
+    @GetMapping({"/estudiante/miperfil"})
+    public String perfil(@AuthenticationPrincipal SecurityUser userConnected, 
     		Model model) {
 
-        EstudianteDTO dto = estudianteService.findById(
-        		usuarioService.getIdByEmail(principal.getName()));
-        prepararModeloFormulario(model, "estudiante/editar-perfil","/estudiante/miperfil","/");
+        EstudianteDTO dto = estudianteService.findById(userConnected.getId());
+        setModeloFormulario(model, "estudiante/editar-perfil","/estudiante/miperfil","/");
         model.addAttribute("form", dto);
         return model.getAttribute("viewName").toString();
     }
@@ -74,11 +74,9 @@ public class EstudianteController extends BaseCrudController {
     		Model model) {
 
         EstudianteDTO dto = estudianteService.findById(id);
-        
-    	model.addAttribute("url", "/registro");
-       	model.addAttribute("urlCancel", "/");
+        setModeloFormulario(model,"estudiante/editar-perfil", "/registro", "/");
         model.addAttribute("form", dto);
-        return "estudiante/editar-perfil";
+        return model.getAttribute("viewName").toString();
     }
     
     @PostMapping("/estudiante/miperfil")
@@ -111,7 +109,7 @@ public class EstudianteController extends BaseCrudController {
     }
 
 	private void preparaRegistro(Model modelo) {
-		prepararModeloFormulario(modelo,"estudiante/editar-perfil","/registro","/home");
+		setModeloFormulario(modelo,"estudiante/editar-perfil","/registro","/home");
 		
 	}
 }

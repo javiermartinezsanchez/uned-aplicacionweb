@@ -1,8 +1,9 @@
 package es.alumno.uned.controller;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,6 +22,7 @@ import es.alumno.uned.dto.UserPasswordChangeDTO;
 import es.alumno.uned.dto.UsuarioRegistroDTO;
 import es.alumno.uned.exception.UserPasswordNotMatchException;
 import es.alumno.uned.mapper.UsuarioRegistroMapper;
+import es.alumno.uned.model.entities.SecurityUser;
 import es.alumno.uned.model.entities.Usuario;
 import es.alumno.uned.model.util.Paginacion;
 import es.alumno.uned.service.RolService;
@@ -29,6 +31,7 @@ import es.alumno.uned.validation.OnCreate;
 import es.alumno.uned.validation.OnUpdate;
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Controlador de mantenimiento de usuarios.
@@ -38,7 +41,7 @@ import jakarta.validation.Validator;
  */
 @Slf4j
 @Controller
-public class UsuarioController {
+public class UsuarioController extends BaseCrudController {
 
 	private UsuarioService userService;
 
@@ -61,11 +64,9 @@ public class UsuarioController {
 		Pageable pageRequest= PageRequest.of(page, 10);
 		Paginacion<Usuario, UsuarioRegistroDTO> paginacion = userService.listadoPaginado("/admin/usuario", pageRequest);
 		model.addAttribute("titulo", "{usuario.lista}");
-		model.addAttribute("urlAlta", "/admin/newUser");
-		model.addAttribute("urlBack", "/home");
 		model.addAttribute("paginacion", paginacion);
-		model.addAttribute("query", "");
-		return "admin/usuarios";
+		setModeloListado(model, "admin/usuarios", "/admin/newUser", "/admin/usuario","/home", "" );
+		return model.getAttribute("viewName").toString();
 	}
 	@GetMapping("/admin/newUser")
 	public String nuevo(Model model) {
@@ -77,18 +78,22 @@ public class UsuarioController {
     		@PathVariable("id") Long id, 
     		Model model) {
 		if (success != null) {
-			model.addAttribute("success", "\"mensaje.grabacionOK\"");
+			model.addAttribute("success", "mensaje.grabacionOK");
 			}
 		model.addAttribute("form", userService.getUsuario(id));
 		return getUsuario(model);
 	}
 
+	@GetMapping("/admin/miperfil")
+	public String miPerfil(@RequestParam(required = false) String success,
+			@AuthenticationPrincipal SecurityUser userConnected, 
+			Model model) {
+		return "redirect:/admin/usuario/".concat(userConnected.getId().toString());
+	}
 	private String getUsuario(Model model) {
-    	model.addAttribute("url", "/admin/usuario");
-    	model.addAttribute("urlCancel", "/admin/usuario");
+		setModeloFormulario(model, "admin/usuario", "/admin/usuario","/admin/usuario");
         model.addAttribute("roles", rolService.getList());
-    	
-    	return "admin/usuario";
+    	return model.getAttribute("viewName").toString();
     }
 	@PostMapping("/admin/usuario")
 	public String grabarUsuario(@AuthenticationPrincipal UserDetails usuario,
@@ -106,15 +111,13 @@ public class UsuarioController {
 	            .validate(form, result, grupo);
 	    
         if (result.hasErrors()) {
+        	setModeloFormulario(model, "admin/usuario", "/admin/usuario","/admin/usuario");
         	model.addAttribute("roles", rolService.getList());
-        	model.addAttribute("url", "/admin/usuario");
-            return "admin/usuario";
+            return model.getAttribute("viewName").toString();
         }
         Long id = userService.grabar(form,usuario.getUsername()).getId();
         model.addAttribute("success", "mensaje.grabacionOK");
-	
-
-		return "redirect:/admin/usuario/".concat(id.toString());
+		return String.format("redirect:/admin/usuario/%s?success",id.toString());
 	}
 	@GetMapping("/admin/usuarioconnected")
     public String modUsuario(Model model) {

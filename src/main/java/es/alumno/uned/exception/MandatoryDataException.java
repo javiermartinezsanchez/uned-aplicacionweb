@@ -19,7 +19,7 @@ public class MandatoryDataException extends AppGlobalException {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	protected MandatoryDataException(String messageKey, Object dto, Object[] args) {
+	protected MandatoryDataException(String messageKey, Object dto, String[] args) {
 		super(messageKey, dto, args);
 	}
 

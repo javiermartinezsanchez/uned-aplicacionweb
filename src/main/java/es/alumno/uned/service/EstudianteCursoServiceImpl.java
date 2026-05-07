@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import es.alumno.uned.exception.CursoNotExistException;
-import es.alumno.uned.exception.ModuloException;
+import es.alumno.uned.exception.MandatoryModuloException;
 import es.alumno.uned.model.entities.Curso;
 import es.alumno.uned.model.entities.Estudiante;
 import es.alumno.uned.model.entities.EstudianteCurso;
@@ -105,7 +105,7 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 
         case TipoModulo.ENTREGA_OBLIGATORIA:
             if (entregable == null || entregable.isEmpty()) {
-                throw new MandatoryDataException("Debe subir un archivo para completar este módulo", );
+                throw new MandatoryModuloException("cualquier cosa",null, "entregable" );
             }
             guardarArchivo(entregable);
             marcarComoCompletado(estudiante, modulo);

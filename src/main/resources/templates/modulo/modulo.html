@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+th:replace="~{plantilla::layout(~{::section})}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<section>
+<h1 th:text="#{modulo.title}">Título</h1>
+<br>
+<div th:replace="~{fragments/mensajesresultado :: mensajes}"></div>
+<div th:fragment="frmModulo(form)" th:object="${form}">
+<form th:action="@{${url}}" th:object="${form}" method="post">
+
+    <!-- ID oculto para saber si editamos o creamos -->
+    <input type="hidden" th:field="*{id}" />
+
+    <!-- Fila 1: Título y Tipo -->
+    <div class="row">
+        <div class="col-md-8 mb-3">
+            <label class="form-label" th:text="#{modulo.titulo}">Título</label>
+            <input type="text" th:field="*{titulo}" class="form-control" placeholder="Ej: Introducción a Spring Boot">
+            <div class="text-danger" th:errors="*{titulo}"></div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label class="form-label" th:text="#{modulo.tipo}">Tipo de Módulo</label>
+            <select class="form-select" th:field="*{tipo}">
+                <option th:value="${''}" th:text="#{tipo.select}">Seleccione tipo...</option>
+                <!-- Asumiendo que pasas el enum TipoModulo.values() al modelo como 'tipos' -->
+                <option th:each="t : ${T(com.tu.paquete.TipoModulo).values()}"
+                        th:value="${t}"
+                        th:text="${t}">
+                </option>
+            </select>
+            <div class="text-danger" th:errors="*{tipo}"></div>
+        </div>
+    </div>
+
+    <!-- Fila 2: Descripción corta -->
+    <div class="mb-3">
+        <label class="form-label" th:text="#{modulo.descripcion}">Descripción Corta</label>
+        <input type="text" th:field="*{descripcion}" class="form-control" maxlength="500">
+        <div class="text-danger" th:errors="*{descripcion}"></div>
+    </div>
+
+    <!-- Fila 3: Contenido (Textarea para @Lob) -->
+    <div class="mb-3">
+        <label class="form-label" th:text="#{modulo.contenido}">Contenido Completo</label>
+        <textarea th:field="*{contenido}" class="form-control" rows="5"></textarea>
+        <div class="text-danger" th:errors="*{contenido}"></div>
+    </div>
+
+    <!-- Fila 4: Peso y Checkboxes -->
+    <div class="row align-items-end">
+        <div class="col-md-4 mb-3">
+            <label class="form-label" th:text="#{modulo.peso}">Peso (%)</label>
+            <div class="input-group">
+                <input type="number" th:field="*{peso}" class="form-control" min="0" max="100">
+                <span class="input-group-text">%</span>
+            </div>
+            <div class="text-danger" th:errors="*{peso}"></div>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" th:field="*{requiereEntrega}" id="chkEntrega">
+                <label class="form-check-label" for="chkEntrega" th:text="#{modulo.requiereEntrega}">
+                    Requiere Entrega
+                </label>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" th:field="*{finalizacionAutomatica}" id="chkAuto">
+                <label class="form-check-label" for="chkAuto" th:text="#{modulo.finalizacionAutomatica}">
+                    Finalización Automática
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Campos de auditoría (solo lectura si existen) -->
+    <div class="row mt-3 pt-2 border-top" th:if="*{id} != null">
+        <div class="col-md-6">
+            <small class="text-muted">
+                Creado por: <span th:text="*{userIns}">Usuario</span> el 
+                <span th:text="${#temporals.format(form.fIns, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+            </small>
+        </div>
+    </div>
+</div>
+    <div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, @{${urlCancel}})}"></div>
+</form>
+<div th:replace="~{fragments/mensajesresultado :: errorgeneral}"></div>
+
+</section>
+</body>
+</html>
