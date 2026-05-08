@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import es.alumno.uned.model.util.UserUtil;
 import es.alumno.uned.service.CursoService;
@@ -48,7 +49,11 @@ public class HomeController {
 		return handleAnonimousHome(modelo, authentication);
 	}
 	@GetMapping("/login")
-	public String handleLogin() {
+	public String handleLogin(@RequestParam(required = false) String success,
+			Model model) {
+		if (success != null) {
+			model.addAttribute("success", "mensaje.grabacionOK");
+			}
 		return "login";
 	}
 	

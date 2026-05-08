@@ -8,11 +8,13 @@
 <section>
 <h5 class="mt-4" th:text="#{registro.titulo}">Datos del Estudiante</h5>
 <div th:replace="~{fragments/mensajesresultado :: mensajes}"></div>
+<div th:replace="~{fragments/mensajesresultado :: errorgeneral}"></div>
 <form th:action="@{${url}}" th:object="${form}" method="post">
 	<frmUsuario th:replace="~{fragments/frmUsuario :: frmUsuario}"></frmUsuario>
 	<frmUsuario th:replace="~{fragments/frmUsuario :: frmEstudiante(${areasDisponibles})}"></frmUsuario>
 	<div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, @{${urlCancel}})}"></div>
 </form>
+
 </section>
 </body>
 </html>

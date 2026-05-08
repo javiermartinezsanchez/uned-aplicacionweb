@@ -25,7 +25,7 @@ import jakarta.servlet.http.HttpServletRequest;
  * Se implementa el {@code MessageSource} para poder mostrar el mensaje de i18n 
  * 
  *  <p><b>Requisitos</b>
- *  Definir el el controlador (normalmente en el POST) los siguientes atributos:
+ *  Definir el el controlador (normalmente en el POST) los siguientes atributos en el Request:
  *  <ul>
  *  <li>url: Url para el commit</li>
  *  <li>urlCancel: Url para el cancel</li>
@@ -52,8 +52,9 @@ public class GlobalExceptionHandler {
 
 	private String putDataException(AppGlobalException ex, HttpServletRequest request, Model model) {
 		String backUrl = request.getHeader("Referer");
-		model.addAttribute("url", (String) model.getAttribute("url"));
-		model.addAttribute("urlCancel", (String) model.getAttribute("urlCancel"));
+		model.addAttribute("viewName", (String) request.getAttribute("viewName"));
+		model.addAttribute("url", (String) request.getAttribute("url"));
+		model.addAttribute("urlCancel", (String) request.getAttribute("urlCancel"));
     	model.addAttribute("backUrl", backUrl != null ? backUrl : "/");
         model.addAttribute("errorGlobal", messageSource.getMessage(
                 ex.getMessage(),   // la clave del fichero "traducciones"
@@ -61,7 +62,7 @@ public class GlobalExceptionHandler {
                 LocaleContextHolder.getLocale()
             ));
         model.addAttribute("form", ex.getDto());
-        return (String) model.getAttribute("viewName");
+        return (String) request.getAttribute("viewName");
 	}
 }
 

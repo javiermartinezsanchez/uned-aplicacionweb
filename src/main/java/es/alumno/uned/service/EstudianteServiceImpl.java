@@ -1,7 +1,5 @@
 package es.alumno.uned.service;
 
-import java.util.Optional;
-
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -9,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.alumno.uned.dto.EstudianteDTO;
-import es.alumno.uned.exception.AreaTematicaAlreadyExistException;
 import es.alumno.uned.exception.EstudianteAlreadyExistException;
 import es.alumno.uned.mapper.EstudianteMapper;
 import es.alumno.uned.model.entities.Estudiante;
@@ -47,7 +44,6 @@ public class EstudianteServiceImpl implements EstudianteService {
 		 *  Si "id" del estudiante es otro, no se permite.
 		 *   * Buscar usuario por su e-mail
 		 Si existe updatear Usuario
-		Usuario user = usuarioService.findByEmail(estudianteDTO.getEmail());
 		*/ 
 		Estudiante estudiante = estudianteMapper.toEntity(estudianteDTO, usuarioAlta);
 		/**
@@ -71,16 +67,14 @@ public class EstudianteServiceImpl implements EstudianteService {
 	 */
 	private void checkEmail(EstudianteDTO estudianteDTO) {
 		if (estudianteRepository.findByUsuarioEmail(estudianteDTO.getEmail()).isPresent()) {
-		//if (estudianteRepository.findByUsuarioEmail(estudianteDTO.getEmail()).isPresent()) {
 			throw new EstudianteAlreadyExistException("usuario.existente.exception",
 					estudianteDTO, estudianteDTO.getEmail());
 		}
-		if (usuarioService.getIdByEmail(estudianteDTO.getEmail()) != null) {
+		if (usuarioService.findByEmail(estudianteDTO.getEmail()) != null) {
 			throw new EstudianteAlreadyExistException("usuario.existente.exception",
 					estudianteDTO, estudianteDTO.getEmail());
 			
 		}
-		
 	}
 
 	@Override

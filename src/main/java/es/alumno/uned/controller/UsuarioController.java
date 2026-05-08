@@ -58,7 +58,7 @@ public class UsuarioController extends BaseCrudController {
 	}
 	@GetMapping("/admin/usuario")
 	public String listar(
-			@RequestParam(name="page", defaultValue = "0") int page, 
+			@RequestParam(defaultValue = "0") int page, 
 			Model model) {
 		Pageable pageRequest= PageRequest.of(page, 10);
 		Paginacion<Usuario, UsuarioRegistroDTO> paginacion = userService.listadoPaginado("/admin/usuario", pageRequest);
@@ -74,7 +74,7 @@ public class UsuarioController extends BaseCrudController {
 	}
 	@GetMapping("/admin/usuario/{id}")
     public String modificar(@RequestParam(required = false) String success, 
-    		@PathVariable("id") Long id, 
+    		Long id, 
     		Model model) {
 		if (success != null) {
 			model.addAttribute("success", "mensaje.grabacionOK");
@@ -97,7 +97,7 @@ public class UsuarioController extends BaseCrudController {
     }
 	@PostMapping("/admin/usuario")
 	public String grabarUsuario(@AuthenticationPrincipal UserDetails usuario,
-            @ModelAttribute("form") UsuarioRegistroDTO form,
+            UsuarioRegistroDTO form,
             BindingResult result,
             Model model) {
 
