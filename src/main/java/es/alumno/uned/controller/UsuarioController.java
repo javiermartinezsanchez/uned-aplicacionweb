@@ -74,7 +74,7 @@ public class UsuarioController extends BaseCrudController {
 	}
 	@GetMapping("/admin/usuario/{id}")
     public String modificar(@RequestParam(required = false) String success, 
-    		Long id, 
+    		@PathVariable Long id, 
     		Model model) {
 		if (success != null) {
 			model.addAttribute("success", "mensaje.grabacionOK");

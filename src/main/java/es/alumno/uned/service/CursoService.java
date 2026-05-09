@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +27,18 @@ public interface CursoService {
 	CursoDTO grabar(CursoDTO dto, MultipartFile imagen, String usuario) throws IOException;
 
 	public Paginacion<Curso, CursoDTO> listadoPaginado(String url,  Pageable pageable);
+	
+	/**
+	 * Método para consultas de Cursos con un mapa de parámetros para realizar
+	 * consultas de forma dinámica.
+	 * 
+	 * @param url Cadena que define la url de consulta para la paginación.
+	 * @param pageable Definición de la página de datos a generar.
+	 * @param params Mapa de parámetros {nombre=valor,....} que definirá la búsqueda.
+	 * @return Página de datos (Cursos) que cumplen las condiciones de búsqueda.
+	 */
+	public Paginacion<Curso, CursoDTO> listadoPaginado(String url, Pageable pageable, Map<String, String> params);
+
 	
 	Paginacion<Curso, CursoDTO> listadoPaginadoPorResponsable(
             String url, Pageable pageable, Long responsableId);

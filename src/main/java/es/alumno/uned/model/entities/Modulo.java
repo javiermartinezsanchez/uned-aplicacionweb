@@ -7,18 +7,15 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "modulo")
+@Table(name = "modulos")
 public class Modulo {
 
     @Id
@@ -34,18 +31,12 @@ public class Modulo {
     @Lob
     private String contenido;
 
-    @Column(nullable = false)
-    private int peso; // porcentaje dentro del curso
+//    @Column(nullable = false)
+//    private int peso; // porcentaje dentro del curso
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private TipoModulo tipo;
-
-    @Column(name = "requiere_entrega", nullable = false)
-    private boolean requiereEntrega;
-
-    @Column(name = "finalizacion_automatica", nullable = false)
-    private boolean finalizacionAutomatica;
 
     @Column(name = "fecha_ins")
     private LocalDateTime fIns;
@@ -53,10 +44,10 @@ public class Modulo {
     @Column(name = "user_ins", length = 50)
     private String userIns;
 
-    // RELACIÓN CON CURSO
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "curso_id", nullable = false)
-    private Curso curso;
+    // RELACIÓN CON CURSO_MODULO
+    //@ManyToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name = "curso_id", nullable = false)
+    //private CursoModulo cursoMod;
 
     @OneToMany(mappedBy = "modulo")
     private List<EstudianteCursoModulo> estudianteCursoModulos;
@@ -94,13 +85,13 @@ public class Modulo {
 		this.contenido = contenido;
 	}
 
-	public int getPeso() {
-		return peso;
-	}
-
-	public void setPeso(int peso) {
-		this.peso = peso;
-	}
+//	public int getPeso() {
+//		return peso;
+//	}
+//
+//	public void setPeso(int peso) {
+//		this.peso = peso;
+//	}
 
 	public TipoModulo getTipo() {
 		return tipo;
@@ -108,22 +99,6 @@ public class Modulo {
 
 	public void setTipo(TipoModulo tipo) {
 		this.tipo = tipo;
-	}
-
-	public boolean isRequiereEntrega() {
-		return requiereEntrega;
-	}
-
-	public void setRequiereEntrega(boolean requiereEntrega) {
-		this.requiereEntrega = requiereEntrega;
-	}
-
-	public boolean isFinalizacionAutomatica() {
-		return finalizacionAutomatica;
-	}
-
-	public void setFinalizacionAutomatica(boolean finalizacionAutomatica) {
-		this.finalizacionAutomatica = finalizacionAutomatica;
 	}
 
 	public LocalDateTime getfIns() {
@@ -142,14 +117,11 @@ public class Modulo {
 		this.userIns = userIns;
 	}
 
-	public Curso getCurso() {
-		return curso;
-	}
-
-	public void setCurso(Curso curso) {
-		this.curso = curso;
-	}
-
+	/*
+	 * public Curso getCurso() { return curso; }
+	 * 
+	 * public void setCurso(Curso curso) { this.curso = curso; }
+	 */
    
 }
 

@@ -131,7 +131,7 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 	public void cambioPassword(UserPasswordChangeDTO dto, String email) {
 		Usuario usuario = getUserOrNotByEmail(email);	    
 		if (!passEncoder.matches(dto.getOldPassword(), usuario.getPassword())) {
-	    	throw new UserPasswordNotMatchException("Contraseña actual no es correcta");
+	    	throw new UserPasswordNotMatchException("validations.password.nocoincide", dto, "");
 	    }
 	    this.cambioPasswordUserAdmin(new UserPasswordAdminChangeDTO(dto.getNewPassword(), dto.getConfirmPassword()), usuario.getId());
 	}
@@ -140,7 +140,7 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 	public void cambioPasswordUserAdmin(UserPasswordAdminChangeDTO dto, Long id) {
 		Usuario usuario = getUserOrNotById(id);	    
 		if (!dto.getNewPassword().matches(dto.getConfirmPassword())) {
-	    	throw new UserPasswordNotMatchException("Las contraseñas no coinciden}");
+	    	throw new UserPasswordNotMatchException("validations.password.nocoincide", dto, "");
 	    }
 	    usuario.setPassword(getEncriptedPass(dto.getNewPassword()));
 	    userRepository.save(usuario);

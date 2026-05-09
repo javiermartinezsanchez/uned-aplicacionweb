@@ -17,6 +17,15 @@
 			</select>
 	        <div class="text-danger" th:errors="*{rol}"></div>
 	    </div>
+	    <div class="col-md-6 mb-3" sec:authorize="not hasRole('ADMIN')" th:if="*{id} != null">
+        	<label class="form-label" th:text="#{usuario.role}">Rol</label>
+	    	<input type="text" th:value="*{rol}" readonly class="form-control-plaintext w-50">
+	    
+   		</div>
+   		<div class="col-md-6 mb-3" sec:authorize="!isAuthenticated()" th:if="not *{id}">
+	    	<input type="hidden" th:field="*{rol}" />
+   		</div>
+   
     </div>
     <div th:if="*{id} == null">
     <div  th:replace="~{fragments/frmChangePass :: frmChangePass}"></div>
@@ -47,14 +56,7 @@
 	        <div class="text-danger" th:errors="*{apellido2}"></div>
 	    </div>
     </div>
-   <div class="mb-3" sec:authorize="not hasRole('ADMIN')" th:if="*{id} != null">
-        <label class="form-label" th:text="#{usuario.role}">Rol</label>
-	    <input type="text" th:value="*{rol}" readonly class="form-control-plaintext w-50">
-	    
-   </div>
-   <div class="mb-3" sec:authorize="!isAuthenticated()" th:if="not *{id}">
-	    <input type="hidden" th:field="*{rol}" />
-   </div>
+
 
 </div>
 <div th:fragment="frmEstudiante(areasDisponibles)">

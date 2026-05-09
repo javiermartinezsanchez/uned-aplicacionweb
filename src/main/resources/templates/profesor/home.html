@@ -5,28 +5,20 @@
   <title>titulo</title>
 </head>
 <body>
-  <section th:fragment="content">
+<section th:fragment="content">
     <div class="container">
-       Bienvenido a la  página principal del Profesor
+       <h1 th:text="#{home.profesor.title}"></h1>
     </div>
     <div class="album py-5 bg-body-tertiary"> 
       <div class="container"> 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-        
-        
-        <div class="col">
-          <div class="card shadow-sm">
-             <div class="card-body"><i class="bi bi-collection" style="font-size: 2rem;"></i>
-              <a class="navbar-brand" th:href="@{/curso/profesor}">Gestión de cursos</a>
-            </div>
-          </div>
-        </div>
-        
-    </div>    
+	    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+	       <div class="col" th:insert="~{fragments/opcionesPanel :: opcionCursos}">
+	       </div>
+	       <div class="col" th:insert="~{fragments/opcionesPanel :: opcionModulos}">
+	       </div>
+	    </div>    
+      </div>
     </div>
-    </div>
-  </section>
-  
-  
+</section>
 </body>
 </html>

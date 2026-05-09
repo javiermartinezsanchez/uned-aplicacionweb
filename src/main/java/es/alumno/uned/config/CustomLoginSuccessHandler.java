@@ -51,13 +51,8 @@ public class CustomLoginSuccessHandler extends SavedRequestAwareAuthenticationSu
                                         Authentication authentication)
             throws ServletException, IOException {
 
-        // 1. Auditoría
         audit.save(new UserAudit(authentication.getName(), "Login usuario", LocalDateTime.now()));
-
-        // 2. Registrar sesión en SessionRegistry
         sessionStrategy.onAuthentication(authentication, request, response);
-
-        // 3. ¿Hay una URL pendiente?
         SavedRequest savedRequest = requestCache.getRequest(request, response);
 
         if (savedRequest != null) {
@@ -65,8 +60,6 @@ public class CustomLoginSuccessHandler extends SavedRequestAwareAuthenticationSu
             redirectStrategy.sendRedirect(request, response, targetUrl);
             return;
         }
-
-        // 4. Si no hay SavedRequest → home según rol
         String home = UserUtil.defineHome(UserUtil.getRol(authentication)).concat("/home");
         redirectStrategy.sendRedirect(request, response, home);
     }

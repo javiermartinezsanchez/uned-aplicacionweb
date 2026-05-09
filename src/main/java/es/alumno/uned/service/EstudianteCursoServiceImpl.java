@@ -68,12 +68,12 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
         estudianteCursoRepository.save(ec);
 
         // 5. Crear EstudianteCursoModulo para cada módulo del curso
-        List<Modulo> modulos = moduloRepository.findByCursoId(cursoId);
+        //List<Modulo> modulos = moduloRepository.findByCursoId(cursoId);
 
-        for (Modulo modulo : modulos) {
-            EstudianteCursoModulo ecm = new EstudianteCursoModulo(ec, modulo);
-            estudianteCursoModuloRepository.save(ecm);
-        }
+//        for (Modulo modulo : modulos) {
+//            EstudianteCursoModulo ecm = new EstudianteCursoModulo(ec, modulo);
+//            estudianteCursoModuloRepository.save(ecm);
+//        }
 
         // 6. Incrementar usuarios registrados del curso
         Integer actuales = curso.getUsuariosRegistrados();

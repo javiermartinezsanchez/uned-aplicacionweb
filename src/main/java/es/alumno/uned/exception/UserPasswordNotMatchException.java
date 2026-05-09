@@ -1,27 +1,13 @@
 package es.alumno.uned.exception;
 
-public class UserPasswordNotMatchException extends RuntimeException {
+public final class UserPasswordNotMatchException extends InconsistencyDataException {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4227999226031605506L;
 
-	public UserPasswordNotMatchException() {
-		super();
+	public UserPasswordNotMatchException(String messageKey, Object dto, String... args) {
+        super(messageKey, dto, args);
 	}
-
-	public UserPasswordNotMatchException(final String message, final Throwable cause) {
-		super(message, cause);
-	}
-
-	public UserPasswordNotMatchException(final String message) {
-		super(message);
-	}
-	
-	
-	public UserPasswordNotMatchException(final Throwable cause) {
-		super(cause);
-	}
-
 }

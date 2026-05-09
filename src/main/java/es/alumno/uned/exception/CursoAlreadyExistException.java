@@ -3,7 +3,12 @@ package es.alumno.uned.exception;
 import es.alumno.uned.dto.CursoDTO;
 
 public class CursoAlreadyExistException extends AlreadyExistException {
-    public CursoAlreadyExistException(String messageKey, CursoDTO dto, Object... args) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3126007241237083051L;
+
+	public CursoAlreadyExistException(String messageKey, CursoDTO dto, Object... args) {
         super(messageKey, dto, args);
     }
 }

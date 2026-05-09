@@ -3,28 +3,36 @@ package es.alumno.uned.service;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import es.alumno.uned.dto.CursoDTO;
 import es.alumno.uned.mapper.CursoMapper;
 import es.alumno.uned.model.entities.Curso;
 import es.alumno.uned.model.entities.CursoValoracion;
+import es.alumno.uned.model.entities.Modulo;
 import es.alumno.uned.model.repository.AreaTematicaRepository;
 import es.alumno.uned.model.repository.CursoRepository;
 import es.alumno.uned.model.repository.CursoValoracionRepository;
 import es.alumno.uned.model.repository.UsuarioRepository;
 import es.alumno.uned.model.util.Paginacion;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 
 @Service
 public class  CursoServiceImpl implements CursoService{
-
 	
 	@Autowired
 	CursoRepository cursoRepository;
@@ -92,7 +100,62 @@ public class  CursoServiceImpl implements CursoService{
 		
 		return construirPaginacion(url, cursoRepository.findAll(pageable));
 	}
+
+	@Override
+	public Paginacion<Curso, CursoDTO> listadoPaginado(String url, Pageable pageable, Map<String, String> params) {
+		Specification<Curso> condiciones = generaCondiciones(params);
+		return construirPaginacion(url,cursoRepository.findAll(condiciones, pageable));
+	}
 	
+	/**
+	 * Nos devuelve la lista de condiciones {@link Specification} de la consulta de acuerdo a los parámetros enviados.
+	 * <p> Si el mapa de parámetros está vacio devuelve todos.
+	 * @param params Mapa de parámetros para definir la búsqueda de Módulos.
+	 * @return Los predicados de búsqueda generados de acuerdo a los parámetros enviados.
+	 */
+	public static Specification<Curso> generaCondiciones(Map<String, String> filtros) {
+	    return (root, query, cb) -> {
+	    	/**
+	    	 * Recomendación para evitar consultas innecesarias.
+	    	 */
+	    	if (query.getResultType() != Long.class && query.getResultType() != long.class) {
+	            root.fetch("areaTematica", JoinType.LEFT);
+	            root.fetch("responsable", JoinType.LEFT);
+	        }
+	        List<Predicate> predicates = new ArrayList<>();
+
+	        if (filtros.containsKey("titulo")) {
+	            predicates.add(cb.like(cb.lower(root.get("titulo")), 
+	                           "%" + filtros.get("titulo").toLowerCase() + "%"));
+	        }
+
+	        if (filtros.containsKey("nivel")) {
+	            predicates.add(cb.equal(root.get("nivel"), filtros.get("nivel")));
+	        }
+
+	        if (filtros.containsKey("areaId")) {
+	            predicates.add(cb.equal(root.get("areaTematica").get("id"), 
+	                           Long.parseLong(filtros.get("areaId"))));
+	        }
+
+	        if (filtros.containsKey("responsableId")) {
+	            predicates.add(cb.equal(root.get("responsable").get("id"), 
+	                           Long.parseLong(filtros.get("responsableId"))));
+	        }
+
+	        if (filtros.containsKey("fIni")) {
+	            predicates.add(cb.greaterThanOrEqualTo(root.get("fIni"), 
+	                           LocalDate.parse(filtros.get("fIni"))));
+	        }
+
+	        if (filtros.containsKey("fFin")) {
+	            predicates.add(cb.lessThanOrEqualTo(root.get("fFin"), 
+	                           LocalDate.parse(filtros.get("fFin"))));
+	        }
+
+	        return cb.and(predicates.toArray(new Predicate[0]));
+	    };
+	}
     @Override
     public Paginacion<Curso, CursoDTO> listadoPaginadoPorResponsable(
             String url, Pageable pageable, Long responsableId) {
@@ -178,9 +241,11 @@ public class  CursoServiceImpl implements CursoService{
 	@Override
 	public List<CursoDTO> listadoHome() {
 		return cursoRepository.findAll().stream()
+		.filter(c -> c.getUriImagen() != null)
 		.filter(c -> c.getUriImagen().length() != 0)
 		.map(cursoMapper :: toDTO)
 		.toList();
 	}
+
 	
 }

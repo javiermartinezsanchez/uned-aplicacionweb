@@ -46,7 +46,6 @@ public class GlobalExceptionHandler {
     public String handleAppException(AppGlobalException ex, 
     		HttpServletRequest request,
     		Model model) {
-
     	return putDataException(ex, request, model);
     }
 
@@ -55,7 +54,7 @@ public class GlobalExceptionHandler {
 		model.addAttribute("viewName", (String) request.getAttribute("viewName"));
 		model.addAttribute("url", (String) request.getAttribute("url"));
 		model.addAttribute("urlCancel", (String) request.getAttribute("urlCancel"));
-    	model.addAttribute("backUrl", backUrl != null ? backUrl : "/");
+    	model.addAttribute("urlBack", backUrl != null ? backUrl : "/");
         model.addAttribute("errorGlobal", messageSource.getMessage(
                 ex.getMessage(),   // la clave del fichero "traducciones"
                 ex.getArgs(),

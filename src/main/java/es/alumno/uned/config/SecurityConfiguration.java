@@ -28,6 +28,7 @@ public class SecurityConfiguration {
 	                             "/webjars/**", "/login", "/login*","/invalidSession",
 	                             "/css/**", "/js/**", "/images/**", "/error", "/valoracionCurso", "/viewcurso/**").permitAll()
 	            .requestMatchers("/estudiante*", "/estudiante/**").hasAnyAuthority("ROLE_ESTUD", "ROLE_ADMIN")
+	            .requestMatchers("/modulo/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_PROFE")
 	            .requestMatchers("/profesor/**").hasAuthority("ROLE_PROFE")
 	            .requestMatchers("/admin/**" ).hasAuthority("ROLE_ADMIN")
 	            .anyRequest().authenticated()

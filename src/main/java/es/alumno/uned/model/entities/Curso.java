@@ -62,8 +62,8 @@ public class Curso {
 	@Column(name="USUARIOS_REGISTRADOS", nullable=false)
 	private Integer usuariosRegistrados = 0;
 	
-	@OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Modulo> modulos = new ArrayList<>();
+//	@OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
+//	private List<Modulo> modulos = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CursoValoracion> valoraciones = new ArrayList<>();
@@ -210,8 +210,8 @@ public class Curso {
 		this.usuariosRegistrados = usuariosRegistrados;
 	}
 
-	public List<Modulo> getModulos() {
-		return modulos;
-	}
+//	public List<Modulo> getModulos() {
+//		return modulos;
+//	}
 	
 }

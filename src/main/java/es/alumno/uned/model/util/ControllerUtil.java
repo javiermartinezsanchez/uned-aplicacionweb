@@ -16,7 +16,7 @@ public class ControllerUtil {
 	 * Limpia el mapa de parametros que llegan desde el formulario.
 	 * <p>Genera un nuevo mapa de valores:
 	 * <ul>
-	 * <li>Elimina los parámetro sin valor </li>
+	 * <li>Elimina los parámetro sin valor, o con espacios en blanco </li>
 	 * <li>Elimina el parámetro "page".</li>
 	 * </ul>
 	 * <p>Nos sirve para mantener los campos de búsqueda en el modelo y no tener que generar "n" variables.

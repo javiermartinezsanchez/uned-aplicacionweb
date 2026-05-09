@@ -26,8 +26,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import es.alumno.uned.dto.CursoDTO;
+import es.alumno.uned.dto.ModuloDTO;
 import es.alumno.uned.dto.ValoracionDTO;
 import es.alumno.uned.model.entities.Curso;
+import es.alumno.uned.model.entities.SecurityUser;
 import es.alumno.uned.model.util.ControllerUtil;
 import es.alumno.uned.model.util.Paginacion;
 import es.alumno.uned.service.AreaTematicaService;
@@ -36,7 +38,7 @@ import es.alumno.uned.service.UsuarioService;
 import jakarta.validation.Valid;
 
 @Controller
-public class CursoController {
+public class CursoController extends BaseCrudController {
 
 	CursoService cursoService;
 	AreaTematicaService areaTematicaService;
@@ -48,20 +50,60 @@ public class CursoController {
 		this.areaTematicaService = areaTematicaService;
 		this.usuarioService = usuarioService;
 	}
-	
+	/**
+	 * Método para añadir un nuevo Curso.
+	 * <p>Se invoca mediate GET y con el mapping "/curso/nuevo"
+	 * <p>Se genera un nuevo {@link CursoDTO} que se envia a la vista.
+	 * <p>Injectamos el Id del usuario para filtrarlo por "responsableId"
+	 * @param userConnected Usuario Conectado para identificarlo.
+	 * @param model {@link Model} Modelo de la vista.
+	 * @return Vista que vamos a utilizar.
+	 */
 	@GetMapping("/curso/nuevo")
-	public String nuevo(Model model) {
-		model.addAttribute("url", "/curso/guardar");
-		model.addAttribute("urlCancel", "/curso");
-	    model.addAttribute("form", new CursoDTO());
+	public String nuevo(@AuthenticationPrincipal SecurityUser userConnected, 
+			Model model) {
+		setModeloFormulario(model, "curso/curso", "/curso/guardar", "/curso");
+	    model.addAttribute("form", new CursoDTO(userConnected.getId()));
 	    model.addAttribute("areas", areaTematicaService.listAll());
 	    model.addAttribute("usuarios", usuarioService.listarProfesores());
-	    return "curso/curso";
+	    return model.getAttribute("viewName").toString();
+	}
+	
+	/**
+	 * Método para guardar la información del Curso.
+	 * <p>Se invoca mediate POST y con el mapping "/curso/guardar"
+	 * @param userDetails Información del usuario "logado"
+	 * @param form Datos introducidos en el formulario de la vista.
+	 * @param result {@link BindingResult} de las validaciones de los campos.
+	 * @param imagen Imagen del curso si existe.
+	 * @param redirectAttributes Atributos del modelo no relacionados con el modelo.
+	 * @param model {@link Model} Modelo completo enviado
+	 * @return Redirigimos a la vista del Módulo correspondiente. 
+	 */
+	@PostMapping("/curso/guardar")
+	public String guarda(@AuthenticationPrincipal UserDetails userDetails,
+			@Valid @ModelAttribute("form") CursoDTO form,
+	        BindingResult result,
+	        MultipartFile imagen,
+	        RedirectAttributes redirectAttributes, 
+	        Model model) throws IOException {
+
+	    if (result.hasErrors()) {
+	        model.addAttribute("areas", areaTematicaService.listAll());
+	        model.addAttribute("usuarios", usuarioService.listarProfesores());
+	        return "curso/curso";
+	    }
+
+	    var cursoGrabado = cursoService.grabar(form, imagen, userDetails.getUsername());
+	    model.addAttribute("form", cursoGrabado);
+	    redirectAttributes.addFlashAttribute("success", "mensaje.grabacionOK");
+		return String.format("redirect:/curso/curso/%d", cursoGrabado.getId());
 	}
 	
 	@GetMapping("/curso/curso/{id}")
-    public String modifica(Model model, 
-    		@PathVariable("id") Long id) {
+    public String modifica(@AuthenticationPrincipal SecurityUser userConnected, 
+    		@PathVariable("id") Long id,
+    		Model model) {
 		model.addAttribute("url", "/curso/guardar");
 		model.addAttribute("urlCancel", "/curso");
 		model.addAttribute("form", cursoService.getCurso(id));
@@ -74,82 +116,36 @@ public class CursoController {
     		@PathVariable("id") Long id) {
 		model.addAttribute("url", "/curso/guardar");
 		model.addAttribute("urlBack", "/");
-		model.addAttribute("curso", cursoService.getCurso(id));
+		model.addAttribute("form", cursoService.getCurso(id));
 		return "curso/fichacurso";
 	}
 
-	@PostMapping("/curso/guardar")
-	public String guarda(@AuthenticationPrincipal UserDetails userDetails,
-	        @ModelAttribute("curso") @Valid CursoDTO dto,
-	        BindingResult result,
-	        MultipartFile imagen,
-	        RedirectAttributes redirectAttributes, 
-	        Model model) throws IOException {
-
-	    if (result.hasErrors()) {
-	        model.addAttribute("areas", areaTematicaService.listAll());
-	        model.addAttribute("usuarios", usuarioService.listarProfesores());
-	        return "curso/curso";
-	    }
-
-	    var cursoGrabado = cursoService.grabar(dto, imagen, userDetails.getUsername());
-	    model.addAttribute("form", cursoGrabado);
-	    redirectAttributes.addFlashAttribute("successStr", "true");
-		return String.format("redirect:/curso/curso/%d", cursoGrabado.getId());
-	}
+	/**
+	 * Método de listado genérico de Cursos.
+	 * <p>Se realiza la consulta con los parámetros (opcionales) del buscador.
+	 * @param paramsBusqueda Mapa con los parámetros de búsqueda.
+	 * @param page Número de página del listado (por defecto 0)
+	 * @param model {@link Model} Modelo de la vista.
+	 * @return Vista que vamos a utilizar
+	 */
     
     @GetMapping("/curso")
-    public String ListadoGeneral(
-    		@RequestParam Map<String, String> params,
-            @RequestParam(required = false) String titulo,
-            @RequestParam(required = false) Integer nivel,
-            @RequestParam(required = false) Long areaId,
-            @RequestParam(required = false) Long responsableId,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fIni,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fFin,
+    public String ListadoGeneral(@AuthenticationPrincipal SecurityUser userConnected,
+    		@RequestParam Map<String, String> paramsBusqueda,
             @RequestParam(name="page", defaultValue = "0") int page,
             Model model) {
     	Pageable pageRequest= PageRequest.of(page, 10);
-        Paginacion<Curso, CursoDTO> paginacion;
-        var filtros = ControllerUtil.paramsToMap(params);
-        // ============================
-        //   LÓGICA DE BÚSQUEDA
-        // ============================
-
-        if (titulo != null && !titulo.isBlank()) {
-            paginacion = cursoService.listadoPaginadoPorTitulo("/curso", pageRequest, titulo);
-        }
-        else if (nivel != null) {
-            paginacion = cursoService.listadoPaginadoPorNivel("/curso", pageRequest, nivel);
-        }
-        else if (areaId != null) {
-            paginacion = cursoService.listadoPaginadoPorArea("/curso", pageRequest, areaId);
-        }
-        else if (responsableId != null) {
-            paginacion = cursoService.listadoPaginadoPorResponsable("/curso", pageRequest, responsableId);
-        }
-        else if (fIni != null && fFin != null) {
-            paginacion = cursoService.listadoPaginadoPorFechaInicio(
-                    "/curso", pageRequest,
-                    fIni.atStartOfDay(),
-                    fFin.atTime(23, 59)
-            );
-        }
-        else {
-            paginacion = cursoService.listadoPaginado("/curso", pageRequest);
-        }
-
-        // ============================================================
-        //   DATOS PARA EL FORMULARIO de búsqueda y para la paginación
-        // ============================================================
+        var filtros = ControllerUtil.paramsToMap(paramsBusqueda);
+       Paginacion<Curso, CursoDTO> paginacion = cursoService.listadoPaginado("/curso", pageRequest, filtros);
         model.addAttribute("url", "curso");
         model.addAttribute("urlAlta", "/curso/nuevo");
         model.addAttribute("urlBack", "/home");
         model.addAttribute("paginacion", paginacion);
         model.addAttribute("areas", areaTematicaService.listAll());
+        model.addAttribute("responsableId", userConnected.getId());
         model.addAttribute("responsables", usuarioService.listarProfesores());
         model.addAttribute("query", ControllerUtil.mapToQuery(filtros));
-
+        model.addAttribute("paramsBusqueda",paramsBusqueda );
         return "curso/cursos"; 
     	
     }

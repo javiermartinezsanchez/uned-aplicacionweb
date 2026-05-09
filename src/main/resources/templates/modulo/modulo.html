@@ -10,6 +10,7 @@ th:replace="~{plantilla::layout(~{::section})}">
 <h1 th:text="#{modulo.title}">Título</h1>
 <br>
 <div th:replace="~{fragments/mensajesresultado :: mensajes}"></div>
+<div th:replace="~{fragments/mensajesresultado :: errorgeneral}"></div>
 <div th:fragment="frmModulo(form)" th:object="${form}">
 <form th:action="@{${url}}" th:object="${form}" method="post">
 
@@ -26,9 +27,9 @@ th:replace="~{plantilla::layout(~{::section})}">
         <div class="col-md-4 mb-3">
             <label class="form-label" th:text="#{modulo.tipo}">Tipo de Módulo</label>
             <select class="form-select" th:field="*{tipo}">
-                <option th:value="${''}" th:text="#{tipo.select}">Seleccione tipo...</option>
+                <option th:value="${''}" th:text="#{comun.select.any}">Seleccione tipo...</option>
                 <!-- Asumiendo que pasas el enum TipoModulo.values() al modelo como 'tipos' -->
-                <option th:each="t : ${T(com.tu.paquete.TipoModulo).values()}"
+                <option th:each="t : ${T(es.alumno.uned.model.entities.TipoModulo).values()}"
                         th:value="${t}"
                         th:text="${t}">
                 </option>
@@ -53,6 +54,7 @@ th:replace="~{plantilla::layout(~{::section})}">
 
     <!-- Fila 4: Peso y Checkboxes -->
     <div class="row align-items-end">
+    <!-- 
         <div class="col-md-4 mb-3">
             <label class="form-label" th:text="#{modulo.peso}">Peso (%)</label>
             <div class="input-group">
@@ -61,39 +63,22 @@ th:replace="~{plantilla::layout(~{::section})}">
             </div>
             <div class="text-danger" th:errors="*{peso}"></div>
         </div>
-        
-        <div class="col-md-4 mb-3">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" th:field="*{requiereEntrega}" id="chkEntrega">
-                <label class="form-check-label" for="chkEntrega" th:text="#{modulo.requiereEntrega}">
-                    Requiere Entrega
-                </label>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-3">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" th:field="*{finalizacionAutomatica}" id="chkAuto">
-                <label class="form-check-label" for="chkAuto" th:text="#{modulo.finalizacionAutomatica}">
-                    Finalización Automática
-                </label>
-            </div>
-        </div>
-    </div>
-
+         -->
+     </div>
     <!-- Campos de auditoría (solo lectura si existen) -->
     <div class="row mt-3 pt-2 border-top" th:if="*{id} != null">
         <div class="col-md-6">
-            <small class="text-muted">
-                Creado por: <span th:text="*{userIns}">Usuario</span> el 
-                <span th:text="${#temporals.format(form.fIns, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+            <small class="text-muted" >
+                <span th:text="#{comun.creaadopor}">Creado por: </span><span th:text="' ' + *{userIns}">Usuario</span> ( 
+                <span th:text="${#temporals.format(form.fIns, 'dd/MM/yyyy HH:mm')}">Fecha</span>)
             </small>
         </div>
     </div>
-</div>
-    <div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, @{${urlCancel}})}"></div>
+        <div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, @{${urlCancel}})}"></div>
 </form>
-<div th:replace="~{fragments/mensajesresultado :: errorgeneral}"></div>
+</div>
+
+
 
 </section>
 </body>

@@ -34,6 +34,7 @@ public class CursoDTO {
     @NotNull(message = "{validations.curso.area.mandatory}")
     private Long areaTematicaId;
 
+    private String areaTematicaText;
     @NotNull(message = "{validations.curso.responsable.mandatory}")
     private Long responsableId;
 
@@ -55,11 +56,14 @@ public class CursoDTO {
     private BigDecimal valoracion;
     private Integer usuariosRegistrados;
 
-    private List<ModuloDTO> modulos;
+    //private List<ModuloDTO> modulos;
 
     private List<String> extras;
     public CursoDTO() {}
-	
+    public CursoDTO(Long idResponsable) {
+    	this.responsableId = idResponsable;
+    	
+    }
 	public CursoDTO(Long id, String titulo,
 			String descripcion, String uriImagen,
 			int nivel, Long areaTematicaID,
@@ -114,6 +118,13 @@ public class CursoDTO {
 	public void setAreaTematicaId(Long areaTematicaID) {
 		this.areaTematicaId = areaTematicaID;
 	}
+	public String getAreaTematicaText() {
+		return areaTematicaText;
+	}
+	public void setAreaTematicaText(String areaTematicaTitulo) {
+		this.areaTematicaText = areaTematicaTitulo;
+	}
+
 	public Long getResponsableId() {
 		return responsableId;
 	}
@@ -212,13 +223,13 @@ public class CursoDTO {
 		this.usuariosRegistrados = usuariosRegistrados;
 	}
 
-	public List<ModuloDTO> getModulos() {
-		return modulos;
-	}
-
-	public void setModulos(List<ModuloDTO> modulos) {
-		this.modulos = modulos;
-	}
+//	public List<ModuloDTO> getModulos() {
+//		return modulos;
+//	}
+//
+//	public void setModulos(List<ModuloDTO> modulos) {
+//		this.modulos = modulos;
+//	}
 
 	public List<String> getExtras() {
 		return extras;

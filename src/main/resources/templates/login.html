@@ -2,8 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
 	th:replace="~{plantilla::layout(~{::content})}">
-	
-	
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -18,12 +16,10 @@
 
                 <h3 class="text-center mb-4" th:text="#{login.initSession}">traducir</h3>
 
-                <!-- Mensaje de error -->
                 <div th:if="${param.error}" class="alert alert-danger text-center" th:text="#{login.mensaje.error}">
                     traducir
                 </div>
 
-                <!-- Mensaje de logout -->
                 <div th:if="${param.logout}" class="alert alert-success text-center" th:text="#{login.mensaje.logout}">
                     traducir
                 </div>

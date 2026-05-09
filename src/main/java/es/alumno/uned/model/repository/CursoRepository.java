@@ -1,18 +1,35 @@
 package es.alumno.uned.model.repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import es.alumno.uned.model.entities.Curso;
 
-public interface CursoRepository extends JpaRepository<Curso, Long>{
+public interface CursoRepository extends JpaRepository<Curso, Long>, JpaSpecificationExecutor<Curso> {
 
-/**
- */
+	@Query("SELECT m FROM Curso m WHERE " +
+	           "m.titulo LIKE %:titulo% AND " +
+	           "m.nivel = :nivel AND " +
+	           "m.areaTematica.id = :areaId AND " +
+	           "m.responsable.id = :responsableId AND " +
+	           "m.fIni >= :fIni AND " +
+	           "m.fFin <= :fFin")
+	    Page<Curso> buscarConFiltrosCompletos(Pageable pageable,
+	        @Param("titulo") String titulo,
+	        @Param("nivel") String nivel,
+	        @Param("areaId") Long areaId,
+	        @Param("responsableId") Long responsableId,
+	        @Param("fIni") LocalDate fIni,
+	        @Param("fFin") LocalDate fFin
+	    );
 	/**
 	 * 	Búsqueda de cursos por responsable (Profesor).
 	 * 

@@ -10,20 +10,27 @@ th:replace="~{plantilla::layout(~{::section})}">
 <h1 th:text="#{curso.title}">Título</h1>
 		<br>
 <div th:replace="~{fragments/mensajesresultado :: mensajes}"></div>
-	
+<div th:replace="~{fragments/mensajesresultado :: errorgeneral}"></div>
 <form th:action="@{${url}}" th:object="${form}" method="post"
       enctype="multipart/form-data">
 
     <input type="hidden" th:field="*{id}"/>
-
-    <!-- Título -->
-    <div class="mb-3">
-        <label class="form-label" th:text="#{curso.titulo}">Título</label>
-        <input type="text" class="form-control" th:field="*{titulo}">
-        <div class="text-danger" th:errors="*{titulo}"></div>
-    </div>
-
-    <!-- Descripción -->
+    <div class="row p-3">
+	    <div class="col-md-6">
+	     <label class="form-label" th:text="#{curso.imagen}">Imagen del curso</label>
+	        <div class="mt-2" th:if="*{uriImagen} != null and *{uriImagen} != ''">
+	            <img th:src="@{/images/curso/{img}(img=*{uriImagen})}"
+	                 class="img-thumbnail"
+	                 style="max-width: 200px;">
+	        </div>
+	        <input type="file" class="form-control" name="imagen" accept="image/*">
+	    </div>
+	    <div class="col-md-6 align-self-end">
+	        <label class="form-label" th:text="#{curso.titulo}">Título</label>
+	        <input type="text" class="form-control" th:field="*{titulo}">
+	        <div class="text-danger" th:errors="*{titulo}"></div>
+	    </div>
+	</div>
     <div class="mb-3">
         <label class="form-label" th:text="#{comun.descripcion}">Descripción</label>
         <textarea class="form-control" th:field="*{descripcion}" rows="3"></textarea>
@@ -31,8 +38,6 @@ th:replace="~{plantilla::layout(~{::section})}">
     </div>
     <div class="row g-3">
       <div class="col-md-4">
-
-      <!-- Área Temática -->
         <label class="form-label" th:text="#{areatematica.title}">Área Temática</label>
         <select class="form-select" th:field="*{areaTematicaId}">
             <option th:value="${''}" th:text="#{comun.select.any}"></option>
@@ -43,20 +48,17 @@ th:replace="~{plantilla::layout(~{::section})}">
         </select>
         <div class="text-danger" th:errors="*{areaTematicaId}"></div>
       </div>
-    <!-- Nivel -->
-      <div class="col-md-4">
+      <div class="col-md-2">
         <label class="form-label" th:text="#{curso.nivel}">Nivel</label>
         <input type="number" class="form-control" th:field="*{nivel}">
         <div class="text-danger" th:errors="*{nivel}"></div>
     </div>
-    <!-- Área Temática -->
-      <div class="col-md-4">
+    <div class="col-md-2">
         <label class="form-label" th:text="#{curso.duracion}">Área Temática</label>
- <input type="number" class="form-control" th:field="*{duracion}">        <div class="text-danger" th:errors="*{areaTematicaId}"></div>
+ 		<input type="number" class="form-control" th:field="*{duracion}">        <div class="text-danger" th:errors="*{areaTematicaId}"></div>
     </div>
     </div>
-    <!-- Responsable -->
-    <div class="mb-3">
+    <div class="mb-3" sec:authorize="hasAnyRole('ADMIN')">
         <label class="form-label" th:text="#{curso.responsable}">Responsable</label>
         <select class="form-select" th:field="*{responsableId}">
             <option th:value="${''}" th:text="#{responsable.select}"></option>
@@ -67,37 +69,23 @@ th:replace="~{plantilla::layout(~{::section})}">
         </select>
         <div class="text-danger" th:errors="*{responsableId}"></div>
     </div>
-
-    <!-- Fechas -->
+    <div sec:authorize="hasAnyRole('PROFE')">
+    <input type="hidden" th:field="*{responsableId}"/>
+    </div>
     <div class="row">
         <div class="col-md-6 mb-3">
             <label class="form-label" th:text="#{comun.fini}">Fecha Inicio</label>
             <input type="date" class="form-control" th:field="*{fIni}">
             <div class="text-danger" th:errors="*{fIni}"></div>
         </div>
-
         <div class="col-md-6 mb-3">
             <label class="form-label"th:text="#{comun.fFin}">Fecha Fin</label>
             <input type="date" class="form-control" th:field="*{fFin}">
             <div class="text-danger" th:errors="*{fFin}"></div>
         </div>
     </div>
-
-    <!-- Imagen -->
-    <div class="mb-3">
-        <label class="form-label" th:text="#{curso.imagen}">Imagen del curso</label>
-        <input type="file" class="form-control" name="imagen" accept="image/*">
-
-        <div class="mt-2" th:if="*{uriImagen} != null and *{uriImagen} != ''">
-            <img th:src="@{/images/curso/{img}(img=*{uriImagen})}"
-                 class="img-thumbnail"
-                 style="max-width: 200px;">
-        </div>
-    </div>
-    
     <div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, @{${urlCancel}})}"></div>
 </form>
-<div th:replace="~{fragments/mensajesresultado :: errorgeneral}"></div>
 
 </section>
 </body>

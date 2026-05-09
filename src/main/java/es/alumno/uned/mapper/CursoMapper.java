@@ -1,8 +1,5 @@
 package es.alumno.uned.mapper;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,17 +28,14 @@ public class CursoMapper {
         entity.setfIni(dto.getFIni());
         entity.setfFin(dto.getFFin());
 
-        // Área Temática
         AreaTematica area = areaTematicaRepository.findById(dto.getAreaTematicaId())
                 .orElseThrow(() -> new IllegalArgumentException("Área temática no encontrada"));
         entity.setAreaTematica(area);
 
-        // Responsable
         Usuario responsable = usuarioRepository.findById(dto.getResponsableId())
                 .orElseThrow(() -> new IllegalArgumentException("Responsable no encontrado"));
         entity.setResponsable(responsable);
 
-        // Imagen (solo el nombre del fichero)
         entity.setUriImagen(dto.getUriImagen());
         
         // Auditoría
@@ -64,6 +58,7 @@ public class CursoMapper {
         dto.setFIni(entity.getfIni());
         dto.setFFin(entity.getfFin());
         dto.setAreaTematicaId(entity.getAreaTematica().getId());
+        dto.setAreaTematicaText(entity.getAreaTematica().getTitulo());
         dto.setResponsableId(entity.getResponsable().getId());
         dto.setNombreResponsable(getNombreCompleto(entity.getResponsable()));       
         dto.setUriImagen(entity.getUriImagen());

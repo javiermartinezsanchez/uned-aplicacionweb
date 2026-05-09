@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import es.alumno.uned.dto.AreaTematicaDTO;
 import es.alumno.uned.dto.EstudianteDTO;
+import es.alumno.uned.exception.UserConectedNotMachtException;
 import es.alumno.uned.model.entities.SecurityUser;
 import es.alumno.uned.service.AreaTematicaService;
 import es.alumno.uned.service.EstudianteService;
@@ -31,10 +32,12 @@ import jakarta.validation.groups.Default;
 @Controller
 public class EstudianteController extends BaseCrudController {
 
-	private static final Map<String, String> CONFIG_MODEL = Map.of(
+	private Map<String, String> CONFIG_MODEL = Map.of(
 	        "viewName", "estudiante/editar-perfil",
 	        "url", "/registro",
-	        "urlCancel", "/home"
+	        "urlCancel", "/home",
+	        "urlBack", "/",
+	        "query", ""
 	    );
     private final EstudianteService estudianteService;
     private final AreaTematicaService areaService;
@@ -106,20 +109,21 @@ public class EstudianteController extends BaseCrudController {
     }
     
     @PostMapping("/estudiante/miperfil")
-    public String actualizarPerfil(
+    public String actualizarPerfil(@AuthenticationPrincipal SecurityUser userConnected,
             @Valid EstudianteDTO form,
             BindingResult result,
-            Principal principal,
+            HttpServletRequest request,
             Model model) {
-    	if (principal.getName() != form.getEmail()){
-    		result.reject("errorGlobal",  "error.en properties", "SÓLO SE PUEDE MODIFICAR EL PERFIL POR EL PROPIO USUARIO");
+
+    	preparaModeloPost(model, request);
+    	if (userConnected.getId() != form.getId()){
+    		throw new UserConectedNotMachtException("error.403.title", form, "");
     	}
         if (result.hasErrors()) {
-        	model.addAttribute("url", "/estudiante/miperfil");
-            return "estudiante/editar-perfil";
+        	return "estudiante/editar-perfil";
         }
-
         estudianteService.grabar(form, "");
+        model.addAttribute("sucess", "mensaje.grabacionOK");
         return "redirect:/estudiante/miperfil?sucess";
     }
     @GetMapping("/estudiante")
@@ -127,9 +131,11 @@ public class EstudianteController extends BaseCrudController {
     		Model model) {
     	Pageable pageRequest = PageRequest.of(page, 10);
     	var paginacion = estudianteService.listadoPaginado("/estudiante", pageRequest);
+    	model.addAttribute("paginacion", paginacion);
+    	 
         model.addAttribute("urlAlta", "/registro");
 		model.addAttribute("urlBack", "/home");
-	    model.addAttribute("paginacion", paginacion);
+	   
 	    model.addAttribute("query","");
         return "estudiante/estudiantes";
     }
