@@ -1,0 +1,9 @@
+
+<select name="areaId" class="form-select" th:fragment="selectArea(areas,selectoption)">
+     <option th:value="${''}" th:text="#{areatematica.select}"></option>
+     <option th:each="a : ${areas}"
+             th:value="${a.id}"
+             th:text="${a.titulo}"
+             th:selected="${#strings.equals(selectoption, a.id)}">
+     </option>
+</select>
