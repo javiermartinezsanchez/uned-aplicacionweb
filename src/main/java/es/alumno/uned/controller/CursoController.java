@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -64,7 +65,6 @@ public class CursoController extends BaseCrudController {
 			Model model) {
 		setModeloFormulario(model, "curso/curso", "/curso/guardar", "/curso");
 	    model.addAttribute("form", new CursoDTO(userConnected.getId()));
-	    model.addAttribute("areas", areaTematicaService.listAll());
 	    model.addAttribute("usuarios", usuarioService.listarProfesores());
 	    return model.getAttribute("viewName").toString();
 	}
@@ -89,7 +89,7 @@ public class CursoController extends BaseCrudController {
 	        Model model) throws IOException {
 
 	    if (result.hasErrors()) {
-	        model.addAttribute("areas", areaTematicaService.listAll());
+	        //model.addAttribute("areas", areaTematicaService.listAll());
 	        model.addAttribute("usuarios", usuarioService.listarProfesores());
 	        return "curso/curso";
 	    }
@@ -104,10 +104,11 @@ public class CursoController extends BaseCrudController {
     public String modifica(@AuthenticationPrincipal SecurityUser userConnected, 
     		@PathVariable("id") Long id,
     		Model model) {
+		var rol = userConnected.getRol();
 		model.addAttribute("url", "/curso/guardar");
 		model.addAttribute("urlCancel", "/curso");
 		model.addAttribute("form", cursoService.getCurso(id));
-	    model.addAttribute("areas", areaTematicaService.listAll());
+	    //model.addAttribute("areas", areaTematicaService.listAll());
 	    model.addAttribute("usuarios", usuarioService.listarProfesores());
 		return "curso/curso";
 	}
@@ -116,7 +117,7 @@ public class CursoController extends BaseCrudController {
     		@PathVariable("id") Long id) {
 		model.addAttribute("url", "/curso/guardar");
 		model.addAttribute("urlBack", "/");
-		model.addAttribute("form", cursoService.getCurso(id));
+		model.addAttribute("curso", cursoService.getCurso(id));
 		return "curso/fichacurso";
 	}
 
@@ -128,7 +129,6 @@ public class CursoController extends BaseCrudController {
 	 * @param model {@link Model} Modelo de la vista.
 	 * @return Vista que vamos a utilizar
 	 */
-    
     @GetMapping("/curso")
     public String ListadoGeneral(@AuthenticationPrincipal SecurityUser userConnected,
     		@RequestParam Map<String, String> paramsBusqueda,
@@ -141,7 +141,7 @@ public class CursoController extends BaseCrudController {
         model.addAttribute("urlAlta", "/curso/nuevo");
         model.addAttribute("urlBack", "/home");
         model.addAttribute("paginacion", paginacion);
-        model.addAttribute("areas", areaTematicaService.listAll());
+        //model.addAttribute("areas", areaTematicaService.listAll());
         model.addAttribute("responsableId", userConnected.getId());
         model.addAttribute("responsables", usuarioService.listarProfesores());
         model.addAttribute("query", ControllerUtil.mapToQuery(filtros));

@@ -97,7 +97,7 @@ public class UsuarioController extends BaseCrudController {
     }
 	@PostMapping("/admin/usuario")
 	public String grabarUsuario(@AuthenticationPrincipal UserDetails usuario,
-            UsuarioRegistroDTO form,
+			@ModelAttribute("form") UsuarioRegistroDTO form,
             BindingResult result,
             Model model) {
 

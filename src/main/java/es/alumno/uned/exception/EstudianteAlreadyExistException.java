@@ -1,8 +1,10 @@
 package es.alumno.uned.exception;
 
 import es.alumno.uned.dto.EstudianteDTO;
-
-public class EstudianteAlreadyExistException extends AlreadyExistException {
+/**
+ * Excepción que generamos cuando un Estudiante ya exista en procesos de alta o modificación.
+ */
+public final class EstudianteAlreadyExistException extends AlreadyExistException {
     /**
 	 * 
 	 */

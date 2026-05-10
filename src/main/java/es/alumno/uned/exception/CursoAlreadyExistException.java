@@ -1,8 +1,10 @@
 package es.alumno.uned.exception;
 
 import es.alumno.uned.dto.CursoDTO;
-
-public class CursoAlreadyExistException extends AlreadyExistException {
+/**
+ * Excepción controlada cuando un Curso ya existe. Normalmente en altas.
+ */
+public final class CursoAlreadyExistException extends AlreadyExistException {
     /**
 	 * 
 	 */

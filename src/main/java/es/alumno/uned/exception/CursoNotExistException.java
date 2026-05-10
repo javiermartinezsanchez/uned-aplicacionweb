@@ -1,6 +1,8 @@
 package es.alumno.uned.exception;
-
-public class CursoNotExistException extends NotDataFoundException{
+/**
+ * Excepción que generaremos cuando un Curso no exista, o el usuario que la intenta visualizar no esté autorizado.
+ */
+public final class CursoNotExistException extends NotDataFoundException{
 
 	/**
 	 * 

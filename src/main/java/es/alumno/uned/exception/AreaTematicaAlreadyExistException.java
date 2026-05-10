@@ -4,7 +4,7 @@ import es.alumno.uned.dto.AreaTematicaDTO;
 /**
  * Excepción en el alta de un Área Temática
  */
-public class AreaTematicaAlreadyExistException extends AlreadyExistException {
+public final class AreaTematicaAlreadyExistException extends AlreadyExistException {
 	    /**
 	 * 
 	 */

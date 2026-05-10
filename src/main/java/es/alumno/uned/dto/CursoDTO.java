@@ -3,6 +3,7 @@ package es.alumno.uned.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -55,8 +56,8 @@ public class CursoDTO {
     private String userIns;
     private BigDecimal valoracion;
     private Integer usuariosRegistrados;
-
-    //private List<ModuloDTO> modulos;
+    private Integer numVistas;
+    private List<ModuloDTO> modulos;
 
     private List<String> extras;
     public CursoDTO() {}
@@ -223,16 +224,26 @@ public class CursoDTO {
 		this.usuariosRegistrados = usuariosRegistrados;
 	}
 
-//	public List<ModuloDTO> getModulos() {
-//		return modulos;
-//	}
-//
-//	public void setModulos(List<ModuloDTO> modulos) {
-//		this.modulos = modulos;
-//	}
+	public List<ModuloDTO> getModulos() {
+		return modulos;
+	}
+
+	public void setModulos(List<ModuloDTO> modulos) {
+		if (modulos == null) {
+	        this.modulos = new ArrayList<>();
+	    } else {
+	        this.modulos = modulos;
+	    }
+	}
 
 	public List<String> getExtras() {
 		return extras;
+	}
+	public Integer getNumVistas() {
+		return numVistas;
+	}
+	public void setNumVistas(Integer numVistas) {
+		this.numVistas = numVistas;
 	}
 
 	

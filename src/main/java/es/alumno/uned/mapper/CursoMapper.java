@@ -1,13 +1,18 @@
 package es.alumno.uned.mapper;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import es.alumno.uned.dto.CursoDTO;
 import es.alumno.uned.model.entities.AreaTematica;
 import es.alumno.uned.model.entities.Curso;
+import es.alumno.uned.model.entities.Modulo;
 import es.alumno.uned.model.entities.Usuario;
 import es.alumno.uned.model.repository.AreaTematicaRepository;
+import es.alumno.uned.model.repository.ModuloRepository;
 import es.alumno.uned.model.repository.UsuarioRepository;
 
 @Component
@@ -19,6 +24,12 @@ public class CursoMapper {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private ModuloMapper moduloMapper;
+    
+    @Autowired
+    private ModuloRepository moduloRepository;
+    
     public Curso toEntity(CursoDTO dto, Curso entity) {
 
         entity.setTitulo(dto.getTitulo());
@@ -37,7 +48,7 @@ public class CursoMapper {
         entity.setResponsable(responsable);
 
         entity.setUriImagen(dto.getUriImagen());
-        
+        actualizarModulos(dto, entity);
         // Auditoría
         //entity.setfIns(dto.getfIns());
         //entity.setUserIns(dto.getUserIns());
@@ -66,14 +77,49 @@ public class CursoMapper {
         dto.setUserIns(entity.getUserIns());
         dto.setValoracion(entity.getValoracion());
         dto.setUsuariosRegistrados(entity.getUsuariosRegistrados());
+        dto.setNumVistas(entity.getNumVistas());
+        dto.setModulos(entity.getModulos().stream()
+        		.map(moduloMapper :: toDTO)
+        		.toList());
+        
         return dto;
     }
-
-    private String getNombreCompleto(Usuario responsableCurso) {
-    	return (responsableCurso.getNombre()!=null?responsableCurso.getNombre():"")+ 
-               (responsableCurso.getApellido1() !=null?" ".concat(responsableCurso.getApellido1()):"") +
-    	       (responsableCurso.getApellido2() !=null?" ".concat(responsableCurso.getApellido2()):"");
+    /**
+     * Devolvemos el nombre completo del Usuario responsable del curso (profesor)
+     * <p>El formato será: (nombre + " "+ apellido1 + " "+ apellido2)
+     * <p> Se tiene en cuenta los posibles nullos para evitarnos problemas.
+     * @param idUsuario Id del 
+     * @return
+     */
+    private String getNombreCompleto(Usuario idUsuario) {
+    	return (idUsuario.getNombre()!=null?idUsuario.getNombre():"")+ 
+               (idUsuario.getApellido1() !=null?" ".concat(idUsuario.getApellido1()):"") +
+    	       (idUsuario.getApellido2() !=null?" ".concat(idUsuario.getApellido2()):"");
     }
-    
+    /**
+     * Realizamos el "merge" de los módulo que vienen en el DTO con los que teníamos.
+     * <p>Sería mucho más sencillo setear la lista de módulos y que JPA se encargara de todo, pero Al actualizar los módulos del curso penalizaríamos mucho la BD y puede provocarnos errores diversos al realizar el commit en la BD)
+     * <ol>
+     * <li>Obtenemos {@link Modulo} del repositorio. Se filtra los que existan.</li>
+     * <li>Se eliminan los que módulos de nuestra entidad que no existan en la nueva.</li>
+     * <li>Se añaden los nuevos</li>
+     * </ol>
+     * @param dto El {@link CursoDTO} que viene de la vista.
+     * @param entity {@link Curso} La entidad a guardar.
+     */
+    private void actualizarModulos(CursoDTO dto, Curso entity) {
+        
+    	List<Modulo> modulosSeleccionados = dto.getModulos().stream()
+    		    .<Optional<Modulo>>map(m -> moduloRepository.findById(m.getId())) 
+    		    .flatMap(Optional::stream) // Convierte Stream<Optional<Modulo>> en Stream<Modulo> directamente
+    		    .toList();
+        entity.getModulos().removeIf(m -> !modulosSeleccionados.contains(m));
+
+        for (Modulo m : modulosSeleccionados) {
+            if (!entity.getModulos().contains(m)) {
+            	entity.getModulos().add(m);
+            }
+        }
+    }
 }
 

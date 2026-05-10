@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -61,7 +62,7 @@ public class EstudianteController extends BaseCrudController {
     @PostMapping("/registro")
     public String registrar(@AuthenticationPrincipal UserDetails usuario,
     		@RequestParam(required = false) List<Long> areasSeleccionadas,
-            EstudianteDTO form,
+    		@ModelAttribute("form") EstudianteDTO form,
             BindingResult result,
             HttpServletRequest request,
             Model model) {
@@ -110,7 +111,7 @@ public class EstudianteController extends BaseCrudController {
     
     @PostMapping("/estudiante/miperfil")
     public String actualizarPerfil(@AuthenticationPrincipal SecurityUser userConnected,
-            @Valid EstudianteDTO form,
+            @Valid  @ModelAttribute("form") EstudianteDTO form,
             BindingResult result,
             HttpServletRequest request,
             Model model) {

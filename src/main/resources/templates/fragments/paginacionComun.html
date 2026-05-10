@@ -1,5 +1,5 @@
-<nav th:fragment="paginador(paginacion, query)" th:if="${paginacion.totalPag > 1}">
-    <ul class="pagination justify-content-center">
+<nav th:fragment="paginador(paginacion, query,claseExtra)" th:if="${paginacion.totalPag > 1}">
+    <ul class="pagination justify-content-center" th:classappend="${claseExtra}">
 
         <!-- Primera -->
         <li class="page-item"

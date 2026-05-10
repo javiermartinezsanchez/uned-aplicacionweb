@@ -16,32 +16,27 @@
     <div class="col-md-3">
         <label class="form-label" th:text="#{curso.titulo}">Título</label>
         <input type="text" name="titulo" class="form-control"
-               th:value="${param.titulo}">
+               th:value="${paramsBusqueda['titulo']}">
     </div>
 
     <!-- NIVEL -->
     <div class="col-md-2">
         <label class="form-label" th:text="#{curso.nivel}">Nivel</label>
         <select name="nivel" class="form-select">
-            <option value="">-- Todos --</option>
+            <option th:value="${''}" th:text="#{comun.select.all}">traducir</option>
             <option th:each="n : ${#numbers.sequence(1,5)}"
                     th:value="${n}"
                     th:text="'Nivel ' + ${n}"
-                    th:selected="${param.nivel == n}">
+                    th:selected="${#strings.equals(paramsBusqueda['nivel'], n)}">
             </option>
         </select>
+        
     </div>
 
     <!-- ÁREA TEMÁTICA -->
     <div class="col-md-3">
         <label class="form-label" th:text="#{areatematica.title}">Área temática</label>
-        <select name="areaId" class="form-select">
-            <option th:value="${''}" th:text="#{areatematica.select}"></option>
-            <option th:each="a : ${areas}"
-                    th:value="${a.id}"
-                    th:text="${a.titulo}"
-                    th:selected="${param.areaId == a.id}">
-            </option>
+        <select th:replace="~{fragments/selectAreaTematica :: selectArea(${areas},${paramsBusqueda['areaId']})}">  
         </select>
     </div>
 
@@ -53,7 +48,7 @@
             <option th:each="u : ${responsables}"
                     th:value="${u.id}"
                     th:text="${u.nombreCompleto}"
-                    th:selected="${param.responsableId == u.id}">
+                    th:selected="${#strings.equals(paramsBusqueda['responsableId'] , u.id)}">
             </option>
         </select>
     </div>
@@ -62,13 +57,13 @@
     <div class="col-md-2">
         <label class="form-label" th:text="#{comun.fini}">Fecha inicio</label>
         <input type="date" name="fIni" class="form-control"
-               th:value="${param.fIni}">
+               th:value="${paramsBusqueda['fIni']}">
     </div>
 
     <div class="col-md-2">
         <label class="form-label" th:text="#{comun.fFin}">Fecha fin</label>
         <input type="date" name="fFin" class="form-control"
-               th:value="${param.fFin}">
+               th:value="${paramsBusqueda['fFin']}">
     </div>
     <div class="col-md-2 d-flex align-items-end" th:insert="~{fragments/botones :: btnSubmit(
 		        #{command.buscar},
@@ -125,7 +120,7 @@
 				</tr>
 			</tbody>
 		</table>
-        <div th:replace="~{fragments/paginacionComun :: paginador(${paginacion}, ${query})}"></div>
+        <div th:replace="~{fragments/paginacionComun :: paginador(${paginacion}, ${query}, '')}"></div>
 	</div>
  </section>
 </body>

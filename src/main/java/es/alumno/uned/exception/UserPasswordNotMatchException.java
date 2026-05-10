@@ -1,5 +1,9 @@
 package es.alumno.uned.exception;
 
+/**
+ * Excepción por "inconsistenecia", es decir no coinciden la contraseña nueva con su confirmación.
+ * <p>En los cambios de password.
+ */
 public final class UserPasswordNotMatchException extends InconsistencyDataException {
 
 	/**

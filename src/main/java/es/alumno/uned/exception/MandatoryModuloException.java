@@ -1,6 +1,8 @@
 package es.alumno.uned.exception;
-
-public class MandatoryModuloException extends MandatoryDataException{
+/**
+ * Excepción de la necesidad de la existencia de un Módulo
+ */
+public final class MandatoryModuloException extends MandatoryDataException{
 
 	/**
 	 * 

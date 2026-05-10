@@ -2,8 +2,6 @@ package es.alumno.uned.service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Pageable;
@@ -24,6 +22,17 @@ public interface CursoService {
 	 */
 	public CursoDTO getCurso(Long id);
 	
+	/**
+	 * Devolvemos un curso para el id enviado y el responsable.id que le enviamos.
+	 * <p>Básicamente lo utilizaremos en los diferentes "get" de cursos para evitar que un profesor (responsable), pueda ver/modificar los 
+	 * demás cursos asignados a otros profesores.
+	 * <p>En el caso de no existir, o que esté asignado a otro profesor, se generará un {@link CursoNotExistException}
+	 * 
+	 * @param idCurso Id del Curso a Buscar.
+	 * @param idUsuario Id del Usuario que realiza la consulta.
+	 * @return {@link CursoDTO} Encontrado.
+	 */
+	public CursoDTO getCurso(Long idCurso, Long idUsuario);
 	CursoDTO grabar(CursoDTO dto, MultipartFile imagen, String usuario) throws IOException;
 
 	public Paginacion<Curso, CursoDTO> listadoPaginado(String url,  Pageable pageable);
@@ -35,28 +44,10 @@ public interface CursoService {
 	 * @param url Cadena que define la url de consulta para la paginación.
 	 * @param pageable Definición de la página de datos a generar.
 	 * @param params Mapa de parámetros {nombre=valor,....} que definirá la búsqueda.
-	 * @return Página de datos (Cursos) que cumplen las condiciones de búsqueda.
+	 * @return {@link Paginacion} Página de datos (Cursos) que cumplen las condiciones de búsqueda.
 	 */
 	public Paginacion<Curso, CursoDTO> listadoPaginado(String url, Pageable pageable, Map<String, String> params);
 
-	
-	Paginacion<Curso, CursoDTO> listadoPaginadoPorResponsable(
-            String url, Pageable pageable, Long responsableId);
-
-    Paginacion<Curso, CursoDTO> listadoPaginadoPorArea(
-            String url, Pageable pageable, Long areaId);
-
-    Paginacion<Curso, CursoDTO> listadoPaginadoPorNivel(
-            String url, Pageable pageable, int nivel);
-
-    Paginacion<Curso, CursoDTO> listadoPaginadoPorTitulo(
-            String url, Pageable pageable, String titulo);
-
-    Paginacion<Curso, CursoDTO> listadoPaginadoPorFechaInicio(
-            String url, Pageable pageable, LocalDateTime desde, LocalDateTime hasta);
-    
-    List<CursoDTO> listadoHome();
-	
     /**
      * Proceso de guardado de una valoración de un curso
      * @param cursoId Identificador del curso que se valora.

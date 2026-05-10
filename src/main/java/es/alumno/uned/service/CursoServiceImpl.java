@@ -13,16 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import es.alumno.uned.dto.CursoDTO;
 import es.alumno.uned.mapper.CursoMapper;
 import es.alumno.uned.model.entities.Curso;
 import es.alumno.uned.model.entities.CursoValoracion;
-import es.alumno.uned.model.entities.Modulo;
 import es.alumno.uned.model.repository.AreaTematicaRepository;
 import es.alumno.uned.model.repository.CursoRepository;
 import es.alumno.uned.model.repository.CursoValoracionRepository;
@@ -55,6 +52,13 @@ public class  CursoServiceImpl implements CursoService{
 	public CursoDTO getCurso(Long id) {
 		return cursoMapper.toDTO(getValidCurso(id));
 	}
+	
+	@Override
+	public CursoDTO getCurso(Long idCurso, Long idUsuario) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	/**
 	 * Obtenemos un curso válido.
      *
@@ -156,44 +160,7 @@ public class  CursoServiceImpl implements CursoService{
 	        return cb.and(predicates.toArray(new Predicate[0]));
 	    };
 	}
-    @Override
-    public Paginacion<Curso, CursoDTO> listadoPaginadoPorResponsable(
-            String url, Pageable pageable, Long responsableId) {
-
-        Page<Curso> page = cursoRepository.findByResponsableId(responsableId, pageable);
-        return construirPaginacion(url, page);
-    }
-    @Override
-    public Paginacion<Curso, CursoDTO> listadoPaginadoPorArea(
-            String url, Pageable pageable, Long areaId) {
-
-        Page<Curso> page = cursoRepository.findByAreaTematicaId(areaId, pageable);
-        return construirPaginacion(url, page);
-    }
     
-    @Override
-    public Paginacion<Curso, CursoDTO> listadoPaginadoPorNivel(
-            String url, Pageable pageable, int nivel) {
-
-        Page<Curso> page = cursoRepository.findByNivel(nivel, pageable);
-        return construirPaginacion(url, page);
-    }
-    
-    @Override
-    public Paginacion<Curso, CursoDTO> listadoPaginadoPorTitulo(
-            String url, Pageable pageable, String titulo) {
-
-        Page<Curso> page = cursoRepository.findByTituloContainingIgnoreCase(titulo, pageable);
-        return construirPaginacion(url, page);
-    }
-    
-    @Override
-    public Paginacion<Curso, CursoDTO> listadoPaginadoPorFechaInicio(
-            String url, Pageable pageable, LocalDateTime desde, LocalDateTime hasta) {
-
-        Page<Curso> page = cursoRepository.findByFIniBetween(desde, hasta, pageable);
-        return construirPaginacion(url, page);
-    }
     
 	private Paginacion<Curso, CursoDTO> construirPaginacion(String url, Page<Curso> page) {
 	        return new Paginacion.Builder<Curso, CursoDTO>()
@@ -238,14 +205,15 @@ public class  CursoServiceImpl implements CursoService{
 		}
 		return media;
 	}
-	@Override
-	public List<CursoDTO> listadoHome() {
-		return cursoRepository.findAll().stream()
-		.filter(c -> c.getUriImagen() != null)
-		.filter(c -> c.getUriImagen().length() != 0)
-		.map(cursoMapper :: toDTO)
-		.toList();
-	}
+//	@Override
+//	public List<CursoDTO> listadoHome() {
+//		return cursoRepository.findAll().stream()
+//		.filter(c -> c.getUriImagen() != null)
+//		.filter(c -> c.getUriImagen().length() != 0)
+//		.map(cursoMapper :: toDTO)
+//		.toList();
+//	}
+
 
 	
 }

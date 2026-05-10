@@ -24,7 +24,13 @@ import es.alumno.uned.model.entities.SecurityUser;
 import es.alumno.uned.model.entities.Usuario;
 import es.alumno.uned.model.repository.UsuarioRepository;
 import es.alumno.uned.model.util.Paginacion;
-
+/**
+ * Clase "Service" de la entidad usuario.
+ * 
+ * <p>Engloba todas las operaciones de consulta y actualización de la entidad Usuario.
+ * <p>Interactua con {@link UserDetails} de Spring para obtener sus valores.
+ * <p>Nos gestion la consulta de "Usuarios Conectados" desde el {@link SessionRegistry} de Spring.
+ */
 @Service
 public class UserDetailsServiceImpl implements UsuarioService, UserDetailsService{
 

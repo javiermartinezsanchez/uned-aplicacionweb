@@ -9,9 +9,10 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-			<form class="d-flex" th:action="@{/busqueda}" method="get">
-			    <input class="form-control me-2" type="search" name="q">
+        <div class="collapse navbar-collapse" id="navbarNav" >
+			<form class="d-flex" th:action="@{/}" method="get" sec:authorize="!isAuthenticated() or hasAnyRole('ESTUD')">
+			            <select th:replace="~{fragments/selectAreaTematica :: selectArea(${areas},${paramsBusqueda['areaId']})}">  
+        				</select>
 			
 			    <button class="btn btn-outline-success" type="submit">
 			        <span class="d-inline-flex align-items-center gap-2">
@@ -79,7 +80,7 @@
 				        <!-- Español -->
 				        <li>
 				            <a class="dropdown-item"
-				               th:href="@{?(lang='es')}">
+				               th:href="@{${urlBuilder.replaceQueryParam('lang', 'es').toUriString()}}">
 				                <img th:src="@{/images/flags/es.png}" alt="ES" style="width:20px" class="me-2">
 				                <span th:text="#{lenguaje.es}"/>
 				            </a>
@@ -88,7 +89,7 @@
 				        <!-- Inglés -->
 				        <li>
 				            <a class="dropdown-item"
-				               th:href="@{?(lang='en')}">
+				               th:href="@{${urlBuilder.replaceQueryParam('lang', 'en').toUriString()}}">
 				                <img th:src="@{/images/flags/gb.png}" alt="EN" style="width:20px" class="me-2">
 				                <span th:text="#{lenguaje.en}"/>
 				            </a>

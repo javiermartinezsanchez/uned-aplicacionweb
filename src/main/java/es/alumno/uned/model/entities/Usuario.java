@@ -54,6 +54,8 @@ public class Usuario {
 
 	@Column(name="FECHA_ALTA")
 	private LocalDateTime fAlta;
+	@Column(name="FECHA_ULTIMO_ACCESO", nullable = true)
+	private LocalDateTime fUltimoAcceso;
 
 	@Column(name="USUARIO_ALTA")
 	private String usuarioAlta;

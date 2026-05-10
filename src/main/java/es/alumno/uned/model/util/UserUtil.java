@@ -6,7 +6,12 @@ import java.util.stream.Collectors;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 /**
- * Clase de utilidad para determinar según el rol del usuario su "prefijo" para la navegación.
+ * Clase de utilidad para obtener datos del ROL del usuario directamente de su {@link Authentication}, sin tener que consultar a la BD constantemente.
+ * <ul>
+ * <li>Asignación de ruta lógica de acuerdo al ROL principal</li>
+ * <li>Devolución del ROL del usuario</li>
+ * </ul>
+ * 
  */
 public class UserUtil {
 
@@ -42,11 +47,23 @@ public class UserUtil {
 	 * @param authentication Authentication de Spring
 	 * @return Colección de Roles.
 	 */
-	 public static Set<String> getRol(Authentication authentication) {
+	 public static Set<String> getRoles(Authentication authentication) {
 		Set<String> roles = authentication.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toSet());
 		return roles;
 	 }
+		/**
+		 * Nos devuelve el ROL de un usuario.
+		 * 
+		 * @param authentication Authentication de Spring
+		 * @return Rol del usuario o "" si no está authenticado.
+		 */
+		 public static String getRol(Authentication authentication) {
+			 return getRoles(authentication).stream()
+					 .findFirst()
+					 .orElse("");
+		 }
+	 
 }

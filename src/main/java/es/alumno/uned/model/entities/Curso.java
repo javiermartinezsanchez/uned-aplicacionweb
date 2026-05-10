@@ -15,6 +15,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -53,6 +55,7 @@ public class Curso {
 	private LocalDate fFin;
 	@Column(name="FECHA_INS")
 	private LocalDateTime fIns;
+
 	@Column(name="USER_INS")
 	private String userIns;
 	
@@ -61,17 +64,22 @@ public class Curso {
 
 	@Column(name="USUARIOS_REGISTRADOS", nullable=false)
 	private Integer usuariosRegistrados = 0;
-	
-//	@OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
-//	private List<Modulo> modulos = new ArrayList<>();
+		
+	@Column(name="NUMERO_VISTAS", nullable=true)
+	private Integer numVistas = 0;
+	@ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "cursos_modulos", // Nombre de la tabla intermedia
+        joinColumns = @JoinColumn(name = "curso_id"), // FK hacia esta entidad (Curso)
+        inverseJoinColumns = @JoinColumn(name = "modulo_id") // FK hacia la otra entidad (Modulo)
+    )
+    private List<Modulo> modulos = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CursoValoracion> valoraciones = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "curso")
 	private List<EstudianteCurso> estudiantes;
-
-
 
 	public Curso() {}
 	
@@ -210,8 +218,19 @@ public class Curso {
 		this.usuariosRegistrados = usuariosRegistrados;
 	}
 
-//	public List<Modulo> getModulos() {
-//		return modulos;
-//	}
-	
+	public List<Modulo> getModulos() {
+		return modulos;
+	}
+	public Integer getNumVistas() {
+		return numVistas;
+	}
+
+
+	public void setNumVistas(Integer numVistas) {
+		this.numVistas = numVistas;
+	}
+	//Para poder añadir un módulo individual sin tener que setear toda la lista.
+	public void addModulo(Modulo modulo) {
+        this.modulos.add(modulo);
+    }
 }
