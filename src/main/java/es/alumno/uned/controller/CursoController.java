@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +36,7 @@ import es.alumno.uned.model.util.ControllerUtil;
 import es.alumno.uned.model.util.Paginacion;
 import es.alumno.uned.service.AreaTematicaService;
 import es.alumno.uned.service.CursoService;
+import es.alumno.uned.service.ModuloService;
 import es.alumno.uned.service.UsuarioService;
 import jakarta.validation.Valid;
 
@@ -44,12 +46,14 @@ public class CursoController extends BaseCrudController {
 	CursoService cursoService;
 	AreaTematicaService areaTematicaService;
 	UsuarioService usuarioService;
-	
+	ModuloService moduloService;
 	public CursoController(CursoService cursoService, AreaTematicaService areaTematicaService,
-			UsuarioService usuarioService) {
+			UsuarioService usuarioService, 
+			ModuloService moduloService) {
 		this.cursoService = cursoService;
 		this.areaTematicaService = areaTematicaService;
 		this.usuarioService = usuarioService;
+		this.moduloService = moduloService;
 	}
 	/**
 	 * Método para añadir un nuevo Curso.
@@ -89,7 +93,7 @@ public class CursoController extends BaseCrudController {
 	        Model model) throws IOException {
 
 	    if (result.hasErrors()) {
-	        //model.addAttribute("areas", areaTematicaService.listAll());
+	    	prepararVistaEdicion(form, model);
 	        model.addAttribute("usuarios", usuarioService.listarProfesores());
 	        return "curso/curso";
 	    }
@@ -99,16 +103,42 @@ public class CursoController extends BaseCrudController {
 	    redirectAttributes.addFlashAttribute("success", "mensaje.grabacionOK");
 		return String.format("redirect:/curso/curso/%d", cursoGrabado.getId());
 	}
-	
+	/**
+	 * Para definir los módulos existentes y los disponibles en el modelo
+	 * @param cursoDTO 
+	 * @param model
+	 */
+	private void prepararVistaEdicion(CursoDTO cursoDTO, Model model) {
+	    // Volvemos a buscar los módulos que NO están en el curso actual
+	    List<ModuloDTO> todos = moduloService.listAll();
+	    
+	    // Filtramos para el select
+	    List<ModuloDTO> disponibles = todos.stream()
+	        .filter(m -> cursoDTO.getModulos().stream()
+	            .noneMatch(rel -> rel.getModuloId().equals(m.getId())))
+	        .toList();
+	    
+	    model.addAttribute("modulosDisponibles", disponibles);
+	    
+	    // 2. RECUPERAR DESCRIPCIONES (Nombres) de los módulos en la tabla
+	    // Como el nombreModulo no viaja en el POST, lo re-asignamos buscando en la lista 'todos'
+	    cursoDTO.getModulos().forEach(rel -> {
+	        todos.stream()
+	            .filter(m -> m.getId().equals(rel.getModuloId()))
+	            .findFirst()
+	            .ifPresent(m -> rel.setNombreModulo(m.getTitulo()));
+	    });
+	}
 	@GetMapping("/curso/curso/{id}")
     public String modifica(@AuthenticationPrincipal SecurityUser userConnected, 
     		@PathVariable("id") Long id,
     		Model model) {
 		var rol = userConnected.getRol();
+		var curso = cursoService.getCurso(id);
+		prepararVistaEdicion(curso,model);
 		model.addAttribute("url", "/curso/guardar");
 		model.addAttribute("urlCancel", "/curso");
 		model.addAttribute("form", cursoService.getCurso(id));
-	    //model.addAttribute("areas", areaTematicaService.listAll());
 	    model.addAttribute("usuarios", usuarioService.listarProfesores());
 		return "curso/curso";
 	}

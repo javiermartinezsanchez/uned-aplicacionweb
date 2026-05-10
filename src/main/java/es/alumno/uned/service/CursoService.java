@@ -26,7 +26,7 @@ public interface CursoService {
 	 * Devolvemos un curso para el id enviado y el responsable.id que le enviamos.
 	 * <p>Básicamente lo utilizaremos en los diferentes "get" de cursos para evitar que un profesor (responsable), pueda ver/modificar los 
 	 * demás cursos asignados a otros profesores.
-	 * <p>En el caso de no existir, o que esté asignado a otro profesor, se generará un {@link CursoNotExistException}
+	 * <p>En el caso de no existir, o que esté asignado a otro profesor, se generará un {@code CursoNotExistException}
 	 * 
 	 * @param idCurso Id del Curso a Buscar.
 	 * @param idUsuario Id del Usuario que realiza la consulta.

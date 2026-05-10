@@ -1,5 +1,6 @@
 package es.alumno.uned.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,10 +10,11 @@ import org.springframework.stereotype.Component;
 import es.alumno.uned.dto.CursoDTO;
 import es.alumno.uned.model.entities.AreaTematica;
 import es.alumno.uned.model.entities.Curso;
+import es.alumno.uned.model.entities.CursoModulo;
 import es.alumno.uned.model.entities.Modulo;
 import es.alumno.uned.model.entities.Usuario;
 import es.alumno.uned.model.repository.AreaTematicaRepository;
-import es.alumno.uned.model.repository.ModuloRepository;
+import es.alumno.uned.model.repository.CursoModuloRepository;
 import es.alumno.uned.model.repository.UsuarioRepository;
 
 @Component
@@ -25,10 +27,10 @@ public class CursoMapper {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private ModuloMapper moduloMapper;
+    private CursoModuloMapper cursoModuloMapper;
     
     @Autowired
-    private ModuloRepository moduloRepository;
+    private CursoModuloRepository cursoModuloRepository;
     
     public Curso toEntity(CursoDTO dto, Curso entity) {
 
@@ -49,10 +51,6 @@ public class CursoMapper {
 
         entity.setUriImagen(dto.getUriImagen());
         actualizarModulos(dto, entity);
-        // Auditoría
-        //entity.setfIns(dto.getfIns());
-        //entity.setUserIns(dto.getUserIns());
-
         return entity;
     }
     
@@ -79,7 +77,7 @@ public class CursoMapper {
         dto.setUsuariosRegistrados(entity.getUsuariosRegistrados());
         dto.setNumVistas(entity.getNumVistas());
         dto.setModulos(entity.getModulos().stream()
-        		.map(moduloMapper :: toDTO)
+        		.map(cursoModuloMapper :: toDTO)
         		.toList());
         
         return dto;
@@ -108,18 +106,21 @@ public class CursoMapper {
      * @param entity {@link Curso} La entidad a guardar.
      */
     private void actualizarModulos(CursoDTO dto, Curso entity) {
-        
-    	List<Modulo> modulosSeleccionados = dto.getModulos().stream()
-    		    .<Optional<Modulo>>map(m -> moduloRepository.findById(m.getId())) 
+    	
+    	
+    		List<CursoModulo> modulosSeleccionados = (dto.getModulos() == null) ?  new ArrayList<>(): dto.getModulos()
+    				.stream()
+    				.filter(m -> m.getId() !=null)
+    		    .<Optional<CursoModulo>>map(m -> cursoModuloRepository.findById(m.getId())) 
     		    .flatMap(Optional::stream) // Convierte Stream<Optional<Modulo>> en Stream<Modulo> directamente
     		    .toList();
-        entity.getModulos().removeIf(m -> !modulosSeleccionados.contains(m));
-
-        for (Modulo m : modulosSeleccionados) {
-            if (!entity.getModulos().contains(m)) {
-            	entity.getModulos().add(m);
+            entity.getModulos().removeIf(m -> !modulosSeleccionados.contains(m));
+            for (CursoModulo m : modulosSeleccionados) {
+                if (!entity.getModulos().contains(m)) {
+                	entity.addModulo(m.getModulo(), m.getOrden(), m.getPeso());
+                }
             }
-        }
+
     }
 }
 

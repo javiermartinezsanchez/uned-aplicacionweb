@@ -1,6 +1,7 @@
 package es.alumno.uned.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Page;
@@ -116,6 +117,13 @@ public class ModuloServiceImpl implements ModuloService {
 					? moduloRepository.findById(id).orElse(new Modulo())
 					: new Modulo();
 			return entity;
+		}
+
+		@Override
+		public List<ModuloDTO> listAll() {
+			return moduloRepository.findAll().stream()
+					.map(moduloMapper :: toDTO)
+					.toList();
 		}
 
 }

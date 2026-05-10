@@ -114,7 +114,7 @@ public class  CursoServiceImpl implements CursoService{
 	/**
 	 * Nos devuelve la lista de condiciones {@link Specification} de la consulta de acuerdo a los parámetros enviados.
 	 * <p> Si el mapa de parámetros está vacio devuelve todos.
-	 * @param params Mapa de parámetros para definir la búsqueda de Módulos.
+	 * @param filtros Mapa de parámetros para definir la búsqueda de Módulos.
 	 * @return Los predicados de búsqueda generados de acuerdo a los parámetros enviados.
 	 */
 	public static Specification<Curso> generaCondiciones(Map<String, String> filtros) {

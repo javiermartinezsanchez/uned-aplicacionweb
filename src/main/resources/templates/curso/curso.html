@@ -7,8 +7,7 @@ th:replace="~{plantilla::layout(~{::section})}">
 </head>
 <body>
 <section>
-<h1 th:text="#{curso.title}">Título</h1>
-		<br>
+ <h1 th:text="#{curso.title}">Título</h1>
 <div th:replace="~{fragments/mensajesresultado :: mensajes}"></div>
 <div th:replace="~{fragments/mensajesresultado :: errorgeneral}"></div>
 <form th:action="@{${url}}" th:object="${form}" method="post"
@@ -58,7 +57,8 @@ th:replace="~{plantilla::layout(~{::section})}">
  		<input type="number" class="form-control" th:field="*{duracion}">        <div class="text-danger" th:errors="*{areaTematicaId}"></div>
     </div>
     </div>
-    <div class="mb-3" sec:authorize="hasAnyRole('ADMIN')">
+     <div class="row g-3">
+    <div class="col-md-4" sec:authorize="hasAnyRole('ADMIN')">
         <label class="form-label" th:text="#{curso.responsable}">Responsable</label>
         <select class="form-select" th:field="*{responsableId}">
             <option th:value="${''}" th:text="#{responsable.select}"></option>
@@ -72,21 +72,139 @@ th:replace="~{plantilla::layout(~{::section})}">
     <div sec:authorize="hasAnyRole('PROFE')">
     <input type="hidden" th:field="*{responsableId}"/>
     </div>
-    <div class="row">
-        <div class="col-md-6 mb-3">
+   
+        <div class="col-md-2 mb-3">
             <label class="form-label" th:text="#{comun.fini}">Fecha Inicio</label>
             <input type="date" class="form-control" th:field="*{fIni}">
             <div class="text-danger" th:errors="*{fIni}"></div>
         </div>
-        <div class="col-md-6 mb-3">
+        <div class="col-md-2 mb-3">
             <label class="form-label"th:text="#{comun.fFin}">Fecha Fin</label>
             <input type="date" class="form-control" th:field="*{fFin}">
             <div class="text-danger" th:errors="*{fFin}"></div>
         </div>
     </div>
+    <div class="card mb-4 border-info">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">Configuración del Itinerario</h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-3 align-items-end mb-4">
+                <div class="col-md-8">
+                    <label class="form-label fw-bold">Añadir Módulo</label>
+                    <select id="selectorModulos" class="form-select">
+                        <option value="" selected disabled>Selecciona para añadir...</option>
+                        <option th:each="m : ${modulosDisponibles}" 
+                                th:value="${m.id}" 
+                                th:text="${m.titulo}"></option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <button type="button" onclick="addModuloRow()" class="btn btn-outline-info w-100">
+                        <i class="bi bi-plus-lg"></i> Añadir al listado
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle" id="tablaItinerario">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Módulo</th>
+                            <th style="width: 100px;">Orden</th>
+                            <th style="width: 120px;">Peso %</th>
+                            <th style="width: 50px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="rel, iter : *{modulos}">
+                            <td>
+                                <span th:text="${rel.nombreModulo}">Módulo</span>
+                                <input type="hidden" th:field="*{modulos[__${iter.index}__].id}" />
+                                <input type="hidden" th:field="*{modulos[__${iter.index}__].moduloId}" />
+                            </td>
+                            <td>
+                                <input type="number" th:field="*{modulos[__${iter.index}__].orden}" class="form-control form-control-sm" />
+                            </td>
+                            <td>
+                                <input type="number" th:field="*{modulos[__${iter.index}__].peso}" class="form-control form-control-sm" />
+                            </td>
+                            <td>
+                                <button type="button" class="btn text-danger" 
+                                        th:onclick="|removeModuloRow(this, '${rel.moduloId}')|">
+                                    <i class="bi bi-x-circle-fill"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
     <div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, @{${urlCancel}})}"></div>
+ 
 </form>
 
+
+<script>
+function addModuloRow() {
+    const select = document.getElementById('selectorModulos');
+    const moduloId = select.value;
+    const nombre = select.options[select.selectedIndex].text;
+
+    if (!moduloId) return;
+
+    const tbody = document.querySelector('table tbody');
+    const index = tbody.rows.length; // Siguiente índice disponible
+
+    const row = `
+        <tr>
+            <td>
+                <span>${nombre}</span>
+                <input type="hidden" name="modulos[${index}].moduloId" value="${moduloId}" />
+            </td>
+            <td>
+                <input type="number" name="modulos[${index}].orden" class="form-control" value="${index + 1}" />
+            </td>
+            <td>
+                <div class="input-group">
+                    <input type="number" name="modulos[${index}].peso" class="form-control" value="10" min="10" max="100" />
+                    <span class="input-group-text">%</span>
+                </div>
+            </td>
+            <td>
+                <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeModuloRow(this, '${moduloId}')">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </td>
+        </tr>
+    `;
+
+    tbody.insertAdjacentHTML('beforeend', row);
+    
+    // Deshabilitar la opción en el select para no duplicar
+    select.options[select.selectedIndex].disabled = true;
+    select.value = "";
+}
+function removeModuloRow(button, moduloId) {
+    // 1. Localizar la fila y eliminarla
+    const row = button.closest('tr');
+    row.remove();
+
+    // 2. Reactivar la opción en el select
+    const select = document.getElementById('selectorModulos');
+    const options = select.options;
+
+    for (let i = 0; i < options.length; i++) {
+        if (options[i].value == moduloId) {
+            options[i].disabled = false;
+            break;
+        }
+    }
+}
+</script>
 </section>
 </body>
 </html>

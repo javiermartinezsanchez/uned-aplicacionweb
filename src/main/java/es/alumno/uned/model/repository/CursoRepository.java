@@ -15,8 +15,8 @@ public interface CursoRepository extends JpaRepository<Curso, Long>, JpaSpecific
 	 * Nos devuelve de forma paginada los cursos del Id Usuario del profesor.
 	 * 
 	 * @param responsableId Id del profesor asociado.
-	 * @param pageable Definición de la paginación, (número de página solicitada y tamaño de la página)
-	 * @return Página de datos encontrados.
+	 * @param cursoId Id del curso a consultar)
+	 * @return Curso Encontrado.
 	 */
 	Optional<Curso> findByIdAndResponsableId(Long cursoId, Long responsableId);
 

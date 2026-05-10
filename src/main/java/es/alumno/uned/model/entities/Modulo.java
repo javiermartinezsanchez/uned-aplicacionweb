@@ -46,9 +46,8 @@ public class Modulo {
     @Column(name = "user_ins", length = 50)
     private String userIns;
 
-    // RELACIÓN CON CURSO_MODULO
-    @ManyToMany(mappedBy = "modulos") 
-    private List<Curso> cursos = new ArrayList<>();
+    @OneToMany(mappedBy = "modulo")
+    private List<CursoModulo> cursoModulos = new ArrayList<>();
     
     @OneToMany(mappedBy = "modulo")
     private List<EstudianteCursoModulo> estudianteCursoModulos;
@@ -86,14 +85,6 @@ public class Modulo {
 		this.contenido = contenido;
 	}
 
-//	public int getPeso() {
-//		return peso;
-//	}
-//
-//	public void setPeso(int peso) {
-//		this.peso = peso;
-//	}
-
 	public TipoModulo getTipo() {
 		return tipo;
 	}
@@ -123,8 +114,9 @@ public class Modulo {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((contenido == null) ? 0 : contenido.hashCode());
-		result = prime * result + ((cursos == null) ? 0 : cursos.hashCode());
+		result = prime * result + ((cursoModulos == null) ? 0 : cursoModulos.hashCode());
 		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
+		result = prime * result + ((estudianteCursoModulos == null) ? 0 : estudianteCursoModulos.hashCode());
 		result = prime * result + ((fIns == null) ? 0 : fIns.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((tipo == null) ? 0 : tipo.hashCode());
@@ -147,15 +139,20 @@ public class Modulo {
 				return false;
 		} else if (!contenido.equals(other.contenido))
 			return false;
-		if (cursos == null) {
-			if (other.cursos != null)
+		if (cursoModulos == null) {
+			if (other.cursoModulos != null)
 				return false;
-		} else if (!cursos.equals(other.cursos))
+		} else if (!cursoModulos.equals(other.cursoModulos))
 			return false;
 		if (descripcion == null) {
 			if (other.descripcion != null)
 				return false;
 		} else if (!descripcion.equals(other.descripcion))
+			return false;
+		if (estudianteCursoModulos == null) {
+			if (other.estudianteCursoModulos != null)
+				return false;
+		} else if (!estudianteCursoModulos.equals(other.estudianteCursoModulos))
 			return false;
 		if (fIns == null) {
 			if (other.fIns != null)
@@ -181,6 +178,7 @@ public class Modulo {
 			return false;
 		return true;
 	}
+
 
 	/*
 	 * public Curso getCurso() { return curso; }

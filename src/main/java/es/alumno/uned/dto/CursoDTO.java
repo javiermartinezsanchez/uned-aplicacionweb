@@ -9,7 +9,7 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
-
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -57,7 +57,8 @@ public class CursoDTO {
     private BigDecimal valoracion;
     private Integer usuariosRegistrados;
     private Integer numVistas;
-    private List<ModuloDTO> modulos;
+    @Valid
+    private List<CursoModuloDTO> modulos;
 
     private List<String> extras;
     public CursoDTO() {}
@@ -224,11 +225,11 @@ public class CursoDTO {
 		this.usuariosRegistrados = usuariosRegistrados;
 	}
 
-	public List<ModuloDTO> getModulos() {
+	public List<CursoModuloDTO> getModulos() {
 		return modulos;
 	}
 
-	public void setModulos(List<ModuloDTO> modulos) {
+	public void setModulos(List<CursoModuloDTO> modulos) {
 		if (modulos == null) {
 	        this.modulos = new ArrayList<>();
 	    } else {

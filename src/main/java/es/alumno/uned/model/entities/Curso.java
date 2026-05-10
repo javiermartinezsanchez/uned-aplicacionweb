@@ -19,6 +19,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 
 @Entity
@@ -67,13 +68,11 @@ public class Curso {
 		
 	@Column(name="NUMERO_VISTAS", nullable=true)
 	private Integer numVistas = 0;
-	@ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "cursos_modulos", // Nombre de la tabla intermedia
-        joinColumns = @JoinColumn(name = "curso_id"), // FK hacia esta entidad (Curso)
-        inverseJoinColumns = @JoinColumn(name = "modulo_id") // FK hacia la otra entidad (Modulo)
-    )
-    private List<Modulo> modulos = new ArrayList<>();
+
+	@OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("orden ASC") // Esto ayuda a que siempre vengan ordenados
+    private List<CursoModulo> cursoModulos = new ArrayList<>();	
+
 	
 	@OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CursoValoracion> valoraciones = new ArrayList<>();
@@ -218,8 +217,8 @@ public class Curso {
 		this.usuariosRegistrados = usuariosRegistrados;
 	}
 
-	public List<Modulo> getModulos() {
-		return modulos;
+	public List<CursoModulo> getModulos() {
+		return cursoModulos;
 	}
 	public Integer getNumVistas() {
 		return numVistas;
@@ -230,7 +229,8 @@ public class Curso {
 		this.numVistas = numVistas;
 	}
 	//Para poder añadir un módulo individual sin tener que setear toda la lista.
-	public void addModulo(Modulo modulo) {
-        this.modulos.add(modulo);
+	public void addModulo(Modulo modulo, Integer orden, Integer peso) {
+        CursoModulo relacion = new CursoModulo(this, modulo, orden, peso);
+        this.cursoModulos.add(relacion);
     }
 }

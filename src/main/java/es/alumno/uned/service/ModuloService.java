@@ -1,5 +1,6 @@
 package es.alumno.uned.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Pageable;
@@ -20,4 +21,6 @@ public interface ModuloService {
 	 * @return MóduloDTO encontrado.
 	 */
 	ModuloDTO get(Long idModulo);
+	
+	List<ModuloDTO> listAll();
 }

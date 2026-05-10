@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
      * Como el buscador de la home, está en el fragmento "header", es
      * común a todo el proyecto (excepto si hubiera alguna plantilla si el header.
      * <p>Como necesitamos poder conocer los parámetros y estos se incluyen
-     * en un {@Code Map<String, String>}, vamos a crearlos a nivel de "Adviser".
+     * en un {@code Map<String, String>}, vamos a crearlos a nivel de "Adviser".
      * <p>De esta forma no se tendrá que incluir "siempre" este mapa en el modelo.
      * Y será Spring el encargado de manejarlo a nivel de {@link ModelAttribute} 
      * @param allParams Captura todos los parámetros de la query y lo devuelve, 
