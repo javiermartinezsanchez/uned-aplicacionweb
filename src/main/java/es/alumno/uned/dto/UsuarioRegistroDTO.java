@@ -29,11 +29,11 @@ public class UsuarioRegistroDTO {
     @NotBlank(message = "{validations.message.email.mandatory}")
     private String email;
 
-    @NotBlank(message = "{validations.message.password.mandatory}")
+    @NotBlank(message = "{validations.message.password.mandatory}",groups = OnCreate.class)
     @Size(min = 6, message = "{validations.message.password.validformat}",groups = OnCreate.class)
     private String newPassword;
 
-    @NotBlank(message = "{validations.message.password.mandatory}")
+    @NotBlank(message = "{validations.message.password.mandatory}",groups = OnCreate.class)
     @Size(min = 6, message = "{validations.message.password.validformat}",groups = OnCreate.class)
     private String confirmPassword;
 

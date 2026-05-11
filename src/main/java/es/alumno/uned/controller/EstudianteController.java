@@ -127,6 +127,9 @@ public class EstudianteController extends BaseCrudController {
         model.addAttribute("sucess", "mensaje.grabacionOK");
         return "redirect:/estudiante/miperfil?sucess";
     }
+    /*^*
+     * Listado genérico de Estudiantes para la consola de administración.
+     */
     @GetMapping("/estudiante")
     public String lista(@RequestParam(defaultValue = "0") int page, 
     		Model model) {

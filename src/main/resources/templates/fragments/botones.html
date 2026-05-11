@@ -46,6 +46,19 @@
         <i class="bi bi-trash"></i> Eliminar
     </a>
 </div>
+<!-- BOTÓN con función JS -->
+<th:block th:fragment="btnOnClick(texto, funcionOnclick, estilo, icono)">
+ <span style="color:red; display:block;">DEBUG: Fragmento cargado</span>
+    <button 
+        th:class="'btn ' + ${estilo}"
+        th:onclick="${funcionOnclick}()" 
+        type="button">
+        <i th:if="${icono != null}" th:class="${icono}"></i>
+        
+        <!-- Texto -->
+        <span th:text="${texto}"></span>
+    </button>
+</th:block>
 
 
 <!-- ========================================================= -->

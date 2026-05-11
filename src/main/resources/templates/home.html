@@ -8,15 +8,15 @@
   <section th:fragment="content">
     <div class="container">
        <h1 th:text="#{home.lista.cursos.mas.vistos}"></h1>
+	    <div class="album py-5 bg-body-tertiary"> 
+	      <div class="container"> 
+	        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"> 
+	        	<div class="col" th:each="curso : ${paginacion.contenido}" th:insert="~{fragments/curso-card :: cursoCard1(${curso})}"></div>
+	      	</div>  
+	      	<div th:replace="~{fragments/paginacionComun :: paginador(${paginacion}, ${query}, 'pagination-sm')}"></div>      					
+	      </div> 
+	    </div> 
     </div>
-    <div class="album py-5 bg-body-tertiary"> 
-      <div class="container"> 
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"> 
-        	<div class="col" th:each="curso : ${paginacion.contenido}" th:insert="~{fragments/curso-card :: cursoCard1(${curso})}"></div>
-      	</div>  
-      	<div th:replace="~{fragments/paginacionComun :: paginador(${paginacion}, ${query}, 'pagination-sm')}"></div>      					
-      </div> 
-    </div> 
     <script th:src="@{/js/enviarvaloracion.js}"></script>
   </section>
 </body>

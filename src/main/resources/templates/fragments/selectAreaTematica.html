@@ -1,5 +1,5 @@
 
-<select name="areaId" class="form-select" th:fragment="selectArea(areas,selectoption)">
+<select name="areaId" id="selectarea" class="form-select" th:fragment="selectArea(areas,selectoption)">
      <option th:value="${''}" th:text="#{areatematica.select}"></option>
      <option th:each="a : ${areas}"
              th:value="${a.id}"

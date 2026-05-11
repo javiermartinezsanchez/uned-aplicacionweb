@@ -174,6 +174,15 @@ public class Estudiante {
 				return false;
 			return true;
 		}
+
+		/**
+		 * Método para añadir individualmente areas de interés al estudiante
+		 * @param a AreaTematica a insertar.
+		 */
+		public void addAreaInteres(AreaTematica a) {
+			 this.areasInteres.add(a);
+			
+		}
 		
 	}
 

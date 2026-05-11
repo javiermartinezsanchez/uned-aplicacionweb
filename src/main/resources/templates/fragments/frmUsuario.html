@@ -59,7 +59,7 @@
 
 
 </div>
-<div th:fragment="frmEstudiante(areasDisponibles)">
+<div th:fragment="frmEstudiante()">
     <div class="mb-1">
         <label class="form-label" th:text="#{usuario.direccion}">Dirección</label>
         <input type="text" th:field="*{direccion}" class="form-control">
@@ -92,14 +92,14 @@
             <h5 th:text="#{areatematica.estudiante.select}">Áreas de Interés Seleccionadas</h5>
             <div class="area-list" id="listaSeleccionadas">
                 <!-- Aquí se renderizarán los checkboxes dinámicamente o estáticamente -->
-                <div th:each="area : ${form.areasInteres}" class="area-item">
+                <div th:each="area : ${form.areasInteres}" class="area-item d-flex align-items-center">
                     <input type="checkbox" name="areasSeleccionadas" 
                            th:value="${area.id}" 
                            th:data-nombre="${area.titulo}"
                            checked disabled>
                     <span th:text="${area.titulo}"></span>
                     <!-- Botón pequeño para eliminar (opcional, requiere lógica extra) -->
-                    <button type="button" class="btn btn-sm btn-outline-danger ms-2" 
+                    <button type="button" class="btn btn-sm btn-outline-danger ms-auto" 
                             th:onclick="eliminarArea(this, ${area.id}, '${area.titulo}')" title="Eliminar">
                         &times;
                     </button>
@@ -114,24 +114,21 @@
         <div class="col-md-6">
             <h5 th:text="#{areatematica.estudiante.disponibles}">Áreas Disponibles</h5>
             <div class="mb-3">
-                <select id="selectAreasDisponibles" class="form-select">
-                    <option th:value="${''}" th:text="#{areatematica.select}"></option>
-                    <option th:each="area : ${areasDisponibles}" 
-                            th:value="${area.id}" 
-                            th:text="${area.titulo}"
-                            >
-                    </option>
-                </select>
-            </div>
+                <select th:replace="~{fragments/selectAreaTematica :: selectArea(${areas},${paramsBusqueda['areaId']})}">  
+        		</select>
+            
             <button type="button" class="btn btn-primary btn-add" onclick="agregarArea()">
                 Añadir a la lista
             </button>
+            <th:block th:replace="~{fragments/botones :: btnOnClick(#{comun.addtolist}, 'agregarArea', 'btn-primary btn-add', 'bi bi-plus-lg')}">
+</th:block>
+            </div>
         </div>
     </div>
     <script>
     // Función para agregar una área del select a la lista de checkboxes
     function agregarArea() {
-        const select = document.getElementById('selectAreasDisponibles');
+        const select = document.getElementById('selectarea');
         const selectedOption = select.options[select.selectedIndex];
         const listaContainer = document.getElementById('listaSeleccionadas');
 
