@@ -117,7 +117,7 @@
                 <select th:replace="~{fragments/selectAreaTematica :: selectArea(${areas},${paramsBusqueda['areaId']})}">  
         		</select>
             
-            <button type="button" class="btn btn-primary btn-add" onclick="agregarArea()">
+            <button type="button" class="btn btn-primary btn-add" onclick="agregarArea()"><i class="'bi bi-plus-lg'"></i>
                 Añadir a la lista
             </button>
             <th:block th:replace="~{fragments/botones :: btnOnClick(#{comun.addtolist}, 'agregarArea', 'btn-primary btn-add', 'bi bi-plus-lg')}">
