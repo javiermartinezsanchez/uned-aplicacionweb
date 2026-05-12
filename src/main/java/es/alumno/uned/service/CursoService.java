@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import es.alumno.uned.dto.CursoDTO;
 import es.alumno.uned.model.entities.Curso;
@@ -33,7 +34,7 @@ public interface CursoService {
 	 * @return {@link CursoDTO} Encontrado.
 	 */
 	public CursoDTO getCurso(Long idCurso, Long idUsuario);
-	CursoDTO grabar(CursoDTO dto, MultipartFile imagen, String usuario) throws IOException;
+	CursoDTO grabar(CursoDTO dto, MultipartFile imagen, Map<String, MultipartFile> contenidosExtraFiles, String usuario) throws IOException;
 
 	public Paginacion<Curso, CursoDTO> listadoPaginado(String url,  Pageable pageable);
 	

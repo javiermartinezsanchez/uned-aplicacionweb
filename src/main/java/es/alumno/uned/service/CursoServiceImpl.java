@@ -16,11 +16,15 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import es.alumno.uned.dto.CursoDTO;
+import es.alumno.uned.exception.MandatoryFileException;
 import es.alumno.uned.mapper.CursoMapper;
+import es.alumno.uned.model.entities.ContenidoExtra;
 import es.alumno.uned.model.entities.Curso;
 import es.alumno.uned.model.entities.CursoValoracion;
+import es.alumno.uned.model.entities.TipoContenido;
 import es.alumno.uned.model.repository.AreaTematicaRepository;
 import es.alumno.uned.model.repository.CursoRepository;
 import es.alumno.uned.model.repository.CursoValoracionRepository;
@@ -84,7 +88,10 @@ public class  CursoServiceImpl implements CursoService{
 	}
 	@Transactional
 	@Override
-	public CursoDTO grabar(CursoDTO dto, MultipartFile imagen, String usuario) throws IOException {
+	public CursoDTO grabar(CursoDTO dto, 
+			MultipartFile imagen, 
+			Map<String, MultipartFile> contenidoExtraFiles,
+			String usuario) throws IOException {
 		var curso = getValidCurso(dto.getId());
 	    cursoMapper.toEntity(dto, curso);
 	    if (curso.getfIns() == null) {
@@ -97,6 +104,27 @@ public class  CursoServiceImpl implements CursoService{
 	        curso.setUriImagen(fileStorageService.saveImagen(imagen));
 	    }
 
+	    for (int i = 0; i < curso.getContenidosExtra().size(); i++) {
+	        ContenidoExtra contenido = curso.getContenidosExtra().get(i);
+	        
+	        // Buscamos si hay un archivo asociado a este índice en el mapa
+	        String key = "archivoExtra_" + i;
+	        MultipartFile archivoFisico = contenidoExtraFiles.get(key);
+	        
+	        if (contenido.getTipoContenido() == TipoContenido.PROPIO) {
+	            if (archivoFisico != null && !archivoFisico.isEmpty()) {
+	                // Es un archivo nuevo: guardamos y actualizamos URI
+	                String pathArchivo = fileStorageService.saveDocumento(archivoFisico);
+	                contenido.setUri(pathArchivo);
+	            } else if (contenido.getUri() == null || contenido.getUri().isEmpty()) {
+	                // Error: Es contenido propio pero no hay archivo ni URI previa
+	                throw new MandatoryFileException("curso.contenidoextra.filenotexist", dto, "");
+	            }
+	        }
+	        // Si es EXTERNO, la URI ya viene en el DTO/Entidad gracias al binding de Spring
+	        
+	        contenido.setCurso(curso); // Mantenemos la bidireccionalidad
+	    }	    
 	    return cursoMapper.toDTO(cursoRepository.save(curso));
 		
 	}

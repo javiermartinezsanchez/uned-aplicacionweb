@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import es.alumno.uned.dto.CursoDTO;
@@ -80,6 +81,7 @@ public class CursoController extends BaseCrudController {
 	 * @param form Datos introducidos en el formulario de la vista.
 	 * @param result {@link BindingResult} de las validaciones de los campos.
 	 * @param imagen Imagen del curso si existe.
+	 * @param contenidoExtrasFile {@link MultipartHttpServletRequest} de los ficheros de contenidos extra, si los hubiera.
 	 * @param redirectAttributes Atributos del modelo no relacionados con el modelo.
 	 * @param model {@link Model} Modelo completo enviado
 	 * @return Redirigimos a la vista del Módulo correspondiente. 
@@ -89,6 +91,7 @@ public class CursoController extends BaseCrudController {
 			@Valid @ModelAttribute("form") CursoDTO form,
 	        BindingResult result,
 	        MultipartFile imagen,
+	        MultipartHttpServletRequest contenidoExtrasFile,
 	        RedirectAttributes redirectAttributes, 
 	        Model model) throws IOException {
 
@@ -97,8 +100,8 @@ public class CursoController extends BaseCrudController {
 	        model.addAttribute("usuarios", usuarioService.listarProfesores());
 	        return "curso/curso";
 	    }
-
-	    var cursoGrabado = cursoService.grabar(form, imagen, userDetails.getUsername());
+	    Map<String, MultipartFile> archivosExtra = contenidoExtrasFile.getFileMap();
+	    var cursoGrabado = cursoService.grabar(form, imagen,archivosExtra,  userDetails.getUsername());
 	    model.addAttribute("form", cursoGrabado);
 	    redirectAttributes.addFlashAttribute("success", "mensaje.grabacionOK");
 		return String.format("redirect:/curso/curso/%d", cursoGrabado.getId());

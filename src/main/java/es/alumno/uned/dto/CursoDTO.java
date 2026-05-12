@@ -59,8 +59,8 @@ public class CursoDTO {
     private Integer numVistas;
     @Valid
     private List<CursoModuloDTO> modulos;
-
-    private List<String> extras;
+    private List<ContenidoExtraDTO> contenidosExtra = new ArrayList<>();
+    
     public CursoDTO() {}
     public CursoDTO(Long idResponsable) {
     	this.responsableId = idResponsable;
@@ -237,8 +237,11 @@ public class CursoDTO {
 	    }
 	}
 
-	public List<String> getExtras() {
-		return extras;
+	public List<ContenidoExtraDTO> getContenidosExtra() {
+		return contenidosExtra;
+	}
+	public void setContenidosExtra(List<ContenidoExtraDTO> contenidosExtra) {
+		this.contenidosExtra = contenidosExtra;
 	}
 	public Integer getNumVistas() {
 		return numVistas;

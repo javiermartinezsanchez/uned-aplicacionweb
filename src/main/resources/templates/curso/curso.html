@@ -84,9 +84,9 @@ th:replace="~{plantilla::layout(~{::section})}">
             <div class="text-danger" th:errors="*{fFin}"></div>
         </div>
     </div>
-    <div class="card mb-4 border-info">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0">Configuración del Itinerario</h5>
+    <div class="card mb-4 border-tertiary">
+        <div class="card-header bg-body-tertiary text-black">
+            <h5 class="mb-0" th:text="#{curso.modulo.cabecera}">ssss</h5>w
         </div>
         <div class="card-body">
             <div class="row g-3 align-items-end mb-4">
@@ -139,9 +139,11 @@ th:replace="~{plantilla::layout(~{::section})}">
                     </tbody>
                 </table>
             </div>
+           
         </div>
+        
     </div>
-
+	<div th:replace="~{fragments/curso-card :: contenidoExtra}"></div>
 
     <div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, @{${urlCancel}})}"></div>
  
@@ -204,6 +206,44 @@ function removeModuloRow(button, moduloId) {
             options[i].disabled = false;
             break;
         }
+    }
+}
+function addContenidoExtraRow() {
+    const tableBody = document.querySelector('#tablaContenidos tbody');
+    const index = tableBody.rows.length;
+    
+    const row = `
+        <tr>
+            <td>
+                <input type="text" name="contenidosExtra[${index}].descripcion" class="form-control" required />
+            </td>
+            <td>
+                <select name="contenidosExtra[${index}].tipoContenido" class="form-select" onchange="toggleInputType(this, ${index})">
+                    <option value="EXTERNO">Externo (URL)</option>
+                    <option value="PROPIO">Propio (Archivo)</option>
+                </select>
+            </td>
+            <td>
+                <div id="wrapper-input-${index}">
+                    <input type="url" name="contenidosExtra[${index}].uri" class="form-control" placeholder="https://..." />
+                </div>
+            </td>
+            <td>
+                <button type="button" class="btn btn-danger" onclick="this.closest('tr').remove()">×</button>
+            </td>
+        </tr>
+    `;
+    tableBody.insertAdjacentHTML('beforeend', row);
+}
+
+function toggleInputType(select, index) {
+    const wrapper = document.getElementById(`wrapper-input-${index}`);
+    if (select.value === 'PROPIO') {
+        // Si es propio, cambiamos a input file. 
+        // Nota: Los archivos suelen requerir un manejo especial en el Controller (Multipart)
+        wrapper.innerHTML = `<input type="file" name="archivoExtra_${index}" class="form-control" />`;
+    } else {
+        wrapper.innerHTML = `<input type="url" name="contenidosExtra[${index}].uri" class="form-control" placeholder="https://..." />`;
     }
 }
 </script>

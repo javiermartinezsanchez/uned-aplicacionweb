@@ -1,22 +1,20 @@
 package es.alumno.uned.mapper;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import es.alumno.uned.dto.ContenidoExtraDTO;
 import es.alumno.uned.dto.CursoDTO;
 import es.alumno.uned.dto.CursoModuloDTO;
-import es.alumno.uned.dto.ModuloDTO;
 import es.alumno.uned.model.entities.AreaTematica;
+import es.alumno.uned.model.entities.ContenidoExtra;
 import es.alumno.uned.model.entities.Curso;
-import es.alumno.uned.model.entities.CursoModulo;
 import es.alumno.uned.model.entities.Modulo;
+import es.alumno.uned.model.entities.TipoContenido;
 import es.alumno.uned.model.entities.Usuario;
 import es.alumno.uned.model.repository.AreaTematicaRepository;
-import es.alumno.uned.model.repository.CursoModuloRepository;
 import es.alumno.uned.model.repository.ModuloRepository;
 import es.alumno.uned.model.repository.UsuarioRepository;
 
@@ -32,6 +30,8 @@ public class CursoMapper {
     @Autowired
     private CursoModuloMapper cursoModuloMapper;
     
+    @Autowired 
+    private ContenidoExtraMapper contenidoExtraMapper;
     @Autowired
     private ModuloRepository moduloRepository;
     
@@ -54,6 +54,7 @@ public class CursoMapper {
 
         entity.setUriImagen(dto.getUriImagen());
         actualizarModulos(dto, entity);
+        actualizarContenidoExtra(dto.getContenidosExtra(), entity);
         return entity;
     }
     
@@ -117,6 +118,41 @@ public class CursoMapper {
                 	entity.addModulo(modulo, mDTO.getOrden(), mDTO.getPeso());
                 }
             }
+    }
+    /**
+     * Se mergea los contenidos que vienen informados con los actuales.
+     * <ul>
+     * <ol>Borramos los que no existan en la entidad actual.</ol>
+     * <ol>Actualizamos los que existan y añadimos los nuevos</ol>
+     * </ul>
+     * @param dtos Lista de Contenidos del DTO.
+     * @param entity Entidad {@link Curso} destino
+     */
+    private void actualizarContenidoExtra(List<ContenidoExtraDTO> dtos, Curso entity) {
+    	
+    	entity.getContenidosExtra().removeIf(entidad ->
+    	dtos.stream().noneMatch(dto -> dto.getId() != null && dto.getId().equals(entidad.getId())));
+    	
+    	for (ContenidoExtraDTO dto : dtos) {
+            if (dto.getId() != null) {
+                // Caso ACTUALIZAR: Buscamos el objeto existente en la lista del curso
+                entity.getContenidosExtra().stream()
+                    .filter(entidad -> entidad.getId().equals(dto.getId()))
+                    .findFirst()
+                    .ifPresent(entidad -> {
+                        entidad.setDescripcion(dto.getDescripcion());
+                        entidad.setTipoContenido(dto.getTipoContenido());
+                        // Solo actualizamos la URI si es externa (la propia se gestiona con el Multipart)
+                        if (dto.getTipoContenido() == TipoContenido.EXTERNO) {
+                            entidad.setUri(dto.getUri());
+                        }
+                    });
+            } else {
+                // Caso NUEVO: Convertimos DTO a Entidad y añadimos
+                ContenidoExtra nuevaEntidad = contenidoExtraMapper.toEntity(dto);
+                entity.addContenidoExtra(nuevaEntidad); // Usamos el helper para el curso_id
+            }
+    	 }
     }
 }
 

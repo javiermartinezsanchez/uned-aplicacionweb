@@ -69,3 +69,23 @@
     </div>
 </div>
 </fichacurso> 
+<div th:fragment="contenidoExtra" class="card mt-3">
+    <div class="card-header bg-light">Contenidos Extra</div>
+    <div class="card-body">
+        <table class="table" id="tablaContenidos">
+            <thead>
+                <tr>
+                    <th>Descripción</th>
+                    <th>Tipo</th>
+                    <th>Recurso (Archivo/URL)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                </tbody>
+        </table>
+        <button type="button" class="btn btn-sm btn-secondary" onclick="addContenidoExtraRow()">
+            + Añadir Contenido Extra
+        </button>
+    </div>
+</div>

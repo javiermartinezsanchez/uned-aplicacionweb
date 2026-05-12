@@ -142,12 +142,12 @@
     <hr class="my-5">
 
     <!-- CONTENIDOS EXTRA -->
-    <div th:if="${curso.extras != null}">
+    <div th:if="${curso.contenidosExtra != null and curso.contenidosExtra.size != 0}">
         <h3 class="fw-bold mb-3" th:text="#{curso.contenidosExtra}">Contenidos extra</h3>
 
         <ul class="list-group">
             <li class="list-group-item"
-                th:each="extra : ${curso.extras}"
+                th:each="extra : ${curso.contenidosExtra}"
                 th:text="${extra}">
                 Contenido extra...
             </li>

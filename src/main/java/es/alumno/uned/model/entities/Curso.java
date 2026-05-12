@@ -6,6 +6,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -73,6 +76,11 @@ public class Curso {
     @OrderBy("orden ASC") // Esto ayuda a que siempre vengan ordenados
     private List<CursoModulo> cursoModulos = new ArrayList<>();	
 	
+	// Dentro de la clase Curso.java
+	@OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ContenidoExtra> contenidosExtra = new ArrayList<>();
+
+
 	@OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CursoValoracion> valoraciones = new ArrayList<>();
 	
@@ -262,6 +270,20 @@ public class Curso {
 	public void removeModulo(Modulo modulo) {
 	    this.cursoModulos.removeIf(cm -> cm.getModulo().equals(modulo));
 	}
+	
+	/**
+	 * Utilidad para añadir la relación de contenidos extra al curso.
+	 * @param contenido
+	 */
+	public void addContenidoExtra(ContenidoExtra contenido) {
+		contenido.setCurso(this);
+	    contenidosExtra.add(contenido);
+	    
+	}
+	public List<ContenidoExtra> getContenidosExtra() {
+		return this.contenidosExtra;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -365,6 +387,8 @@ public class Curso {
 			return false;
 		return true;
 	}
+
+
 	
 	
 }
