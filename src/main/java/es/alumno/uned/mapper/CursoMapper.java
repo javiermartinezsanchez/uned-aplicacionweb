@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import es.alumno.uned.dto.CursoDTO;
+import es.alumno.uned.dto.CursoModuloDTO;
+import es.alumno.uned.dto.ModuloDTO;
 import es.alumno.uned.model.entities.AreaTematica;
 import es.alumno.uned.model.entities.Curso;
 import es.alumno.uned.model.entities.CursoModulo;
@@ -15,6 +17,7 @@ import es.alumno.uned.model.entities.Modulo;
 import es.alumno.uned.model.entities.Usuario;
 import es.alumno.uned.model.repository.AreaTematicaRepository;
 import es.alumno.uned.model.repository.CursoModuloRepository;
+import es.alumno.uned.model.repository.ModuloRepository;
 import es.alumno.uned.model.repository.UsuarioRepository;
 
 @Component
@@ -30,7 +33,7 @@ public class CursoMapper {
     private CursoModuloMapper cursoModuloMapper;
     
     @Autowired
-    private CursoModuloRepository cursoModuloRepository;
+    private ModuloRepository moduloRepository;
     
     public Curso toEntity(CursoDTO dto, Curso entity) {
 
@@ -106,21 +109,14 @@ public class CursoMapper {
      * @param entity {@link Curso} La entidad a guardar.
      */
     private void actualizarModulos(CursoDTO dto, Curso entity) {
-    	
-    	
-    		List<CursoModulo> modulosSeleccionados = (dto.getModulos() == null) ?  new ArrayList<>(): dto.getModulos()
-    				.stream()
-    				.filter(m -> m.getId() !=null)
-    		    .<Optional<CursoModulo>>map(m -> cursoModuloRepository.findById(m.getId())) 
-    		    .flatMap(Optional::stream) // Convierte Stream<Optional<Modulo>> en Stream<Modulo> directamente
-    		    .toList();
-            entity.getModulos().removeIf(m -> !modulosSeleccionados.contains(m));
-            for (CursoModulo m : modulosSeleccionados) {
-                if (!entity.getModulos().contains(m)) {
-                	entity.addModulo(m.getModulo(), m.getOrden(), m.getPeso());
+    		entity.getModulos().clear();
+            for (CursoModuloDTO mDTO : dto.getModulos()) {
+            	Modulo modulo = moduloRepository.findById(mDTO.getModuloId())
+						.orElseThrow();
+                if (!entity.getModulos().contains(mDTO)) {
+                	entity.addModulo(modulo, mDTO.getOrden(), mDTO.getPeso());
                 }
             }
-
     }
 }
 

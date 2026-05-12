@@ -10,13 +10,13 @@
  <div class="container">
 	<h1 th:text="#{comun.lista(#{modulo.lista})}">Accesos</h1>
 	<div class="form-group">
-		<form class="row g-3 mb-4" method="get" th:action="@{/modulo}">
-		    <div class="col-md-3 d-flex align-items-end">
+		<form class="row g-3 align-items-end mb-4" method="get" th:action="@{/modulo}">
+		    <div class="col-md-3">
 		        <label class="form-label" th:text="#{curso.titulo}">Título</label>
 		        <input type="text" name="titulo" class="form-control"
 		               th:value="${paramsBusqueda['titulo']}">
 		    </div>
-			<div class="col-md-4 mb-3 d-flex align-items-end">
+			<div class="col-md-3">
 	            <label class="form-label" th:text="#{modulo.tipo}">Tipo de Módulo</label>
 	            <select name="tipo" class="form-select">
 	                <option th:value="${''}" th:text="#{comun.select.any}">Seleccione tipo...</option>
@@ -26,29 +26,22 @@
 	                        th:selected="${paramsBusqueda['tipo'] == t.name}">
 	                </option>
 	            </select>
-	           
 	        </div>
-		
-		    <div class="col-md-2 d-flex align-items-end" th:insert="~{fragments/botones :: btnSubmit(
+		    <div class="col-md-auto d-flex gap-2" th:insert="~{fragments/botones :: btnSubmit(
 				        #{command.buscar},
 				        'btn-primary w-100',
 				        'bi-search'
 				    )}">">
 		    </div>
-		    <div class="col-md-2 d-flex align-items-end" th:insert="~{fragments/botones :: btnLink(
-				        #{command.limpiar},
-				        @{/curso},
-				        'btn-secondary w-100',
-				        'bi-arrow-counterclockwise'
-				    )}">
+		    <div class="col-md-auto ms-auto" th:insert="~{fragments/botones :: btnReset()}">
 		    </div>
-			<div class="col-md-2 d-flex align-items-end" th:insert="~{fragments/botones :: btnLink(
+			<div class="col-md-auto ms-auto" th:insert="~{fragments/botones :: btnLink(
 		        #{mensaje.nuevo} + ' ' + #{modulo.title},
 		        @{${urlAlta}},
 		        'btn-success', 'bi bi-plus-circle'
 		    )}">
 		    </div>
-		    <div class="col-md-2 d-flex align-items-end" th:insert="~{fragments/botones :: btnLink(
+		    <div class="col-md-auto ms-auto" th:insert="~{fragments/botones :: btnLink(
 				        #{command.volver}, 
 				        ${urlBack}, 
 				        'btn-outline-secondary', 'bi-arrow-left'
@@ -76,7 +69,7 @@
 					<td th:text="${modulo.tipo}">ID</td>
 					<td th:text="${modulo.userIns}">ID</td>
 					<td th:text="${#temporals.format(modulo.fIns, 'dd/MM/yyyy HH:mm')}">ID</td>
-					<td><a th:href="@{/{url}/modulo/{id}(url=${url},id=${modulo.id})}" class="btn btn-primary" ><i class="bi bi-pencil-square"></i></a></td>
+					<td><a th:href="@{{url}{id}(url=${url},id=${modulo.id})}" class="btn btn-primary" ><i class="bi bi-pencil-square"></i></a></td>
 				</tr>
 			</tbody>
 		</table>

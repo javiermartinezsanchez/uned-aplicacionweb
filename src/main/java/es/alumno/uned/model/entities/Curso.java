@@ -72,7 +72,6 @@ public class Curso {
 	@OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("orden ASC") // Esto ayuda a que siempre vengan ordenados
     private List<CursoModulo> cursoModulos = new ArrayList<>();	
-
 	
 	@OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CursoValoracion> valoraciones = new ArrayList<>();
@@ -98,6 +97,7 @@ public class Curso {
 		this.fFin = fFin;
 		this.fIns = fIns;
 		this.userIns = userIns;
+		this.numVistas = 0;
 	}
 
 	public Long getId() {
@@ -190,7 +190,6 @@ public class Curso {
 
 	public void setResponsable(Usuario responsable2) {
 		this.responsable = responsable2;
-		
 	}
 
 	public Usuario getResponsable() {
@@ -228,9 +227,144 @@ public class Curso {
 	public void setNumVistas(Integer numVistas) {
 		this.numVistas = numVistas;
 	}
-	//Para poder añadir un módulo individual sin tener que setear toda la lista.
+	
+	/**
+	 * Utilidad para añadir Usuarios registrados al curso
+	 */
+	public void addUserRegistred() {
+		this.usuariosRegistrados = this.usuariosRegistrados + 1;
+	}
+	/**
+	 * Utilidad para añadir vistas al curso
+	 */
+	public void addVista() {
+		this.numVistas = (this.numVistas == null ? 0: this.numVistas) + 1;
+				
+	}
+	//
+	/**
+	 * Para poder añadir un módulo individual sin tener que setear toda la lista.
+	 * 
+	 * @param modulo Módulo a insertar
+	 * @param orden Orden del módulo
+	 * @param peso Peso del módulo (0-100)
+	 */
 	public void addModulo(Modulo modulo, Integer orden, Integer peso) {
         CursoModulo relacion = new CursoModulo(this, modulo, orden, peso);
         this.cursoModulos.add(relacion);
     }
+	/**
+	 * Para poder borrar un módulo individual sin tener que setear toda la lista.
+	 * 
+	 * @param modulo Módulo a insertar
+	 */
+
+	public void removeModulo(Modulo modulo) {
+	    this.cursoModulos.removeIf(cm -> cm.getModulo().equals(modulo));
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
+		result = prime * result + ((duracion == null) ? 0 : duracion.hashCode());
+		result = prime * result + ((fFin == null) ? 0 : fFin.hashCode());
+		result = prime * result + ((fIni == null) ? 0 : fIni.hashCode());
+		result = prime * result + ((fIns == null) ? 0 : fIns.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((nivel == null) ? 0 : nivel.hashCode());
+		result = prime * result + ((numVistas == null) ? 0 : numVistas.hashCode());
+		result = prime * result + ((responsable == null) ? 0 : responsable.hashCode());
+		result = prime * result + ((titulo == null) ? 0 : titulo.hashCode());
+		result = prime * result + ((uriImagen == null) ? 0 : uriImagen.hashCode());
+		result = prime * result + ((userIns == null) ? 0 : userIns.hashCode());
+		result = prime * result + ((usuariosRegistrados == null) ? 0 : usuariosRegistrados.hashCode());
+		result = prime * result + ((valoracion == null) ? 0 : valoracion.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Curso other = (Curso) obj;
+		if (descripcion == null) {
+			if (other.descripcion != null)
+				return false;
+		} else if (!descripcion.equals(other.descripcion))
+			return false;
+		if (duracion == null) {
+			if (other.duracion != null)
+				return false;
+		} else if (!duracion.equals(other.duracion))
+			return false;
+		if (fFin == null) {
+			if (other.fFin != null)
+				return false;
+		} else if (!fFin.equals(other.fFin))
+			return false;
+		if (fIni == null) {
+			if (other.fIni != null)
+				return false;
+		} else if (!fIni.equals(other.fIni))
+			return false;
+		if (fIns == null) {
+			if (other.fIns != null)
+				return false;
+		} else if (!fIns.equals(other.fIns))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (nivel == null) {
+			if (other.nivel != null)
+				return false;
+		} else if (!nivel.equals(other.nivel))
+			return false;
+		if (numVistas == null) {
+			if (other.numVistas != null)
+				return false;
+		} else if (!numVistas.equals(other.numVistas))
+			return false;
+		if (responsable == null) {
+			if (other.responsable != null)
+				return false;
+		} else if (!responsable.equals(other.responsable))
+			return false;
+		if (titulo == null) {
+			if (other.titulo != null)
+				return false;
+		} else if (!titulo.equals(other.titulo))
+			return false;
+		if (uriImagen == null) {
+			if (other.uriImagen != null)
+				return false;
+		} else if (!uriImagen.equals(other.uriImagen))
+			return false;
+		if (userIns == null) {
+			if (other.userIns != null)
+				return false;
+		} else if (!userIns.equals(other.userIns))
+			return false;
+		if (usuariosRegistrados == null) {
+			if (other.usuariosRegistrados != null)
+				return false;
+		} else if (!usuariosRegistrados.equals(other.usuariosRegistrados))
+			return false;
+		if (valoracion == null) {
+			if (other.valoracion != null)
+				return false;
+		} else if (!valoracion.equals(other.valoracion))
+			return false;
+		return true;
+	}
+	
+	
 }

@@ -305,6 +305,9 @@ public class DatabaseLoader {
 					cursoRepo.save(new Curso(null,"Creatividad Práctica", "Métodos creativos para generar ideas, resolver problemas y fomentar la innovación personal."
 						,"",2, areaRepo.findByTitulo("Comunicación"), profesor,35, LocalDate.parse("2026-06-10"), LocalDate.parse("2026-06-30") , LocalDateTime.now(), "CARGAINICIAL"));
 				}
+				System.out.println("--------------------------------------------");
+				System.out.println("----------FIN DE CARGA DE DATOS-------------");
+				System.out.println("--------------------------------------------");
 			}
 		};
 	}

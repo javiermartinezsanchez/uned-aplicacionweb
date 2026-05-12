@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import es.alumno.uned.dto.CursoDTO;
@@ -27,7 +28,7 @@ import es.alumno.uned.model.repository.UsuarioRepository;
 import es.alumno.uned.model.util.Paginacion;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
-
+@Transactional(readOnly = true)
 @Service
 public class  CursoServiceImpl implements CursoService{
 	
@@ -81,6 +82,7 @@ public class  CursoServiceImpl implements CursoService{
 				: new Curso();
 		return curso;
 	}
+	@Transactional
 	@Override
 	public CursoDTO grabar(CursoDTO dto, MultipartFile imagen, String usuario) throws IOException {
 		var curso = getValidCurso(dto.getId());
@@ -91,7 +93,7 @@ public class  CursoServiceImpl implements CursoService{
 	    }
 	    // Subida de imagen
 	    if (imagen != null && !imagen.isEmpty()) {
-
+//	    	if ((curso.getUriImagen() != null) && ())
 	        curso.setUriImagen(fileStorageService.saveImagen(imagen));
 	    }
 

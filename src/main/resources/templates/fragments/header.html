@@ -52,7 +52,7 @@
        
                       <!-- Si es estudiante -->
                       <li class="nav-item" sec:authorize="hasAnyRole('ESTUD')">
-                        <a class="nav-link" th:href="@{${urlUser}+'/miscursos'}">Mis Cursos</a>
+                        <a class="dropdown-item" th:href="@{/miscursos}"><i class="bi bi-collection"></i> Mis Cursos</a>
                       </li>
  
 	                  <li><hr class="dropdown-divider"></li>

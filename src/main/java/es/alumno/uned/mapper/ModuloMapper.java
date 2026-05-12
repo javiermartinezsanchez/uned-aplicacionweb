@@ -23,11 +23,9 @@ public class ModuloMapper {
     public ModuloDTO toDTO(Modulo m) {
         return new ModuloDTO(
                 m.getId(),
-                //m.getCurso().getId(),
                 m.getTitulo(),
                 m.getDescripcion(),
                 m.getContenido(),
-                //m.getPeso(),
                 m.getTipo(),
                 m.getfIns(),
                 m.getUserIns()
@@ -48,13 +46,7 @@ public class ModuloMapper {
         modulo.setTitulo(moduloDTO.getTitulo());
         modulo.setDescripcion(moduloDTO.getDescripcion());
         modulo.setContenido(moduloDTO.getContenido());
-        //m.setPeso(dto.peso());
         modulo.setTipo(moduloDTO.getTipo());
-
-//        Curso c = new Curso();
-//        c.setId(dto.cursoId());
-//        m.setCurso(c);
-
         return modulo;
     }
 }

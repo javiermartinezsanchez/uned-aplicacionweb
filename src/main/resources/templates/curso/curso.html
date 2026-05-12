@@ -120,7 +120,7 @@ th:replace="~{plantilla::layout(~{::section})}">
                         <tr th:each="rel, iter : *{modulos}">
                             <td>
                                 <span th:text="${rel.nombreModulo}">Módulo</span>
-                                <input type="hidden" th:field="*{modulos[__${iter.index}__].id}" />
+                                <input type="hidden" th:field="*{modulos[__${iter.index}__].cursoId}" />
                                 <input type="hidden" th:field="*{modulos[__${iter.index}__].moduloId}" />
                             </td>
                             <td>
@@ -151,6 +151,7 @@ th:replace="~{plantilla::layout(~{::section})}">
 <script>
 function addModuloRow() {
     const select = document.getElementById('selectorModulos');
+    const cursoId = document.getElementById('id').value;
     const moduloId = select.value;
     const nombre = select.options[select.selectedIndex].text;
 
@@ -163,6 +164,7 @@ function addModuloRow() {
         <tr>
             <td>
                 <span>${nombre}</span>
+                <input type="hidden" name="modulos[${index}].cursoId" value="${cursoId}" />
                 <input type="hidden" name="modulos[${index}].moduloId" value="${moduloId}" />
             </td>
             <td>

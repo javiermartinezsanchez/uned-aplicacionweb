@@ -77,7 +77,7 @@ public class EstudianteMapper {
      * Realizamos el "merge" de las áreas de interés del Estudiante que vienen el DTO con los que teníamos.
      * 
      * <ol>
-     * <li>Obtenemos {@link AreaInteres} del repositorio. Se filtra los que existan.</li>
+     * <li>Obtenemos {@link AreaTematica} del repositorio. Se filtra los que existan.</li>
      * <li>Se eliminan las Áreas que tenía y que ya no vienen en nuestro DTO.</li>
      * <li>Se añaden los nuevos</li>
      * </ol>

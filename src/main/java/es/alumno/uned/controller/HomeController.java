@@ -2,7 +2,6 @@ package es.alumno.uned.controller;
 
 
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +18,6 @@ import es.alumno.uned.model.entities.Curso;
 import es.alumno.uned.model.util.ControllerUtil;
 import es.alumno.uned.model.util.Paginacion;
 import es.alumno.uned.model.util.UserUtil;
-import es.alumno.uned.service.AreaTematicaService;
 import es.alumno.uned.service.CursoService;
 
 /**
@@ -47,9 +45,7 @@ public class HomeController {
 			Model modelo) {
 		modelo.addAttribute("title", "Home");
 		String urlUser= "";
-		//modelo.addAttribute("paramsBusqueda",modelo.getAttribute("paramsBusqueda")== null? new HashMap<String,String>(): modelo.getAttribute("paramsBusqueda"));
 		if (authentication !=null) {
-		//System.out.println("getCredentials: " + authentication.getCredentials().toString());
 		 urlUser =  UserUtil.defineHome(UserUtil.getRoles(authentication));
 		 modelo.addAttribute("urlUser", "admin");
 		}
@@ -59,9 +55,6 @@ public class HomeController {
 	   		Paginacion<Curso, CursoDTO> paginacion = cursoService.listadoPaginado("/", pageRequest, filtros);
 	   		modelo.addAttribute("paginacion", paginacion);
 	        modelo.addAttribute("query", ControllerUtil.mapToQuery(filtros));
-	        //modelo.addAttribute("paramsBusqueda",paramsBusqueda );
-
-			//modelo.addAttribute("cursos", cursoService.listadoHome());
 		}
 		return urlUser.concat("/home");
 	}
@@ -88,18 +81,15 @@ public class HomeController {
 	@GetMapping("/admin/home")
 	//@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public String adminHome(Model modelo) {
-		modelo.addAttribute("urlUser", "admin");
 		return "admin/home";
 	}
 
 	@GetMapping("/profesor/home")
 	public String profeHome(Model modelo) {
-		modelo.addAttribute("urlUser", "profesor");
 		return "profesor/home";
 	}
 	@GetMapping("/estudiante/home")
 	public String estudianteHome(Model modelo) {
-		modelo.addAttribute("urlUser", "estudiante");
 		return "estudiante/home";
 	}
 	@GetMapping("/miperfil")

@@ -1,29 +1,28 @@
 package es.alumno.uned.model.entities;
 
-import es.alumno.uned.dto.CursoModuloDTO;
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "cursos_modulos")
 public class CursoModulo {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@EmbeddedId
+    private CursoModuloId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("cursoId")
     @JoinColumn(name = "curso_id")
     private Curso curso;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("moduloId")
     @JoinColumn(name = "modulo_id")
     private Modulo modulo;
 
@@ -37,12 +36,17 @@ public class CursoModulo {
     public CursoModulo() {}
 
     public CursoModulo(Curso curso, Modulo modulo, Integer orden, Integer peso) {
-        this.curso = curso;
+        this.id = new CursoModuloId(curso.getId(), modulo.getId());
+    	this.curso = curso;
         this.modulo = modulo;
         this.orden = orden;
         this.peso = peso;
     }
 
+    public CursoModuloId getId() {
+    	return id;
+    }
+    
 	public Integer getOrden() {
 		return orden;
 	}
@@ -57,10 +61,6 @@ public class CursoModulo {
 
 	public void setPeso(Integer peso) {
 		this.peso = peso;
-	}
-
-	public Long getId() {
-		return id;
 	}
 
 	public void setCurso(Curso curso) {
@@ -124,6 +124,4 @@ public class CursoModulo {
 			return false;
 		return true;
 	}
-
-    
 }

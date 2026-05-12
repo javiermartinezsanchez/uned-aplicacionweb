@@ -9,9 +9,10 @@ import jakarta.validation.constraints.NotNull;
 public class CursoModuloDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Long id;          // ID de la relación (CursoModulo.id)
     @NotNull(message = "{validations.cursomodulo.modulo.requerido}")
-    private Long moduloId;    // ID del módulo asociado
+    private Long cursoId;
+    @NotNull(message = "{validations.cursomodulo.modulo.requerido}")
+    private Long moduloId;
     private String nombreModulo; // Útil para mostrar el nombre en la tabla/lista sin buscar más
     
     @NotNull(message = "{validations.cursomodulo.orden.requerido}")
@@ -25,8 +26,8 @@ public class CursoModuloDTO implements Serializable {
 
     public CursoModuloDTO() {
     }
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getCursoId() { return cursoId; }
+    public void setCursoId(Long id) { this.cursoId = id; }
 
     public Long getModuloId() { return moduloId; }
     public void setModuloId(Long moduloId) { this.moduloId = moduloId; }

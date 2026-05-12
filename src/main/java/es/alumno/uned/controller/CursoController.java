@@ -142,6 +142,12 @@ public class CursoController extends BaseCrudController {
 	    model.addAttribute("usuarios", usuarioService.listarProfesores());
 		return "curso/curso";
 	}
+	/**
+	 * Método público de vista de la ficha de un curso.
+	 * @param model Modelo a construir.
+	 * @param id Id del Curso a visualizar.
+	 * @return Vista del Curso.
+	 */
 	@GetMapping("/viewcurso/{id}")
     public String verFicha(Model model, 
     		@PathVariable("id") Long id) {

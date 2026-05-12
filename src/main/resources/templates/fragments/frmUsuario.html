@@ -113,32 +113,68 @@
         <!-- Columna Derecha: Áreas Disponibles -->
         <div class="col-md-6">
             <h5 th:text="#{areatematica.estudiante.disponibles}">Áreas Disponibles</h5>
-            <div class="mb-3">
+            <div class="d-flex align-items-center gap-2">
                 <select th:replace="~{fragments/selectAreaTematica :: selectArea(${areas},${paramsBusqueda['areaId']})}">  
         		</select>
             
-            <button type="button" class="btn btn-primary btn-add" onclick="agregarArea()"><i class="'bi bi-plus-lg'"></i>
-                Añadir a la lista
+            <button type="button" class="btn btn-primary btn-add ms-auto text-nowrap" onclick="agregarArea(this)">
+                <i class="bi bi-plus-lg"></i><span th:text="#{comun.addtolist}">Añadir a la lista</span>
             </button>
-            <th:block th:replace="~{fragments/botones :: btnOnClick(#{comun.addtolist}, 'agregarArea', 'btn-primary btn-add', 'bi bi-plus-lg')}">
-</th:block>
             </div>
         </div>
     </div>
     <script>
     // Función para agregar una área del select a la lista de checkboxes
-    function agregarArea() {
-        const select = document.getElementById('selectarea');
+    function agregarArea(boton) {
+    	
+
+    	console.log("ENTRADA -> agregarArea()");
+
+        // 1. Buscamos el contenedor que ya sabemos que funciona
+        const contenedor = boton.closest('.col-md-6');
+        console.log("Contenedor hallado:", contenedor);
+
+        if (!contenedor) {
+            console.error("No se encontró el contenedor .col-md-6");
+            return;
+        }
+
+        // 2. Buscamos el elemento SELECT dentro de ese contenedor
+        // Usamos el tag 'select' directamente para evitar fallos de nombres de clase
+        const select = contenedor.querySelector('select');
+
+        if (!select) {
+            console.error("No se encontró ningún elemento <select> dentro del contenedor");
+            return;
+        }
+
+        // 3. Obtener el valor y el texto
+        const idSeleccionado = select.value;
+        
+        if (idSeleccionado === "") {
+            alert("Por favor, selecciona un área de la lista.");
+            return;
+        }
+
+        const nombreSeleccionado =select.options[select.selectedIndex].text;
+
+        console.log("¡LOGRADO! -> ID:", idSeleccionado, "Nombre:", nombreSeleccionado);
+        //const select = document.getElementById('selectarea');
         const selectedOption = select.options[select.selectedIndex];
         const listaContainer = document.getElementById('listaSeleccionadas');
 
+        console.log("ENTRADA ->agregarArea()");
+        console.log("select ->", select);
+        console.log("select.value ->", select.value);
+        console.log("Texto seleccionado:", select.options[select.selectedIndex].text);
+        console.log("Atributo value de la opción:", select.options[select.selectedIndex].getAttribute('value'));
         if (select.value === "") {
            return;
         }
 
         const areaId = select.value;
         const areaNombre = selectedOption.text;
-
+        console.log("areaId ->", areaId);
         // Verificar si ya existe (doble seguridad)
         const checkboxes = document.querySelectorAll('input[name="areasSeleccionadas"]');
         let yaExiste = false;
@@ -162,7 +198,7 @@
                     <input type="checkbox" class="form-check-input me-2" value="${areaId}" data-nombre="${areaNombre}" checked >
                     <span class="text-truncate">${areaNombre}</span>
                 </div>
-                <button type="button" class="btn btn-sm btn-outline-danger" onclick="eliminarArea(this, '${areaId}', '${areaNombre}')" title="Eliminar">&times;</button>
+                <button type="button" class="btn btn-sm btn-outline-danger" onclick="eliminarArea(this, '${areaId}', '${areaNombre}')" title="Eliminar"><i class="bi bi-trash"></i></button>
         `;
 
 	    const inputHidden = document.createElement('input');
@@ -205,6 +241,7 @@
         if (items.length === 0 ){
         	mensaje.classList.remove('d-none');
         }
+        console.log("SALIDA ->agregarArea()");
     }
 	</script>
 </div>
