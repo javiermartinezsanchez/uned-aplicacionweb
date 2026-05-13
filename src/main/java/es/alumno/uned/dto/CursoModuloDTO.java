@@ -9,11 +9,11 @@ import jakarta.validation.constraints.NotNull;
 public class CursoModuloDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @NotNull(message = "{validations.cursomodulo.modulo.requerido}")
+    //@NotNull(message = "{validations.cursomodulo.modulo.requerido}")
     private Long cursoId;
     @NotNull(message = "{validations.cursomodulo.modulo.requerido}")
     private Long moduloId;
-    private String nombreModulo; // Útil para mostrar el nombre en la tabla/lista sin buscar más
+    private String nombreModulo; 
     
     @NotNull(message = "{validations.cursomodulo.orden.requerido}")
     @Min(value = 1, message = "{validations.cursomodulo.orden.min}")

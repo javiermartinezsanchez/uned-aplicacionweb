@@ -86,7 +86,7 @@ th:replace="~{plantilla::layout(~{::section})}">
     </div>
     <div class="card mb-4 border-tertiary">
         <div class="card-header bg-body-tertiary text-black">
-            <h5 class="mb-0" th:text="#{curso.modulo.cabecera}">ssss</h5>w
+            <h5 class="mb-0" th:text="#{curso.modulo.cabecera}">ssss</h5>
         </div>
         <div class="card-body">
             <div class="row g-3 align-items-end mb-4">
@@ -156,6 +156,7 @@ function addModuloRow() {
     const cursoId = document.getElementById('id').value;
     const moduloId = select.value;
     const nombre = select.options[select.selectedIndex].text;
+	console.log("id : ", cursoId);
 
     if (!moduloId) return;
 

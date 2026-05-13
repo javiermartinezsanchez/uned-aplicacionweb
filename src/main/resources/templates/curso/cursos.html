@@ -88,6 +88,7 @@
 				<th th:text="#{comun.descripcion}">default</th>
 				<th th:text="#{areatematica.title}">default</th>
 				<th th:text="#{curso.duracion}">default</th>
+				<th th:text="#{curso.inscritos}">default</th>
 				<th th:text="#{comun.fini}">default</th>
 				<th th:text="#{comun.fFin}">default</th>
 				<th></th>
@@ -99,6 +100,7 @@
 				<td class="text-truncate" style="max-width: 350px;" th:text="${curso.descripcion}" th:title="${curso.descripcion}">ID</td>
 				<td th:text="${curso.areaTematicaText}">ID</td>
 				<td class="text-end" th:text="${curso.duracion}">ID</td>
+				<td class="text-center" th:text="${curso.usuariosRegistrados}"></td>
 				<td th:text="${#temporals.format(curso.fIni, 'dd/MM/yyyy')}">ID</td>
 				<td th:text="${#temporals.format(curso.fFin, 'dd/MM/yyyy')}">ID</td>
 				<td><a th:href="@{/{url}/curso/{id}(url=${url},id=${curso.id})}" class="btn btn-primary" ><i class="bi bi-pencil-square"></i></a></td>

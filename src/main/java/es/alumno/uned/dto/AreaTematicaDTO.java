@@ -9,7 +9,7 @@ public class AreaTematicaDTO {
 	@NotBlank(message = "{validations.areatematica.titulo.mandatory}")
 	private String titulo;
 	
-	@NotBlank(message = "{validations.areatematica.descripcion.mandatory}")
+	@NotBlank(message = "{validations.descripcion.mandatory}")
 	private String descripcion;
 	
 	public AreaTematicaDTO() {};

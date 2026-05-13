@@ -68,7 +68,7 @@
 					<td th:text="${modulo.descripcion}">ID</td>
 					<td th:text="${modulo.tipo}">ID</td>
 					<td th:text="${modulo.userIns}">ID</td>
-					<td th:text="${#temporals.format(modulo.fIns, 'dd/MM/yyyy HH:mm')}">ID</td>
+					<td th:text="${#temporals.format(modulo.fIns, 'dd/MM/yyyy')}">ID</td>
 					<td><a th:href="@{{url}{id}(url=${url},id=${modulo.id})}" class="btn btn-primary" ><i class="bi bi-pencil-square"></i></a></td>
 				</tr>
 			</tbody>

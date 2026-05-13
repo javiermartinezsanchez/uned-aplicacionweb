@@ -9,18 +9,21 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
+import es.alumno.uned.validation.OnCreate;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class CursoDTO {
 
     private Long id;
 
     @NotBlank(message = "{validations.curso.titulo.mandatory}")
+    @Size(max = 50, message = "{validations.curso.titulo.validformat}")
     private String titulo;
 
-    @NotBlank(message = "{validations.curso.descripcion.mandatory}")
+    @NotBlank(message = "{validations.descripcion.mandatory}")
     private String descripcion;
 
     // Nombre del fichero guardado en /curso/images/

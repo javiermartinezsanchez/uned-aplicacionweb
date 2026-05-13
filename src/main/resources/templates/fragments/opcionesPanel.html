@@ -1,41 +1,6 @@
-<div class="card shadow-sm" th:fragment="opcionUsuarios">
-   <div class="card-body"><i class="bi bi-people" style="font-size: 2rem;"></i>
-    <a class="navbar-brand" th:href="@{/admin/usuario}"><span th:text="#{panel.usuarios}">Roles</span></a>
-  </div>
-</div>
-<div class="card shadow-sm" th:fragment="opcionEstudiantes">
-   <div class="card-body"><i class="bi bi-mortarboard" style="font-size: 2rem;"></i>
-    <a class="navbar-brand" th:href="@{/estudiante}"><span th:text="#{panel.estudiantes}">Roles</span></a>
-  </div>
-</div>
-<div class="card shadow-sm" th:fragment="opcionAccesos">
-   <div class="card-body"><i class="bi bi-bar-chart-line" style="font-size: 2rem;"></i>
-    <a class="navbar-brand" th:href="@{/admin/accesos}"><span th:text="#{panel.estadisticas}">Roles</span></a>
-  </div>
-</div>
-<div class="card shadow-sm" th:fragment="opcionAreas">
-   <div class="card-body"><i class="bi bi-bookmark" style="font-size: 2rem;"></i>
-    <a class="navbar-brand" th:href="@{/admin/areaTematica}"><span th:text="#{panel.areas}">Roles</span></a>
-  </div>
-</div>
-<div class="card shadow-sm" th:fragment="opcionUserConnected">
-   <div class="card-body"><i class="bi bi-person-check" style="font-size: 2rem;"></i>
-    <a class="navbar-brand" th:href="@{/admin/usuarioconnected}"><span th:text="#{panel.conectados}">Roles</span></a>
-  </div>
-</div>
-<div class="card shadow-sm" th:fragment="opcionCursos">
-   <div class="card-body"><i class="bi bi-collection" style="font-size: 2rem;"></i>
-    <a class="navbar-brand" th:href="@{/curso}"><span th:text="#{panel.cursos}">Roles</span></a>
-  </div>
-</div>
-<div class="card shadow-sm" th:fragment="opcionModulos">
-   <div class="card-body"><i class="bi bi-list-columns-reverse" style="font-size: 2rem;"></i>
-    <a class="navbar-brand" th:href="@{/modulo}"><span th:text="#{panel.modulos}">Roles</span></a>
-  </div>
-</div>
-<div class="card shadow-sm" th:fragment="opcionUserRoles">
-   <div class="card-body"><i class="bi bi-people-fill" style="font-size: 2rem;"></i>
-    <a class="navbar-brand" th:href="@{/admin/rol}"><span th:text="#{panel.roles}">Roles</span></a>
+<div class="card shadow-sm" th:fragment="opcionesPanel(icono, link, texto)">
+   <div class="card-body"><i th:class="'bi '+${icono}" style="font-size: 2rem;"></i>
+    <a class="navbar-brand" th:href="@{${link}}"><span th:text="#{${texto}}">Roles</span></a>
   </div>
 </div>
 		          

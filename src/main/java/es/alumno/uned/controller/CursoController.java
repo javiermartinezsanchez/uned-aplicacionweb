@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -17,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,7 +41,10 @@ import es.alumno.uned.service.AreaTematicaService;
 import es.alumno.uned.service.CursoService;
 import es.alumno.uned.service.ModuloService;
 import es.alumno.uned.service.UsuarioService;
+import es.alumno.uned.validation.OnCreate;
+import es.alumno.uned.validation.OnUpdate;
 import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 
 @Controller
 public class CursoController extends BaseCrudController {
@@ -48,6 +53,10 @@ public class CursoController extends BaseCrudController {
 	AreaTematicaService areaTematicaService;
 	UsuarioService usuarioService;
 	ModuloService moduloService;
+	
+	@Autowired
+	private Validator validator;
+	
 	public CursoController(CursoService cursoService, AreaTematicaService areaTematicaService,
 			UsuarioService usuarioService, 
 			ModuloService moduloService) {
@@ -69,8 +78,11 @@ public class CursoController extends BaseCrudController {
 	public String nuevo(@AuthenticationPrincipal SecurityUser userConnected, 
 			Model model) {
 		setModeloFormulario(model, "curso/curso", "/curso/guardar", "/curso");
-	    model.addAttribute("form", new CursoDTO(userConnected.getId()));
+		var curso = new CursoDTO(userConnected.getId());
+	    prepararVistaEdicion(curso,model);
+	    model.addAttribute("form", curso);
 	    model.addAttribute("usuarios", usuarioService.listarProfesores());
+	   
 	    return model.getAttribute("viewName").toString();
 	}
 	
@@ -107,22 +119,23 @@ public class CursoController extends BaseCrudController {
 		return String.format("redirect:/curso/curso/%d", cursoGrabado.getId());
 	}
 	/**
-	 * Para definir los módulos existentes y los disponibles en el modelo
-	 * @param cursoDTO 
-	 * @param model
+	 * Para definir los módulos existentes y los disponibles en el modelo.
+	 * <ol>
+	 * <li>Se seleccionan todos los módulos existentes</li>
+	 * <li>Se filtran los ya existentes (en edición) para asignarle los títulos.</li>
+	 * </ol>
+	 * @param cursoDTO Curso que estamos insertando/editando
+	 * @param model Modelo para añadir los atributos.
 	 */
 	private void prepararVistaEdicion(CursoDTO cursoDTO, Model model) {
 	    // Volvemos a buscar los módulos que NO están en el curso actual
 	    List<ModuloDTO> todos = moduloService.listAll();
 	    
-	    // Filtramos para el select
-	    List<ModuloDTO> disponibles = todos.stream()
-	        .filter(m -> cursoDTO.getModulos().stream()
-	            .noneMatch(rel -> rel.getModuloId().equals(m.getId())))
-	        .toList();
-	    
-	    model.addAttribute("modulosDisponibles", disponibles);
-	    
+	    if (cursoDTO.getModulos() != null) {
+//	    List<ModuloDTO> disponibles = todos.stream()
+//	        .filter(m -> cursoDTO.getModulos().stream()
+//	            .noneMatch(rel -> rel.getModuloId().equals(m.getId())))
+//	        .toList();
 	    // 2. RECUPERAR DESCRIPCIONES (Nombres) de los módulos en la tabla
 	    // Como el nombreModulo no viaja en el POST, lo re-asignamos buscando en la lista 'todos'
 	    cursoDTO.getModulos().forEach(rel -> {
@@ -130,7 +143,10 @@ public class CursoController extends BaseCrudController {
 	            .filter(m -> m.getId().equals(rel.getModuloId()))
 	            .findFirst()
 	            .ifPresent(m -> rel.setNombreModulo(m.getTitulo()));
-	    });
+	        });
+	    }
+	    model.addAttribute("modulosDisponibles", todos);
+	    
 	}
 	@GetMapping("/curso/curso/{id}")
     public String modifica(@AuthenticationPrincipal SecurityUser userConnected, 

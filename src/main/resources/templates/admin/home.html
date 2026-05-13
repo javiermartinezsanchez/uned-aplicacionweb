@@ -12,22 +12,14 @@
     <div class="album py-5 bg-body-tertiary"> 
 	    <div class="container"> 
 		    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-		        <div class="col" th:insert="~{fragments/opcionesPanel :: opcionUsuarios}">
-		        </div>
-		        <div class="col" th:insert="~{fragments/opcionesPanel :: opcionEstudiantes}">
-		        </div>
-		        <div class="col" th:insert="~{fragments/opcionesPanel :: opcionAccesos}">
-		        </div>
-		        <div class="col" th:insert="~{fragments/opcionesPanel :: opcionAreas}">
-		        </div>
-		        <div class="col" th:insert="~{fragments/opcionesPanel :: opcionUserConnected}">
-		        </div>
-		        <div class="col" th:insert="~{fragments/opcionesPanel :: opcionCursos}">
-		        </div>
-		        <div class="col" th:insert="~{fragments/opcionesPanel :: opcionModulos}">
-		        </div>
-		        <div class="col" th:insert="~{fragments/opcionesPanel :: opcionUserRoles}">
-		        </div>
+		        <div class="col" th:insert="~{fragments/opcionesPanel :: opcionesPanel('bi-people', '/admin/usuario', 'panel.usuarios')}"></div>
+		        <div class="col" th:insert="~{fragments/opcionesPanel :: opcionesPanel('bi-mortarboard', '/estudiante', 'panel.estudiantes')}"></div>
+		        <div class="col" th:insert="~{fragments/opcionesPanel :: opcionesPanel('bi-bar-chart-line', '/admin/accesos', 'panel.estadisticas')}"></div>
+		        <div class="col" th:insert="~{fragments/opcionesPanel :: opcionesPanel('bi-bookmark', '/admin/areaTematica', 'panel.areas')}"></div>
+		        <div class="col" th:insert="~{fragments/opcionesPanel :: opcionesPanel('bi-person-check', '/admin/usuarioconnected', 'panel.conectados')}"></div>
+		        <div class="col" th:insert="~{fragments/opcionesPanel :: opcionesPanel('bi-collection', '/curso', 'panel.cursos')}"></div>
+		        <div class="col" th:insert="~{fragments/opcionesPanel :: opcionesPanel('bi-list-columns-reverse', '/modulo', 'panel.modulos')}"></div>
+		        <div class="col" th:insert="~{fragments/opcionesPanel :: opcionesPanel('bi-people-fill', '/admin/rol', 'panel.roles')}"></div>
 		    </div>    
 	    </div>
     </div>
