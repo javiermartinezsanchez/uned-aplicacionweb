@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,6 +26,7 @@ import es.alumno.uned.model.entities.ContenidoExtra;
 import es.alumno.uned.model.entities.Curso;
 import es.alumno.uned.model.entities.CursoValoracion;
 import es.alumno.uned.model.entities.TipoContenido;
+import es.alumno.uned.model.records.FicheroData;
 import es.alumno.uned.model.repository.AreaTematicaRepository;
 import es.alumno.uned.model.repository.CursoRepository;
 import es.alumno.uned.model.repository.CursoValoracionRepository;
@@ -89,8 +91,8 @@ public class  CursoServiceImpl implements CursoService{
 	@Transactional
 	@Override
 	public CursoDTO grabar(CursoDTO dto, 
-			MultipartFile imagen, 
-			Map<String, MultipartFile> contenidoExtraFiles,
+			FicheroData imagen, 
+			List<FicheroData> contenidoExtraFiles,
 			String usuario) throws IOException {
 		var curso = getValidCurso(dto.getId());
 	    cursoMapper.toEntity(dto, curso);
@@ -99,23 +101,25 @@ public class  CursoServiceImpl implements CursoService{
 	    	curso.setUserIns(usuario);
 	    }
 	    // Subida de imagen
-	    if (imagen != null && !imagen.isEmpty()) {
+	    if (imagen != null ) {
 //	    	if ((curso.getUriImagen() != null) && ())
 	        curso.setUriImagen(fileStorageService.saveImagen(imagen));
 	    }
 
 	    for (int i = 0; i < curso.getContenidosExtra().size(); i++) {
 	        ContenidoExtra contenido = curso.getContenidosExtra().get(i);
+	        int indiceActual = i;
+	        Optional<FicheroData> ficheroCorrespondiente = contenidoExtraFiles.stream()
+	                .filter(f -> f.indice() == indiceActual)
+	                .findFirst();
 	        
 	        // Buscamos si hay un archivo asociado a este índice en el mapa
-	        String key = "archivoExtra_" + i;
-	        MultipartFile archivoFisico = contenidoExtraFiles.get(key);
+	       // String key = "archivoExtra_" + ;
+	       // MultipartFile archivoFisico = contenidoExtraFiles.get(key);
 	        
 	        if (contenido.getTipoContenido() == TipoContenido.PROPIO) {
-	            if (archivoFisico != null && !archivoFisico.isEmpty()) {
-	                // Es un archivo nuevo: guardamos y actualizamos URI
-	                String pathArchivo = fileStorageService.saveDocumento(archivoFisico);
-	                contenido.setUri(pathArchivo);
+	            if (ficheroCorrespondiente.isPresent()) {
+	            	contenido.setUri( fileStorageService.saveDocumento(ficheroCorrespondiente.get()));
 	            } else if (contenido.getUri() == null || contenido.getUri().isEmpty()) {
 	                // Error: Es contenido propio pero no hay archivo ni URI previa
 	                throw new MandatoryFileException("curso.contenidoextra.filenotexist", dto, "");

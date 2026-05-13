@@ -2,6 +2,7 @@ package es.alumno.uned.service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import es.alumno.uned.dto.CursoDTO;
 import es.alumno.uned.model.entities.Curso;
+import es.alumno.uned.model.records.FicheroData;
 import es.alumno.uned.model.util.Paginacion;
 
 
@@ -34,7 +36,7 @@ public interface CursoService {
 	 * @return {@link CursoDTO} Encontrado.
 	 */
 	public CursoDTO getCurso(Long idCurso, Long idUsuario);
-	CursoDTO grabar(CursoDTO dto, MultipartFile imagen, Map<String, MultipartFile> contenidosExtraFiles, String usuario) throws IOException;
+	CursoDTO grabar(CursoDTO dto, FicheroData imagen, List<FicheroData> contenidosExtraFiles, String usuario) throws IOException;
 
 	public Paginacion<Curso, CursoDTO> listadoPaginado(String url,  Pageable pageable);
 	

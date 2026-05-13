@@ -30,7 +30,8 @@ public class Modulo {
     @Column(nullable = false, length = 500)
     private String descripcion;
 
-    @Lob
+    //@Lob
+    @Column(columnDefinition = "TEXT")
     private String contenido;
 
 //    @Column(nullable = false)
@@ -53,6 +54,18 @@ public class Modulo {
     @OneToMany(mappedBy = "modulo")
     private List<EstudianteCursoModulo> estudianteCursoModulos;
 
+    public Modulo() {};
+
+	public Modulo(String titulo, String descripcion, String contenido, TipoModulo tipo, LocalDateTime fIns,
+			String userIns) {
+		super();
+		this.titulo = titulo;
+		this.descripcion = descripcion;
+		this.contenido = contenido;
+		this.tipo = tipo;
+		this.fIns = fIns;
+		this.userIns = userIns;
+	}
 
 	public Long getId() {
 		return id;

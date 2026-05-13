@@ -1,5 +1,6 @@
 package es.alumno.uned.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -8,9 +9,9 @@ import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import es.alumno.uned.config.AppProperties;
+import es.alumno.uned.model.records.FicheroData;
 /**
  * Servicio para guardar fichros.
  * 
@@ -34,7 +35,7 @@ public class FileStorageService {
 	 * @return Nombre del fichero guardado
 	 * @throws IOException
 	 */
-    public String saveImagen(MultipartFile file) throws IOException {
+    public String saveImagen(FicheroData file) throws IOException {
         return saveFile(file, appProperties.getUploadImgDir());
     }
     /**
@@ -44,7 +45,7 @@ public class FileStorageService {
      * @throws IOException
      */
 
-    public String saveDocumento(MultipartFile file) throws IOException {
+    public String saveDocumento(FicheroData file) throws IOException {
         return saveFile(file, appProperties.getUploadDocDir());
     }
     /**
@@ -60,16 +61,16 @@ public class FileStorageService {
      * @return Nombre del fichero generado
      * @throws IOException
      */
-    private String saveFile(MultipartFile file, String basePath) throws IOException {
+    private String saveFile(FicheroData file, String basePath) throws IOException {
 
-        String nombreArchivo = UUID.randomUUID() + "_" + file.getOriginalFilename();
+        String nombreArchivo = UUID.randomUUID() + "_" + file.nombreOriginal();
 
         Path ruta = Paths.get(basePath);
         if (!Files.exists(ruta)) {
         	Files.createDirectories(ruta);
         }
 
-        Files.copy(file.getInputStream(), ruta.resolve(nombreArchivo), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(new ByteArrayInputStream(file.contenido()), ruta.resolve(nombreArchivo), StandardCopyOption.REPLACE_EXISTING);
 
         return nombreArchivo;
     }

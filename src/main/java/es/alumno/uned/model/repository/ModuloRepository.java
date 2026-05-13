@@ -15,6 +15,7 @@ import es.alumno.uned.model.entities.TipoModulo;
  */
 public interface ModuloRepository extends JpaRepository<Modulo, Long> {
 
+	Modulo findByTituloContainingIgnoreCase(String Titulo);
 	Page<Modulo> findByTituloContainingIgnoreCase(String Titulo, Pageable pageable);
 	
 	Page<Modulo> findByTipo(TipoModulo tipoModulo, Pageable pageable);

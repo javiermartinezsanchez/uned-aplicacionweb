@@ -2,23 +2,18 @@ package es.alumno.uned.controller;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,16 +30,14 @@ import es.alumno.uned.dto.ModuloDTO;
 import es.alumno.uned.dto.ValoracionDTO;
 import es.alumno.uned.model.entities.Curso;
 import es.alumno.uned.model.entities.SecurityUser;
+import es.alumno.uned.model.records.FicheroData;
 import es.alumno.uned.model.util.ControllerUtil;
 import es.alumno.uned.model.util.Paginacion;
 import es.alumno.uned.service.AreaTematicaService;
 import es.alumno.uned.service.CursoService;
 import es.alumno.uned.service.ModuloService;
 import es.alumno.uned.service.UsuarioService;
-import es.alumno.uned.validation.OnCreate;
-import es.alumno.uned.validation.OnUpdate;
 import jakarta.validation.Valid;
-import jakarta.validation.Validator;
 
 @Controller
 public class CursoController extends BaseCrudController {
@@ -53,9 +46,6 @@ public class CursoController extends BaseCrudController {
 	AreaTematicaService areaTematicaService;
 	UsuarioService usuarioService;
 	ModuloService moduloService;
-	
-	@Autowired
-	private Validator validator;
 	
 	public CursoController(CursoService cursoService, AreaTematicaService areaTematicaService,
 			UsuarioService usuarioService, 
@@ -107,13 +97,41 @@ public class CursoController extends BaseCrudController {
 	        RedirectAttributes redirectAttributes, 
 	        Model model) throws IOException {
 
+		FicheroData imagenData = null;
+		if (!imagen.isEmpty()) {
+			imagenData = new FicheroData(0,
+					imagen.getOriginalFilename(),
+					imagen.getContentType(),
+					imagen.getBytes());
+		}
 	    if (result.hasErrors()) {
 	    	prepararVistaEdicion(form, model);
 	        model.addAttribute("usuarios", usuarioService.listarProfesores());
 	        return "curso/curso";
 	    }
-	    Map<String, MultipartFile> archivosExtra = contenidoExtrasFile.getFileMap();
-	    var cursoGrabado = cursoService.grabar(form, imagen,archivosExtra,  userDetails.getUsername());
+	    
+//	    Map<String, MultipartFile> archivosExtra = contenidoExtrasFile.getFileMap();
+	    List<FicheroData> archivosExtra = contenidoExtrasFile.getFileMap().entrySet().stream()
+	    	    .filter(entry -> !entry.getValue().isEmpty() && entry.getKey().contains("_")) 
+	    	    .map(entry -> {
+	    	        try {
+	    	            MultipartFile file = entry.getValue();
+	    	            // Extraemos el índice del nombre del campo 
+	    	            int index = Integer.parseInt(entry.getKey().split("_")[1]);
+	    	            
+	    	            return new FicheroData(
+    	            		index,
+	    	                file.getOriginalFilename(),
+	    	                file.getContentType(),
+	    	                file.getBytes()
+	    	                
+	    	            );
+	    	        } catch (IOException e) {
+	    	            throw new RuntimeException("Error al leer bytes del archivo", e);
+	    	        }
+	    	    })
+	    	    .toList();
+	    var cursoGrabado = cursoService.grabar(form, imagenData,archivosExtra,  userDetails.getUsername());
 	    model.addAttribute("form", cursoGrabado);
 	    redirectAttributes.addFlashAttribute("success", "mensaje.grabacionOK");
 		return String.format("redirect:/curso/curso/%d", cursoGrabado.getId());
@@ -196,7 +214,6 @@ public class CursoController extends BaseCrudController {
         model.addAttribute("urlAlta", "/curso/nuevo");
         model.addAttribute("urlBack", "/home");
         model.addAttribute("paginacion", paginacion);
-        //model.addAttribute("areas", areaTematicaService.listAll());
         model.addAttribute("responsableId", userConnected.getId());
         model.addAttribute("responsables", usuarioService.listarProfesores());
         model.addAttribute("query", ControllerUtil.mapToQuery(filtros));
