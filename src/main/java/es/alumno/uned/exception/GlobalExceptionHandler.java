@@ -47,48 +47,8 @@ public class GlobalExceptionHandler {
 
     private final MessageSource messageSource;
 
-    @Autowired
-    private AreaTematicaService areaTematicaService;
-    
     public GlobalExceptionHandler(MessageSource messageSource) {
         this.messageSource = messageSource;
-    }
-    @ModelAttribute("currentUri")
-    public String getCurrentUri(HttpServletRequest request) {
-        return request.getRequestURI();
-    }
-    
-    @ModelAttribute("urlBuilder")
-    public ServletUriComponentsBuilder urlBuilder() {
-        // Retorna un constructor basado en la petición actual
-        return ServletUriComponentsBuilder.fromCurrentRequest();
-    }
-    
-    /**
-     * Como el buscador de la home, está en el fragmento "header", es
-     * común a todo el proyecto (excepto si hubiera alguna plantilla si el header.
-     * <p>Como necesitamos poder conocer los parámetros y estos se incluyen
-     * en un {@code Map<String, String>}, vamos a crearlos a nivel de "Adviser".
-     * <p>De esta forma no se tendrá que incluir "siempre" este mapa en el modelo.
-     * Y será Spring el encargado de manejarlo a nivel de {@link ModelAttribute} 
-     * @param allParams Captura todos los parámetros de la query y lo devuelve, 
-     * de forma que siempre existirá, aunque sea vacio.
-     * @return Map con todos los parámetros o {} (vacio).
-     */
-    @ModelAttribute("paramsBusqueda")
-    public Map<String, String> getParamsBusqueda(@RequestParam Map<String, String> allParams) {
-         return allParams; 
-    }
-    
-    /**
-     * Para poder tener acceso al buscador desde todas las vistas que lo incluyan,
-     * es necesario "injectar" entodo el Modelo la lista de áreas.
-     * 
-     * @return Lista de áreas con el nombre "areas".
-     */
-    @ModelAttribute("areas")
-    public List<AreaTematicaDTO> getAreas() {
-        return areaTematicaService.listAll();
     }
     @ExceptionHandler(AppGlobalException.class)
     public String handleAppException(AppGlobalException ex, 

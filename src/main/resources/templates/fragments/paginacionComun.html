@@ -49,3 +49,91 @@
 
     </ul>
 </nav>
+<nav th:fragment="paginadorSINURL(paginacion, query, claseExtra)" th:if="${paginacion.totalPag > 1}">
+    <ul class="pagination justify-content-center" th:classappend="${claseExtra}">
+
+        <!-- Primera -->
+        <li class="page-item"
+            th:classappend="${paginacion.first} ? ' disabled'">
+            <a class="page-link"
+               th:href="${paginacion.first} ? null : ${urlBuilder.cloneBuilder().replaceQueryParam('page', 0).toUriString()}">
+                <i class="bi bi-skip-start-fill"></i>
+            </a>
+        </li>
+
+        <!-- Anterior -->
+        <li class="page-item"
+            th:classappend="${not paginacion.hasPrevious} ? ' disabled'">
+            <a class="page-link"
+               th:href="${not paginacion.hasPrevious} ? null : ${urlBuilder.cloneBuilder().replaceQueryParam('page', paginacion.pagActual - 2).toUriString()}">
+                <i class="bi bi-chevron-left"></i>
+            </a>
+        </li>
+
+        <!-- Números -->
+        <li class="page-item"
+            th:each="elemento : ${paginacion.paginas}"
+            th:classappend="${elemento.numero == paginacion.pagActual} ? ' active'">
+            <a class="page-link"
+               th:href="${elemento.numero == paginacion.pagActual} ? null : ${urlBuilder.cloneBuilder().replaceQueryParam('page', elemento.numero - 1).toUriString()}"
+               th:text="${elemento.numero}">
+            </a>
+        </li>
+
+        <!-- Siguiente -->
+        <li class="page-item"
+            th:classappend="${not paginacion.hasNext} ? ' disabled'">
+            <a class="page-link"
+               th:href="${not paginacion.hasNext} ? null : ${urlBuilder.cloneBuilder().replaceQueryParam('page', paginacion.pagActual).toUriString()}">
+                <i class="bi bi-chevron-right"></i>
+            </a>
+        </li>
+
+        <!-- Última -->
+        <li class="page-item"
+            th:classappend="${paginacion.last} ? ' disabled'">
+            <a class="page-link"
+               th:href="${paginacion.last} ? null : ${urlBuilder.cloneBuilder().replaceQueryParam('page', paginacion.totalPag - 1).toUriString()}">
+                <i class="bi bi-skip-end-fill"></i>
+            </a>
+        </li>
+
+    </ul>
+</nav>
+<!--  
+Se define el bloque a insertar
+<div th:id="miTextoCentro">
+    <span class="small text-uppercase text-muted">Página actual</span>
+    <h5 class="mb-0" th:text="${paginacion.pagActual}">1</h5>
+</div>
+
+se llama al fragmento "PaginadorLateral":
+
+<div th:replace="~{layouts/paginador :: navegacionLateral(${miPaginacion}, ~{::#miTextoCentro}, 'my-4')}"></div>
+-->
+<nav th:fragment="navegacionLateral(paginacion, contenidoCentral, claseExtra)" th:if="${paginacion.totalPag > 1}">
+    <div class="d-flex align-items-center justify-content-between" th:classappend="${claseExtra}">
+
+        <div th:classappend="${not paginacion.hasPrevious} ? 'opacity-50'">
+            <a class="btn btn-outline-secondary btn-sm rounded-circle px-2"
+               th:href="${not paginacion.hasPrevious} ? '#' : ${urlBuilder.cloneBuilder().replaceQueryParam('page', paginacion.pagActual - 2).toUriString()}"
+               th:style="${not paginacion.hasPrevious} ? 'cursor: not-allowed;' : ''">
+                <i class="bi bi-chevron-left"></i>
+            </a>
+        </div>
+
+        <!-- Contenido Central Dinámico Recibido por Parámetro -->
+        <div class="mx-3 flex-grow-1 text-center">
+            <div th:insert="${contenidoCentral}"></div>
+        </div>
+
+        <div th:classappend="${not paginacion.hasNext} ? 'opacity-50'">
+            <a class="btn btn-outline-secondary btn-sm rounded-circle px-2"
+               th:href="${not paginacion.hasNext} ? '#' : ${urlBuilder.cloneBuilder().replaceQueryParam('page', paginacion.pagActual).toUriString()}"
+               th:style="${not paginacion.hasNext} ? 'cursor: not-allowed;' : ''">
+                <i class="bi bi-chevron-right"></i>
+            </a>
+        </div>
+
+    </div>
+</nav>

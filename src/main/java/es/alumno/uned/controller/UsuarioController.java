@@ -101,7 +101,7 @@ public class UsuarioController extends BaseCrudController {
             BindingResult result,
             Model model) {
 
-		  // 1) Para utilizar el mismo DTO sea 
+		  // 1) Para utilizar el mismo DTO  
 		  //     Creación (con password) 
 		  //     Modificación (sin password) y que  no salte el @NotBlank del validator
 	    Class<?> grupo = (form.getId() == null) ? OnCreate.class : OnUpdate.class;
