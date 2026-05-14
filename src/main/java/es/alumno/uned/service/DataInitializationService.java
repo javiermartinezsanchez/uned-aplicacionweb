@@ -1,6 +1,7 @@
 package es.alumno.uned.service;
 
 import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,7 +21,28 @@ import es.alumno.uned.model.repository.EstudianteRepository;
 import es.alumno.uned.model.repository.ModuloRepository;
 import es.alumno.uned.model.repository.RolRepository;
 import es.alumno.uned.model.repository.UsuarioRepository;
-
+/**
+ * 
+ * Clase {@code @Service} de inicialización de datos para las pruebas.
+ * <p>Comprueba si existe un dato y lo inserta.
+ *  <ul>
+* <li>Tabla de ROLES de usuario</li>
+* <li>Tabla de USUARIOS</li>
+* 
+* <li>Tabla de ESTUDIANTES (con los datos de los usuarios EST)</li>
+* <li>Tabla de Areas Temáticas</li>
+* <li>Tabla de CURSOS</li>
+* <li>Tabla de modulos</li>
+* </ul>
+ * @param rolRepo Repositorio de Roles.
+ * @param userRepo Repositorio de Usuarios.
+ * @param estudianteRepo Repositorio de Estudiantes.
+ * @param areaRepo Repositorio de Áreas Temáticas.
+ * @param cursoRepo Repositorio de Cursos.
+ * @param moduloRepo Repositorio de Módulos.
+ * @param passEncoder Clase de encriptación de la contraseña.
+ *
+*/
 @Service
 public class DataInitializationService {
 	RolRepository rolRepo;
@@ -58,26 +80,31 @@ public class DataInitializationService {
 			
 		}
 		if (userRepo.findByEmail("admin@correo.es").isEmpty()) {
-			userRepo.save(new Usuario("admin", "admin@correo.es", "", "", passEncoder.encode("1234")  , "ADMIN", true, LocalDateTime.now(), "CARGA INICIAL"));
+			userRepo.save(new Usuario("admin", "admin@correo.es", "", "", passEncoder.encode("admin@correo.es")  , "ADMIN", true, LocalDateTime.now(), "CARGA INICIAL"));
 			
 		}
 		if (userRepo.findByEmail("profe1@correo.es").isEmpty()) {
-			userRepo.save(new Usuario("Manuel", "profe1@correo.es", "López", "Rodríguez", passEncoder.encode("1234")  , "PROFE", true, LocalDateTime.now(), "CARGA INICIAL"));
+			userRepo.save(new Usuario("Manuel", "profe1@correo.es", "López", "Rodríguez", passEncoder.encode("profe1@correo.es")  , "PROFE", true, LocalDateTime.now(), "CARGA INICIAL"));
 			
 		}
+		if (userRepo.findByEmail("profe2@correo.es").isEmpty()) {
+			userRepo.save(new Usuario("Luis", "profe2@correo.es", "García", "Kalimotxo", passEncoder.encode("profe2@correo.es")  , "PROFE", true, LocalDateTime.now(), "CARGA INICIAL"));
+			
+		}
+		
 		if (userRepo.findByEmail("estudiante1@correo.es").isEmpty()) {
-			userRepo.save(new Usuario("José", "estudiante1@correo.es", "García", "Avellaneda", passEncoder.encode("1234")  , "ESTUD", true, LocalDateTime.now(), "CARGA INICIAL"));
+			userRepo.save(new Usuario("José", "estudiante1@correo.es", "García", "Avellaneda", passEncoder.encode("estudiante1@correo.es")  , "ESTUD", true, LocalDateTime.now(), "CARGA INICIAL"));
 			
 		}
 		if (userRepo.findByEmail("luis.estudiante@correo.es").isEmpty()) {
-			userRepo.save(new Usuario("Luís", "luis.estudiante@correo.es", "Condemor", "Sindón", passEncoder.encode("1234")  , "ESTUD", true, LocalDateTime.now(), "CARGA INICIAL"));
+			userRepo.save(new Usuario("Luís", "luis.estudiante@correo.es", "Condemor", "Sindón", passEncoder.encode("luis.estudiante@correo.es")  , "ESTUD", true, LocalDateTime.now(), "CARGA INICIAL"));
 		}
 		if (userRepo.findByEmail("julian.estudiante@correo.es").isEmpty()) {
-			userRepo.save(new Usuario("Julián", "julian.estudiante@correo.es", "SinLuz", "Solar", passEncoder.encode("1234")  , "ESTUD", true, LocalDateTime.now(), "CARGA INICIAL"));
+			userRepo.save(new Usuario("Julián", "julian.estudiante@correo.es", "SinLuz", "Solar", passEncoder.encode("julian.estudiante@correo.es")  , "ESTUD", true, LocalDateTime.now(), "CARGA INICIAL"));
 			
 		}
 		if (userRepo.findByEmail("maria.estudiante@correo.es").isEmpty()) {
-			userRepo.save(new Usuario("Maria", "maria.estudiante@correo.es", "Relaño", "Wilson", passEncoder.encode("1234")  , "ESTUD", true, LocalDateTime.now(), "CARGA INICIAL"));
+			userRepo.save(new Usuario("Maria", "maria.estudiante@correo.es", "Relaño", "Wilson", passEncoder.encode("maria.estudiante@correo.es")  , "ESTUD", true, LocalDateTime.now(), "CARGA INICIAL"));
 			
 		}
         // Añadimos a los estudiantes

@@ -51,9 +51,9 @@ public class ModuloController extends BaseCrudController {
 	        Paginacion<Modulo, ModuloDTO> paginacion;
 	        var filtros = ControllerUtil.paramsToMap(paramsBusqueda);
 
-	        paginacion = moduloService.listadoPaginado("/modulo", pageRequest, filtros);
+	        paginacion = moduloService.listadoPaginado( pageRequest, filtros);
 
-	        setModeloListado(model,"modulo/modulos", "/modulo/nuevo","/modulo/modulo/",  "/home", ControllerUtil.mapToQuery(filtros) );
+	        setModeloListado(model,"modulo/modulos", "/modulo/nuevo","/modulo/modulo/",  "/home" );
 	        model.addAttribute("tipos", TipoModulo.values());
 	        model.addAttribute("paginacion", paginacion);
 	        model.addAttribute("paramsBusqueda",paramsBusqueda );

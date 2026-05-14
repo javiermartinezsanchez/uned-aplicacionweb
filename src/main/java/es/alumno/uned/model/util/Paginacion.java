@@ -19,7 +19,6 @@ import org.springframework.data.domain.Page;
  */
 public class Paginacion<E, D> {
 
-    private final String url;
     private final Page<E> paginaEntidad;
     private final List<D> contenido;
     private final List<Pagina> paginas;
@@ -28,7 +27,6 @@ public class Paginacion<E, D> {
     private final int pagActual;
 
     private Paginacion(Builder<E, D> builder) {
-        this.url = builder.url;
         this.paginaEntidad = builder.paginaEntidad;
 
         // Convertimos entidades a DTOs
@@ -80,10 +78,6 @@ public class Paginacion<E, D> {
 
     // GETTERS
 
-    public String getUrl() {
-        return url;
-    }
-
     public List<D> getContenido() {
         return contenido;
     }
@@ -126,14 +120,8 @@ public class Paginacion<E, D> {
 
     public static class Builder<E, D> {
 
-        private String url;
         private Page<E> paginaEntidad;
         private Function<E, D> mapper;
-
-        public Builder<E, D> url(String url) {
-            this.url = url;
-            return this;
-        }
 
         public Builder<E, D> pagina(Page<E> pagina) {
             this.paginaEntidad = pagina;
@@ -146,7 +134,6 @@ public class Paginacion<E, D> {
         }
 
         public Paginacion<E, D> build() {
-            Objects.requireNonNull(url, "url no puede ser null");
             Objects.requireNonNull(paginaEntidad, "paginaEntidad no puede ser null");
             Objects.requireNonNull(mapper, "mapper no puede ser null");
 

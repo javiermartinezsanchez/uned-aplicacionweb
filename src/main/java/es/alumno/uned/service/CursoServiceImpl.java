@@ -16,8 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import es.alumno.uned.dto.CursoDTO;
 import es.alumno.uned.exception.MandatoryFileException;
@@ -134,15 +132,15 @@ public class  CursoServiceImpl implements CursoService{
 	}
 
 	@Override
-	public Paginacion<Curso, CursoDTO> listadoPaginado(String url,  Pageable pageable){
+	public Paginacion<Curso, CursoDTO> listadoPaginado(  Pageable pageable){
 		
-		return construirPaginacion(url, cursoRepository.findAll(pageable));
+		return construirPaginacion( cursoRepository.findAll(pageable));
 	}
 
 	@Override
-	public Paginacion<Curso, CursoDTO> listadoPaginado(String url, Pageable pageable, Map<String, String> params) {
+	public Paginacion<Curso, CursoDTO> listadoPaginado( Pageable pageable, Map<String, String> params) {
 		Specification<Curso> condiciones = generaCondiciones(params);
-		return construirPaginacion(url,cursoRepository.findAll(condiciones, pageable));
+		return construirPaginacion(cursoRepository.findAll(condiciones, pageable));
 	}
 	
 	/**
@@ -196,9 +194,8 @@ public class  CursoServiceImpl implements CursoService{
 	}
     
     
-	private Paginacion<Curso, CursoDTO> construirPaginacion(String url, Page<Curso> page) {
+	private Paginacion<Curso, CursoDTO> construirPaginacion( Page<Curso> page) {
 	        return new Paginacion.Builder<Curso, CursoDTO>()
-	                .url(url)
 	                .pagina(page)
 	                .mapper(cursoMapper::toDTO)
 	                .build();

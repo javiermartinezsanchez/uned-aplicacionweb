@@ -1,11 +1,9 @@
 package es.alumno.uned.service;
 
-import java.util.List;
 
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Pageable;
 
-import es.alumno.uned.dto.AreaTematicaDTO;
 import es.alumno.uned.dto.EstudianteDTO;
 import es.alumno.uned.model.entities.Estudiante;
 import es.alumno.uned.model.util.Paginacion;
@@ -36,7 +34,7 @@ public interface EstudianteService {
 	@Nullable
 	Object findAll();
 
-	public Paginacion<Estudiante, EstudianteDTO> listadoPaginado(String url, Pageable pageRequest);
+	public Paginacion<Estudiante, EstudianteDTO> listadoPaginado( Pageable pageRequest);
 	
 
 }

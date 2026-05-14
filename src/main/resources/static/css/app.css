@@ -13,3 +13,15 @@
 .input-small {
     max-width: 250px;
 }
+
+/* Para el colapso de div */
+/* CERRADO */
+[data-bs-toggle="collapse"] .icono-giro {
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+
+/* ABIERTO (Bootstrap añade la clase 'collapsed' al disparador cuando está cerrado, y se la quita al abrir) */
+[data-bs-toggle="collapse"]:not(.collapsed) .icono-giro {
+    transform: rotate(180deg);
+}

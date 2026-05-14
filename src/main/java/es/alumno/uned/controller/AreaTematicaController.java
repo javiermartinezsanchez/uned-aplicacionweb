@@ -2,8 +2,6 @@ package es.alumno.uned.controller;
 
 import java.util.Map;
 
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,62 +25,61 @@ public class AreaTematicaController extends BaseCrudController{
 	public AreaTematicaController(AreaTematicaService areaTematicaService) {
 		this.areaTematicaService = areaTematicaService;
 	}
-	@GetMapping("/admin/areaTematica/nueva")
-	public String nueva(Model model) {
-		preparaArea(model);
+	@GetMapping("/{urlBase}/areaTematica/nueva")
+	public String nueva(@PathVariable("urlBase") String urlBase,
+			Model model) {
+		preparaArea(model, urlBase);
 		model.addAttribute("form", new AreaTematicaDTO());
 		return model.getAttribute("viewName").toString();
 	}
 
-	@GetMapping("/admin/areaTematica/{id}")
-	public String modifica(@PathVariable("id") Long id, 
+	@GetMapping("/{urlBase}/areaTematica/{id}")
+	public String modifica(
+			@PathVariable("urlBase") String urlBase,
+			@PathVariable("id") Long id, 
 			@ModelAttribute("successStr") String successStr,
 			Model model) {
 		if (successStr != null && "true".equalsIgnoreCase(successStr)) {
 			model.addAttribute("success", "mensaje.grabacionOK");
 		}
-		preparaArea(model);
+		preparaArea(model, urlBase);
 		model.addAttribute("form", areaTematicaService.getAreaTematica(id));
 		return model.getAttribute("viewName").toString();
 	}
 	
-	@PostMapping("/admin/areaTematica")
-	public String graba(@Valid @ModelAttribute("form") AreaTematicaDTO form,
+	@PostMapping("/{urlBase}/areaTematica")
+	public String graba(@PathVariable("urlBase") String urlBase,
+			@Valid @ModelAttribute("form") AreaTematicaDTO form,
             BindingResult result, 
             RedirectAttributes redirectAttributes, 
             Model model) {
-		preparaArea(model);
+		preparaArea(model, urlBase);
         if (result.hasErrors()) {
             return model.getAttribute("viewName").toString();
         }
         var areaGrabada = areaTematicaService.grabar(form);
         model.addAttribute("form", areaGrabada);
         redirectAttributes.addFlashAttribute("successStr", "true");
-		return String.format("redirect:/admin/areaTematica/%d", areaGrabada.getId());
+		return String.format("redirect:/" + urlBase + "/areaTematica/%d", areaGrabada.getId());
 	}
 
-	@GetMapping("/admin/areaTematica")
+	@GetMapping("/{urlBase}/areaTematica")
 	public String lista(
+			@PathVariable("urlBase") String urlBase,
 			@RequestParam Map<String, String> params,
 			@RequestParam(defaultValue = "0") int page, 
 			Model model) {
-		Pageable pageRequest= PageRequest.of(page, 10);
-		
-		var filtros = ControllerUtil.paramsToMap(params);
-		
-		String titulo = filtros.containsKey("titulo") ? filtros.get("titulo") : null;
-		String descripcion = filtros.containsKey("descripcion") ? filtros.get("descripcion") : null;
-		var paginacion = areaTematicaService.listadoPaginado("/admin/areaTematica", titulo, descripcion, pageRequest);
-		model.addAttribute("urlAlta", "/admin/areaTematica/nueva");
-		model.addAttribute("urlBack", "/home");
-	    model.addAttribute("paginacion", paginacion);
-		model.addAttribute("titulo", titulo);
-		model.addAttribute("descripcion", descripcion);
+		var paginacion = areaTematicaService.listadoPaginado(ControllerUtil.paramsToMap(params), getParams(page));
 
-	    model.addAttribute("query", ControllerUtil.mapToQuery(filtros));
-		return "admin/AreaTematicaList";
+		setModeloListado(model, "admin/areasTematicas", 
+				"/"+ urlBase+"/areaTematica/nueva",
+	    		"/"+ urlBase + "/areaTematica", 
+	    		"/home");
+	    model.addAttribute("paginacion", paginacion);
+	    model.addAttribute("title", "Listado de Áreas Temáticas");
+		return model.getAttribute("viewName").toString();
 	}
-	private void preparaArea(Model model) {
-		setModeloFormulario(model, "admin/areaTematica", "/admin/areaTematica","/admin/areaTematica");
+	private void preparaArea(Model model, String urlBase) {
+		setModeloFormulario(model, "admin/areaTematica", "/"+urlBase+"/areaTematica","/"+urlBase+"/areaTematica");
 	}
 }

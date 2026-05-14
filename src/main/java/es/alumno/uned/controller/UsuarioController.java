@@ -61,10 +61,10 @@ public class UsuarioController extends BaseCrudController {
 			@RequestParam(defaultValue = "0") int page, 
 			Model model) {
 		Pageable pageRequest= PageRequest.of(page, 10);
-		Paginacion<Usuario, UsuarioRegistroDTO> paginacion = userService.listadoPaginado("/admin/usuario", pageRequest);
+		Paginacion<Usuario, UsuarioRegistroDTO> paginacion = userService.listadoPaginado( pageRequest);
 		model.addAttribute("titulo", "{usuario.lista}");
 		model.addAttribute("paginacion", paginacion);
-		setModeloListado(model, "admin/usuarios", "/admin/newUser", "/admin/usuario","/home", "" );
+		setModeloListado(model, "admin/usuarios", "/admin/newUser", "/admin/usuario","/home" );
 		return model.getAttribute("viewName").toString();
 	}
 	@GetMapping("/admin/newUser")

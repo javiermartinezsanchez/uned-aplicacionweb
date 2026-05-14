@@ -88,22 +88,25 @@ th:replace="~{plantilla::layout(~{::section})}">
     </div>
     <div class="card mb-4 border-tertiary">
         <div class="card-header bg-body-tertiary text-black">
-            <h5 class="mb-0" th:text="#{curso.modulo.cabecera}">ssss</h5>
+			<a class="d-inline-flex align-items-center text-dark text-decoration-none" 
+               data-bs-toggle="collapse" href="#datosModulo" role="button" aria-expanded="false">
+        		<span class="me-2 icono-giro">▼</span>
+        		<h5 class="mb-0" th:text="#{curso.modulo.cabecera}">ssss</h5>
+    		</a>
         </div>
-        <div class="card-body">
+        <div class="card-body" id="datosModulo">
             <div class="row g-3 align-items-end mb-4">
                 <div class="col-md-8">
-                    <label class="form-label fw-bold">Añadir Módulo</label>
                     <select id="selectorModulos" class="form-select">
-                        <option value="" selected disabled>Selecciona para añadir...</option>
+                        <option th:value="${''}" th:text="#{curso.modulo.select}" th:selected="${true}" th:disabled="${true}"></option>
                         <option th:each="m : ${modulosDisponibles}" 
                                 th:value="${m.id}" 
                                 th:text="${m.titulo}"></option>
                     </select>
                 </div>
                 <div class="col-md-4">
-                    <button type="button" onclick="addModuloRow()" class="btn btn-outline-info w-100">
-                        <i class="bi bi-plus-lg"></i> Añadir al listado
+                    <button type="button" onclick="addModuloRow()" class="btn btn-outline-success w-100">
+                        <i class="bi bi-plus-lg"></i> <span th:text="#{curso.modulo.add}">Añadir al listado</span>
                     </button>
                 </div>
             </div>
@@ -112,9 +115,9 @@ th:replace="~{plantilla::layout(~{::section})}">
                 <table class="table table-hover align-middle" id="tablaItinerario">
                     <thead class="table-light">
                         <tr>
-                            <th>Módulo</th>
-                            <th style="width: 100px;">Orden</th>
-                            <th style="width: 120px;">Peso %</th>
+                            <th th:text="#{curso.modulos}">Módulo</th>
+                            <th style="width: 100px;" th:text="#{curso.modulo.orden}">Orden</th>
+                            <th style="width: 120px;"><span th:text="#{curso.modulo.peso}"></span> %</th>
                             <th style="width: 50px;"></th>
                         </tr>
                     </thead>
@@ -182,7 +185,7 @@ function addModuloRow() {
                 </div>
             </td>
             <td>
-                <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeModuloRow(this, '${moduloId}')">
+                <button type="button" class="btn text-danger btn-sm" onclick="removeModuloRow(this, '${moduloId}')">
                     <i class="bi bi-trash"></i>
                 </button>
             </td>

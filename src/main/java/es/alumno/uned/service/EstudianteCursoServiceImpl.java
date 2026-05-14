@@ -1,6 +1,5 @@
 package es.alumno.uned.service;
 
-import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,7 +10,6 @@ import es.alumno.uned.exception.MandatoryModuloException;
 import es.alumno.uned.model.entities.Curso;
 import es.alumno.uned.model.entities.Estudiante;
 import es.alumno.uned.model.entities.EstudianteCurso;
-import es.alumno.uned.model.entities.EstudianteCursoModulo;
 import es.alumno.uned.model.entities.Modulo;
 import es.alumno.uned.model.entities.TipoModulo;
 import es.alumno.uned.model.repository.CursoRepository;
@@ -29,20 +27,19 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
     private final CursoRepository cursoRepository;
     private final EstudianteCursoRepository estudianteCursoRepository;
     private final EstudianteCursoModuloRepository estudianteCursoModuloRepository;
-    private final ModuloRepository moduloRepository;
+
 
     public EstudianteCursoServiceImpl(
             EstudianteRepository estudianteRepository,
             CursoRepository cursoRepository,
             EstudianteCursoRepository estudianteCursoRepository,
-            EstudianteCursoModuloRepository estudianteCursoModuloRepository,
-            ModuloRepository moduloRepository) {
+            EstudianteCursoModuloRepository estudianteCursoModuloRepository
+            ) {
 
         this.estudianteRepository = estudianteRepository;
         this.cursoRepository = cursoRepository;
         this.estudianteCursoRepository = estudianteCursoRepository;
         this.estudianteCursoModuloRepository = estudianteCursoModuloRepository;
-        this.moduloRepository = moduloRepository;
     }
 
     @Override

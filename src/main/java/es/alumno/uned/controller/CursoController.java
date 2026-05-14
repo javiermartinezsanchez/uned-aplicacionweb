@@ -110,15 +110,15 @@ public class CursoController extends BaseCrudController {
 	        return "curso/curso";
 	    }
 	    
-//	    Map<String, MultipartFile> archivosExtra = contenidoExtrasFile.getFileMap();
-	    List<FicheroData> archivosExtra = contenidoExtrasFile.getFileMap().entrySet().stream()
+	    List<FicheroData> archivosExtra = contenidoExtrasFile.getFileMap()
+	    		.entrySet()
+	    		.stream()
 	    	    .filter(entry -> !entry.getValue().isEmpty() && entry.getKey().contains("_")) 
 	    	    .map(entry -> {
 	    	        try {
 	    	            MultipartFile file = entry.getValue();
 	    	            // Extraemos el índice del nombre del campo 
 	    	            int index = Integer.parseInt(entry.getKey().split("_")[1]);
-	    	            
 	    	            return new FicheroData(
     	            		index,
 	    	                file.getOriginalFilename(),
@@ -209,14 +209,13 @@ public class CursoController extends BaseCrudController {
             Model model) {
     	Pageable pageRequest= PageRequest.of(page, 10);
         var filtros = ControllerUtil.paramsToMap(paramsBusqueda);
-       Paginacion<Curso, CursoDTO> paginacion = cursoService.listadoPaginado("/curso", pageRequest, filtros);
+       Paginacion<Curso, CursoDTO> paginacion = cursoService.listadoPaginado(pageRequest, filtros);
         model.addAttribute("url", "curso");
         model.addAttribute("urlAlta", "/curso/nuevo");
         model.addAttribute("urlBack", "/home");
         model.addAttribute("paginacion", paginacion);
         model.addAttribute("responsableId", userConnected.getId());
         model.addAttribute("responsables", usuarioService.listarProfesores());
-        model.addAttribute("query", ControllerUtil.mapToQuery(filtros));
         model.addAttribute("paramsBusqueda",paramsBusqueda );
         return "curso/cursos"; 
     	

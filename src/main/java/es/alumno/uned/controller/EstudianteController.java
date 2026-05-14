@@ -37,8 +37,7 @@ public class EstudianteController extends BaseCrudController {
 	        "viewName", "estudiante/editar-perfil",
 	        "url", "/registro",
 	        "urlCancel", "/home",
-	        "urlBack", "/",
-	        "query", ""
+	        "urlBack", "/"
 	    );
     private final EstudianteService estudianteService;
     private final AreaTematicaService areaService;
@@ -134,7 +133,7 @@ public class EstudianteController extends BaseCrudController {
     public String lista(@RequestParam(defaultValue = "0") int page, 
     		Model model) {
     	Pageable pageRequest = PageRequest.of(page, 10);
-    	var paginacion = estudianteService.listadoPaginado("/estudiante", pageRequest);
+    	var paginacion = estudianteService.listadoPaginado( pageRequest);
     	model.addAttribute("paginacion", paginacion);
     	 
         model.addAttribute("urlAlta", "/registro");

@@ -70,22 +70,30 @@
 </div>
 </fichacurso> 
 <div th:fragment="contenidoExtra" class="card mt-3">
-    <div class="card-header bg-light">Contenidos Extra</div>
-    <div class="card-body">
+ <div class="card-header bg-body-tertiary text-black">
+			<a class="d-inline-flex align-items-center text-dark text-decoration-none" 
+               data-bs-toggle="collapse" href="#datosExtra" role="button" aria-expanded="false">
+        		<span class="me-2 icono-giro">▼</span>
+        		<h5 class="mb-0" th:text="#{curso.contenidosExtra}">ssss</h5>
+    		</a>
+        </div>
+        <div class="card-body" id="datosExtra">
         <table class="table" id="tablaContenidos">
             <thead>
                 <tr>
-                    <th>Descripción</th>
-                    <th>Tipo</th>
-                    <th>Recurso (Archivo/URL)</th>
+                    <th th:text="#{curso.contenidosExtra}">Descripción</th>
+                    <th th:text="#{comun.tipo(#{curso.contenido})}">Tipo</th>
+                    <th th:text="#{curso.contenidosExtra}">Recurso (Archivo/URL)</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                </tbody>
+            </tbody>
         </table>
-        <button type="button" class="btn btn-sm btn-secondary" onclick="addContenidoExtraRow()">
-            + Añadir Contenido Extra
-        </button>
+        <div class="text-end">
+	        <button type="button" class="btn btn-sm btn-outline-success" onclick="addContenidoExtraRow()">
+	            <i class="bi bi-plus-lg"></i><span th:text="#{curso.contenidosExtra}">Extra</span>
+	        </button>
+        </div>
     </div>
 </div>

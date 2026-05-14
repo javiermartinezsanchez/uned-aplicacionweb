@@ -13,7 +13,7 @@ public interface ModuloService {
 
 	ModuloDTO grabar(ModuloDTO moduloDTO, String UserIns);
 
-	Paginacion<Modulo, ModuloDTO> listadoPaginado(String string, Pageable pageRequest, Map<String, String> paramBusca);
+	Paginacion<Modulo, ModuloDTO> listadoPaginado( Pageable pageRequest, Map<String, String> paramBusca);
 	
 	/**
 	 * Devuelve el {@code ModuloDTO} buscado por su Id.

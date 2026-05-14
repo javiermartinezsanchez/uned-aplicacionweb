@@ -1,11 +1,8 @@
 package es.alumno.uned.model.util;
 
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import org.springframework.web.util.UriUtils;
 
 /**
  * Clase helper de procesos comunes a los controladores.
@@ -31,19 +28,5 @@ public class ControllerUtil {
 		filtros.values().removeIf(v -> v == null || v.isBlank());
 		
 		return filtros;
-	}
-	/**
-	 * Genera una queryString tipo &amp;clave=valor&amp;clave1=valor1 de acuerdo al mapa
-	 * de filtros que recibe.
-	 * <p>Necesario para mantener los campos de búsqueda en la paginación.
-	 * @param filtros Mapa de filtros.
-	 * @return Cadena en formato QueryString
-	 */
-	public static String mapToQuery(Map<String, String> filtros) {
-		return filtros.entrySet().stream()
-				.filter(e -> !e.getKey().equals("page"))
-	            .map(e -> e.getKey() + "=" +
-	                    UriUtils.encode(e.getValue(), StandardCharsets.UTF_8))
-	            .collect(Collectors.joining("&"));
 	}
 }

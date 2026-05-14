@@ -52,9 +52,8 @@ public class HomeController {
 		else {
 	   		Pageable pageRequest= PageRequest.of(page, 3, Sort.by("numVistas").descending());
 	   		var filtros = ControllerUtil.paramsToMap(paramsBusqueda);
-	   		Paginacion<Curso, CursoDTO> paginacion = cursoService.listadoPaginado("/", pageRequest, filtros);
+	   		Paginacion<Curso, CursoDTO> paginacion = cursoService.listadoPaginado( pageRequest, filtros);
 	   		modelo.addAttribute("paginacion", paginacion);
-	        modelo.addAttribute("query", ControllerUtil.mapToQuery(filtros));
 		}
 		return urlUser.concat("/home");
 	}

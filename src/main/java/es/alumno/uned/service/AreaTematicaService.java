@@ -1,12 +1,14 @@
 package es.alumno.uned.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Pageable;
 
 import es.alumno.uned.dto.AreaTematicaDTO;
 import es.alumno.uned.model.entities.AreaTematica;
+import es.alumno.uned.model.records.PageParams;
 import es.alumno.uned.model.util.Paginacion;
 /**
  *  	Interface público de los métodos 
@@ -15,11 +17,11 @@ public interface AreaTematicaService {
 
 	/**
 	 * Listado paginado de las Areas temáticas.
-	 * @param urlDetalle String con  
+	 * @param params Mapa de parámetros para el filtrado de la búsqueda.  
 	 * @param pageRequest Definición de la página.
 	 * @return Página de los datos solicitados.
 	 */
-	Paginacion<AreaTematica, AreaTematicaDTO> listadoPaginado(String urlDetalle, String titulo, String descripcion, Pageable pageRequest);
+	Paginacion<AreaTematica, AreaTematicaDTO> listadoPaginado( Map<String, String> params, PageParams pageRequest);
 
 	@Nullable
 	Object getAreaTematica(Long id);

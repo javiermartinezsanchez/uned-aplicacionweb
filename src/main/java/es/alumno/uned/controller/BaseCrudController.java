@@ -2,6 +2,7 @@ package es.alumno.uned.controller;
 
 import org.springframework.ui.Model;
 
+import es.alumno.uned.model.records.PageParams;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
@@ -53,24 +54,39 @@ public abstract class BaseCrudController {
     }
     /**
      * Define en el {@link Model} la vista y las url comunes a todos los listados.
-     * <p>Se añade la query para mantener los campos de búsqueda (si existen) en la paginación.
      * @param model Modelo de la vista.
      * @param viewName Vista a mostrar.
      * @param urlAlta Url para un nuevo registro
      * @param urlDetalle Url para el comando de ver/modificar
      * @param urlBack Url para el comando "volver"
-     * @param query Query con los parámetro de búsqueda para la paginación.
      */
     protected void setModeloListado(Model model, String viewName, 
     		String urlAlta,
     		String urlDetalle, 
-    		String urlBack, 
-    		String query) {
+    		String urlBack) {
         model.addAttribute("urlAlta", urlAlta);
         model.addAttribute("viewName", viewName);
         model.addAttribute("url", urlDetalle);
         model.addAttribute("urlBack", urlBack);
-        model.addAttribute("query", query);
     }
+    
+    /**
+     * Definición del tamaño de la página de datos por defecto.
+     * 
+     * @return El tamaño de la página de datos.
+     */
+    protected int getPageSize() {
+        return 10; 
+    }
+
+    /**
+     * 
+     * @param page
+     * @return
+     */
+    protected PageParams getParams(int page) {
+        return new PageParams(page, getPageSize());
+    }
+    
 }
 

@@ -25,17 +25,8 @@ import es.alumno.uned.model.repository.UsuarioRepository;
 import es.alumno.uned.service.DataInitializationService;
 
 /**
- * Clase inicial de carga de datos.
+ * Clase inicial en la que se llama al Servicio de carga de datos {@link DataInitializationService}.
  * 
- * <ul>
- * <li>Tabla de ROLES de usuario</li>
- * <li>Tabla de USUARIOS</li>
- * 
- * <li>Tabla de ESTUDIANTES (con los datos de los usuarios EST)</li>
- * <li>Tabla de Areas Temáticas</li>
- * <li>Tabla de CURSOS</li>
- * <li>Tabla de modulos</li>
- * </ul>
  */
 @Configuration
 public class DatabaseLoader {

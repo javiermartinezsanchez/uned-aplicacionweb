@@ -11,7 +11,7 @@
 		<h1 th:text="#{areatematica.lista}">Título</h1>
 		<br>
 		<div class="form-group">
-		  <form class="row g-3 mb-4" method="get" th:action="@{/admin/areaTematica}">		
+		  <form class="row g-3 mb-4" method="get" th:action="@{${urlBuilder.cloneBuilder().removePathExtension()}}">		
 			<div class="col-md-3">
 		        <label class="form-label" th:text="#{areatematica.title}">Título</label>
 		        <input type="text" name="titulo" class="form-control"
@@ -60,11 +60,11 @@
 				<tr th:each="tema : ${paginacion.contenido}">
 					<td th:text="${tema.titulo}">ID</td>
 					<td th:text="${tema.descripcion}">ID</td>
-					<td><a th:href="@{|${paginacion.url}/${tema.id}|}" class="btn btn-primary" ><i class="bi bi-pencil-square"></i></a></td>
+					<td><a th:href="@{|${url}/${tema.id}|}" class="btn btn-primary" ><i class="bi bi-pencil-square"></i></a></td>
 				</tr>
 			</tbody>
 		</table>
-        <div th:replace="~{fragments/paginacionComun :: paginador(${paginacion}, ${query},'')}"></div>
+        <div th:replace="~{fragments/paginacionComun :: paginador(${paginacion}, '')}"></div>
 	</div>
 </section>
 </body>

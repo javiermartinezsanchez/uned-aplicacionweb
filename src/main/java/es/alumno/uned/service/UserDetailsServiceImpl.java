@@ -60,10 +60,9 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 	            .collect(Collectors.toList());
 	}
 	@Override
-	public Paginacion<Usuario, UsuarioRegistroDTO> listadoPaginado(String url, Pageable pageRequest) {
+	public Paginacion<Usuario, UsuarioRegistroDTO> listadoPaginado( Pageable pageRequest) {
 		
 		return new Paginacion.Builder<Usuario, UsuarioRegistroDTO>()
-				.url(url)
 				.pagina(userRepository.findAll(pageRequest))
 				.mapper(usuarioMapper::toDTO)
 				.build()

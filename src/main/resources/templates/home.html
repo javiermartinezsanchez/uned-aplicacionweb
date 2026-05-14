@@ -13,7 +13,7 @@
 	        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"> 
 	        	<div class="col" th:each="curso : ${paginacion.contenido}" th:insert="~{fragments/curso-card :: cursoCard1(${curso})}"></div>
 	      	</div>  
-	      	<div th:replace="~{fragments/paginacionComun :: paginador(${paginacion}, ${query}, 'pagination-sm')}"></div>      					
+	      	<div th:replace="~{fragments/paginacionComun :: paginador(${paginacion}, 'pagination-sm')}"></div>      					
 	      </div> 
 	    </div> 
     </div>

@@ -54,16 +54,16 @@ public class UserUtil {
                 .collect(Collectors.toSet());
 		return roles;
 	 }
-		/**
-		 * Nos devuelve el ROL de un usuario.
-		 * 
-		 * @param authentication Authentication de Spring
-		 * @return Rol del usuario o "" si no está authenticado.
-		 */
-		 public static String getRol(Authentication authentication) {
-			 return getRoles(authentication).stream()
-					 .findFirst()
-					 .orElse("");
-		 }
+	/**
+	 * Nos devuelve el ROL de un usuario.
+	 * 
+	 * @param authentication Authentication de Spring
+	 * @return Rol del usuario o "" si no está authenticado.
+	 */
+	 public static String getRol(Authentication authentication) {
+		 return getRoles(authentication).stream()
+				 .findFirst()
+				 .orElse("");
+	 }
 	 
 }

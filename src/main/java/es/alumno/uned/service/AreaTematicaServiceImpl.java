@@ -1,11 +1,13 @@
 package es.alumno.uned.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ import es.alumno.uned.dto.AreaTematicaDTO;
 import es.alumno.uned.exception.AreaTematicaAlreadyExistException;
 import es.alumno.uned.mapper.AreaTematicaMapper;
 import es.alumno.uned.model.entities.AreaTematica;
+import es.alumno.uned.model.records.PageParams;
 import es.alumno.uned.model.repository.AreaTematicaRepository;
 import es.alumno.uned.model.util.Paginacion;
 import jakarta.transaction.Transactional;
@@ -27,13 +30,16 @@ public class AreaTematicaServiceImpl implements AreaTematicaService {
 	@Autowired
 	AreaTematicaMapper mapper;
 	@Override
-	public Paginacion<AreaTematica, AreaTematicaDTO> listadoPaginado(String url, String titulo, String descripcion, Pageable pageRequest) {
+	public Paginacion<AreaTematica, AreaTematicaDTO> listadoPaginado(Map<String, String> params, PageParams pageRequest) {
 		
 		return new Paginacion.Builder<AreaTematica, AreaTematicaDTO>()
-				.url(url)
-                .pagina(getPaginaBusqueda(pageRequest, titulo, descripcion))
+				.pagina(getPaginaBusqueda(creaPageable(pageRequest), params))
                 .mapper(mapper::toDTO)
                 .build();
+	}
+	
+	private Pageable creaPageable(PageParams datosPaginacion) {
+		return PageRequest.of(datosPaginacion.page(), datosPaginacion.size());
 	}
     /**
      * Devolvemos una búsqueda de acuerdo a los datos enviados por el filtro.
@@ -46,15 +52,16 @@ public class AreaTematicaServiceImpl implements AreaTematicaService {
      * @param descripcion Texto para buscar en Descripción
      * @return Página de datos obtenida con los datos solicitados.
      */
-	private Page<AreaTematica> getPaginaBusqueda(Pageable pageable, String titulo, String descripcion){
-		if ((titulo !=null) && (descripcion != null)) {
-			return repo.findByTituloContainingIgnoreCaseAndDescripcionContainingIgnoreCase(titulo, descripcion, pageable);
+	private Page<AreaTematica> getPaginaBusqueda(Pageable pageable, Map<String, String> params){
+
+		if ((params.containsKey("titulo")) && (params.containsKey("descripcion"))) {
+			return repo.findByTituloContainingIgnoreCaseAndDescripcionContainingIgnoreCase(params.get("titulo"), params.get("descripcion"), pageable);
 		}
-		if (titulo != null){
-			return repo.findByTituloContainingIgnoreCase(titulo, pageable);
+		if (params.containsKey("titulo")){
+			return repo.findByTituloContainingIgnoreCase(params.get("titulo"), pageable);
 		}
-		if (descripcion != null){
-			return repo.findByDescripcionContainingIgnoreCase(descripcion, pageable);
+		if (params.containsKey("descripcion")){
+			return repo.findByDescripcionContainingIgnoreCase(params.get("descripcion"), pageable);
 		}
 		return repo.findAll(pageable);
 	}

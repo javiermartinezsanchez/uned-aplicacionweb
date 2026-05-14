@@ -94,7 +94,7 @@ public interface UsuarioService extends UserDetailsService{
 	 */
 	public Usuario findByEmail(String email);
 
-	public Paginacion<Usuario, UsuarioRegistroDTO> listadoPaginado(String url, Pageable pageRequest);
+	public Paginacion<Usuario, UsuarioRegistroDTO> listadoPaginado( Pageable pageRequest);
 
 	/**
 	 * Nos devuelve la lista de usuarios conectados (en sesión)

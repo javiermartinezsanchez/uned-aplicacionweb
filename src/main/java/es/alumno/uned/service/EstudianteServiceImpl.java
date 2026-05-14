@@ -89,10 +89,9 @@ public class EstudianteServiceImpl implements EstudianteService {
 	}
 
 	@Override
-	public Paginacion<Estudiante, EstudianteDTO> listadoPaginado(String url, Pageable pageRequest) {
+	public Paginacion<Estudiante, EstudianteDTO> listadoPaginado( Pageable pageRequest) {
 		
 		return new Paginacion.Builder<Estudiante, EstudianteDTO>()
-				.url(url)
 				.pagina(estudianteRepository.findAll(pageRequest))
 				.mapper(estudianteMapper :: toDTO)
 				.build();

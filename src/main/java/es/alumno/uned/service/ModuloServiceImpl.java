@@ -61,12 +61,11 @@ public class ModuloServiceImpl implements ModuloService {
 	    }
 
 		@Override
-		public Paginacion<Modulo, ModuloDTO> listadoPaginado(String url, Pageable pageable, Map<String,String> params) {
-			return construirPaginacion(url,selectByParams( pageable, params) );
+		public Paginacion<Modulo, ModuloDTO> listadoPaginado( Pageable pageable, Map<String,String> params) {
+			return construirPaginacion(selectByParams( pageable, params) );
 		}
-		private Paginacion<Modulo, ModuloDTO> construirPaginacion(String url, Page<Modulo> page) {
+		private Paginacion<Modulo, ModuloDTO> construirPaginacion( Page<Modulo> page) {
 	        return new Paginacion.Builder<Modulo, ModuloDTO>()
-	                .url(url)
 	                .pagina(page)
 	                .mapper(moduloMapper::toDTO)
 	                .build();

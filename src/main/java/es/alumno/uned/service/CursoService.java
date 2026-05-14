@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import es.alumno.uned.dto.CursoDTO;
 import es.alumno.uned.model.entities.Curso;
@@ -38,18 +36,17 @@ public interface CursoService {
 	public CursoDTO getCurso(Long idCurso, Long idUsuario);
 	CursoDTO grabar(CursoDTO dto, FicheroData imagen, List<FicheroData> contenidosExtraFiles, String usuario) throws IOException;
 
-	public Paginacion<Curso, CursoDTO> listadoPaginado(String url,  Pageable pageable);
+	public Paginacion<Curso, CursoDTO> listadoPaginado( Pageable pageable);
 	
 	/**
 	 * Método para consultas de Cursos con un mapa de parámetros para realizar
 	 * consultas de forma dinámica.
 	 * 
-	 * @param url Cadena que define la url de consulta para la paginación.
 	 * @param pageable Definición de la página de datos a generar.
 	 * @param params Mapa de parámetros {nombre=valor,....} que definirá la búsqueda.
 	 * @return {@link Paginacion} Página de datos (Cursos) que cumplen las condiciones de búsqueda.
 	 */
-	public Paginacion<Curso, CursoDTO> listadoPaginado(String url, Pageable pageable, Map<String, String> params);
+	public Paginacion<Curso, CursoDTO> listadoPaginado( Pageable pageable, Map<String, String> params);
 
     /**
      * Proceso de guardado de una valoración de un curso
