@@ -2,7 +2,6 @@ package es.alumno.uned.service;
 
 import java.util.List;
 
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import es.alumno.uned.controller.UserSessionInfoDTO;
@@ -10,6 +9,7 @@ import es.alumno.uned.dto.UserPasswordAdminChangeDTO;
 import es.alumno.uned.dto.UserPasswordChangeDTO;
 import es.alumno.uned.dto.UsuarioRegistroDTO;
 import es.alumno.uned.model.entities.Usuario;
+import es.alumno.uned.model.records.PageParams;
 import es.alumno.uned.model.util.Paginacion;
 import jakarta.validation.Valid;
 
@@ -94,7 +94,7 @@ public interface UsuarioService extends UserDetailsService{
 	 */
 	public Usuario findByEmail(String email);
 
-	public Paginacion<Usuario, UsuarioRegistroDTO> listadoPaginado( Pageable pageRequest);
+	public Paginacion<Usuario, UsuarioRegistroDTO> listadoPaginado( PageParams pageData);
 
 	/**
 	 * Nos devuelve la lista de usuarios conectados (en sesión)

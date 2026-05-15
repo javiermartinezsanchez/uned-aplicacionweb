@@ -7,10 +7,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
-
+/**
+ * Para el control de los errores 404,500 y redirigir a las vistas propias.
+ */
 @Controller
 public class CustomErrorController implements ErrorController {
-
+	/**
+	 * Manejador "Handler" el error.. 
+	 * @param request La Request que genera el error.
+	 * @param model Modelo de la vista que genera el error.
+	 * @return Devuelve la vista que lo mues
+	 */
     @GetMapping("/error")
     public String handleError(HttpServletRequest request, Model model) {
 

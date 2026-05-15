@@ -1,5 +1,9 @@
 package es.alumno.uned.mapper;
-
+/**
+ * Mapper de la entidad UserAudit
+ * 
+ * <p>Se mapa bi-direccionalmente (toDTO) y (toEntity)
+ */
 import org.springframework.stereotype.Component;
 
 import es.alumno.uned.dto.UserAuditDTO;

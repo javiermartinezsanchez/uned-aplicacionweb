@@ -1,20 +1,12 @@
 package es.alumno.uned.exception;
 
-import java.util.List;
-import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import es.alumno.uned.dto.AreaTematicaDTO;
-import es.alumno.uned.service.AreaTematicaService;
 import jakarta.servlet.http.HttpServletRequest;
 /**
  * Control global de excepciones vinculadas a datos.

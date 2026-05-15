@@ -11,7 +11,7 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
    <script th:src="@{/webjars/bootstrap/{version}/js/bootstrap.bundle.min.js(version=${@webjarsConfig.bootstrap})}"></script>
  
    <title th:text="${title} ?: 'Mi Aplicación'"></title>
- 
+   <link rel="icon" type="image/png" th:href="@{/images/favicon.png}">
  </head>
 <body>
 <div th:replace="~{fragments/header :: nav}"></div>

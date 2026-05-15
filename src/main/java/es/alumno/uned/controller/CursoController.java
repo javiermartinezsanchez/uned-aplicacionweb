@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,7 +29,6 @@ import es.alumno.uned.dto.ValoracionDTO;
 import es.alumno.uned.model.entities.Curso;
 import es.alumno.uned.model.entities.SecurityUser;
 import es.alumno.uned.model.records.FicheroData;
-import es.alumno.uned.model.util.ControllerUtil;
 import es.alumno.uned.model.util.Paginacion;
 import es.alumno.uned.service.AreaTematicaService;
 import es.alumno.uned.service.CursoService;
@@ -197,26 +194,28 @@ public class CursoController extends BaseCrudController {
 	/**
 	 * Método de listado genérico de Cursos.
 	 * <p>Se realiza la consulta con los parámetros (opcionales) del buscador.
+	 * @param urlBase Se extrae del path del mapping, para identificar al profesor o al administrador.
 	 * @param paramsBusqueda Mapa con los parámetros de búsqueda.
 	 * @param page Número de página del listado (por defecto 0)
 	 * @param model {@link Model} Modelo de la vista.
 	 * @return Vista que vamos a utilizar
 	 */
-    @GetMapping("/curso")
+    @GetMapping("/{urlBase}/curso")
     public String ListadoGeneral(@AuthenticationPrincipal SecurityUser userConnected,
+    		@PathVariable("urlBase") String urlBase,
     		@RequestParam Map<String, String> paramsBusqueda,
             @RequestParam(name="page", defaultValue = "0") int page,
             Model model) {
-    	Pageable pageRequest= PageRequest.of(page, 10);
-        var filtros = ControllerUtil.paramsToMap(paramsBusqueda);
-       Paginacion<Curso, CursoDTO> paginacion = cursoService.listadoPaginado(pageRequest, filtros);
+    	if (urlBase.equals("profesor")){
+    		paramsBusqueda.put("responsableId", userConnected.getId().toString());
+    	}
+    	Paginacion<Curso, CursoDTO> paginacion = cursoService.listadoPaginado(getParams(page), paramsToMap(paramsBusqueda));
         model.addAttribute("url", "curso");
         model.addAttribute("urlAlta", "/curso/nuevo");
         model.addAttribute("urlBack", "/home");
         model.addAttribute("paginacion", paginacion);
         model.addAttribute("responsableId", userConnected.getId());
         model.addAttribute("responsables", usuarioService.listarProfesores());
-        model.addAttribute("paramsBusqueda",paramsBusqueda );
         return "curso/cursos"; 
     	
     }

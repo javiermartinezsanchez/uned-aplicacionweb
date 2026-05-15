@@ -83,7 +83,9 @@ public class CursoMapper {
         dto.setModulos(entity.getModulos().stream()
         		.map(cursoModuloMapper :: toDTO)
         		.toList());
-        
+        dto.setContenidosExtra(entity.getContenidosExtra().stream()
+        		.map(c -> new ContenidoExtraDTO(c.getId(), c.getDescripcion(), c.getUri(), c.getTipoContenido()))
+        		.toList());
         return dto;
     }
     /**
@@ -111,13 +113,15 @@ public class CursoMapper {
      */
     private void actualizarModulos(CursoDTO dto, Curso entity) {
     		entity.getModulos().clear();
-            for (CursoModuloDTO mDTO : dto.getModulos()) {
-            	Modulo modulo = moduloRepository.findById(mDTO.getModuloId())
-						.orElseThrow();
-                if (!entity.getModulos().contains(mDTO)) {
-                	entity.addModulo(modulo, mDTO.getOrden(), mDTO.getPeso());
-                }
-            }
+    		if (dto.getModulos() != null) {
+	            for (CursoModuloDTO mDTO : dto.getModulos()) {
+	            	Modulo modulo = moduloRepository.findById(mDTO.getModuloId())
+							.orElseThrow();
+	                if (!entity.getModulos().contains(mDTO)) {
+	                	entity.addModulo(modulo, mDTO.getOrden(), mDTO.getPeso());
+	                }
+	            }
+    		}
     }
     /**
      * Se mergea los contenidos que vienen informados con los actuales.

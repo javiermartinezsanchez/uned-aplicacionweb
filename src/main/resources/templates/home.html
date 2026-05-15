@@ -8,14 +8,29 @@
   <section th:fragment="content">
     <div class="container">
        <h1 th:text="#{home.lista.cursos.mas.vistos}"></h1>
-	    <div class="album py-5 bg-body-tertiary"> 
-	      <div class="container"> 
-	        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"> 
+	    <div class="album py-6 bg-body-tertiary"> 
+		    <div th:replace="~{fragments/paginacionComun :: navegacionLateral(${paginacion}, ~{::#cursosTR}, 'my-4')}">
+	        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="cursosTR"> 
 	        	<div class="col" th:each="curso : ${paginacion.contenido}" th:insert="~{fragments/curso-card :: cursoCard1(${curso})}"></div>
 	      	</div>  
-	      	<div th:replace="~{fragments/paginacionComun :: paginador(${paginacion}, 'pagination-sm')}"></div>      					
-	      </div> 
+	      	</div>
 	    </div> 
+	    <h1 th:text="#{home.lista.cursos.mas.valorados}"></h1>
+	    <div class="album py-6 bg-body-tertiary"> 
+		    <div th:replace="~{fragments/paginacionComun :: navegacionLateral(${paginacionMV}, ~{::#cursosMV}, 'my-4')}">
+		        <div class="row row-cols-1 row-cols-md-3 g-4 w-100 mx-0" id="cursosMV">
+		        	<div class="col" th:each="curso : ${paginacionMV.contenido}" th:insert="~{fragments/curso-card :: cursoCard1(${curso})}"></div>
+		      	</div>  
+			</div>
+	    </div>
+	    <h1 th:text="#{home.lista.cursos.mas.subscritos}"></h1>
+	    <div class="album py-6 bg-body-tertiary"> 
+		    <div th:replace="~{fragments/paginacionComun :: navegacionLateral(${paginacionME}, ~{::#cursosME"}, 'my-4')}">
+		        <div class="row row-cols-1 row-cols-md-3 g-4 w-100 mx-0" id="cursosME">
+		        	<div class="col" th:each="curso : ${paginacionMV.contenido}" th:insert="~{fragments/curso-card :: cursoCard1(${curso})}"></div>
+		      	</div>  
+			</div>
+	    </div>
     </div>
     <script th:src="@{/js/enviarvaloracion.js}"></script>
   </section>

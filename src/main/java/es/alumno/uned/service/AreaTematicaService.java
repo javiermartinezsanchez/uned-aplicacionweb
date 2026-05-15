@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.jspecify.annotations.Nullable;
-import org.springframework.data.domain.Pageable;
 
 import es.alumno.uned.dto.AreaTematicaDTO;
 import es.alumno.uned.model.entities.AreaTematica;

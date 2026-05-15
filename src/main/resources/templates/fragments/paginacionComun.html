@@ -58,9 +58,9 @@ Se define el bloque a insertar
 
 se llama al fragmento "PaginadorLateral":
 
-<div th:replace="~{layouts/paginador :: navegacionLateral(${miPaginacion}, ~{::#miTextoCentro}, 'my-4')}"></div>
+<div th:replace="~{fragments/paginadorComun :: navegacionLateral(${paginacionMV}, ~{::#miTextoCentro}, 'my-4')}"></div>
 -->
-<nav th:fragment="navegacionLateral(paginacion, contenidoCentral, claseExtra)" th:if="${paginacion.totalPag > 1}">
+<nav th:fragment="navegacionLateralv0(paginacion, contenidoCentral, claseExtra)" th:if="${paginacion.totalPag > 1}">
     <div class="d-flex align-items-center justify-content-between" th:classappend="${claseExtra}">
 
         <div th:classappend="${not paginacion.hasPrevious} ? 'opacity-50'">
@@ -73,7 +73,7 @@ se llama al fragmento "PaginadorLateral":
 
         <!-- Contenido Central Dinámico Recibido por Parámetro -->
         <div class="mx-3 flex-grow-1 text-center">
-            <div th:insert="${contenidoCentral}"></div>
+            <div th:replace="${contenidoCentral}"></div>
         </div>
 
         <div th:classappend="${not paginacion.hasNext} ? 'opacity-50'">
@@ -84,5 +84,27 @@ se llama al fragmento "PaginadorLateral":
             </a>
         </div>
 
+    </div>
+</nav>
+<nav th:fragment="navegacionLateral(paginacion, contenidoCentral, claseExtra)" 
+     th:if="${paginacion.totalPag > 1}" 
+     class="position-relative"> <div class="position-absolute top-50 start-0 translate-middle-y" style="z-index: 10; margin-left: -25px;">
+        <a class="btn btn-white shadow rounded-circle border"
+           th:classappend="${not paginacion.hasPrevious} ? 'disabled opacity-25'"
+           th:href="${not paginacion.hasPrevious} ? '#' : ${urlBuilder.cloneBuilder().replaceQueryParam('page', paginacion.pagActual - 2).toUriString()}">
+            <i class="bi bi-chevron-left"></i>
+        </a>
+    </div>
+
+    <div class="px-3">
+        <div th:replace="${contenidoCentral}"></div>
+    </div>
+
+    <div class="position-absolute top-50 end-0 translate-middle-y" style="z-index: 10; margin-right: -25px;">
+        <a class="btn btn-white shadow rounded-circle border"
+           th:classappend="${not paginacion.hasNext} ? 'disabled opacity-25'"
+           th:href="${not paginacion.hasNext} ? '#' : ${urlBuilder.cloneBuilder().replaceQueryParam('page', paginacion.pagActual).toUriString()}">
+            <i class="bi bi-chevron-right"></i>
+        </a>
     </div>
 </nav>

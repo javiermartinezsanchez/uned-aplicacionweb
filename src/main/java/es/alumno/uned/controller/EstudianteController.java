@@ -3,10 +3,9 @@ package es.alumno.uned.controller;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import es.alumno.uned.dto.AreaTematicaDTO;
@@ -31,6 +31,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.groups.Default;
 
 @Controller
+@RequestMapping("/estudiante")
 public class EstudianteController extends BaseCrudController {
 
 	private Map<String, String> CONFIG_MODEL = Map.of(
@@ -51,53 +52,18 @@ public class EstudianteController extends BaseCrudController {
         this.areaService= areaService;
     }
 
-    @GetMapping("/registro")
-    public String nuevo(Model model) {
-    	preparaModeloGet(model);
-        model.addAttribute("form", new EstudianteDTO("ESTUD"));
-        model.addAttribute("areasDisponibles", areaService.listAll());
-        return model.getAttribute("viewName").toString();
-    }
-    @PostMapping("/registro")
-    public String registrar(@AuthenticationPrincipal UserDetails usuario,
-    		@RequestParam(required = false) List<Long> areasSeleccionadas,
-    		@ModelAttribute("form") EstudianteDTO form,
-            BindingResult result,
-            HttpServletRequest request,
-            Model model) {
-    	preparaModeloPost(model, request);
-    	validator.validate(form, result, Default.class); 
-        if (result.hasErrors()) {
-            return model.getAttribute("viewName").toString();
-        }
-        String usuarioAlta;
-        if (usuario == null) {
-        	usuarioAlta = form.getEmail();
-        }
-        else {
-        	usuarioAlta = usuario.getUsername();
-        }
-        if (areasSeleccionadas != null) {
-	        List<AreaTematicaDTO> nuevasAreas = areaService.findAllById(areasSeleccionadas);
-	        form.setAreasInteres(nuevasAreas);
-        }
-        estudianteService.grabar(form, usuarioAlta);
-        model.addAttribute("success", "mensaje.grabacionOK");
-        return "redirect:/login?sucess";
-    }
     
-    @GetMapping({"/estudiante/miperfil"})
+    @GetMapping("/miperfil")
     public String perfil(@AuthenticationPrincipal SecurityUser userConnected, 
     		Model model) {
 
         EstudianteDTO dto = estudianteService.findById(userConnected.getId());
         setModeloFormulario(model, "estudiante/editar-perfil","/estudiante/miperfil","/");
         model.addAttribute("form", dto);
-        model.addAttribute("areasDisponibles", areaService.listAll());
         return model.getAttribute("viewName").toString();
     }
 
-    @GetMapping("/estudiante/editar/{id}")
+    @GetMapping("/editar/{id}")
     public String modificar(@PathVariable Long id,Principal principal, 
     		Model model) {
 
@@ -108,32 +74,37 @@ public class EstudianteController extends BaseCrudController {
         return model.getAttribute("viewName").toString();
     }
     
-    @PostMapping("/estudiante/miperfil")
+    @PostMapping("/miperfil")
     public String actualizarPerfil(@AuthenticationPrincipal SecurityUser userConnected,
+    		@RequestParam(required = false) List<Long> areasSeleccionadas,
             @Valid  @ModelAttribute("form") EstudianteDTO form,
             BindingResult result,
             HttpServletRequest request,
             Model model) {
 
-    	preparaModeloPost(model, request);
-    	if (userConnected.getId() != form.getId()){
+    	preparaModeloPost(model, request, "/estudiante/miperfil");
+    	if (!Objects.equals(userConnected.getId(),form.getId())){
     		throw new UserConectedNotMachtException("error.403.title", form, "");
     	}
         if (result.hasErrors()) {
         	return "estudiante/editar-perfil";
         }
+        if (areasSeleccionadas != null) {
+	        List<AreaTematicaDTO> nuevasAreas = areaService.findAllById(areasSeleccionadas);
+	        form.setAreasInteres(nuevasAreas);
+        }
+
         estudianteService.grabar(form, "");
         model.addAttribute("sucess", "mensaje.grabacionOK");
-        return "redirect:/estudiante/miperfil?sucess";
+        return "redirect:/" + request.getAttribute("urlRequest") + "?sucess";
     }
     /*^*
      * Listado genérico de Estudiantes para la consola de administración.
      */
-    @GetMapping("/estudiante")
+    @GetMapping({"","/"})
     public String lista(@RequestParam(defaultValue = "0") int page, 
     		Model model) {
-    	Pageable pageRequest = PageRequest.of(page, 10);
-    	var paginacion = estudianteService.listadoPaginado( pageRequest);
+    	var paginacion = estudianteService.listadoPaginado( getParams(page));
     	model.addAttribute("paginacion", paginacion);
     	 
         model.addAttribute("urlAlta", "/registro");
@@ -151,12 +122,13 @@ public class EstudianteController extends BaseCrudController {
 	            CONFIG_MODEL.get("urlCancel"));
 		
 	}
-	private void preparaModeloPost(Model modelo, HttpServletRequest request) {
+	private void preparaModeloPost(Model modelo, HttpServletRequest request, String urlRequest) {
 		
 		preparaModeloGet(modelo);
 		setRequestFormulario(request,CONFIG_MODEL.get("viewName"), 
 	            CONFIG_MODEL.get("url"), 
-	            CONFIG_MODEL.get("urlCancel"));
+	            CONFIG_MODEL.get("urlCancel"),
+	            urlRequest);
 	
 	}
 

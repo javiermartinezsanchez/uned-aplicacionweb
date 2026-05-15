@@ -12,7 +12,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,7 @@ import es.alumno.uned.model.entities.Curso;
 import es.alumno.uned.model.entities.CursoValoracion;
 import es.alumno.uned.model.entities.TipoContenido;
 import es.alumno.uned.model.records.FicheroData;
+import es.alumno.uned.model.records.PageParams;
 import es.alumno.uned.model.repository.AreaTematicaRepository;
 import es.alumno.uned.model.repository.CursoRepository;
 import es.alumno.uned.model.repository.CursoValoracionRepository;
@@ -138,11 +141,28 @@ public class  CursoServiceImpl implements CursoService{
 	}
 
 	@Override
-	public Paginacion<Curso, CursoDTO> listadoPaginado( Pageable pageable, Map<String, String> params) {
+	public Paginacion<Curso, CursoDTO> listadoPaginado( PageParams pageData, Map<String, String> params) {
 		Specification<Curso> condiciones = generaCondiciones(params);
-		return construirPaginacion(cursoRepository.findAll(condiciones, pageable));
+		return construirPaginacion(cursoRepository.findAll(condiciones, PageRequest.of(pageData.page(), pageData.size())));
 	}
 	
+	@Override
+	public Paginacion<Curso, CursoDTO> listadoOrderByNumVisistas(PageParams pageData, Map<String, String> params) {
+		Specification<Curso> condiciones = generaCondiciones(params);
+		return construirPaginacion(cursoRepository.findAll(condiciones, PageRequest.of(pageData.page(), pageData.size(), Sort.by("numVistas").descending())));
+	}
+	@Override
+	public Paginacion<Curso, CursoDTO> listadoOrderByValoracion(PageParams pageData, Map<String, String> params) {
+		Specification<Curso> condiciones = generaCondiciones(params);
+		return construirPaginacion(cursoRepository.findAll(condiciones, PageRequest.of(pageData.page(), pageData.size(), Sort.by("valoracion").descending())));
+	}
+
+	@Override
+	public Paginacion<Curso, CursoDTO> listadoOrderByInscritos(PageParams pageData, Map<String, String> params) {
+		Specification<Curso> condiciones = generaCondiciones(params);
+		return construirPaginacion(cursoRepository.findAll(condiciones, PageRequest.of(pageData.page(), pageData.size(), Sort.by("usuariosRegistrados").descending())));
+	}
+
 	/**
 	 * Nos devuelve la lista de condiciones {@link Specification} de la consulta de acuerdo a los parámetros enviados.
 	 * <p> Si el mapa de parámetros está vacio devuelve todos.
@@ -244,7 +264,6 @@ public class  CursoServiceImpl implements CursoService{
 //		.map(cursoMapper :: toDTO)
 //		.toList();
 //	}
-
 
 	
 }

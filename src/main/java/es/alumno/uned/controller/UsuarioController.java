@@ -1,8 +1,6 @@
 package es.alumno.uned.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -60,8 +58,7 @@ public class UsuarioController extends BaseCrudController {
 	public String listar(
 			@RequestParam(defaultValue = "0") int page, 
 			Model model) {
-		Pageable pageRequest= PageRequest.of(page, 10);
-		Paginacion<Usuario, UsuarioRegistroDTO> paginacion = userService.listadoPaginado( pageRequest);
+		Paginacion<Usuario, UsuarioRegistroDTO> paginacion = userService.listadoPaginado( getParams(page));
 		model.addAttribute("titulo", "{usuario.lista}");
 		model.addAttribute("paginacion", paginacion);
 		setModeloListado(model, "admin/usuarios", "/admin/newUser", "/admin/usuario","/home" );

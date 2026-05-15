@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import es.alumno.uned.dto.AreaTematicaDTO;
-import es.alumno.uned.model.util.ControllerUtil;
 import es.alumno.uned.service.AreaTematicaService;
 import jakarta.validation.Valid;
 
@@ -69,7 +68,7 @@ public class AreaTematicaController extends BaseCrudController{
 			@RequestParam Map<String, String> params,
 			@RequestParam(defaultValue = "0") int page, 
 			Model model) {
-		var paginacion = areaTematicaService.listadoPaginado(ControllerUtil.paramsToMap(params), getParams(page));
+		var paginacion = areaTematicaService.listadoPaginado(paramsToMap(params), getParams(page));
 
 		setModeloListado(model, "admin/areasTematicas", 
 				"/"+ urlBase+"/areaTematica/nueva",

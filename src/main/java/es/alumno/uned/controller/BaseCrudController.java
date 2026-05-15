@@ -1,5 +1,8 @@
 package es.alumno.uned.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.ui.Model;
 
 import es.alumno.uned.model.records.PageParams;
@@ -41,16 +44,19 @@ public abstract class BaseCrudController {
 	 * @param viewName Vista a mostrar.
 	 * @param urlGuardar Url para el comando de "Guardar" 
 	 * @param urlCancelar Url para el comando "Cancelar"
+	 * @param urlRedirect Url de redirección en caso de exito.
 	 */
     protected void setRequestFormulario(
     		HttpServletRequest request,
             String viewName,
             String urlGuardar,
-            String urlCancelar
+            String urlCancelar,
+            String urlRedirect
     ) {
     	request.setAttribute("viewName", viewName);
     	request.setAttribute("url", urlGuardar);
     	request.setAttribute("urlCancel", urlCancelar);
+    	request.setAttribute("urlRedirect", urlRedirect);
     }
     /**
      * Define en el {@link Model} la vista y las url comunes a todos los listados.
@@ -80,13 +86,45 @@ public abstract class BaseCrudController {
     }
 
     /**
+     * Se genera un objeto {@link PageParams} encapsulando los datos para la paginación.
      * 
      * @param page
-     * @return
+     * @return Parámetros de paginación con el "default" de PageSize.
      */
     protected PageParams getParams(int page) {
         return new PageParams(page, getPageSize());
     }
-    
+    /**
+     * Se genera un objeto {@link PageParams} encapsulando los datos para la paginación.
+     * 
+     * @param page Número de página
+     * @param size Tamaño de la página
+     * @return Parámetros de paginación con el "default" de PageSize.
+     */
+    protected PageParams getParams(int page, int size) {
+        return new PageParams(page, size);
+    }
+	/**
+	 * Limpia el mapa de parametros que llegan desde el formulario.
+	 * <p>Genera un nuevo mapa de valores:
+	 * <ul>
+	 * <li>Elimina los parámetro sin valor, o con espacios en blanco </li>
+	 * <li>Elimina el parámetro "page".</li>
+	 * </ul>
+	 * <p>Nos sirve para mantener los campos de búsqueda en el modelo y no tener que generar "n" variables.
+	 * 
+	 * <p>El "Service" lo recibirá y nos devuele la consulta adecuada a los mismos.
+	 * @param params Mapa de parámetros recibidos por el controller.
+	 * @return Mapa de clave-valor sin "page" y sin los parámetros vacios.
+	 */
+	public Map<String, String> paramsToMap(Map<String, String> params){
+		Map<String, String> filtros = 
+				params == null? new HashMap<>(Map.of("","")) :
+				new HashMap<>(params);
+		filtros.remove("page");
+		filtros.values().removeIf(v -> v == null || v.isBlank());
+		return filtros;
+	}
+
 }
 

@@ -15,7 +15,6 @@ public class ContenidoExtraDTO {
     private TipoContenido tipoContenido;
 
 	public ContenidoExtraDTO(Long id, String descripcion, String uri, TipoContenido tipoContenido) {
-		super();
 		this.id = id;
 		this.descripcion = descripcion;
 		this.uri = uri;

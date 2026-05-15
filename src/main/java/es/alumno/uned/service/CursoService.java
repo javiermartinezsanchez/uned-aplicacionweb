@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import es.alumno.uned.dto.CursoDTO;
 import es.alumno.uned.model.entities.Curso;
 import es.alumno.uned.model.records.FicheroData;
+import es.alumno.uned.model.records.PageParams;
 import es.alumno.uned.model.util.Paginacion;
 
 
@@ -42,11 +43,35 @@ public interface CursoService {
 	 * Método para consultas de Cursos con un mapa de parámetros para realizar
 	 * consultas de forma dinámica.
 	 * 
-	 * @param pageable Definición de la página de datos a generar.
+	 * @param pageData Definición de la página de datos a generar.
 	 * @param params Mapa de parámetros {nombre=valor,....} que definirá la búsqueda.
 	 * @return {@link Paginacion} Página de datos (Cursos) que cumplen las condiciones de búsqueda.
 	 */
-	public Paginacion<Curso, CursoDTO> listadoPaginado( Pageable pageable, Map<String, String> params);
+	public Paginacion<Curso, CursoDTO> listadoPaginado( PageParams pageData, Map<String, String> params);
+
+	/**
+	 * Consulta de cursos para home ordenado por número de visitas.
+	 * @param pageData Datos de la paginación
+	 * @param params Parámetros de búsqueda.
+	 * @return Página de datos encontrados ordenados por NumVisitas descendente.
+	 */
+	public Paginacion<Curso, CursoDTO> listadoOrderByNumVisistas( PageParams pageData, Map<String, String> params);
+
+	/**
+	 * Consulta de cursos para home ordenado por Valoración.
+	 * @param pageData Datos de la paginación
+	 * @param params Parámetros de búsqueda.
+	 * @return Página de datos encontrados ordenados por NumVisitas descendente.
+	 */
+	public Paginacion<Curso, CursoDTO> listadoOrderByValoracion( PageParams pageData, Map<String, String> params);
+
+	/**
+	 * Consulta de cursos para home ordenado por número de inscritos.
+	 * @param pageData Datos de la paginación
+	 * @param params Parámetros de búsqueda.
+	 * @return Página de datos encontrados ordenados por NumVisitas descendente.
+	 */
+	public Paginacion<Curso, CursoDTO> listadoOrderByInscritos( PageParams pageData, Map<String, String> params);
 
     /**
      * Proceso de guardado de una valoración de un curso

@@ -2,7 +2,7 @@ package es.alumno.uned.service;
 
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +10,7 @@ import es.alumno.uned.dto.EstudianteDTO;
 import es.alumno.uned.exception.EstudianteAlreadyExistException;
 import es.alumno.uned.mapper.EstudianteMapper;
 import es.alumno.uned.model.entities.Estudiante;
+import es.alumno.uned.model.records.PageParams;
 import es.alumno.uned.model.repository.EstudianteRepository;
 import es.alumno.uned.model.util.Paginacion;
 
@@ -89,10 +90,10 @@ public class EstudianteServiceImpl implements EstudianteService {
 	}
 
 	@Override
-	public Paginacion<Estudiante, EstudianteDTO> listadoPaginado( Pageable pageRequest) {
+	public Paginacion<Estudiante, EstudianteDTO> listadoPaginado( PageParams pageData) {
 		
 		return new Paginacion.Builder<Estudiante, EstudianteDTO>()
-				.pagina(estudianteRepository.findAll(pageRequest))
+				.pagina(estudianteRepository.findAll(PageRequest.of(pageData.page(), pageData.size())))
 				.mapper(estudianteMapper :: toDTO)
 				.build();
 	}

@@ -30,17 +30,14 @@ public class AreaTematicaServiceImpl implements AreaTematicaService {
 	@Autowired
 	AreaTematicaMapper mapper;
 	@Override
-	public Paginacion<AreaTematica, AreaTematicaDTO> listadoPaginado(Map<String, String> params, PageParams pageRequest) {
+	public Paginacion<AreaTematica, AreaTematicaDTO> listadoPaginado(Map<String, String> params, PageParams pageData) {
 		
 		return new Paginacion.Builder<AreaTematica, AreaTematicaDTO>()
-				.pagina(getPaginaBusqueda(creaPageable(pageRequest), params))
+				.pagina(getPaginaBusqueda(PageRequest.of(pageData.page(), pageData.size()), params))
                 .mapper(mapper::toDTO)
                 .build();
 	}
 	
-	private Pageable creaPageable(PageParams datosPaginacion) {
-		return PageRequest.of(datosPaginacion.page(), datosPaginacion.size());
-	}
     /**
      * Devolvemos una búsqueda de acuerdo a los datos enviados por el filtro.
      * 

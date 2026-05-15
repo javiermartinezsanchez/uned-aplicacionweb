@@ -2,8 +2,6 @@ package es.alumno.uned.controller;
 
 import java.util.Map;
 
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -20,7 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import es.alumno.uned.dto.ModuloDTO;
 import es.alumno.uned.model.entities.Modulo;
 import es.alumno.uned.model.entities.TipoModulo;
-import es.alumno.uned.model.util.ControllerUtil;
 import es.alumno.uned.model.util.Paginacion;
 import es.alumno.uned.service.ModuloService;
 import jakarta.validation.Valid;
@@ -47,11 +44,10 @@ public class ModuloController extends BaseCrudController {
 	    		@RequestParam Map<String, String> paramsBusqueda,
 	            @RequestParam(defaultValue = "0") int page,
 	            Model model) {
-	    	Pageable pageRequest= PageRequest.of(page, 10);
+	    	
 	        Paginacion<Modulo, ModuloDTO> paginacion;
-	        var filtros = ControllerUtil.paramsToMap(paramsBusqueda);
 
-	        paginacion = moduloService.listadoPaginado( pageRequest, filtros);
+	        paginacion = moduloService.listadoPaginado( getParams( page), paramsToMap(paramsBusqueda));
 
 	        setModeloListado(model,"modulo/modulos", "/modulo/nuevo","/modulo/modulo/",  "/home" );
 	        model.addAttribute("tipos", TipoModulo.values());

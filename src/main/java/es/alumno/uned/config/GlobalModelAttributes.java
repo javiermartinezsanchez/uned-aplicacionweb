@@ -1,5 +1,6 @@
 package es.alumno.uned.config;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -77,7 +78,11 @@ public class GlobalModelAttributes {
      */
     @ModelAttribute("areas")
     public List<AreaTematicaDTO> getAreas() {
-        return areaTematicaService.listAll();
+        return ordenadaPorTitulo(areaTematicaService.listAll());
     }
 
+    private List<AreaTematicaDTO> ordenadaPorTitulo(List<AreaTematicaDTO> listaAreas){
+    	listaAreas.sort(Comparator.comparing(AreaTematicaDTO :: getTitulo));
+    	return listaAreas;
+    }
 }

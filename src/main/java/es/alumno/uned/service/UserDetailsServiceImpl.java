@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,6 +22,7 @@ import es.alumno.uned.exception.UserPasswordNotMatchException;
 import es.alumno.uned.mapper.UsuarioRegistroMapper;
 import es.alumno.uned.model.entities.SecurityUser;
 import es.alumno.uned.model.entities.Usuario;
+import es.alumno.uned.model.records.PageParams;
 import es.alumno.uned.model.repository.UsuarioRepository;
 import es.alumno.uned.model.util.Paginacion;
 /**
@@ -60,10 +61,10 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 	            .collect(Collectors.toList());
 	}
 	@Override
-	public Paginacion<Usuario, UsuarioRegistroDTO> listadoPaginado( Pageable pageRequest) {
+	public Paginacion<Usuario, UsuarioRegistroDTO> listadoPaginado( PageParams pageData) {
 		
 		return new Paginacion.Builder<Usuario, UsuarioRegistroDTO>()
-				.pagina(userRepository.findAll(pageRequest))
+				.pagina(userRepository.findAll(PageRequest.of(pageData.page(), pageData.size())))
 				.mapper(usuarioMapper::toDTO)
 				.build()
 				;

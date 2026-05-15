@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import es.alumno.uned.dto.ModuloDTO;
 import es.alumno.uned.mapper.ModuloMapper;
 import es.alumno.uned.model.entities.Modulo;
 import es.alumno.uned.model.entities.TipoModulo;
+import es.alumno.uned.model.records.PageParams;
 import es.alumno.uned.model.repository.CursoRepository;
 import es.alumno.uned.model.repository.EstudianteRepository;
 import es.alumno.uned.model.repository.ModuloRepository;
@@ -61,7 +63,8 @@ public class ModuloServiceImpl implements ModuloService {
 	    }
 
 		@Override
-		public Paginacion<Modulo, ModuloDTO> listadoPaginado( Pageable pageable, Map<String,String> params) {
+		public Paginacion<Modulo, ModuloDTO> listadoPaginado( PageParams pageData, Map<String,String> params) {
+			Pageable pageable = PageRequest.of(pageData.page(), pageData.size());
 			return construirPaginacion(selectByParams( pageable, params) );
 		}
 		private Paginacion<Modulo, ModuloDTO> construirPaginacion( Page<Modulo> page) {
