@@ -30,7 +30,7 @@ public class Modulo {
     @Column(nullable = false, length = 500)
     private String descripcion;
 
-    //@Lob
+   
     @Column(columnDefinition = "TEXT")
     private String contenido;
 

@@ -43,7 +43,7 @@ public class EstudianteCurso {
     private Double calificacionFinal; // 0-10 o 0-100
 
     @Enumerated(EnumType.STRING)
-    private EstadoCurso estado; // ACTIVO, COMPLETADO, BLOQUEADO, BAJA
+    private EstadoCursoModulo estado; // ACTIVO, COMPLETADO, BLOQUEADO, BAJA
 
     @OneToMany(mappedBy = "estudianteCurso")
     private List<EstudianteCursoModulo> modulos;
@@ -56,7 +56,7 @@ public class EstudianteCurso {
         this.curso = curso;
         this.fechaSubscripcion = LocalDateTime.now();
         this.fechaUltimoAcceso = LocalDateTime.now();
-        this.estado = EstadoCurso.ACTIVO;
+        this.estado = EstadoCursoModulo.ACTIVO;
         this.progreso = 0;
     }
 
@@ -116,11 +116,11 @@ public class EstudianteCurso {
 		this.calificacionFinal = calificacionFinal;
 	}
 
-	public EstadoCurso getEstado() {
+	public EstadoCursoModulo getEstado() {
 		return estado;
 	}
 
-	public void setEstado(EstadoCurso estado) {
+	public void setEstado(EstadoCursoModulo estado) {
 		this.estado = estado;
 	}
 

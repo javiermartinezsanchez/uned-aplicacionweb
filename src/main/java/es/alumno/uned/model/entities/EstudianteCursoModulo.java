@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
@@ -27,6 +29,9 @@ public class EstudianteCursoModulo {
     private Modulo modulo;
 
     private Boolean completado;
+    
+    @Enumerated(EnumType.STRING)
+    private EstadoCursoModulo estado; // ACTIVO, COMPLETADO, BLOQUEADO, BAJA
 
     @Column(name = "FECHA_COMPLETADO")
     private LocalDateTime fechaCompletado;
@@ -40,6 +45,9 @@ public class EstudianteCursoModulo {
     @Column(name = "FECHA_ENTREGA")   
     private LocalDateTime fechaEntrega;
 
+    @Column(name = "FECHA_REVISION")
+    
+    private LocalDateTime fechaRevision;
     @Column(name = "CALIFICACION", precision = 2, scale = 1)
 	private BigDecimal calificacion; // si el módulo tiene nota
 
@@ -51,6 +59,7 @@ public class EstudianteCursoModulo {
     protected EstudianteCursoModulo() {}
 
     public EstudianteCursoModulo(EstudianteCurso ecurso, Modulo mod) {
+    	this.id = new EstudianteCursoModuloId(ecurso.getId(), mod.getId());
     	this.estudianteCurso = ecurso;
     	this.modulo = mod;
     	this.fechaUltimoAcceso = LocalDateTime.now();

@@ -236,7 +236,7 @@ public class Curso {
 	 * Utilidad para añadir Usuarios registrados al curso
 	 */
 	public void addUserRegistred() {
-		this.usuariosRegistrados = this.usuariosRegistrados + 1;
+		this.usuariosRegistrados = (this.usuariosRegistrados == null ? 0 : this.usuariosRegistrados) + 1;
 	}
 	/**
 	 * Utilidad para añadir vistas al curso

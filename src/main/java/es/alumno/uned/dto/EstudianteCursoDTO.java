@@ -2,7 +2,7 @@ package es.alumno.uned.dto;
 
 import java.time.LocalDateTime;
 
-import es.alumno.uned.model.entities.EstadoCurso;
+import es.alumno.uned.model.entities.EstadoCursoModulo;
 
 public record EstudianteCursoDTO(
         Long estudianteId,
@@ -11,7 +11,7 @@ public record EstudianteCursoDTO(
         LocalDateTime fechaUltimoAcceso,
         Integer progreso,
         Double calificacionFinal,
-        EstadoCurso estado
+        EstadoCursoModulo estado
 ) {}
 
 
