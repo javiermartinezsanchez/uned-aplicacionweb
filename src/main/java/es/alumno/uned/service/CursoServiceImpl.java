@@ -222,19 +222,26 @@ public class  CursoServiceImpl implements CursoService{
 	    }
 	@Override
 	public BigDecimal guardarValoracion(Long cursoId, Integer valoracion, String usuario) {
-       
-		Curso curso = cursoRepository.findById(cursoId).orElse(null);
-		
-		BigDecimal media =BigDecimal.ZERO;
-		Boolean addValoracion = true;
-		if (curso != null) {
-			media=curso.getValoracion();
-			if (usuario !=null) {
-				addValoracion = (cursoValoracionRepository.findByCursoIdAndUsuario(cursoId, usuario) == null); 
-			}
+	    Curso curso = cursoRepository.findById(cursoId).orElse(null);
+	    
+	    BigDecimal media = BigDecimal.ZERO;
+	    boolean addValoracion = true;
+	    
+	    if (curso != null) {
+	        media = curso.getValoracion();
+	        if (usuario != null) {
+	            addValoracion = (cursoValoracionRepository.findByCursoIdAndUsuario(cursoId, usuario) == null); 
+	        }
+	        
 	        if (addValoracion) {
-	        	cursoValoracionRepository.save(new CursoValoracion(curso,usuario,valoracion));
-	    		// Una vez añadida la valoración calculamos el valor de la media.
+	            // 1. Instanciamos la nueva valoración
+	            CursoValoracion nuevaValoracion = new CursoValoracion(curso, usuario, valoracion);
+	            cursoValoracionRepository.save(nuevaValoracion);
+	            
+	            // 2. ¡CLAVE!: Sincronizamos la lista en memoria para que el Stream la tenga en cuenta
+	            curso.getValoraciones().add(nuevaValoracion);
+
+	            // 3. Calculamos la media real con el nuevo elemento incluido
 	            BigDecimal suma = curso.getValoraciones().stream()
 	                    .map(v -> BigDecimal.valueOf(v.getValoracion()))
 	                    .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -246,15 +253,18 @@ public class  CursoServiceImpl implements CursoService{
 	                    BigDecimal.valueOf(total),
 	                    1, // un decimal
 	                    RoundingMode.HALF_UP
-	            );
+	                );
+	                
+	                // 4. Guardamos la nueva media fija en el curso para que el carrusel la lea rápido
+	                curso.setValoracion(media);
+	                cursoRepository.save(curso);
 
-	            }
-	            catch(ArithmeticException e) {
-	            	media =BigDecimal.ZERO;
+	            } catch (ArithmeticException e) {
+	                media = BigDecimal.ZERO;
 	            }
 	        }
-		}
-		return media;
+	    }
+	    return media;
 	}
 //	@Override
 //	public List<CursoDTO> listadoHome() {

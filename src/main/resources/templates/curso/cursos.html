@@ -27,9 +27,9 @@
 	            </option>
 	        </select>
 	    </div>
-	    <div class="col-md-3">
+	    <div class="col-md-3" th:with="areaIdSeleccionada=${param.areaId != null ? param.areaId[0] : null}">
 	        <label class="form-label" th:text="#{areatematica.title}">Área temática</label>
-	        <select th:replace="~{fragments/selectAreaTematica :: selectArea(${areas},${param.areaId})}">  
+	        <select th:replace="~{fragments/selectAreaTematica :: selectArea(${areas}, ${areaIdSeleccionada})}">  
 	        </select>
 	    </div>
 	    <div class="col-md-3" sec:authorize="hasAnyRole('ADMIN')">
@@ -47,7 +47,7 @@
 	    <div class="col-md-2">
 	        <label class="form-label" th:text="#{comun.fini}">Fecha inicio</label>
 	        <input type="date" name="fIni" class="form-control"
-	               th:value="${param..fIni}">
+	               th:value="${param.fIni}">
 	    </div>
 	    <div class="col-md-2">
 	        <label class="form-label" th:text="#{comun.fFin}">Fecha fin</label>

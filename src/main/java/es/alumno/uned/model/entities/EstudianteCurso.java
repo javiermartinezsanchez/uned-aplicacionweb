@@ -48,7 +48,7 @@ public class EstudianteCurso {
     @OneToMany(mappedBy = "estudianteCurso")
     private List<EstudianteCursoModulo> modulos;
     
-    protected EstudianteCurso() {}
+    public EstudianteCurso() {}
 
     public EstudianteCurso(Estudiante estudiante, Curso curso) {
         this.id = new EstudianteCursoId(estudiante.getId(), curso.getId());

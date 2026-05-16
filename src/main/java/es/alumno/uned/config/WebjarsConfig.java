@@ -15,7 +15,7 @@ public class WebjarsConfig {
 
 	String bootstrap = "5.3.3";
 	String bootstrapicons = "1.13.1";
-	String jquery;
+	String jquery = "3.7.1";
 	public String getBootstrap() {
 		return bootstrap;
 	}

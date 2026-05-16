@@ -356,7 +356,7 @@ public class DataInitializationService {
 				moduloRepo.save(new Modulo("Documentación (Swagger/OpenAPI)","Documentación (Swagger/OpenAPI)","",TipoModulo.FINALIZACION_MANUAL,LocalDateTime.now(),"CARGAINICIAL"));
 			}
 			if (moduloRepo.findByTituloContainingIgnoreCase("Características Avanzadas a Implementar") ==null) {
-				moduloRepo.save(new Modulo("CaracterÃ­sticas Avanzadas a Implementar","Características Avanzadas a Implementar","",TipoModulo.FINALIZACION_MANUAL,LocalDateTime.now(),"CARGAINICIAL"));
+				moduloRepo.save(new Modulo("Características Avanzadas a Implementar","Características Avanzadas a Implementar","",TipoModulo.FINALIZACION_MANUAL,LocalDateTime.now(),"CARGAINICIAL"));
 			}
 			if (moduloRepo.findByTituloContainingIgnoreCase("Criterios de Éxito (Checklist)") == null) {
 				moduloRepo.save(new Modulo("Criterios de Éxito (Checklist)","Criterios de Éito (Checklist)","",TipoModulo.FINALIZACION_MANUAL,LocalDateTime.now(),"CARGAINICIAL"));

@@ -45,13 +45,20 @@ public class GlobalModelAttributes {
 	 * <p>Nos sirve para crear enlaces de paginación o filtros dinámicos.
 	 * <p>Permite a la vista modificar o añadir parámetros a la URL actual sin perder los que ya existían.
 	 * <p><b>Ejemplo en Thymeleaf:</b> Si estás en /cursos?buscar=java y quieres cambiar a la página 2, en el HTML puedes invocar al objeto de esta forma: {@code ${urlBuilder.replaceQueryParam('page', 2).toUriString()}}, lo que generará automáticamente /cursos?buscar=java&page=2.
+	 * <p>Se elimina el parámetro "lang" para no propagarlo en todas las URL's.
 	 * @return
 	 */
-    @ModelAttribute("urlBuilder")
-    public ServletUriComponentsBuilder urlBuilder() {
-        // Retorna un constructor basado en la petición actual
-        return ServletUriComponentsBuilder.fromCurrentRequest();
-    }
+	@ModelAttribute("urlBuilder")
+	public ServletUriComponentsBuilder urlBuilder() {
+//	    ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentRequest();
+//	    
+//	    // Elimina el parámetro 'lang' de forma segura
+//	    builder.replaceQueryParam("lang", (Object[]) new String[0]); 
+//	    
+//	    return builder;
+	    return ServletUriComponentsBuilder.fromCurrentRequest();
+	}
+
     
     /**
      * Como el buscador de la home, está en el fragmento "header", es

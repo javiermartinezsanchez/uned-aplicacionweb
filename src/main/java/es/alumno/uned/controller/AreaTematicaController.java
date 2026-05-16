@@ -2,6 +2,7 @@ package es.alumno.uned.controller;
 
 import java.util.Map;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +26,10 @@ public class AreaTematicaController extends BaseCrudController{
 		this.areaTematicaService = areaTematicaService;
 	}
 	@GetMapping("/{urlBase}/areaTematica/nueva")
+	@PreAuthorize(
+		    "(#urlBase == 'admin' and hasRole('ADMIN')) or " +
+		    "(#urlBase == 'profesor' and hasRole('PROFESOR'))"
+		)
 	public String nueva(@PathVariable("urlBase") String urlBase,
 			Model model) {
 		preparaArea(model, urlBase);
@@ -33,6 +38,10 @@ public class AreaTematicaController extends BaseCrudController{
 	}
 
 	@GetMapping("/{urlBase}/areaTematica/{id}")
+	@PreAuthorize(
+		    "(#urlBase == 'admin' and hasRole('ADMIN')) or " +
+		    "(#urlBase == 'profesor' and hasRole('PROFESOR'))"
+		)
 	public String modifica(
 			@PathVariable("urlBase") String urlBase,
 			@PathVariable("id") Long id, 
@@ -47,6 +56,10 @@ public class AreaTematicaController extends BaseCrudController{
 	}
 	
 	@PostMapping("/{urlBase}/areaTematica")
+	@PreAuthorize(
+		    "(#urlBase == 'admin' and hasRole('ADMIN')) or " +
+		    "(#urlBase == 'profesor' and hasRole('PROFESOR'))"
+		)	
 	public String graba(@PathVariable("urlBase") String urlBase,
 			@Valid @ModelAttribute("form") AreaTematicaDTO form,
             BindingResult result, 
@@ -63,6 +76,10 @@ public class AreaTematicaController extends BaseCrudController{
 	}
 
 	@GetMapping("/{urlBase}/areaTematica")
+	@PreAuthorize(
+		    "(#urlBase == 'admin' and hasRole('ADMIN')) or " +
+		    "(#urlBase == 'profesor' and hasRole('PROFESOR'))"
+		)
 	public String lista(
 			@PathVariable("urlBase") String urlBase,
 			@RequestParam Map<String, String> params,

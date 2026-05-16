@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -201,6 +202,10 @@ public class CursoController extends BaseCrudController {
 	 * @return Vista que vamos a utilizar
 	 */
     @GetMapping("/{urlBase}/curso")
+    @PreAuthorize(
+    	    "(#urlBase == 'admin' and hasRole('ADMIN')) or " +
+    	    "(#urlBase == 'profesor' and hasRole('PROFESOR'))"
+    	)
     public String ListadoGeneral(@AuthenticationPrincipal SecurityUser userConnected,
     		@PathVariable("urlBase") String urlBase,
     		@RequestParam Map<String, String> paramsBusqueda,
@@ -254,4 +259,36 @@ public class CursoController extends BaseCrudController {
             respuesta.put("nuevaPromedio", mediaValoracion); 
             return ResponseEntity.ok(respuesta);
     }
+	@GetMapping("/cursos/ajax/masvisitados")
+	public String paginarDestacadosAJAX(
+			@RequestParam Map<String, String> paramsBusqueda,
+			@RequestParam(defaultValue = "0") int page, Model model) {
+
+		Paginacion<Curso, CursoDTO> paginacion = cursoService.listadoOrderByNumVisistas( getParams( page, 3), paramsToMap(paramsBusqueda));
+	    model.addAttribute("paginacion", paginacion);
+	    // Retorna la vista de cursos, pero solo el fragmento del bloque seleccionado
+	    return "home :: #bloqueMasVisitados"; 
+	}
+	@GetMapping("/cursos/ajax/masvalorados")
+	public String paginarValoradosAJAX(
+			@RequestParam Map<String, String> paramsBusqueda,
+			@RequestParam(defaultValue = "0") int page, Model model) {
+
+		Paginacion<Curso, CursoDTO> paginacion = cursoService.listadoOrderByValoracion( getParams( page, 3), paramsToMap(paramsBusqueda));
+	    model.addAttribute("paginacionMV", paginacion);
+	    // Retorna la vista de cursos, pero solo el fragmento del bloque seleccionado
+	    return "home :: #bloqueMasValorados"; 
+	}
+	@GetMapping("/cursos/ajax/massubscritos")
+	public String paginarMasInscritosAJAX(
+			@RequestParam Map<String, String> paramsBusqueda,
+			@RequestParam(defaultValue = "0") int page, Model model) {
+
+		Paginacion<Curso, CursoDTO> paginacion = cursoService.listadoOrderByInscritos( getParams( page, 3), paramsToMap(paramsBusqueda));
+	    model.addAttribute("paginacionME", paginacion);
+	    // Retorna la vista de cursos, pero solo el fragmento del bloque seleccionado
+	    return "home :: #bloqueMasSubscritos"; 
+	}
+
+
 }

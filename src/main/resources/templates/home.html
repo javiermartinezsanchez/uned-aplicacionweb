@@ -7,32 +7,50 @@
 <body>
   <section th:fragment="content">
     <div class="container">
-       <h1 th:text="#{home.lista.cursos.mas.vistos}"></h1>
-	    <div class="album py-6 bg-body-tertiary"> 
-		    <div th:replace="~{fragments/paginacionComun :: navegacionLateral(${paginacion}, ~{::#cursosTR}, 'my-4')}">
-	        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="cursosTR"> 
-	        	<div class="col" th:each="curso : ${paginacion.contenido}" th:insert="~{fragments/curso-card :: cursoCard1(${curso})}"></div>
-	      	</div>  
-	      	</div>
-	    </div> 
-	    <h1 th:text="#{home.lista.cursos.mas.valorados}"></h1>
-	    <div class="album py-6 bg-body-tertiary"> 
-		    <div th:replace="~{fragments/paginacionComun :: navegacionLateral(${paginacionMV}, ~{::#cursosMV}, 'my-4')}">
-		        <div class="row row-cols-1 row-cols-md-3 g-4 w-100 mx-0" id="cursosMV">
-		        	<div class="col" th:each="curso : ${paginacionMV.contenido}" th:insert="~{fragments/curso-card :: cursoCard1(${curso})}"></div>
-		      	</div>  
+       	<h1 th:text="#{home.lista.cursos.mas.vistos}"></h1>
+		<div class="album py-6 bg-body-tertiary"> 
+		    <div class="container position-relative px-5 my-5" id="bloqueMasVisitados">
+			    <div th:replace="~{fragments/paginacionComun :: navegacionLateralAJAX(${paginacion}, 'bloqueMasVisitados', '/cursos/ajax/masvisitados')}"></div>
+			    <div class="row row-cols-1 row-cols-md-3 g-4"> 
+			        <div class="col" th:each="curso : ${paginacion.contenido}" th:insert="~{fragments/curso-card :: cursoCard1(${curso})}"></div>
+			    </div>
 			</div>
-	    </div>
-	    <h1 th:text="#{home.lista.cursos.mas.subscritos}"></h1>
-	    <div class="album py-6 bg-body-tertiary"> 
-		    <div th:replace="~{fragments/paginacionComun :: navegacionLateral(${paginacionME}, ~{::#cursosME"}, 'my-4')}">
-		        <div class="row row-cols-1 row-cols-md-3 g-4 w-100 mx-0" id="cursosME">
-		        	<div class="col" th:each="curso : ${paginacionMV.contenido}" th:insert="~{fragments/curso-card :: cursoCard1(${curso})}"></div>
-		      	</div>  
+		</div>
+       	<h1 th:text="#{home.lista.cursos.mas.valorados}"></h1>
+		<div class="album py-6 bg-body-tertiary"> 
+		    <div class="container position-relative px-5 my-5" id="bloqueMasValorados">
+			    <div th:replace="~{fragments/paginacionComun :: navegacionLateralAJAX(${paginacionMV}, 'bloqueMasValorados', '/cursos/ajax/masvalorados')}"></div>
+			    <div class="row row-cols-1 row-cols-md-3 g-4"> 
+			        <div class="col" th:each="curso : ${paginacionMV.contenido}" th:insert="~{fragments/curso-card :: cursoCard1(${curso})}"></div>
+			    </div>
 			</div>
-	    </div>
-    </div>
-    <script th:src="@{/js/enviarvaloracion.js}"></script>
+		</div>
+       	<h1 th:text="#{home.lista.cursos.mas.subscritos}"></h1>
+		<div class="album py-6 bg-body-tertiary"> 
+		    <div class="container position-relative px-5 my-5" id="bloqueMasSubscritos">
+			    <div th:replace="~{fragments/paginacionComun :: navegacionLateralAJAX(${paginacionME}, 'bloqueMasSubscritos', '/cursos/ajax/massubscritos')}"></div>
+			    <div class="row row-cols-1 row-cols-md-3 g-4"> 
+			        <div class="col" th:each="curso : ${paginacionME.contenido}" th:insert="~{fragments/curso-card :: cursoCard1(${curso})}"></div>
+			    </div>
+			</div>
+		</div>
+	</div>	
+<!--     <script th:src="@{/js/enviarvaloracion.js}"></script> -->
+		<script th:src="@{/webjars/jquery/{version}/jquery.min.js(version=${@webjarsConfig.jquery})}"></script>
+		<script th:inline="javascript">
+		    $(document).ready(function() {
+		        // Escucha el clic en cualquier botón de paginación AJAX
+		        $(document).on('click', '.btn-paginar-ajax', function(e) {
+		            e.preventDefault();
+		            
+		            var urlALlamar = $(this).data('url');   // Obtiene la URL con la página
+		            var contenedorTarget = $(this).data('target'); // Obtiene el ID del carrusel (#bloqueDestacados)
+		
+		            // Hace la petición silenciosa y reemplaza el HTML de ese carrusel
+		            $(contenedorTarget).load(urlALlamar);
+		        });
+		    });
+</script>
   </section>
 </body>
 </html>
