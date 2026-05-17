@@ -5,9 +5,24 @@
 <!--  Uso: th:insert="fragments/botones :: btnLink('Texto', '/ruta', 'btn-primary', 'bi-save')" -->
 <!-- ========================================================= -->
 <div th:fragment="btnLink(texto, url, estilo, icono)">
-    <a th:href="@{${url}}"
-       th:class="'btn ' + ${estilo}">
-        <i th:if="${icono != null}" th:class="${icono}"></i>
+    <div th:replace="~{::btnLinkTarget(
+    texto=${texto},
+    url=${url},
+    deshabilitado=false,
+    target=null,
+    estilo=${estilo},
+    icono=${icono}
+    )}">
+    </div>    
+</div>
+
+<div th:fragment="btnLinkTarget(texto, url, deshabilitado, target, estilo, icono)">
+    <a th:href="${deshabilitado} ? '#' : ${url}"
+       th:target="${deshabilitado} ? null : ${target}"
+       th:class="'btn ' + ${estilo}"
+       th:classappend="${deshabilitado} ? ' disabled' : ''">
+        <i th:class="${deshabilitado} ? 'bi bi-lock-fill' : ${icono}" 
+           th:if="${deshabilitado} or ${icono != null}"></i>
         <span th:text="${texto}"></span>
     </a>
 </div>

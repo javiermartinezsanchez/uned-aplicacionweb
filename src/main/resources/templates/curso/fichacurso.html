@@ -42,6 +42,14 @@
 							class="btn btn-primary btn-lg px-4"
 							th:text="#{curso.subscribirse}"> Suscribirse al curso </a>
 					</div>
+					<div th:insert="~{fragments/botones :: btnLink(
+				        #{curso.subscribirse},
+				        @{'/curso/' + ${curso.id} + '/suscribir'},
+				        'btn-outline-success btn-sm px-2 text-nowrap',
+				        'bi-clipboard-check'
+				    )}">
+				    </div>
+					
 				</div>
 			</div>
 
@@ -165,28 +173,42 @@
     </div>
 </div>
 
-
-
-			<hr class="my-5">
-			<div
-				th:if="${not #lists.isEmpty(curso.contenidosExtra)}">
-				<h3 class="fw-bold mb-3" th:text="#{curso.contenidosExtra}">Contenidos
-					extra</h3>
+		<hr class="my-5">
+			<div th:if="${not #lists.isEmpty(curso.contenidosExtra)}">
+				<h3 class="fw-bold mb-3" th:text="#{curso.contenidosExtra}">Contenidos extra</h3>
 
 				<ul class="list-group">
-					<li class="list-group-item"
-						th:each="extra : ${curso.contenidosExtra}" th:text="${extra}">
-						Contenido extra...</li>
+				    <!-- Iteramos sobre la lista de contenidos extra del curso -->
+				    <li class="list-group-item d-flex justify-content-between align-items-center" 
+				        th:each="extra : ${curso.contenidosExtra}">
+				        
+				        <!-- 1. Pintamos el texto de la descripción -->
+				        <span th:text="${extra.descripcion}">Contenido extra...</span>
+				        
+				        <!-- 2. Zona de acciones según seguridad -->
+				        <div>
+				            <!-- USUARIO AUTENTICADO: Botón activo con tu endpoint definitivo -->
+				            <span sec:authorize="isAuthenticated()">
+				                <a th:href="@{/contenido-extra/{idCurso}/{idConten}(idCurso=${curso.id}, idConten=${extra.id})}" 
+				                   target="_blank" 
+				                   class="btn btn-primary btn-sm">
+				                   Ver contenido
+				                </a>
+				            </span>
+				
+				            <!-- USUARIO ANÓNIMO: Botón deshabilitado con candado -->
+				            <span sec:authorize="isAnonymous()">
+				                <button class="btn btn-secondary btn-sm" disabled>
+				                   🔒 Iniciar sesión
+				                </button>
+				            </span>
+				        </div>
+				    </li>
 				</ul>
-			</div>
-			<div class="col-md-2 d-flex align-items-end"
-				th:insert="~{fragments/botones :: btnLink(
-		        #{command.volver}, 
-		        ${urlBack}, 
-		        'btn-outline-secondary', 'bi-arrow-left'
-		     )}">
-			</div>
-
+<!--         		<button class="btn btn-secondary btn-sm" disabled> -->
+           		
+<!--         </button> -->
+    </div>
 		</div>
 		<script th:src="@{/js/enviarvaloracion.js}"></script>
 	</section>

@@ -30,18 +30,27 @@ public class ContenidoExtra {
     @Column(name = "tipo_contenido", nullable = false)
     private TipoContenido tipoContenido;
 
+    @Column(name = "nombre_real", nullable = true)
+    private String nombreReal;
+
+    @Column(name = "content_type", nullable = true)
+    private String contentType;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "curso_id")
     private Curso curso;
 
     public ContenidoExtra() {};
     
-	public ContenidoExtra(String descripcion, String uri, TipoContenido tipoContenido) {
+	public ContenidoExtra(String descripcion, String uri, TipoContenido tipoContenido, 
+			String nombreReal,
+			String contentType) {
 		super();
 		this.descripcion = descripcion;
 		this.uri = uri;
 		this.tipoContenido = tipoContenido;
-		
+		this.nombreReal = nombreReal;
+		this.contentType = contentType;
 	}
 
 	public Long getId() {
@@ -82,6 +91,22 @@ public class ContenidoExtra {
 
 	public void setCurso(Curso curso) {
 		this.curso = curso;
+	}
+
+	public String getNombreReal() {
+		return nombreReal;
+	}
+
+	public void setNombreReal(String nombreReal) {
+		this.nombreReal = nombreReal;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
 	}
 
 	@Override

@@ -84,7 +84,8 @@ public class CursoMapper {
         		.map(cursoModuloMapper :: toDTO)
         		.toList());
         dto.setContenidosExtra(entity.getContenidosExtra().stream()
-        		.map(c -> new ContenidoExtraDTO(c.getId(), c.getDescripcion(), c.getUri(), c.getTipoContenido()))
+        		.map(c -> new ContenidoExtraDTO(c.getId(), c.getDescripcion(), c.getUri(), c.getTipoContenido(),
+        				c.getNombreReal(), c.getContentType()))
         		.toList());
         return dto;
     }

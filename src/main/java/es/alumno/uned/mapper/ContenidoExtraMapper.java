@@ -12,6 +12,8 @@ public class ContenidoExtraMapper {
 		return new ContenidoExtra(
 				dto.getDescripcion(), 
 				dto.getUri(), 
-				dto.getTipoContenido());
+				dto.getTipoContenido(),
+				dto.getNombreReal(),
+				dto.getContentType());
 	}
 }

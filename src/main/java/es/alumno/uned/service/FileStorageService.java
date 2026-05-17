@@ -2,12 +2,15 @@ package es.alumno.uned.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
+import org.springframework.core.io.UrlResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import es.alumno.uned.config.AppProperties;
@@ -47,6 +50,27 @@ public class FileStorageService {
 
     public String saveDocumento(FicheroData file) throws IOException {
         return saveFile(file, appProperties.getUploadDocDir());
+    }
+    /**
+     * Método para la descarga de un documento guardado en nuestro disco.
+     * 
+     * @param fichero Nombre del fichero a descargar.
+     * @return Resource del fichero (contenido)
+     */
+    public Resource getDocumento(String fichero) {
+    	try {
+    	Path dirDoc = Paths.get(appProperties.getUploadDocDir());
+    	Path file = dirDoc.resolve(fichero);
+    	Resource resource = new UrlResource(file.toUri());
+    	if (resource.exists() && resource.isReadable()) {
+    		return resource;
+    	}
+    	
+    	
+    	} catch (MalformedURLException e) {
+            // Manejo de error físico
+        }
+    	return null;
     }
     /**
      * Guardamos el fichero enviado desde la aplicación {@code MultipartFile} al directorio deseado.

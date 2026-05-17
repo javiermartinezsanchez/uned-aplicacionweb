@@ -185,7 +185,7 @@ function addModuloRow() {
                 </div>
             </td>
             <td>
-                <button type="button" class="btn text-danger btn-sm" onclick="removeModuloRow(this, '${moduloId}')">
+                <button type="button" class="bi bi-x-circle-fill" onclick="removeModuloRow(this, '${moduloId}')">
                     <i class="bi bi-trash"></i>
                 </button>
             </td>
@@ -235,7 +235,9 @@ function addContenidoExtraRow() {
                 </div>
             </td>
             <td>
-                <button type="button" class="btn btn-danger" onclick="this.closest('tr').remove()">×</button>
+                <button type="button" class="btn text-danger" onclick="this.closest('tr').remove()">
+                	<i class="bi bi-x-circle-fill"></i>
+            	</button>
             </td>
         </tr>
     `;

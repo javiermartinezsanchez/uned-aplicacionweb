@@ -121,6 +121,8 @@ public class  CursoServiceImpl implements CursoService{
 	        if (contenido.getTipoContenido() == TipoContenido.PROPIO) {
 	            if (ficheroCorrespondiente.isPresent()) {
 	            	contenido.setUri( fileStorageService.saveDocumento(ficheroCorrespondiente.get()));
+	            	contenido.setNombreReal(ficheroCorrespondiente.get().nombreOriginal());
+	            	contenido.setContentType(ficheroCorrespondiente.get().contentType());
 	            } else if (contenido.getUri() == null || contenido.getUri().isEmpty()) {
 	                // Error: Es contenido propio pero no hay archivo ni URI previa
 	                throw new MandatoryFileException("curso.contenidoextra.filenotexist", dto, "");

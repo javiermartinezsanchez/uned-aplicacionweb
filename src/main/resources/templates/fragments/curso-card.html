@@ -1,44 +1,35 @@
 <fichacurso th:fragment="cursoCard1(curso)">
-<!--     <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100" style="width: 22rem;"> -->
 <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 w-100">
-    <!-- Imagen fija -->
     <img th:src="@{/images/curso/{img}(img=${curso.uriImagen})}"
          class="card-img-top card-img-fixed"
          alt="Imagen del curso">
-
     <div class="card-body p-4">
-
         <h5 class="fw-bold mb-2" th:text="${curso.titulo}"></h5>
-
-        <!-- Descripción limitada -->
         <p class="text-muted small descripcion-limitada"
            th:text="${curso.descripcion}">
         </p>
-
-        <!-- Botones -->
-        <div class="d-flex justify-content-between mb-3">
-            <a th:href="@{'/viewcurso/' + ${curso.id}}"
-               class="btn btn-primary btn-sm px-3" th:text="#{curso.vercurso}">Ver curso</a>
-
-            <a th:href="@{'/curso/' + ${curso.id} + '/suscribir'}"
-               class="btn btn-outline-success btn-sm px-3" th:text="#{curso.subscribirse}">Suscribirse</a>
-        </div>
-
-        <!-- Usuarios registrados + valoración alineados a la derecha -->
+		<div class="d-flex justify-content-between align-items-center gap-2 mb-3">
+		    <div th:insert="~{fragments/botones :: btnLink(
+		        #{curso.vercurso},
+		        @{'/viewcurso/' + ${curso.id}},
+		        'btn-primary btn-sm px-2 text-nowrap',
+		        'bi-info-circle'
+		    )}"></div>
+		    <div th:insert="~{fragments/botones :: btnLink(
+		        #{curso.subscribirse},
+		        @{'/curso/' + ${curso.id} + '/suscribir'},
+		        'btn-outline-success btn-sm px-2 text-nowrap',
+		        'bi-clipboard-check'
+		    )}"></div>
+		</div>
         <div class="d-flex justify-content-between mt-2">
-
-            <!-- Valoración -->
             <span class="fw-semibold">
                 ⭐ <span th:text="${curso.valoracion}">4.8</span> / 5
             </span>
-
-            <!-- Usuarios registrados -->
             <span class="fw-semibold text-secondary">
                 👥 <span th:text="${curso.usuariosRegistrados}">0</span>
             </span>
-
         </div>
-
     </div>
 </div>
 
@@ -88,7 +79,41 @@
                 </tr>
             </thead>
             <tbody>
-            </tbody>
+        <!-- Iteramos sobre los contenidos actuales si existen -->
+        <tr th:each="contenido, stat : *{contenidosExtra}">
+            <!-- Campo oculto para mantener el ID y no duplicar registros al guardar -->
+            <input type="hidden" th:field="*{contenidosExtra[__${stat.index}__].id}" />
+            
+            <td>
+                <input type="text" 
+                       th:field="*{contenidosExtra[__${stat.index}__].descripcion}" 
+                       class="form-control" required />
+            </td>
+            <td>
+                <select th:field="*{contenidosExtra[__${stat.index}__].tipoContenido}" 
+                        class="form-select" 
+                        th:onchange="|toggleInputType(this, ${stat.index})|">
+                    <option value="EXTERNO">Externo (URL)</option>
+                    <option value="PROPIO">Propio (Archivo)</option>
+                </select>
+            </td>
+            <td>
+                <div th:id="|wrapper-input-${stat.index}|">
+                    <!-- Ejemplo simple con URL, aquí adaptas tu toggle según el tipo -->
+                    <input type="url" 
+                           th:field="*{contenidosExtra[__${stat.index}__].uri}" 
+                           class="form-control" placeholder="https://..." />
+                </div>
+            </td>
+            <td>
+                <!-- Botón de eliminar fila existente -->
+                <button type="button" class="btn text-danger" 
+                       th:onclick="this.closest('tr').remove()">
+                   <i class="bi bi-x-circle-fill"></i>
+                </button>
+  
+            </td>
+        </tr>
         </table>
         <div class="text-end">
 	        <button type="button" class="btn btn-sm btn-outline-success" onclick="addContenidoExtraRow()">

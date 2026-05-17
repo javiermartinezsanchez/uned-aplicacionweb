@@ -99,9 +99,9 @@
                            checked disabled>
                     <span th:text="${area.titulo}"></span>
                     <!-- Botón pequeño para eliminar (opcional, requiere lógica extra) -->
-                    <button type="button" class="btn btn-sm btn-outline-danger ms-auto" 
-                            th:onclick="eliminarArea(this, ${area.id}, '${area.titulo}')" title="Eliminar">
-                        &times;
+                    <button type="button" class="btn text-danger ms-auto" 
+                       th:onclick="eliminarArea(this, ${area.id}, '${area.titulo}')">
+                       <i class="bi bi-x-circle-fill"></i>
                     </button>
                 </div>
                 <p id="mensajeSinAreas" th:if="${form.areasInteres == null or form.areasInteres.isEmpty()}" class="text-muted">
@@ -126,56 +126,34 @@
     <script>
     // Función para agregar una área del select a la lista de checkboxes
     function agregarArea(boton) {
-    	
-
-    	console.log("ENTRADA -> agregarArea()");
-
-        // 1. Buscamos el contenedor que ya sabemos que funciona
         const contenedor = boton.closest('.col-md-6');
-        console.log("Contenedor hallado:", contenedor);
 
         if (!contenedor) {
             console.error("No se encontró el contenedor .col-md-6");
             return;
         }
-
-        // 2. Buscamos el elemento SELECT dentro de ese contenedor
-        // Usamos el tag 'select' directamente para evitar fallos de nombres de clase
         const select = contenedor.querySelector('select');
 
         if (!select) {
-            console.error("No se encontró ningún elemento <select> dentro del contenedor");
             return;
         }
-
-        // 3. Obtener el valor y el texto
         const idSeleccionado = select.value;
         
         if (idSeleccionado === "") {
-            alert("Por favor, selecciona un área de la lista.");
             return;
         }
 
         const nombreSeleccionado =select.options[select.selectedIndex].text;
 
-        console.log("¡LOGRADO! -> ID:", idSeleccionado, "Nombre:", nombreSeleccionado);
-        //const select = document.getElementById('selectarea');
         const selectedOption = select.options[select.selectedIndex];
         const listaContainer = document.getElementById('listaSeleccionadas');
 
-        console.log("ENTRADA ->agregarArea()");
-        console.log("select ->", select);
-        console.log("select.value ->", select.value);
-        console.log("Texto seleccionado:", select.options[select.selectedIndex].text);
-        console.log("Atributo value de la opción:", select.options[select.selectedIndex].getAttribute('value'));
         if (select.value === "") {
            return;
         }
 
         const areaId = select.value;
         const areaNombre = selectedOption.text;
-        console.log("areaId ->", areaId);
-        // Verificar si ya existe (doble seguridad)
         const checkboxes = document.querySelectorAll('input[name="areasSeleccionadas"]');
         let yaExiste = false;
         checkboxes.forEach(cb => {
@@ -198,7 +176,7 @@
                     <input type="checkbox" class="form-check-input me-2" value="${areaId}" data-nombre="${areaNombre}" checked >
                     <span class="text-truncate">${areaNombre}</span>
                 </div>
-                <button type="button" class="btn btn-sm btn-outline-danger" onclick="eliminarArea(this, '${areaId}', '${areaNombre}')" title="Eliminar"><i class="bi bi-trash"></i></button>
+            	<button type="button" class="btn text-danger ms-auto" onclick="eliminarArea(this, ${areaId}, '${areaNombre}')"><i class="bi bi-x-circle-fill"></i></button>
         `;
 
 	    const inputHidden = document.createElement('input');
