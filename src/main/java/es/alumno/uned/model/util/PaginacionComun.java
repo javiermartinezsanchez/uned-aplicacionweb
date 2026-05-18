@@ -86,7 +86,9 @@ public class PaginacionComun<T> {
 	public Page<T> getPagina() {
 		return pagina;
 	}
-
+	public List<T> getContenido(){
+		return pagina.getContent();
+	}
 	public List<Pagina> getPaginas() {
 		return paginas;
 	}

@@ -19,6 +19,22 @@ import jakarta.servlet.http.HttpServletRequest;
  * forma correcta mediante las excepciones definidas.
  */
 public abstract class BaseCrudController {
+
+	/**
+	 * Para las rutas compartidas, definimos la url de vuelta o de Cancel.
+	 * 
+	 * @param urlBack Ruta por defecto.
+	 * @param rol Rol del usuario.
+	 * @return UrlBack generada.
+	 */
+	protected String getUrlBack(String urlBack, String rol) {
+		if (rol.equals("ADMIN")) {
+	        urlBack = "/admin".concat(urlBack);
+	    } else if (rol.equals("PROFE")) {
+	        urlBack = "/profesor".concat(urlBack);
+	    }		
+		return urlBack;
+	}
 	/**
 	 * Define en el {@link Model} la vista y las URL necesarias en cada formulario.
 	 * @param model Modelo de la vista.

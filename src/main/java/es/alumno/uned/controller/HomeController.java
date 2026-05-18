@@ -122,6 +122,7 @@ public class HomeController extends BaseCrudController {
     public String nuevo(Model model) {
     	setModeloFormulario(model,"estudiante/editar-perfil","/registro","/home");
         model.addAttribute("form", new EstudianteDTO("ESTUD"));
+        model.addAttribute("title", "Sign up");
         return model.getAttribute("viewName").toString();
     }
     @PostMapping("/registro")

@@ -2,6 +2,8 @@ package es.alumno.uned.controller;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +33,7 @@ import es.alumno.uned.model.entities.Curso;
 import es.alumno.uned.model.entities.SecurityUser;
 import es.alumno.uned.model.records.FicheroData;
 import es.alumno.uned.model.util.Paginacion;
+import es.alumno.uned.model.util.UserUtil;
 import es.alumno.uned.service.AreaTematicaService;
 import es.alumno.uned.service.CursoService;
 import es.alumno.uned.service.ModuloService;
@@ -65,7 +68,9 @@ public class CursoController extends BaseCrudController {
 	@GetMapping("/curso/nuevo")
 	public String nuevo(@AuthenticationPrincipal SecurityUser userConnected, 
 			Model model) {
-		setModeloFormulario(model, "curso/curso", "/curso/guardar", "/curso");
+		
+		String urlBack = getUrlBack("/curso",userConnected.getRol()) ;
+		setModeloFormulario(model, "curso/curso", "/curso/guardar", urlBack);
 		var curso = new CursoDTO(userConnected.getId());
 	    prepararVistaEdicion(curso,model);
 	    model.addAttribute("form", curso);
@@ -145,15 +150,10 @@ public class CursoController extends BaseCrudController {
 	 */
 	private void prepararVistaEdicion(CursoDTO cursoDTO, Model model) {
 	    // Volvemos a buscar los módulos que NO están en el curso actual
-	    List<ModuloDTO> todos = moduloService.listAll();
+	    List<ModuloDTO> todos =  new ArrayList<>(moduloService.listAll());
+	    todos.sort(Comparator.comparing(ModuloDTO::getTitulo));
 	    
 	    if (cursoDTO.getModulos() != null) {
-//	    List<ModuloDTO> disponibles = todos.stream()
-//	        .filter(m -> cursoDTO.getModulos().stream()
-//	            .noneMatch(rel -> rel.getModuloId().equals(m.getId())))
-//	        .toList();
-	    // 2. RECUPERAR DESCRIPCIONES (Nombres) de los módulos en la tabla
-	    // Como el nombreModulo no viaja en el POST, lo re-asignamos buscando en la lista 'todos'
 	    cursoDTO.getModulos().forEach(rel -> {
 	        todos.stream()
 	            .filter(m -> m.getId().equals(rel.getModuloId()))
@@ -172,7 +172,7 @@ public class CursoController extends BaseCrudController {
 		var curso = cursoService.getCurso(id);
 		prepararVistaEdicion(curso,model);
 		model.addAttribute("url", "/curso/guardar");
-		model.addAttribute("urlCancel", "/curso");
+		model.addAttribute("urlCancel", getUrlBack("/curso",userConnected.getRol()));
 		model.addAttribute("form", cursoService.getCurso(id));
 	    model.addAttribute("usuarios", usuarioService.listarProfesores());
 		return "curso/curso";
@@ -225,15 +225,15 @@ public class CursoController extends BaseCrudController {
     	
     }
     /**
-     * Método que recibe la valoración de los cursos.
-     * <p>Se envia un JSON en el body de la petición.
-     * 
-     * @param datos JSON con la estructura: 
-     * <pre>{ idElemento : (curso_id),
-     *  valoracion : (valoración enviada 1-5)
-     *}</pre>
-     * @return
-     */
+    * Método que recibe la valoración de los cursos.
+    * <p>Se envia un JSON en el body de la petición.
+    * 
+    * @param datos JSON con la estructura: 
+    * <pre>{ idElemento : (curso_id),
+    *  valoracion : (valoración enviada 1-5)
+    *}</pre>
+    * @return
+    */
 	@PostMapping("/valoracionCurso")
     @ResponseBody // CRUCIAL: Indica que el retorno es JSON, no una vista HTML
     public ResponseEntity<Map<String, Object>> guardarValoracion(

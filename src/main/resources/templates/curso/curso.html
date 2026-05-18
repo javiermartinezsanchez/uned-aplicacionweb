@@ -101,7 +101,8 @@ th:replace="~{plantilla::layout(~{::section})}">
                         <option th:value="${''}" th:text="#{curso.modulo.select}" th:selected="${true}" th:disabled="${true}"></option>
                         <option th:each="m : ${modulosDisponibles}" 
                                 th:value="${m.id}" 
-                                th:text="${m.titulo}"></option>
+                                th:text="${m.titulo}"
+                                th:disabled="${form.modulos != null and #lists.contains(form.modulos.![moduloId], m.id)}">
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -132,7 +133,10 @@ th:replace="~{plantilla::layout(~{::section})}">
                                 <input type="number" th:field="*{modulos[__${iter.index}__].orden}" class="form-control form-control-sm" />
                             </td>
                             <td>
-                                <input type="number" th:field="*{modulos[__${iter.index}__].peso}" class="form-control form-control-sm" />
+	                            <div class="input-group">
+	                                <input type="number" th:field="*{modulos[__${iter.index}__].peso}" class="form-control"  min="10" max="100"/>
+	                    			<span class="input-group-text">%</span>
+	                            </div>
                             </td>
                             <td>
                                 <button type="button" class="btn text-danger" 
@@ -185,9 +189,9 @@ function addModuloRow() {
                 </div>
             </td>
             <td>
-                <button type="button" class="bi bi-x-circle-fill" onclick="removeModuloRow(this, '${moduloId}')">
-                    <i class="bi bi-trash"></i>
-                </button>
+                <button type="button" class="btn text-danger" onclick="removeModuloRow(this, '${moduloId}')">
+    	            <i class="bi bi-x-circle-fill"></i>
+	            </button>                
             </td>
         </tr>
     `;
@@ -248,7 +252,6 @@ function toggleInputType(select, index) {
     const wrapper = document.getElementById(`wrapper-input-${index}`);
     if (select.value === 'PROPIO') {
         // Si es propio, cambiamos a input file. 
-        // Nota: Los archivos suelen requerir un manejo especial en el Controller (Multipart)
         wrapper.innerHTML = `<input type="file" name="archivoExtra_${index}" class="form-control" />`;
     } else {
         wrapper.innerHTML = `<input type="url" name="contenidosExtra[${index}].uri" class="form-control" placeholder="https://..." />`;

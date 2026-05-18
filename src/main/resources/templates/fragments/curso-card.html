@@ -22,10 +22,18 @@
 		        'bi-clipboard-check'
 		    )}"></div>
 		</div>
-        <div class="d-flex justify-content-between mt-2">
+        <div class="d-flex justify-content-between align-items-center mt-2">
             <span class="fw-semibold">
                 ⭐ <span th:text="${curso.valoracion}">4.8</span> / 5
             </span>
+		    <div class="d-flex align-items-center text-secondary">
+			    <!-- El icono y el texto ahora van juntos con una separación controlada por 'me-2' o gap -->
+			    <i class="bi bi-clock me-2"></i>
+			    <span>
+			        <strong th:text="${curso.duracion}">40</strong>h.
+			    </span>
+			 </div>
+ 
             <span class="fw-semibold text-secondary">
                 👥 <span th:text="${curso.usuariosRegistrados}">0</span>
             </span>
@@ -98,12 +106,36 @@
                 </select>
             </td>
             <td>
-                <div th:id="|wrapper-input-${stat.index}|">
-                    <!-- Ejemplo simple con URL, aquí adaptas tu toggle según el tipo -->
-                    <input type="url" 
-                           th:field="*{contenidosExtra[__${stat.index}__].uri}" 
-                           class="form-control" placeholder="https://..." />
-                </div>
+<div th:switch="${contenido.tipoContenido?.name()}" class="d-inline">
+
+    <!-- CASO PROPIO: Mantiene los 38px estándar sin romper la línea -->
+    <div th:case="PROPIO" class="input-group d-inline-flex" style="vertical-align: middle;">
+        <!-- 1. Botón visual que activa la subida -->
+        <label class="btn btn-outline-secondary btn-sm" th:for="'file-' + ${stat.index}">
+            <i class="bi bi-file-earmark-pdf"></i> Adjuntar
+        </label>
+        
+        <!-- 2. El input file REAL. OJO: Debe llevar name="file", NO th:field -->
+        <input type="file" name="file" th:id="'file-' + ${stat.index}" class="d-none" accept="application/pdf" />
+
+        <!-- 3. Campo de texto simulado que muestra el valor actual en la línea -->
+        <input type="text" class="form-control form-control-sm bg-light text-truncate" 
+               th:value="${contenido.nombreReal != null ? '📄 ' + contenido.nombreReal : 'Sin archivo'}" 
+               readonly />
+               
+        <!-- 4. Campo oculto para que Spring no pierda los metadatos actuales del DTO al enviar -->
+        <input type="hidden" th:field="*{contenidosExtra[__${stat.index}__].id}" />
+        <input type="hidden" th:field="*{contenidosExtra[__${stat.index}__].nombreReal}" />
+    </div>
+
+    <!-- CASO EXTERNO: Tu código original limpio (añadido form-control-sm para igualar alturas) -->
+    <input th:case="EXTERNO" type="url" th:field="*{contenidosExtra[__${stat.index}__].uri}" 
+           class="form-control form-control-sm d-inline-block" placeholder="https://..." style="width: auto;" />
+
+    <!-- CASO POR DEFECTO -->
+    <span th:case="*" class="badge bg-secondary"></span>	            
+</div>
+
             </td>
             <td>
                 <!-- Botón de eliminar fila existente -->
