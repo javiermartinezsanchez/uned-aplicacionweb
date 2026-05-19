@@ -7,8 +7,12 @@
 <body>
   <section th:fragment="content">
     <div class="container">
-       Bienvenido a la  página principal del Estudiante
+       <h3 th:text="#{home.lista.cursos.miscursos}"></h3>
+       
+       <h3 th:text="#{home.lista.cursos.interesados}"></h3>
     </div>
+   	<script th:src="@{/webjars/jquery/{version}/jquery.min.js(version=${@webjarsConfig.jquery})}"></script>
+	<script th:src="@{/js/navegacionHome.js}"></script>
    
   </section>
 </body>
