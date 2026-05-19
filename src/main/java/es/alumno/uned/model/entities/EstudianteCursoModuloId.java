@@ -13,8 +13,8 @@ public class EstudianteCursoModuloId implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private EstudianteCursoId estudianteCursoId;
     private Long moduloId;
-	public EstudianteCursoModuloId(EstudianteCursoId estudianteCursoId, Long moduloId) {
-		super();
+    public EstudianteCursoModuloId() {};
+    public EstudianteCursoModuloId(EstudianteCursoId estudianteCursoId, Long moduloId) {
 		this.estudianteCursoId = estudianteCursoId;
 		this.moduloId = moduloId;
 	}

@@ -1,6 +1,7 @@
 package es.alumno.uned.model.entities;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -46,7 +47,7 @@ public class EstudianteCurso {
     private EstadoCursoModulo estado; // ACTIVO, COMPLETADO, BLOQUEADO, BAJA
 
     @OneToMany(mappedBy = "estudianteCurso")
-    private List<EstudianteCursoModulo> modulos;
+    private List<EstudianteCursoModulo> modulos = new ArrayList<>();
     
     public EstudianteCurso() {}
 
@@ -131,8 +132,18 @@ public class EstudianteCurso {
 	public void setFechaCompletado(LocalDateTime fechaCompletado) {
 		this.fechaCompletado = fechaCompletado;
 	}
+
+	public List<EstudianteCursoModulo> getModulos() {
+		return modulos;
+	}
     
-    
+	/**
+	 * Utilidad para añadir modulos a EstudianteCurso
+	 * @param ecm EstudianteCursoModulo a añadir (sólo en inscripciones)
+	 */
+    public void addModuloCurso(EstudianteCursoModulo ecm) {
+    	modulos.add(ecm);
+    }
     
 }
 

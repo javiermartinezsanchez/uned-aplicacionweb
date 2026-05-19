@@ -27,7 +27,15 @@ public class EstudianteCursoModulo {
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("moduloId")
     private Modulo modulo;
+    
+    @Column(name="titulo")
+    private String titulo;
+    
+    @Column(name = "orden")
+    private Integer orden;
 
+    @Column(name = "peso")
+    private Integer peso; 
     private Boolean completado;
     
     @Enumerated(EnumType.STRING)
@@ -150,6 +158,46 @@ public class EstudianteCursoModulo {
 
 	public void setNotasCalificacion(String notasCalificacion) {
 		this.notasCalificacion = notasCalificacion;
+	}
+
+	public String getTitulo() {
+		return titulo;
+	}
+
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
+	}
+
+	public Integer getOrden() {
+		return orden;
+	}
+
+	public void setOrden(Integer orden) {
+		this.orden = orden;
+	}
+
+	public Integer getPeso() {
+		return peso;
+	}
+
+	public void setPeso(Integer peso) {
+		this.peso = peso;
+	}
+
+	public EstadoCursoModulo getEstado() {
+		return estado;
+	}
+
+	public void setEstado(EstadoCursoModulo estado) {
+		this.estado = estado;
+	}
+
+	public LocalDateTime getFechaRevision() {
+		return fechaRevision;
+	}
+
+	public void setFechaRevision(LocalDateTime fechaRevision) {
+		this.fechaRevision = fechaRevision;
 	}
 
 	

@@ -6,6 +6,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 /**
  * Clave compuesta de Curso Modulo.
+ * <p><b>Compuesto por:</b>
+ * <ul>
+ * <li>cursoId</li>
+ * <li>moduloId</li>
+ * </ul>
  */
 @Embeddable
 public class CursoModuloId implements Serializable {

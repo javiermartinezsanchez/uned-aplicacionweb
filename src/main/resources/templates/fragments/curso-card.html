@@ -17,7 +17,7 @@
 		    )}"></div>
 		    <div th:insert="~{fragments/botones :: btnLink(
 		        #{curso.subscribirse},
-		        @{'/curso/' + ${curso.id} + '/suscribir'},
+		        @{'/estudiante/subscribircurso/' + ${curso.id} },
 		        'btn-outline-success btn-sm px-2 text-nowrap',
 		        'bi-clipboard-check'
 		    )}"></div>

@@ -110,10 +110,6 @@ public class HomeController extends BaseCrudController {
 	public String profeHome(Model modelo) {
 		return "profesor/home";
 	}
-	@GetMapping("/estudiante/home")
-	public String estudianteHome(Model modelo) {
-		return "estudiante/home";
-	}
 	@GetMapping("/miperfil")
 	public String miperfil(Authentication authentication) {
 		return String.format("redirect:/%s/miperfil", UserUtil.defineHome(UserUtil.getRoles(authentication)));

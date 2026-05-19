@@ -10,6 +10,7 @@
 	<div class="container">
 		<h1 th:text="#{panel.admdisco}">Título</h1>
 		<br>
+		<div th:replace="~{fragments/mensajesresultado :: mensajes}"></div>
 		<div class="form-group">
 		    <!-- El único cambio real: Añadimos 'align-items-end' aquí para nivelar el suelo de la fila -->
 		    <form class="row g-3 mb-4 align-items-end" method="get" th:action="@{${urlBuilder.cloneBuilder().removePathExtension()}}">		
@@ -17,7 +18,16 @@
 		            <label class="form-label" th:text="#{comun.nombre('')}">Título</label>
 		            <input type="text" name="nombreReal" class="form-control" th:value="${param.nombreReal}">
 		        </div>
-		        
+				<div class="col-md-3">
+				<label class="form-label" th:text="#{mantenimiento.tabla.tipo}">traducir</label>
+					<select class="form-select" name="TipoFichero">
+						<option th:value="${''}" th:text="#{comun.select.any}"></option>
+    					<option th:each="val : ${T(es.alumno.uned.model.entities.TipoFichero).values()}" 
+            				th:value="${val}" 
+            				th:text="${val}">
+    					</option>
+					</select>    
+				</div>	    
 		        <div class="col-md-2 d-flex align-items-end" th:insert="~{fragments/botones :: btnSubmit(
 		            #{command.buscar},
 		            'btn-primary w-100',
@@ -83,7 +93,7 @@
 			</tbody>
 		</table>
         <div th:replace="~{fragments/paginacionComun :: paginador(${paginacion}, '')}"></div>
-
+	</div>
 </section>
 </body>
 </html>

@@ -60,6 +60,12 @@ public class CustomLoginSuccessHandler extends SavedRequestAwareAuthenticationSu
             redirectStrategy.sendRedirect(request, response, targetUrl);
             return;
         }
+        String continueUrl = request.getParameter("continue");
+        if (continueUrl != null && !continueUrl.isEmpty() && !continueUrl.equals("null")) {
+            redirectStrategy.sendRedirect(request, response, continueUrl);
+            return;
+        }
+        
         String home = UserUtil.defineHome(UserUtil.getRoles(authentication)).concat("/home");
         redirectStrategy.sendRedirect(request, response, home);
     }

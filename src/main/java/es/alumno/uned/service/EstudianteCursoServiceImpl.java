@@ -1,22 +1,34 @@
 package es.alumno.uned.service;
 
 
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import es.alumno.uned.dto.EstudianteCursoDTO;
 import es.alumno.uned.exception.CursoNotExistException;
 import es.alumno.uned.exception.EstudianteNotExistException;
 import es.alumno.uned.exception.MandatoryModuloException;
+import es.alumno.uned.mapper.EstudianteCursoMapper;
 import es.alumno.uned.model.entities.Curso;
+import es.alumno.uned.model.entities.CursoModulo;
+import es.alumno.uned.model.entities.EstadoCursoModulo;
 import es.alumno.uned.model.entities.Estudiante;
 import es.alumno.uned.model.entities.EstudianteCurso;
+import es.alumno.uned.model.entities.EstudianteCursoModulo;
 import es.alumno.uned.model.entities.Modulo;
 import es.alumno.uned.model.entities.TipoModulo;
+import es.alumno.uned.model.records.PageParams;
 import es.alumno.uned.model.repository.CursoRepository;
 import es.alumno.uned.model.repository.EstudianteCursoModuloRepository;
 import es.alumno.uned.model.repository.EstudianteCursoRepository;
 import es.alumno.uned.model.repository.EstudianteRepository;
-import es.alumno.uned.model.repository.ModuloRepository;
+import es.alumno.uned.model.util.Paginacion;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -27,32 +39,32 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
     private final CursoRepository cursoRepository;
     private final EstudianteCursoRepository estudianteCursoRepository;
     private final EstudianteCursoModuloRepository estudianteCursoModuloRepository;
-
+    
+    private final EstudianteCursoMapper estudianteCursoMapper;
 
     public EstudianteCursoServiceImpl(
             EstudianteRepository estudianteRepository,
             CursoRepository cursoRepository,
             EstudianteCursoRepository estudianteCursoRepository,
-            EstudianteCursoModuloRepository estudianteCursoModuloRepository
-            ) {
+            EstudianteCursoModuloRepository estudianteCursoModuloRepository,
+            EstudianteCursoMapper estudianteCursoMapper) {
 
         this.estudianteRepository = estudianteRepository;
         this.cursoRepository = cursoRepository;
         this.estudianteCursoRepository = estudianteCursoRepository;
         this.estudianteCursoModuloRepository = estudianteCursoModuloRepository;
+        this.estudianteCursoMapper = estudianteCursoMapper;
     }
 
+    @Transactional
     @Override
-    public void subscribirAlumnoACurso(Long estudianteId, Long cursoId) {
-        // 1. Buscar estudiante por username
+    public EstudianteCursoDTO subscribirAlumnoACurso(Long estudianteId, Long cursoId) {
         Estudiante estudiante = estudianteRepository.findById(estudianteId)
                 .orElseThrow(() -> new EstudianteNotExistException("msg.exception.notfound", null, "estudiante.titulo"));
 
-        // 2. Buscar curso por ID
         Curso curso = cursoRepository.findById(cursoId)
                 .orElseThrow(() -> new CursoNotExistException("msg.exception.notfound.", null, "curso.title"));
 
-        // 3. Validar si ya está suscrito
         boolean yaSuscrito = estudianteCursoRepository
                 .existsByIdEstudianteIdAndIdCursoId(estudiante.getId(), cursoId);
 
@@ -60,26 +72,24 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
             throw new IllegalStateException("Ya estás suscrito a este curso.");
         }
 
-        // 4. Crear EstudianteCurso
         EstudianteCurso ec = new EstudianteCurso(estudiante, curso);
-        estudianteCursoRepository.save(ec);
 
         // 5. Crear EstudianteCursoModulo para cada módulo del curso
         //List<Modulo> modulos = moduloRepository.findByCursoId(cursoId);
-
-//        for (Modulo modulo : modulos) {
-//            EstudianteCursoModulo ecm = new EstudianteCursoModulo(ec, modulo);
-//            estudianteCursoModuloRepository.save(ecm);
-//        }
-
-        // 6. Incrementar usuarios registrados del curso
-        Integer actuales = curso.getUsuariosRegistrados();
-        if (actuales == null) {
-            actuales = 0;
+        List<CursoModulo> modulos = curso.getModulos();
+        boolean first = true;
+        for (CursoModulo cursoModulo : modulos) {
+            EstudianteCursoModulo ecm = new EstudianteCursoModulo(ec, cursoModulo.getModulo());
+            ecm.setOrden(cursoModulo.getOrden());
+            ecm.setTitulo(cursoModulo.getModulo().getTitulo());
+            ecm.setPeso(cursoModulo.getPeso());
+            ecm.setEstado(first?EstadoCursoModulo.ACTIVO:EstadoCursoModulo.BLOQUEADO);
+            first = false;
+            ec.addModuloCurso(ecm);
         }
-        curso.setUsuariosRegistrados(actuales + 1);
-        // Si tu CursoService se encarga de esto, puedes delegar; si no:
+        curso.addUserRegistred();
         cursoRepository.save(curso);
+        return estudianteCursoMapper.toDTO(estudianteCursoRepository.save(ec));
 
     }
 
@@ -126,5 +136,19 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 		
 	}
 
+	@Override
+	public Paginacion<EstudianteCurso, EstudianteCursoDTO> listadoPaginado(PageParams pageData,
+			Map<String, String> params) {
+	return new Paginacion.Builder<EstudianteCurso, EstudianteCursoDTO>()
+			.pagina(getPaginaBusqueda(PageRequest.of(pageData.page(), pageData.size()),params))
+			.mapper(estudianteCursoMapper :: toDTO)
+			.build();
+	}
 
+	private Page<EstudianteCurso> getPaginaBusqueda(Pageable pageable, Map<String, String> params){
+		if (params.containsKey("estudianteId")){
+			return estudianteCursoRepository.findByIdEstudianteId(Long.valueOf(params.get("estudianteId")));
+		}
+		return null;
+	}	
 }
