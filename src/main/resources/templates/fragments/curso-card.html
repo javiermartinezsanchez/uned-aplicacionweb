@@ -3,12 +3,16 @@
     <img th:src="@{/images/curso/{img}(img=${curso.uriImagen})}"
          class="card-img-top card-img-fixed"
          alt="Imagen del curso">
-    <div class="card-body p-4">
-        <h5 class="fw-bold mb-2" th:text="${curso.titulo}"></h5>
-        <p class="text-muted small descripcion-limitada"
+<!--     <div class="card-body p-4"> -->
+		<div class="card-body d-flex flex-column p-3 pb-3" style="min-height: 50px">
+        <h5 class="card-title fw-bold" style="min-height: 48px;" th:text="${curso.titulo}"></h5>
+        <p class="card-text text-muted small flex-grow-1 descripcion-limitada"
            th:text="${curso.descripcion}">
         </p>
-		<div class="d-flex justify-content-between align-items-center gap-2 mb-3">
+        <span class="text-secundary small mb-3 d-block"
+           th:text="${curso.areaTematicaText}">
+        </span>
+		<div class="d-flex align-items-center justify-content-between mb-3">
 		    <div th:insert="~{fragments/botones :: btnLink(
 		        #{curso.vercurso},
 		        @{'/viewcurso/' + ${curso.id}},
@@ -22,22 +26,13 @@
 		        'bi-clipboard-check'
 		    )}"></div>
 		</div>
-        <div class="d-flex justify-content-between align-items-center mt-2">
-            <span class="fw-semibold">
-                ⭐ <span th:text="${curso.valoracion}">4.8</span> / 5
-            </span>
-		    <div class="d-flex align-items-center text-secondary">
-			    <!-- El icono y el texto ahora van juntos con una separación controlada por 'me-2' o gap -->
-			    <i class="bi bi-clock me-2"></i>
-			    <span>
-			        <strong th:text="${curso.duracion}">40</strong>h.
-			    </span>
-			 </div>
- 
-            <span class="fw-semibold text-secondary">
-                👥 <span th:text="${curso.usuariosRegistrados}">0</span>
-            </span>
+        <div class="d-flex align-items-center justify-content-between text-muted small border-top pt-2">
+            <span class="fw-semibold">⭐ <span th:text="${curso.valoracion}">4.8</span> / 5</span>
+			<span><i class="bi bi-clock me-2"></i><strong th:text="${curso.duracion}">40</strong>h.</span>
+            <span class="fw-semibold text-secondary">👥 <span th:text="${curso.usuariosRegistrados}">0</span></span>
+
         </div>
+   
     </div>
 </div>
 

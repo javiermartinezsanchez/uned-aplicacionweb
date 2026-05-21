@@ -8,8 +8,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import es.alumno.uned.dto.CursoDTO;
 import es.alumno.uned.dto.EstudianteCursoDTO;
 import es.alumno.uned.exception.CursoNotExistException;
 import es.alumno.uned.exception.EstudianteNotExistException;
@@ -147,8 +151,12 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 
 	private Page<EstudianteCurso> getPaginaBusqueda(Pageable pageable, Map<String, String> params){
 		if (params.containsKey("estudianteId")){
-			return estudianteCursoRepository.findByIdEstudianteId(Long.valueOf(params.get("estudianteId")));
+			return estudianteCursoRepository.findByIdEstudianteId(Long.valueOf(params.get("estudianteId")),pageable);
 		}
 		return null;
 	}	
+	
+
+
+	
 }

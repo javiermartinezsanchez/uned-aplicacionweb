@@ -1,6 +1,8 @@
 package es.alumno.uned.mapper;
 
 
+import org.springframework.stereotype.Component;
+
 import es.alumno.uned.dto.EstudianteCursoModuloDTO;
 import es.alumno.uned.model.entities.EstudianteCursoModulo;
 /**
@@ -9,6 +11,7 @@ import es.alumno.uned.model.entities.EstudianteCursoModulo;
  * <p>toDTO Nos devuelve el DTO de la entidad.
  * 
  */
+@Component
 public class EstudianteCursoModuloMapper {
 
 	public EstudianteCursoModuloDTO toDTO(EstudianteCursoModulo entidad) {

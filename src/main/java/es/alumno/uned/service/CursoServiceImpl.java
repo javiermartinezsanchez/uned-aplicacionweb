@@ -165,13 +165,23 @@ public class  CursoServiceImpl implements CursoService{
 		return construirPaginacion(cursoRepository.findAll(condiciones, PageRequest.of(pageData.page(), pageData.size(), Sort.by("usuariosRegistrados").descending())));
 	}
 
+	@Override
+	public Paginacion<Curso, CursoDTO> listadoCursosDisponiblesPorAreas(PageParams pageData, Long idEstudiante,
+			List<Long> areasId) {
+		if (!areasId.isEmpty()) {
+			return construirPaginacion(cursoRepository.findCursosDisponiblesPorAreas(areasId, idEstudiante, PageRequest.of(pageData.page(), pageData.size(), Sort.by("c.areaTematica.titulo").descending())));
+			
+		}
+		return construirPaginacion(cursoRepository.findCursosDisponiblesEstudiante(idEstudiante, PageRequest.of(pageData.page(), pageData.size(),Sort.by("numVistas").descending())));
+	}
+
 	/**
 	 * Nos devuelve la lista de condiciones {@link Specification} de la consulta de acuerdo a los parámetros enviados.
 	 * <p> Si el mapa de parámetros está vacio devuelve todos.
 	 * @param filtros Mapa de parámetros para definir la búsqueda de Módulos.
 	 * @return Los predicados de búsqueda generados de acuerdo a los parámetros enviados.
 	 */
-	public static Specification<Curso> generaCondiciones(Map<String, String> filtros) {
+	private static Specification<Curso> generaCondiciones(Map<String, String> filtros) {
 	    return (root, query, cb) -> {
 	    	/**
 	    	 * Recomendación para evitar consultas innecesarias.
@@ -268,14 +278,7 @@ public class  CursoServiceImpl implements CursoService{
 	    }
 	    return media;
 	}
-//	@Override
-//	public List<CursoDTO> listadoHome() {
-//		return cursoRepository.findAll().stream()
-//		.filter(c -> c.getUriImagen() != null)
-//		.filter(c -> c.getUriImagen().length() != 0)
-//		.map(cursoMapper :: toDTO)
-//		.toList();
-//	}
+
 
 	
 }

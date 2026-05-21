@@ -3,6 +3,7 @@ package es.alumno.uned.model.repository;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import es.alumno.uned.model.entities.EstudianteCurso;
@@ -13,5 +14,5 @@ public interface EstudianteCursoRepository extends JpaRepository<EstudianteCurso
 
     Optional<EstudianteCurso> findByEstudianteIdAndIdCursoId(Long estudianteId, Long cursoId);
 
-	Page<EstudianteCurso> findByIdEstudianteId(Long estudianteId);
+	Page<EstudianteCurso> findByIdEstudianteId(Long estudianteId, Pageable pageable);
 }

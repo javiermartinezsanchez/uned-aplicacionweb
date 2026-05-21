@@ -35,6 +35,16 @@ public interface CursoService {
 	 * @return {@link CursoDTO} Encontrado.
 	 */
 	public CursoDTO getCurso(Long idCurso, Long idUsuario);
+	
+	/**
+	 * Método para dar de alta o modificar un curso.
+	 * @param dto Datos del curso
+	 * @param imagen Imagen si la enviamos
+	 * @param contenidosExtraFiles Contenidos extra,INTERNOS que adjuntan documentación.
+	 * @param usuario Usuario que realiza el alta.
+	 * @return Devuelve el curso creado/modificado.
+	 * @throws IOException 
+	 */
 	CursoDTO grabar(CursoDTO dto, FicheroData imagen, List<FicheroData> contenidosExtraFiles, String usuario) throws IOException;
 
 	public Paginacion<Curso, CursoDTO> listadoPaginado( Pageable pageable);
@@ -72,6 +82,17 @@ public interface CursoService {
 	 * @return Página de datos encontrados ordenados por NumVisitas descendente.
 	 */
 	public Paginacion<Curso, CursoDTO> listadoOrderByInscritos( PageParams pageData, Map<String, String> params);
+
+	/**
+	 * Consulta de cursos para estudiantes por su área de interés.
+	 * <p> En los casos en los que no tenga áreas de interés se mostrarán todos.
+	 * <p> No se mostrarán los cursos en los que haya participado el Estudiante.
+	 * @param pageData Datos de la paginación
+	 * @param idEstudiante Id del Estudiante
+	 * @param areasId Lista de areas de interés que tiene marcadas. Si no tiene marcada ninguna se devolverán 
+	 * @return
+	 */
+	public Paginacion<Curso, CursoDTO> listadoCursosDisponiblesPorAreas(  PageParams pageData, Long idEstudiante,  List<Long> areasId);
 
     /**
      * Proceso de guardado de una valoración de un curso

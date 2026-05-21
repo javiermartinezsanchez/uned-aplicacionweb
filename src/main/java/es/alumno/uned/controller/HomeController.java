@@ -123,7 +123,6 @@ public class HomeController extends BaseCrudController {
     }
     @PostMapping("/registro")
     public String registrar(
-    		//@AuthenticationPrincipal UserDetails usuario,
     		@AuthenticationPrincipal SecurityUser userConnected,
     		@RequestParam(required = false) List<Long> areasSeleccionadas,
     		@ModelAttribute("form") EstudianteDTO form,
@@ -149,7 +148,7 @@ public class HomeController extends BaseCrudController {
         }
         estudianteService.grabar(form, usuarioAlta);
         model.addAttribute("success", "mensaje.grabacionOK");
-        return "redirect:" + request.getAttribute("urlRequest") + "?sucess";
+        return "redirect:" + request.getAttribute("urlRedirect") + "?sucess";
     }
 
 }

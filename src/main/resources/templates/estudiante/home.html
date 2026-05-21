@@ -8,8 +8,34 @@
   <section th:fragment="content">
     <div class="container">
        <h3 th:text="#{home.lista.cursos.miscursos}"></h3>
+       <div class="album py-6 bg-body-tertiary"> 
+		    <div class="container position-relative px-5 my-5">
+		        <div id="bloqueMisCursos" class="w-100">
+		            <div th:replace="~{fragments/paginacionComun :: navegacionLateralAJAX(${paginacion}, 'bloqueMisCursos', '/estudiante/cursos/ajax/miscursos')}"></div>
+		            <div class="row row-cols-1 row-cols-md-3 g-4" style="width: 100% !important; min-width: 100%;"> 
+		                <div class="col flex-grow-0 flex-shrink-0" th:each="curso : ${paginacion.contenido}">
+		                    <div th:insert="~{fragments/curso-card :: cursoCard1(${curso})}"></div>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
        
        <h3 th:text="#{home.lista.cursos.interesados}"></h3>
+             <div class="album py-6 bg-body-tertiary"> 
+		    <div class="container position-relative px-5 my-5">
+		        <div id="bloqueCursosDisponibles" class="w-100">
+		            <div th:replace="~{fragments/paginacionComun :: navegacionLateralAJAX(${paginacionCD}, 'bloqueCursosDisponibles', '/estudiante/cursos/ajax/cursosdisponibles')}"></div>
+		            <div class="row row-cols-1 row-cols-md-3 g-4" style="width: 100% !important; min-width: 100%;"> 
+		                <div class="col flex-grow-0 flex-shrink-0" th:each="curso : ${paginacion.contenido}">
+		                    <div th:insert="~{fragments/curso-card :: cursoCard1(${curso})}"></div>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+       
+       
     </div>
    	<script th:src="@{/webjars/jquery/{version}/jquery.min.js(version=${@webjarsConfig.jquery})}"></script>
 	<script th:src="@{/js/navegacionHome.js}"></script>

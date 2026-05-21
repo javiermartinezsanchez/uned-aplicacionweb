@@ -87,21 +87,23 @@
 	    </div>
     </div>
     <div class="row border rounded p-3">
-        <!-- Columna Izquierda: Áreas Seleccionadas -->
         <div class="col-md-6">
             <h5 th:text="#{areatematica.estudiante.select}">Áreas de Interés Seleccionadas</h5>
             <div class="area-list" id="listaSeleccionadas">
                 <!-- Aquí se renderizarán los checkboxes dinámicamente o estáticamente -->
-                <div th:each="area : ${form.areasInteres}" class="area-item d-flex align-items-center">
-                    <input type="checkbox" name="areasSeleccionadas" 
+                <div th:each="area : ${form.areasInteres}" class="d-flex align-items-center justify-content-between mb-2 p-1 border-bottom">
+                    <i class="bi bi-check-square-fill text-secondary"></i>
+                    <input type="hidden" name="areasSeleccionadas" 
                            th:value="${area.id}" 
                            th:data-nombre="${area.titulo}"
-                           checked disabled>
+                           />
                     <span th:text="${area.titulo}"></span>
                     <!-- Botón pequeño para eliminar (opcional, requiere lógica extra) -->
                     <button type="button" class="btn text-danger ms-auto" 
-                       th:onclick="eliminarArea(this, ${area.id}, '${area.titulo}')">
-                       <i class="bi bi-x-circle-fill"></i>
+							th:onclick="eliminarArea(this)"
+							th:data-id="${area.id}"
+							th:data-titulo="${area.titulo}">                       
+							<i class="bi bi-x-circle-fill"></i>
                     </button>
                 </div>
                 <p id="mensajeSinAreas" th:if="${form.areasInteres == null or form.areasInteres.isEmpty()}" class="text-muted">
@@ -110,8 +112,7 @@
             </div>
         </div>
 
-        <!-- Columna Derecha: Áreas Disponibles -->
-        <div class="col-md-6">
+        <div class="col-md-6 selectarea">
             <h5 th:text="#{areatematica.estudiante.disponibles}">Áreas Disponibles</h5>
             <div class="d-flex align-items-center gap-2">
                 <select th:replace="~{fragments/selectAreaTematica :: selectArea(${areas},${paramsBusqueda['areaId']})}">  
@@ -161,57 +162,61 @@
         });
         const mensaje = document.getElementById('mensajeSinAreas');
         if (mensaje) {
-            mensaje.classList.add('d-none'); // Clase de Bootstrap para ocultar
+            mensaje.classList.add('d-none'); 
         }
         if (yaExiste) {
             return;
         }
-
-        // Crear el nuevo elemento HTML (Checkbox + Label + Botón eliminar)
         const divItem = document.createElement('div');
-        divItem.className = 'd-flex align-items-center justify-content-between mb-2 p-1 border-bottom';
         
         divItem.innerHTML = `
-                <div class="d-flex align-items-center">
-                    <input type="checkbox" class="form-check-input me-2" value="${areaId}" data-nombre="${areaNombre}" checked >
+                <div class="d-flex align-items-center justify-content-between mb-2 p-1 border-bottom">
+            		<i class="bi bi-check-square-fill text-primary"></i>
+            		<input type="hidden" name="areasSeleccionadas" value="${areaId}" data-nombre="${areaNombre}" >
                     <span class="text-truncate">${areaNombre}</span>
-                </div>
-            	<button type="button" class="btn text-danger ms-auto" onclick="eliminarArea(this, ${areaId}, '${areaNombre}')"><i class="bi bi-x-circle-fill"></i></button>
+                
+		            <button type="button" class="btn text-danger ms-auto" onclick="eliminarArea(this)" 
+		            		data-id="${areaId}" 
+		                    data-titulo="${areaNombre}">
+		                    <i class="bi bi-x-circle-fill"></i>
+		             </button>
+            	</div>
         `;
 
-	    const inputHidden = document.createElement('input');
-	    inputHidden.type = 'hidden';
-	    inputHidden.name = 'areasSeleccionadas'; // ¡Mismo nombre que espera Spring!
-	    inputHidden.value = areaId;
-	
-	    listaContainer.appendChild(divItem);
-	    listaContainer.appendChild(inputHidden);
-
-        // Deshabilitar la opción en el select para que no se pueda volver a seleccionar
+ 	    listaContainer.appendChild(divItem);
         select.options[select.selectedIndex].disabled = true;
  
-        // Limpiar el select
         select.value = "";
         
     }
 
     // Función para eliminar una área de la lista seleccionada
-    function eliminarArea(btn, areaId, areaNombre) {
+    function eliminarArea(btn) {
  
-        // Encontrar el div padre y eliminarlo
-        const divItem = btn.closest('.d-flex');
-        if (divItem){
+        const botonReal = btn.closest('button');
+        if (!botonReal) return;
+
+        const areaId = botonReal.getAttribute('data-id');
+        const areaNombre = botonReal.getAttribute('data-titulo');
+        const filaPadre = botonReal.closest('.row');
+        if (filaPadre) {
+            const select = filaPadre.querySelector('select');
+            if (select) {
+                for (let i = 0; i < select.options.length; i++) {
+                    if (select.options[i].value === areaId) {
+                        select.options[i].disabled = false;
+                        console.log("Reactivada área: " + areaNombre);
+                        break;
+                    }
+                }
+            } 
+        }
+
+        const divItem = botonReal.closest('.d-flex');
+        if (divItem) {
             const inputs = document.querySelectorAll('input[name="areasSeleccionadas"][value="' + areaId + '"]');
             inputs.forEach(input => input.remove());
-        	divItem.remove();
-        }
-        // Re-habilitar la opción en el select
-        const select = document.getElementById('selectAreasDisponibles');
-        for (let i = 0; i < select.options.length; i++) {
-            if (select.options[i].value === areaId) {
-                select.options[i].disabled = false;
-                break;
-            }
+            divItem.remove(); 
         }
         const lista = document.getElementById('listaSeleccionadas');
         const items = lista.querySelectorAll('.d-flex');
@@ -219,7 +224,6 @@
         if (items.length === 0 ){
         	mensaje.classList.remove('d-none');
         }
-        console.log("SALIDA ->agregarArea()");
     }
 	</script>
 </div>
