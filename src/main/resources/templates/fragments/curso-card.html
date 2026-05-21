@@ -1,6 +1,8 @@
 <fichacurso th:fragment="cursoCard1(curso)">
 <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 w-100">
-    <img th:src="@{/images/curso/{img}(img=${curso.uriImagen})}"
+    <img th:src="${curso.uriImagen != null and !#strings.isEmpty(curso.uriImagen)} 
+             ? @{/images/curso/{img}(img=${curso.uriImagen})} 
+             : @{/images/curso/default-curso.png}"
          class="card-img-top card-img-fixed"
          alt="Imagen del curso">
 <!--     <div class="card-body p-4"> -->
