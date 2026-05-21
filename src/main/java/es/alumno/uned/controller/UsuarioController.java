@@ -1,5 +1,7 @@
 package es.alumno.uned.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -56,11 +58,14 @@ public class UsuarioController extends BaseCrudController {
 	}
 	@GetMapping("/admin/usuario")
 	public String listar(
+			@RequestParam Map<String, String> params,
 			@RequestParam(defaultValue = "0") int page, 
 			Model model) {
-		Paginacion<Usuario, UsuarioRegistroDTO> paginacion = userService.listadoPaginado( getParams(page));
+		Paginacion<Usuario, UsuarioRegistroDTO> paginacion = userService.listadoPaginado(paramsToMap(params), getParams(page));
 		model.addAttribute("titulo", "{usuario.lista}");
+		model.addAttribute("title", "{usuario.lista}");
 		model.addAttribute("paginacion", paginacion);
+		getUsuario( model);
 		setModeloListado(model, "admin/usuarios", "/admin/newUser", "/admin/usuario","/home" );
 		return model.getAttribute("viewName").toString();
 	}

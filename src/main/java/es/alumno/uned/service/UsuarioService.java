@@ -1,6 +1,7 @@
 package es.alumno.uned.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -63,13 +64,6 @@ public interface UsuarioService extends UserDetailsService{
 	public void cambioPasswordUserAdmin(UserPasswordAdminChangeDTO dto, Long idUser);
 
 	/**
-	 * Listado de Usuarios convertidos en DTO para no exponer las entidades.
-	 * 
-	 * @return List de UsuarioRegistroDTO
-	 */
-	public List<UsuarioRegistroDTO> listarUsuarios();
-
-	/**
 	 * Búsqueda de usuarios por su ID
 	 * 
 	 * @param id Valor del id del Usuario
@@ -94,7 +88,13 @@ public interface UsuarioService extends UserDetailsService{
 	 */
 	public Usuario findByEmail(String email);
 
-	public Paginacion<Usuario, UsuarioRegistroDTO> listadoPaginado( PageParams pageData);
+	/**
+	 * Consulta paginada de Usuarios
+	 * @param params Mapa de parámetros para la búsqueda.
+	 * @param pageData Datos de la página.
+	 * @return Página de datos obtenida.
+	 */
+	public Paginacion<Usuario, UsuarioRegistroDTO> listadoPaginado(Map<String, String> params, PageParams pageData);
 
 	/**
 	 * Nos devuelve la lista de usuarios conectados (en sesión)

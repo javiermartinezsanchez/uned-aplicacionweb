@@ -38,31 +38,6 @@
 
 </fichacurso>
 
-
-<fichacurso th:fragment="cursoCard4(curso)"> 
-<div class="card shadow-sm" style="width: 22rem;">
-     <img th:src="@{'/images/curso/' + ${curso.uriImagen}}" class="card-img-top" alt="Imagen del curso">
-
-    <div class="card-body">
-        <h5 class="card-title" th:text="${curso.titulo}">Título del curso</h5>
-        <p class="card-text text-muted" th:text="${curso.descripcion}">Descripción breve del curso...</p>
-
-        <div class="d-flex justify-content-between mt-3">
-            <a th:href="@{'/curso/' + ${curso.id}}" class="btn btn-primary">Ver curso</a>
-            <a th:href="@{'/curso/' + ${curso.id} + '/suscribir'}" class="btn btn-outline-success">Suscribirse</a>
-        </div>
-
-        <hr>
-
-        <div class="d-flex justify-content-between">
-            <span>Valoración: ⭐⭐⭐⭐☆</span>
-            <a th:href="@{'/curso/' + ${curso.id} + '/valorar'}" class="text-danger">
-                ❤️ Valorar
-            </a>
-        </div>
-    </div>
-</div>
-</fichacurso> 
 <div th:fragment="contenidoExtra" class="card mt-3">
  <div class="card-header bg-body-tertiary text-black">
 			<a class="d-inline-flex align-items-center text-dark text-decoration-none" 
@@ -82,7 +57,6 @@
                 </tr>
             </thead>
             <tbody>
-        <!-- Iteramos sobre los contenidos actuales si existen -->
         <tr th:each="contenido, stat : *{contenidosExtra}">
             <!-- Campo oculto para mantener el ID y no duplicar registros al guardar -->
             <input type="hidden" th:field="*{contenidosExtra[__${stat.index}__].id}" />
@@ -101,39 +75,31 @@
                 </select>
             </td>
             <td>
-<div th:switch="${contenido.tipoContenido?.name()}" class="d-inline">
-
-    <!-- CASO PROPIO: Mantiene los 38px estándar sin romper la línea -->
-    <div th:case="PROPIO" class="input-group d-inline-flex" style="vertical-align: middle;">
-        <!-- 1. Botón visual que activa la subida -->
-        <label class="btn btn-outline-secondary btn-sm" th:for="'file-' + ${stat.index}">
-            <i class="bi bi-file-earmark-pdf"></i> Adjuntar
-        </label>
-        
-        <!-- 2. El input file REAL. OJO: Debe llevar name="file", NO th:field -->
-        <input type="file" name="file" th:id="'file-' + ${stat.index}" class="d-none" accept="application/pdf" />
-
-        <!-- 3. Campo de texto simulado que muestra el valor actual en la línea -->
-        <input type="text" class="form-control form-control-sm bg-light text-truncate" 
-               th:value="${contenido.nombreReal != null ? '📄 ' + contenido.nombreReal : 'Sin archivo'}" 
-               readonly />
-               
-        <!-- 4. Campo oculto para que Spring no pierda los metadatos actuales del DTO al enviar -->
-        <input type="hidden" th:field="*{contenidosExtra[__${stat.index}__].id}" />
-        <input type="hidden" th:field="*{contenidosExtra[__${stat.index}__].nombreReal}" />
-    </div>
-
-    <!-- CASO EXTERNO: Tu código original limpio (añadido form-control-sm para igualar alturas) -->
-    <input th:case="EXTERNO" type="url" th:field="*{contenidosExtra[__${stat.index}__].uri}" 
-           class="form-control form-control-sm d-inline-block" placeholder="https://..." style="width: auto;" />
-
-    <!-- CASO POR DEFECTO -->
-    <span th:case="*" class="badge bg-secondary"></span>	            
-</div>
+				<div th:switch="${contenido.tipoContenido?.name()}" class="d-inline">
+				
+				    <div th:case="PROPIO" class="input-group d-inline-flex" style="vertical-align: middle;">
+				        <label class="btn btn-outline-secondary btn-sm" th:for="'file-' + ${stat.index}">
+				            <i class="bi bi-file-earmark-pdf"></i> Adjuntar
+				        </label>
+				        
+				        <input type="file" name="file" th:id="'file-' + ${stat.index}" class="d-none" accept="application/pdf" />
+				
+				        <input type="text" class="form-control form-control-sm bg-light text-truncate" 
+				               th:value="${contenido.nombreReal != null ? '📄 ' + contenido.nombreReal : 'Sin archivo'}" 
+				               readonly />
+				               
+				        <input type="hidden" th:field="*{contenidosExtra[__${stat.index}__].id}" />
+				        <input type="hidden" th:field="*{contenidosExtra[__${stat.index}__].nombreReal}" />
+				    </div>
+				
+				    <input th:case="EXTERNO" type="url" th:field="*{contenidosExtra[__${stat.index}__].uri}" 
+				           class="form-control form-control-sm d-inline-block" placeholder="https://..." style="width: auto;" />
+				
+				    <span th:case="*" class="badge bg-secondary"></span>	            
+				</div>
 
             </td>
             <td>
-                <!-- Botón de eliminar fila existente -->
                 <button type="button" class="btn text-danger" 
                        th:onclick="this.closest('tr').remove()">
                    <i class="bi bi-x-circle-fill"></i>

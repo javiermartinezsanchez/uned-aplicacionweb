@@ -1,6 +1,8 @@
 package es.alumno.uned.service;
 
 
+import java.util.Map;
+
 import org.jspecify.annotations.Nullable;
 
 import es.alumno.uned.dto.EstudianteDTO;
@@ -8,6 +10,9 @@ import es.alumno.uned.model.entities.Estudiante;
 import es.alumno.uned.model.records.PageParams;
 import es.alumno.uned.model.util.Paginacion;
 
+/**
+ * Interface de métodos de Estudiante.
+ */
 public interface EstudianteService {
 
    /**
@@ -34,7 +39,13 @@ public interface EstudianteService {
 	@Nullable
 	Object findAll();
 
-	public Paginacion<Estudiante, EstudianteDTO> listadoPaginado( PageParams pageData);
+	/**
+	 * Consulta paginada de Estudiantes
+	 * @param params Mapa de parámetros para la búsqueda.
+	 * @param pageData Datos de la página.
+	 * @return Página de datos obtenida.
+	 */
+	public Paginacion<Estudiante, EstudianteDTO> listadoPaginado( Map<String, String> params, PageParams pageData);
 	
 
 }

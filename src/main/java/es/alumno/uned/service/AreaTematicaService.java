@@ -10,7 +10,7 @@ import es.alumno.uned.model.entities.AreaTematica;
 import es.alumno.uned.model.records.PageParams;
 import es.alumno.uned.model.util.Paginacion;
 /**
- *  	Interface público de los métodos 
+ *  	Interface público de los métodos públicos con acceso a Areas Temáticas.
  */
 public interface AreaTematicaService {
 
@@ -22,6 +22,11 @@ public interface AreaTematicaService {
 	 */
 	Paginacion<AreaTematica, AreaTematicaDTO> listadoPaginado( Map<String, String> params, PageParams pageRequest);
 
+	/**
+	 * Consulta de un Area Temática por su Id
+	 * @param id Id del Área temática a buscar.
+	 * @return el Area Temática buscado o "null" si no lo ha encontrado nada.
+	 */
 	@Nullable
 	Object getAreaTematica(Long id);
 	
@@ -38,5 +43,10 @@ public interface AreaTematicaService {
 	 */
 	List<AreaTematicaDTO> listAll();
 
+	/**
+	 * Búsqueda de Áreas Temáticas por un "array" de id's.
+	 * @param areasIds Listado de Id a buscar.
+	 * @return Devolvemos el AreaTematicaDTO para su uso.
+	 */
 	List<AreaTematicaDTO> findAllById(List<Long> areasIds);
 }

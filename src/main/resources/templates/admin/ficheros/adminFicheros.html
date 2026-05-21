@@ -12,7 +12,6 @@
 		<br>
 		<div th:replace="~{fragments/mensajesresultado :: mensajes}"></div>
 		<div class="form-group">
-		    <!-- El único cambio real: Añadimos 'align-items-end' aquí para nivelar el suelo de la fila -->
 		    <form class="row g-3 mb-4 align-items-end" method="get" th:action="@{${urlBuilder.cloneBuilder().removePathExtension()}}">		
 		        <div class="col-md-3">
 		            <label class="form-label" th:text="#{comun.nombre('')}">Título</label>
@@ -35,7 +34,6 @@
 		            )}">
 		        </div>
 		        
-		        <!-- Mantenemos tu col-auto y tu llamada limpia de 4 parámetros que delega sola -->
 		        <div class="col-auto">
 		            <div th:replace="~{fragments/botones :: btnLink(
 		                #{command.volver}, 
@@ -62,7 +60,6 @@
 		    <td class="text-truncate" style="max-width: 250px;" th:text="${file?.nombreReal()}">UUID.pdf</td>
 		    <td th:text="${file?.sizeKB()}">140 KB</td>
 		    <td>
-		        <!-- Badge dinámico para identificar la procedencia del archivo -->
 		        <span th:if="${file?.tipoFichero()?.name() == 'DOCUMENTO'}" class="badge bg-info-subtle text-info-emphasis border border-info-subtle">
 		            <i class="bi bi-file-earmark-pdf-fill"></i><span th:text="#{mantenimiento.tipo.documento}">Documento</span>
 		        </span>
@@ -76,7 +73,6 @@
 		    </td>
 		    <td class="text-center">
 		        <form th:if="${file?.esHuerfano}" th:action="@{${url}}" method="post" class="m-0">
-		            <!-- Inputs ocultos para mandar los dos datos clave al Controller -->
 		            <input type="hidden" name="nombreArchivo" th:value="${file?.nombre}" />
 		            <input type="hidden" name="tipoFichero" th:value="${file?.tipoFichero()?.name()}" />
 		            

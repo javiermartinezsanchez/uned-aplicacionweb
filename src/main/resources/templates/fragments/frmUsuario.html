@@ -6,17 +6,20 @@
 	        <input type="email" th:field="*{email}" class="form-control w-50">
 	        <div class="text-danger" th:errors="*{email}"></div>
         </div>
-	    <div class="col-md-6 mb-3" th:if="${isUser == true}" sec:authorize="hasRole('ADMIN')">
-	        <label class="form-label" th:text="#{usuario.role}">Rol</label>
-	        <select class="form-select" th:field="*{rol}">
-	        <option th:value="${''}" th:text="#{rol.select}"></option>
-	    		<option th:each="r : ${roles}"
-	            		th:value="${r.nombre}"
-	            		th:text="${r.descripcion}">
-	    		</option>
-			</select>
-	        <div class="text-danger" th:errors="*{rol}"></div>
-	    </div>
+        <div th:replace="~{fragments/frmUsuario :: rolSelect(${roles}, 'rol', *{rol}, true)}"></div>
+
+
+<!-- 	    <div class="col-md-2" th:if="${isUser == true}" sec:authorize="hasRole('ADMIN')"> -->
+<!-- 	        <label class="form-label" th:text="#{usuario.role}">Rol</label> -->
+<!-- 	        <select class="form-select" th:field="*{rol}"> -->
+<!-- 	        <option th:value="${''}" th:text="#{rol.select}"></option> -->
+<!-- 	    		<option th:each="r : ${roles}" -->
+<!-- 	            		th:value="${r.nombre}" -->
+<!-- 	            		th:text="${r.descripcion}"> -->
+<!-- 	    		</option> -->
+<!-- 			</select> -->
+<!-- 	        <div class="text-danger" th:errors="*{rol}"></div> -->
+<!-- 	    </div> -->
 	    <div class="col-md-6 mb-3" sec:authorize="not hasRole('ADMIN')" th:if="*{id} != null">
         	<label class="form-label" th:text="#{usuario.role}">Rol</label>
 	    	<input type="text" th:value="*{rol}" readonly class="form-control-plaintext w-50">
@@ -59,6 +62,33 @@
 
 
 </div>
+<div th:fragment="rolSelectNoFunciona(rolList, rolSelected)" class="col-md-2" th:if="${isUser == true}" sec:authorize="hasRole('ADMIN')">
+	        <label class="form-label" th:text="#{usuario.role}">Rol</label>
+	        <select class="form-select" th:field="${rolSelected}">
+	        <option th:value="${''}" th:text="#{rol.select}"></option>
+	    		<option th:each="r : ${rolList}"
+	            		th:value="${r.nombre}"
+	            		th:text="${r.descripcion}">
+	    		</option>
+			</select>
+	        <div class="text-danger" th:errors="*{rol}"></div>
+</div>
+<div th:fragment="rolSelect(rolList, fieldName, selectedValue, showErrors)" class="col-md-2" th:if="${isUser == true}" sec:authorize="hasRole('ADMIN')">
+    <label class="form-label" th:text="#{usuario.role}">Rol</label>
+    
+    <!-- Usamos name e id dinámicos en lugar de th:field -->
+    <select class="form-select" th:id="${fieldName}" th:name="${fieldName}">
+        <option th:value="${''}" th:text="#{rol.select}"></option>
+        <option th:each="r : ${rolList}"
+                th:value="${r.nombre}"
+                th:text="${r.descripcion}"
+                th:selected="${r.nombre == selectedValue}"> 
+        </option>
+    </select>
+    
+    <div class="text-danger" th:if="${showErrors} and ${#fields.hasErrors(fieldName)}" th:errors="*{__${fieldName}__}"></div>
+</div>
+
 <div th:fragment="frmEstudiante()">
     <div class="mb-1">
         <label class="form-label" th:text="#{usuario.direccion}">Dirección</label>

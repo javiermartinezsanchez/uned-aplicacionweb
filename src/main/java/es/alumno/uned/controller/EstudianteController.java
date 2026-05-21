@@ -102,16 +102,24 @@ public class EstudianteController extends BaseCrudController {
      * Listado genérico de Estudiantes para la consola de administración.
      */
     @GetMapping({"","/"})
-    public String lista(@RequestParam(defaultValue = "0") int page, 
+    public String lista(
+    		@RequestParam Map<String, String> params,
+    		@RequestParam(defaultValue = "0") int page, 
     		Model model) {
-    	var paginacion = estudianteService.listadoPaginado( getParams(page));
+    	var paginacion = estudianteService.listadoPaginado(paramsToMap(params),  getParams(page));
+ 
+		setModeloListado(model, "estudiante/estudiantes", 
+				"/registro",
+	    		"/estudiante/editar", 
+	    		"/home");
+
     	model.addAttribute("paginacion", paginacion);
     	 
-        model.addAttribute("urlAlta", "/registro");
-		model.addAttribute("urlBack", "/home");
+  //      model.addAttribute("urlAlta", "/registro");
+	//	model.addAttribute("urlBack", "/home");
 	   
-	    model.addAttribute("query","");
-        return "estudiante/estudiantes";
+	//    model.addAttribute("query","");
+        return model.getAttribute("viewName").toString();
     }
 
 	private void preparaModeloGet(Model modelo) {

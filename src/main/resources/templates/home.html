@@ -26,26 +26,26 @@
 		    </div>
 		</div>
 		<h3 th:text="#{home.lista.cursos.mas.valorados}"></h3>
-		<div class="album py-6 bg-body-tertiary"> 
-		    <div class="container position-relative px-5 my-5">
-		        <div id="bloqueMasValorados" class="w-100">
+		<div class="album pt-3 pb-2 bg-body-tertiary"> 
+		    <div class="container position-relative px-5 mt-2">
+		        <div id="bloqueMasValorados" class="w-99">
 		            <div th:replace="~{fragments/paginacionComun :: navegacionLateralAJAX(${paginacionMV}, 'bloqueMasValorados', '/cursos/ajax/masvalorados')}"></div>
 		            <div class="row row-cols-1 row-cols-md-3 g-4" style="width: 100% !important; min-width: 100%;"> 
-		                <div class="col flex-grow-0 flex-shrink-0" th:each="curso : ${paginacionMV.contenido}">
-		                    <div th:insert="~{fragments/curso-card :: cursoCard1(${curso})}"></div>
+		                <div class="col" th:each="curso : ${paginacionMV.contenido}">
+		                    <div th:insert="~{fragments/curso-card :: cursoCard1(${curso})}" class="w-100"></div>
 		                </div>
 		            </div>
 		        </div>
 		    </div>
 		</div>
-		<h1 th:text="#{home.lista.cursos.mas.subscritos}"></h1>
-		<div class="album py-6 bg-body-tertiary"> 
-		    <div class="container position-relative px-5 my-5">
-		        <div id="bloqueMasSubscritos" class="w-100">
+		<h3 th:text="#{home.lista.cursos.mas.subscritos}"></h3>
+		<div class="album pt-3 pb-2 bg-body-tertiary"> 
+		    <div class="container position-relative px-5 mt-2">
+		        <div id="bloqueMasSubscritos" class="w-99">
 		            <div th:replace="~{fragments/paginacionComun :: navegacionLateralAJAX(${paginacionME}, 'bloqueMasSubscritos', '/cursos/ajax/massubscritos')}"></div>
 		            <div class="row row-cols-1 row-cols-md-3 g-4" style="width: 100% !important; min-width: 100%;"> 
-		                <div class="col flex-grow-0 flex-shrink-0" th:each="curso : ${paginacionME.contenido}">
-		                    <div th:insert="~{fragments/curso-card :: cursoCard1(${curso})}"></div>
+		                <div class="col" th:each="curso : ${paginacionME.contenido}">
+		                    <div th:insert="~{fragments/curso-card :: cursoCard1(${curso})}" class="w-100"></div>
 		                </div>
 		            </div>
 		        </div>

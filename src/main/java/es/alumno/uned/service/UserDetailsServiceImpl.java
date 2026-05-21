@@ -1,12 +1,17 @@
 package es.alumno.uned.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,6 +30,7 @@ import es.alumno.uned.model.entities.Usuario;
 import es.alumno.uned.model.records.PageParams;
 import es.alumno.uned.model.repository.UsuarioRepository;
 import es.alumno.uned.model.util.Paginacion;
+import jakarta.persistence.criteria.Predicate;
 /**
  * Clase "Service" de la entidad usuario.
  * 
@@ -55,20 +61,47 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		return new SecurityUser(getUserOrNotByEmail(username));
 	}
-	public List<UsuarioRegistroDTO> listarUsuarios() {
-	    return userRepository.findAll().stream()
-	    		.map(usuarioMapper::toDTO)
-	            .collect(Collectors.toList());
-	}
+
 	@Override
-	public Paginacion<Usuario, UsuarioRegistroDTO> listadoPaginado( PageParams pageData) {
-		
-		return new Paginacion.Builder<Usuario, UsuarioRegistroDTO>()
-				.pagina(userRepository.findAll(PageRequest.of(pageData.page(), pageData.size())))
-				.mapper(usuarioMapper::toDTO)
-				.build()
-				;
+	public Paginacion<Usuario, UsuarioRegistroDTO> listadoPaginado(Map<String, String> params, PageParams pageData) {
+		Specification<Usuario> condiciones = generaCondiciones(params);
+		return construirPaginacion(userRepository.findAll(condiciones,PageRequest.of(pageData.page(), pageData.size())));
 	}
+	
+	/**
+	 * Nos devuelve la lista de condiciones {@link Specification} de la consulta de acuerdo a los parámetros enviados.
+	 * <p> Si el mapa de parámetros está vacio devuelve todos.
+	 * @param filtros Mapa de parámetros para definir la búsqueda de Módulos.
+	 * @return Los predicados de búsqueda generados de acuerdo a los parámetros enviados.
+	 */
+	private static Specification<Usuario> generaCondiciones(Map<String, String> filtros) {
+	    return (root, query, cb) -> {
+	        List<Predicate> predicates = new ArrayList<>();
+
+	        if (filtros.containsKey("nombre")) {
+	            predicates.add(cb.like(cb.lower(root.get("nombre")), 
+	                           "%" + filtros.get("nombre").toLowerCase() + "%"));
+	        }
+
+	        if (filtros.containsKey("email")) {
+	            predicates.add(cb.equal(root.get("email"), filtros.get("email")));
+	        }
+
+	        if (filtros.containsKey("rol")) {
+	            predicates.add(cb.equal(root.get("rol"), 
+	                           filtros.get("rol")));
+	        }
+
+	        return cb.and(predicates.toArray(new Predicate[0]));
+	    };
+	}
+	private Paginacion<Usuario, UsuarioRegistroDTO> construirPaginacion( Page<Usuario> page) {
+        return new Paginacion.Builder<Usuario, UsuarioRegistroDTO>()
+                .pagina(page)
+                .mapper(usuarioMapper::toDTO)
+                .build();
+    }
+	
 	@Override
 	public Usuario grabar(UsuarioRegistroDTO registroDTO, String usuarioAlta) {
 		Usuario user = findByEmail(registroDTO.getEmail());
@@ -122,12 +155,14 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 
 	@Override
 	public List<UsuarioRegistroDTO> listarProfesores() {
-		return listarUsuarios().stream()
+		return userRepository.findAll().stream()
 				.filter(a -> a.getRol().equals("PROFE"))
+				.map(usuarioMapper::toDTO)
 				.toList()
 				;
 	}
 
+	
 	@Override
 	public Long getIdByEmail(String email) {
 		return findByEmail( email).getId();

@@ -1,8 +1,12 @@
 package es.alumno.uned.service;
 
+import java.util.Map;
+
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -90,13 +94,38 @@ public class EstudianteServiceImpl implements EstudianteService {
 	}
 
 	@Override
-	public Paginacion<Estudiante, EstudianteDTO> listadoPaginado( PageParams pageData) {
+	public Paginacion<Estudiante, EstudianteDTO> listadoPaginado(Map<String, String> params, PageParams pageData) {
+		
 		
 		return new Paginacion.Builder<Estudiante, EstudianteDTO>()
-				.pagina(estudianteRepository.findAll(PageRequest.of(pageData.page(), pageData.size())))
-				.mapper(estudianteMapper :: toDTO)
-				.build();
+				.pagina(getPaginaBusqueda(PageRequest.of(pageData.page(), pageData.size()), params))
+                .mapper(estudianteMapper::toDTO)
+                .build();
+
 	}
 
-	
+   /**
+     * Devolvemos una búsqueda de acuerdo a los datos enviados por el filtro.
+     * 
+     * Dependendiendo de la existencia o no de los mismos llamamos a diferenentens métodos de nuestro repositorio.
+     * 
+     * 
+     * @param pageable Definición de la {@code Page} a devolver.
+     * @param params Mapa de Parámetros del formulario de búsqueda
+     * @return Página de datos obtenida con los datos solicitados.
+     */
+	private Page<Estudiante> getPaginaBusqueda(Pageable pageable, Map<String, String> params){
+
+		if ((params.containsKey("nombre")) && (params.containsKey("email"))) {
+			return estudianteRepository.findByUsuarioEmailContainingIgnoreCaseAndUsuarioNombreContainingIgnoreCase(params.get("nombre"), params.get("email"), pageable);
+		}
+		if (params.containsKey("nombre")){
+			return estudianteRepository.findByUsuarioNombreContainingIgnoreCase(params.get("nombre"), pageable);
+		}
+		if (params.containsKey("email")){
+			return estudianteRepository.findByUsuarioEmailContainingIgnoreCase(params.get("email"), pageable);
+		}
+		return estudianteRepository.findAll(pageable);
+	}
+
 }
