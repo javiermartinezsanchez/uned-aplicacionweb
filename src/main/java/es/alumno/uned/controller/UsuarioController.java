@@ -63,17 +63,17 @@ public class UsuarioController extends BaseCrudController {
 			@RequestParam(defaultValue = "0") int page, 
 			Model model) {
 		Paginacion<Usuario, UsuarioRegistroDTO> paginacion = userService.listadoPaginado(paramsToMap(params), getParams(page));
-		model.addAttribute("titulo", "{usuario.lista}");
-		model.addAttribute("title", "{usuario.lista}");
+		model.addAttribute("titulo", "usuario.lista");
+		model.addAttribute("title", "usuario.lista");
 		model.addAttribute("paginacion", paginacion);
-		getUsuario( model);
+		getVistaUsuario( model, false);
 		setModeloListado(model, "admin/usuarios", "/admin/newUser", "/admin/usuario","/home" );
 		return model.getAttribute("viewName").toString();
 	}
 	@GetMapping("/admin/newUser")
 	public String nuevo(Model model) {
         model.addAttribute("form", new UsuarioRegistroDTO());
-		return getUsuario(model);
+		return getVistaUsuario(model, true);
 	}
 	@GetMapping("/admin/usuario/{id}")
     public String modificar(@RequestParam(required = false) String success, 
@@ -83,7 +83,7 @@ public class UsuarioController extends BaseCrudController {
 			model.addAttribute("success", "mensaje.grabacionOK");
 			}
 		model.addAttribute("form", userService.getUsuario(id));
-		return getUsuario(model);
+		return getVistaUsuario(model, false);
 	}
 
 	@GetMapping("/{urlBase}/miperfil")
@@ -98,6 +98,7 @@ public class UsuarioController extends BaseCrudController {
 			Model model) {
 			model.addAttribute("form", userService.getUsuario(userConnected.getId()));
 			setModeloFormulario(model, "admin/usuario", "/" + urlBase + "/miperfil", "/");
+			model.addAttribute("isUser", true);
 			return "admin/usuario";
 	}
 	
@@ -122,6 +123,7 @@ public class UsuarioController extends BaseCrudController {
         
         model.addAttribute("form", userService.grabar(form,userConnected.getUsername()));
         model.addAttribute("success", "mensaje.grabacionOK");
+        
         return "redirect:/" + urlBase + "/miperfil?sucess";
 	}
 	/**
@@ -129,9 +131,9 @@ public class UsuarioController extends BaseCrudController {
 	 * @param model Modelo a rellenar.
 	 * @return Vista del usuario
 	 */
-	private String getUsuario(Model model) {
+	private String getVistaUsuario(Model model, boolean isUser) {
 		setModeloFormulario(model, "admin/usuario", "/admin/usuario","/admin/usuario");
-		model.addAttribute("isUser", true);
+		model.addAttribute("isUser", isUser);
         model.addAttribute("roles", rolService.getList());
     	return model.getAttribute("viewName").toString();
     }
