@@ -28,7 +28,7 @@ public class AreaTematicaController extends BaseCrudController{
 	@GetMapping("/{urlBase}/areaTematica/nueva")
 	@PreAuthorize(
 		    "(#urlBase == 'admin' and hasRole('ADMIN')) or " +
-		    "(#urlBase == 'profesor' and hasRole('PROFESOR'))"
+		    "(#urlBase == 'profesor' and hasRole('PROFE'))"
 		)
 	public String nueva(@PathVariable("urlBase") String urlBase,
 			Model model) {

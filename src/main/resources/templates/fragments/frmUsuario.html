@@ -7,20 +7,7 @@
 	        <div class="text-danger" th:errors="*{email}"></div>
         </div>
         <div th:replace="~{fragments/frmUsuario :: rolSelect(${roles}, 'rol', *{rol}, true)}"></div>
-
-
-<!-- 	    <div class="col-md-2" th:if="${isUser == true}" sec:authorize="hasRole('ADMIN')"> -->
-<!-- 	        <label class="form-label" th:text="#{usuario.role}">Rol</label> -->
-<!-- 	        <select class="form-select" th:field="*{rol}"> -->
-<!-- 	        <option th:value="${''}" th:text="#{rol.select}"></option> -->
-<!-- 	    		<option th:each="r : ${roles}" -->
-<!-- 	            		th:value="${r.nombre}" -->
-<!-- 	            		th:text="${r.descripcion}"> -->
-<!-- 	    		</option> -->
-<!-- 			</select> -->
-<!-- 	        <div class="text-danger" th:errors="*{rol}"></div> -->
-<!-- 	    </div> -->
-	    <div class="col-md-6 mb-3" sec:authorize="not hasRole('ADMIN')" th:if="*{id} != null">
+	    <div class="col-md-6 mb-3" sec:authorize="not hasRole('ADMIN')" th:if="*{id} != null and isUser == true">
         	<label class="form-label" th:text="#{usuario.role}">Rol</label>
 	    	<input type="text" th:value="*{rol}" readonly class="form-control-plaintext w-50">
 	    

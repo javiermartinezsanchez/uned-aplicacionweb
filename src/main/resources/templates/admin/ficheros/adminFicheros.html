@@ -58,7 +58,7 @@
 					<tbody>
 						<tr th:each="file : ${paginacion.contenido}">
 		    <td class="text-truncate" style="max-width: 250px;" th:text="${file?.nombreReal()}">UUID.pdf</td>
-		    <td th:text="${file?.sizeKB()}">140 KB</td>
+		    <td class="text-end" th:text="${file?.sizeKB()}">140 KB</td>
 		    <td>
 		        <span th:if="${file?.tipoFichero()?.name() == 'DOCUMENTO'}" class="badge bg-info-subtle text-info-emphasis border border-info-subtle">
 		            <i class="bi bi-file-earmark-pdf-fill"></i><span th:text="#{mantenimiento.tipo.documento}">Documento</span>

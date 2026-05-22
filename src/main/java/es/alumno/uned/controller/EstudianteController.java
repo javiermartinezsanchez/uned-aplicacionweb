@@ -52,7 +52,6 @@ public class EstudianteController extends BaseCrudController {
         this.areaService= areaService;
     }
 
-    
     @GetMapping("/miperfil")
     public String perfil(@AuthenticationPrincipal SecurityUser userConnected, 
     		Model model) {
@@ -114,11 +113,6 @@ public class EstudianteController extends BaseCrudController {
 	    		"/home");
 
     	model.addAttribute("paginacion", paginacion);
-    	 
-  //      model.addAttribute("urlAlta", "/registro");
-	//	model.addAttribute("urlBack", "/home");
-	   
-	//    model.addAttribute("query","");
         return model.getAttribute("viewName").toString();
     }
 

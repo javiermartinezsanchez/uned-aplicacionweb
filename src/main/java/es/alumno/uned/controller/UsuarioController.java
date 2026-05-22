@@ -3,6 +3,7 @@ package es.alumno.uned.controller;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -85,12 +86,49 @@ public class UsuarioController extends BaseCrudController {
 		return getUsuario(model);
 	}
 
-	@GetMapping("/admin/miperfil")
-	public String miPerfil(@RequestParam(required = false) String success,
+	@GetMapping("/{urlBase}/miperfil")
+	@PreAuthorize(
+		    "(#urlBase == 'admin' and hasRole('ADMIN')) or " +
+		    "(#urlBase == 'profesor' and hasRole('PROFE'))"
+		)
+	public String miPerfil(
+			@PathVariable("urlBase") String urlBase,
+			@RequestParam(required = false) String success,
 			@AuthenticationPrincipal SecurityUser userConnected, 
 			Model model) {
-		return "redirect:/admin/usuario/".concat(userConnected.getId().toString());
+			model.addAttribute("form", userService.getUsuario(userConnected.getId()));
+			setModeloFormulario(model, "admin/usuario", "/" + urlBase + "/miperfil", "/");
+			return "admin/usuario";
 	}
+	
+	@PostMapping("/{urlBase}/miperfil")
+	@PreAuthorize(
+		    "(#urlBase == 'admin' and hasRole('ADMIN')) or " +
+		    "(#urlBase == 'profesor' and hasRole('PROFE'))"
+		)
+	public String guardarPerfil(@AuthenticationPrincipal SecurityUser userConnected, 
+			@PathVariable("urlBase") String urlBase,
+			@ModelAttribute("form") UsuarioRegistroDTO form,
+            BindingResult result,
+            Model model) {
+		
+		new SpringValidatorAdapter(validator)
+        .validate(form, result, OnUpdate.class);
+        if (result.hasErrors()) {
+        	setModeloFormulario(model, "admin/usuario", "/" + urlBase + "/miperfil", "/");
+        	
+            return model.getAttribute("viewName").toString();
+        }
+        
+        model.addAttribute("form", userService.grabar(form,userConnected.getUsername()));
+        model.addAttribute("success", "mensaje.grabacionOK");
+        return "redirect:/" + urlBase + "/miperfil?sucess";
+	}
+	/**
+	 * Método para la edición de un usuario
+	 * @param model Modelo a rellenar.
+	 * @return Vista del usuario
+	 */
 	private String getUsuario(Model model) {
 		setModeloFormulario(model, "admin/usuario", "/admin/usuario","/admin/usuario");
 		model.addAttribute("isUser", true);

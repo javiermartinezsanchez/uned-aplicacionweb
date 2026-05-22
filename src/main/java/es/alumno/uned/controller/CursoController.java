@@ -204,7 +204,7 @@ public class CursoController extends BaseCrudController {
     @GetMapping("/{urlBase}/curso")
     @PreAuthorize(
     	    "(#urlBase == 'admin' and hasRole('ADMIN')) or " +
-    	    "(#urlBase == 'profesor' and hasRole('PROFESOR'))"
+    	    "(#urlBase == 'profesor' and hasRole('PROFE'))"
     	)
     public String ListadoGeneral(@AuthenticationPrincipal SecurityUser userConnected,
     		@PathVariable("urlBase") String urlBase,

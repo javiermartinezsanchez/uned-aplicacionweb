@@ -112,7 +112,7 @@ public class HomeController extends BaseCrudController {
 	}
 	@GetMapping("/miperfil")
 	public String miperfil(Authentication authentication) {
-		return String.format("redirect:/%s/miperfil", UserUtil.defineHome(UserUtil.getRoles(authentication)));
+		return String.format("redirect:%s/miperfil", UserUtil.defineHome(UserUtil.getRoles(authentication)));
 	}
     @GetMapping("/registro")
     public String nuevo(Model model) {
