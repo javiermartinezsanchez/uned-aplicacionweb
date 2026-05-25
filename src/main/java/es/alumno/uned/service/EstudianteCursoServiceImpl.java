@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import es.alumno.uned.dto.EstudianteCursoDTO;
 import es.alumno.uned.exception.CursoModuloEstadoIncompatibleException;
 import es.alumno.uned.exception.CursoNotExistException;
+import es.alumno.uned.exception.EstudianteCursoAlreadySubscribeException;
 import es.alumno.uned.exception.EstudianteNotExistException;
 import es.alumno.uned.exception.MandatoryModuloException;
 import es.alumno.uned.exception.ModuloNotFoundException;
@@ -79,11 +80,10 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
         Curso curso = cursoRepository.findById(cursoId)
                 .orElseThrow(() -> new CursoNotExistException("msg.exception.notfound.", null, "curso.title"));
 
-        boolean yaSuscrito = estudianteCursoRepository
-                .existsByIdEstudianteIdAndIdCursoId(estudiante.getId(), cursoId);
 
-        if (yaSuscrito) {
-            throw new IllegalStateException("Ya estás suscrito a este curso.");
+
+        if (estudianteCursoRepository.existsByIdEstudianteIdAndIdCursoId(estudiante.getId(), cursoId)) {
+            throw new EstudianteCursoAlreadySubscribeException("error.curso.yainscrito");
         }
 
         EstudianteCurso ec = new EstudianteCurso(estudiante, curso);
@@ -113,11 +113,6 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
     @Override
     public void actualizarUltimoAcceso(String username, Long cursoId) {
         // TODO: implementar actualización de último acceso
-    }
-
-    @Override
-    public void marcarModuloComoCompletado(String username, Long cursoId, Long moduloId) {
-        // TODO: implementar marcado de módulo completado
     }
 
     @Override

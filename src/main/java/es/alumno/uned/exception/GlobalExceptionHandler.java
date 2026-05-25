@@ -53,23 +53,29 @@ public class GlobalExceptionHandler {
     		Model model) {
     	return putDataException(ex, request, model);
     }
-    @ExceptionHandler(FileSizeExcedeedException.class)
-    public String handleFileSizeException(FileSizeExcedeedException ex, HttpServletRequest request,
+    
+    @ExceptionHandler({
+    	FileSizeExcedeedException.class, 
+    	EstudianteCursoAlreadySubscribeException.class}
+    )
+    public String handleFileSizeException(Exception ex, HttpServletRequest request,
     		Model model) {
     	String backUrl = request.getHeader("Referer");
         model.addAttribute("urlBack", backUrl != null ? backUrl : "/");
-        
-        String mensajeTraducido = messageSource.getMessage(
-            "error.archivo.demasiado_grande", 
-            null, 
-            LocaleContextHolder.getLocale()
-        );
-        
+     
         FlashMap flashMap = RequestContextUtils.getOutputFlashMap(request);
         if (flashMap != null) {
             // Guardamos el error directamente en la infraestructura de Spring
-            flashMap.put("errorGlobal", mensajeTraducido);
-            flashMap.put("form", ex.getDto());
+            flashMap.put("errorGlobal", getMsgLocale(ex.getMessage(), ""));
+            // Aprovechando que utilizamos Java 21 utilizamos "Patter maching"
+            switch (ex) {
+            case FileSizeExcedeedException fileException -> 
+                flashMap.put("form", fileException.getDto());
+            case EstudianteCursoAlreadySubscribeException estudianteException -> {}
+            
+            default -> { }
+            }
+
         }
 
         if (backUrl != null) {
@@ -85,13 +91,24 @@ public class GlobalExceptionHandler {
 		model.addAttribute("url", (String) request.getAttribute("url"));
 		model.addAttribute("urlCancel", (String) request.getAttribute("urlCancel"));
     	model.addAttribute("urlBack", backUrl != null ? backUrl : "/");
-        model.addAttribute("errorGlobal", messageSource.getMessage(
-                ex.getMessage(),   // la clave del fichero "traducciones"
-                ex.getArgs(),
-                LocaleContextHolder.getLocale()
-            ));
+        model.addAttribute("errorGlobal", getMsgLocale(ex.getMessage(), ex.getArgs()));
         model.addAttribute("form", ex.getDto());
         return (String) request.getAttribute("viewName");
 	}
+	/**
+	 * Nos devuelve el mensaje traducido al locale.
+	 * @param claveMensaje Clave existente en "traducciones.properties"
+	 * @param args Argumentos opcionales si la clave es compuesta.
+	 * @return Texto traducido.
+	 */
+    private String getMsgLocale(String claveMensaje, Object...args) {
+		return messageSource.getMessage(
+				claveMensaje,   // la clave del fichero "traducciones"
+				args,
+                LocaleContextHolder.getLocale()
+            );
+	}
+    
+    
 }
 

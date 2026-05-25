@@ -41,8 +41,6 @@ public interface EstudianteCursoService {
 
     void actualizarUltimoAcceso(String username, Long cursoId);
 
-    void marcarModuloComoCompletado(String username, Long cursoId, Long moduloId);
-
     /**
      * Se recalcula el progreso del curso de acuerdo al estado del módulo enviado.
      * <p>Se determinará si está en estado "COMPLETADO".

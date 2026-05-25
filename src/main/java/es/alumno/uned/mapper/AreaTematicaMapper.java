@@ -35,4 +35,10 @@ public class AreaTematicaMapper {
 		areaDto.setNumCursos(entity.getNumCursosArea());
 		return areaDto;
 	}
+	
+//	public AreaTematicaDTO toDTOList(AreaTematica entity) {
+//		AreaTematicaDTO areaDto = toDTO(entity);
+//		areaDto.setNumCursos(entity.getNumCursosArea());
+//		return areaDto;
+//	}
 }

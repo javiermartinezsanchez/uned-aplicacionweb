@@ -23,6 +23,9 @@
 
 						<p class="text-muted fs-5" th:text="*{descripcion}">
 							Descripción del curso...</p>
+							<p class="text-muted fs-6" th:text="*{areaTematicaText}">
+							Descripción del curso...</p>
+							
 					</div>
 
 					<div class="d-flex justify-content-between align-items-center mt-3">
@@ -32,19 +35,17 @@
 							th:text="*{usuariosRegistrados}">0</span> <span
 							th:text="#{curso.inscritos}">inscritos</span>
 						</span>
-					</div>
-
-					<div class="mt-4" th:insert="~{fragments/botones :: btnLink(
+						<div th:insert="~{fragments/botones :: btnLink(
 				        #{curso.subscribirse},
 				        @{'/estudiante/subscribircurso/' + ${curso.id} },
 				        'btn-outline-success btn-sm px-2 text-nowrap',
 				        'bi-clipboard-check'
-				    )}">
-				    </div>
+					    )}">
+					    </div>
 					
-				</div>
+					</div>
 			</div>
-
+			<div th:replace="~{fragments/mensajesresultado :: errorgeneral}"></div>
 			<hr class="my-5">
 
 <h3 class="fw-bold mb-3" th:text="#{curso.modulos}">Módulos del curso</h3>
