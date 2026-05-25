@@ -17,7 +17,10 @@ import es.alumno.uned.model.entities.Usuario;
 import es.alumno.uned.model.repository.AreaTematicaRepository;
 import es.alumno.uned.model.repository.ModuloRepository;
 import es.alumno.uned.model.repository.UsuarioRepository;
-
+/**
+ * Mapper Curso
+ * <p>Convierte una entidad Curso a Curso DTO o viceversa.
+ */
 @Component
 public class CursoMapper {
 
@@ -35,6 +38,12 @@ public class CursoMapper {
     @Autowired
     private ModuloRepository moduloRepository;
     
+    /**
+     * Convertimos el DTO editado o nuevo a Entidad para su persistencia
+     * @param dto Datos CursoDTO. 
+     * @param entity Entidad Curso a persistir.
+     * @return {@link Curso}
+     */
     public Curso toEntity(CursoDTO dto, Curso entity) {
 
         entity.setTitulo(dto.getTitulo());
@@ -58,7 +67,11 @@ public class CursoMapper {
         return entity;
     }
     
-    
+    /**
+     * Mappea la entidad Curso a CursoDTO para su mostrarlo o editarlo.
+     * @param entity Entidad a modificar
+     * @return CursoDTO correspondiente.
+     */
     public CursoDTO toDTO(Curso entity) {
 
         CursoDTO dto = new CursoDTO();

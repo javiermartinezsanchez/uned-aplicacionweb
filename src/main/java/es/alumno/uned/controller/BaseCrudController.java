@@ -3,6 +3,8 @@ package es.alumno.uned.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
 
 import es.alumno.uned.model.records.PageParams;
@@ -20,6 +22,11 @@ import jakarta.servlet.http.HttpServletRequest;
  */
 public abstract class BaseCrudController {
 
+	/**
+	 * Injectamos el "messageSource" para los textos.
+	 */
+	@Autowired
+    private MessageSource messageSource;
 	/**
 	 * Para las rutas compartidas, definimos la url de vuelta o de Cancel.
 	 * 

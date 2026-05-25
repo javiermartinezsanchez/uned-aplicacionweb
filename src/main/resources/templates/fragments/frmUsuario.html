@@ -8,7 +8,7 @@
         </div>
         <div th:if="${isUser}" class="col-md-6 mb-3" >
         	<label class="form-label" th:text="#{usuario.role}">Rol</label>
-	    	<input type="text" th:value="*{rol}" readonly class="form-control-plaintext w-50">
+	    	<input type="text" th:field="*{rol}" readonly class="form-control-plaintext w-50">
    		</div>
    		<th:block th:unless="${isUser}">
         	<div th:replace="~{fragments/frmUsuario :: rolSelect(${roles}, 'rol', *{rol}, true)}"></div>

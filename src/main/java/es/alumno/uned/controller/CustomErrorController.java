@@ -16,7 +16,7 @@ public class CustomErrorController implements ErrorController {
 	 * Manejador "Handler" el error.. 
 	 * @param request La Request que genera el error.
 	 * @param model Modelo de la vista que genera el error.
-	 * @return Devuelve la vista que lo mues
+	 * @return Devuelve la vista que lo muestra
 	 */
     @GetMapping("/error")
     public String handleError(HttpServletRequest request, Model model) {

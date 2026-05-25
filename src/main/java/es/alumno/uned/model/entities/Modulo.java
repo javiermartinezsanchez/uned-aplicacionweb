@@ -99,14 +99,6 @@ public class Modulo {
 		this.contenido = contenido;
 	}
 
-//	public int getPeso() {
-//		return peso;
-//	}
-//
-//	public void setPeso(int peso) {
-//		this.peso = peso;
-//	}
-
 	public TipoModulo getTipo() {
 		return tipo;
 	}

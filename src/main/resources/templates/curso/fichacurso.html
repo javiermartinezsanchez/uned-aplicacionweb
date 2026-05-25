@@ -36,12 +36,6 @@
 						</span>
 					</div>
 
-					<!-- Botón de suscripción -->
-<!-- 					<div class="mt-4"> -->
-<!-- 						<a th:href="@{'/subscribircurso/' + *{id} }" -->
-<!-- 							class="btn btn-primary btn-lg px-4" -->
-<!-- 							th:text="#{curso.subscribirse}"> Suscribirse al curso </a> -->
-<!-- 					</div> -->
 					<div class="mt-4" th:insert="~{fragments/botones :: btnLink(
 				        #{curso.subscribirse},
 				        @{'/estudiante/subscribircurso/' + ${curso.id} },

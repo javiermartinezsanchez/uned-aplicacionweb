@@ -7,7 +7,6 @@ import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,7 +27,6 @@ import es.alumno.uned.service.EstudianteService;
 import es.alumno.uned.service.UsuarioService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import jakarta.validation.groups.Default;
 
 @Controller
 @RequestMapping("/estudiante")
@@ -95,7 +93,7 @@ public class EstudianteController extends BaseCrudController {
 
         estudianteService.grabar(form, "");
         model.addAttribute("sucess", "mensaje.grabacionOK");
-        return "redirect:/" + request.getAttribute("urlRequest") + "?sucess";
+        return "redirect:/estudiante/miperfil?sucess";
     }
     /*^*
      * Listado genérico de Estudiantes para la consola de administración.

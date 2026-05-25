@@ -1,6 +1,5 @@
 package es.alumno.uned.mapper;
 
-
 import org.springframework.stereotype.Component;
 
 import es.alumno.uned.dto.EstudianteCursoModuloDTO;
@@ -21,6 +20,9 @@ public class EstudianteCursoModuloMapper {
 		dto.setCursoId(entidad.getEstudianteCurso().getId().getCursoId());
 		dto.setModuloId(entidad.getModulo().getId()); 
 		dto.setTitulo(entidad.getTitulo());
+		dto.setDescripcion(entidad.getDescripcion());
+		dto.setContenido(entidad.getContenido());
+		dto.setTipoModulo(entidad.getTipo());
 		dto.setCompletado(entidad.getCompletado()) ;
 		dto.setOrden(entidad.getOrden());
 		dto.setEstado(entidad.getEstado());
@@ -36,60 +38,4 @@ public class EstudianteCursoModuloMapper {
 		return dto;
 
 	}
-	
-//	public Long getCursoId() {
-//	return cursoId;
-//}
-//public Long getModuloId() {
-//	return moduloId;
-//}
-//public Boolean getCompletado() {
-//	return completado;
-//}
-//public String getTitulo() {
-//	return titulo;
-//}
-//public void setTitulo(String titulo) {
-//	this.titulo = titulo;
-//}
-//public Integer getOrden() {
-//	return orden;
-//}
-//public Integer getPeso() {
-//	return peso;
-//}
-//public void setPeso(Integer peso) {
-//	this.peso = peso;
-//}
-//public EstadoCursoModulo getEstado() {
-//	return estado;
-//}
-//public LocalDateTime getFechaCompletado() {
-//	return fechaCompletado;
-//}
-//public LocalDateTime getFechaUltimoAcceso() {
-//	return fechaUltimoAcceso;
-//}
-//public String getUrlEntrega() {
-//	return urlEntrega;
-//}
-//public void setUrlEntrega(String urlEntrega) {
-//	this.urlEntrega = urlEntrega;
-//}
-//public LocalDateTime getFechaEntrega() {
-//	return fechaEntrega;
-//}
-//public void setFechaEntrega(LocalDateTime fechaEntrega) {
-//	this.fechaEntrega = fechaEntrega;
-//}
-//public LocalDateTime getFechaRevision() {
-//	return fechaRevision;
-//}
-//public BigDecimal getCalificacion() {
-//	return calificacion;
-//}
-//public String getNotasCalificacion() {
-//	return notasCalificacion;
-//}
-
 }

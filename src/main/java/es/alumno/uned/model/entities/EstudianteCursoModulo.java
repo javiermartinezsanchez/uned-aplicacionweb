@@ -12,9 +12,14 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
-
+/**
+ * Entidad de Estudiante Curso Módulo.
+ * <p> Incluye toda la información asociada al módulo para su seguimiento.
+ * <p> Se realiza un "snap-shoot" de CursoModulo para evitar que cualquier alteración por parte del 
+ * responsable o administrador afecte a los cursos ya iniciados con una determinada estructura.
+ */
 @Entity
-@Table(name = "estudiante_curso_modulo")
+@Table(name = "estudiante_curso_modulos")
 public class EstudianteCursoModulo {
 
     @EmbeddedId
@@ -31,12 +36,22 @@ public class EstudianteCursoModulo {
     @Column(name="titulo")
     private String titulo;
     
+    @Column(name="descripcion")
+    private String descripcion;
+    
+    @Column(columnDefinition = "TEXT")
+    private String contenido;
+   
     @Column(name = "orden")
     private Integer orden;
 
     @Column(name = "peso")
     private Integer peso; 
     private Boolean completado;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
+    private TipoModulo tipo;
     
     @Enumerated(EnumType.STRING)
     private EstadoCursoModulo estado; // ACTIVO, COMPLETADO, BLOQUEADO, BAJA
@@ -168,6 +183,22 @@ public class EstudianteCursoModulo {
 		this.titulo = titulo;
 	}
 
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public String getContenido() {
+		return contenido;
+	}
+
+	public void setContenido(String contenido) {
+		this.contenido = contenido;
+	}
+
 	public Integer getOrden() {
 		return orden;
 	}
@@ -182,6 +213,14 @@ public class EstudianteCursoModulo {
 
 	public void setPeso(Integer peso) {
 		this.peso = peso;
+	}
+
+	public TipoModulo getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(TipoModulo tipo) {
+		this.tipo = tipo;
 	}
 
 	public EstadoCursoModulo getEstado() {

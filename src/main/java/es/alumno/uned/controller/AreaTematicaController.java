@@ -16,7 +16,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import es.alumno.uned.dto.AreaTematicaDTO;
 import es.alumno.uned.service.AreaTematicaService;
 import jakarta.validation.Valid;
-
+/**
+ * Controlador de Areas Temáticas.
+ * 
+ * <p>Se definen la operaciones básicas sobre {@link AreaTematica}
+ * 
+ */
 @Controller
 public class AreaTematicaController extends BaseCrudController{
 
@@ -25,6 +30,15 @@ public class AreaTematicaController extends BaseCrudController{
 	public AreaTematicaController(AreaTematicaService areaTematicaService) {
 		this.areaTematicaService = areaTematicaService;
 	}
+	/**
+	 * Inicializa un Area Temática para darla de alta.
+	 * <p>Se realiza un {@code @Preautorize} para blindar el alta.
+	 * <p>Se genera un nuevo {@link AreaTematicaDTO}
+	 * 
+	 * @param urlBase Identificador del rol que 
+	 * @param model {@link Model} Modelo de la vista.
+	 * @return Vista que vamos a utilizar.
+	 */
 	@GetMapping("/{urlBase}/areaTematica/nueva")
 	@PreAuthorize(
 		    "(#urlBase == 'admin' and hasRole('ADMIN')) or " +
@@ -36,7 +50,15 @@ public class AreaTematicaController extends BaseCrudController{
 		model.addAttribute("form", new AreaTematicaDTO());
 		return model.getAttribute("viewName").toString();
 	}
-
+	/**
+	 * Consulta de una Area Temática por id.
+	 * <p>Se realiza un {@code @Preautorize} para blindar el acceso a la alta.
+	 * @param urlBase Parte inicial de la url que define el rol que accede.
+	 * @param id Identificador del Area a consultar/modificar.
+	 * @param successStr mensaje de éxito de la operación para indicarlo al usuario.
+	 * @param model Modelo que viaja a la vista con los datos necesarios.
+	 * @return Vista que utilizaremos para la edición.
+	 */
 	@GetMapping("/{urlBase}/areaTematica/{id}")
 	@PreAuthorize(
 		    "(#urlBase == 'admin' and hasRole('ADMIN')) or " +
@@ -54,11 +76,20 @@ public class AreaTematicaController extends BaseCrudController{
 		model.addAttribute("form", areaTematicaService.getAreaTematica(id));
 		return model.getAttribute("viewName").toString();
 	}
-	
+	/**
+	 * Grabación de los datos del Area Temática. 
+	 * <p> Si es un alta, el id no vendrá informado, en los demás casos se realizará la modificación de los datos introducidos.
+	 * @param urlBase Parte inicial de la url que define el rol que accede.
+	 * @param form Datos del formulario que se ha modificado.
+	 * @param result Se genera el {@link BindingResult} para validación de los campos.
+	 * @param redirectAttributes Añadimos atributos que no existen en el formulario de datos.
+	 * @param model Model a tratar.
+	 * @return Redirección a la vista de consulta con el mensaje "sucess".
+	 */
 	@PostMapping("/{urlBase}/areaTematica")
 	@PreAuthorize(
 		    "(#urlBase == 'admin' and hasRole('ADMIN')) or " +
-		    "(#urlBase == 'profesor' and hasRole('PROFESOR'))"
+		    "(#urlBase == 'profesor' and hasRole('PROFE'))"
 		)	
 	public String graba(@PathVariable("urlBase") String urlBase,
 			@Valid @ModelAttribute("form") AreaTematicaDTO form,
@@ -78,7 +109,7 @@ public class AreaTematicaController extends BaseCrudController{
 	@GetMapping("/{urlBase}/areaTematica")
 	@PreAuthorize(
 		    "(#urlBase == 'admin' and hasRole('ADMIN')) or " +
-		    "(#urlBase == 'profesor' and hasRole('PROFESOR'))"
+		    "(#urlBase == 'profesor' and hasRole('PROFE'))"
 		)
 	public String lista(
 			@PathVariable("urlBase") String urlBase,
@@ -95,6 +126,11 @@ public class AreaTematicaController extends BaseCrudController{
 	    model.addAttribute("title", "Listado de Áreas Temáticas");
 		return model.getAttribute("viewName").toString();
 	}
+	/**
+	 * Método privado para definir los valores utilizados en el modelo.
+	 * @param model Modelo a definir.
+	 * @param urlBase Determina el rol que está realizado la operación.
+	 */
 	private void preparaArea(Model model, String urlBase) {
 		setModeloFormulario(model, "admin/areaTematica", "/"+urlBase+"/areaTematica","/"+urlBase+"/areaTematica");
 	}

@@ -1,5 +1,8 @@
+
 package es.alumno.uned.dto;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -10,6 +13,7 @@ public class EstudianteCursoDTO {
         private CursoDTO curso;
         private LocalDateTime fechaSubscripcion;
         private LocalDateTime fechaUltimoAcceso;
+        private LocalDateTime fechaCompletado;
         private Integer progreso;
         private Double calificacionFinal;
         private EstadoCursoModulo estado;
@@ -39,6 +43,13 @@ public class EstudianteCursoDTO {
 		public void setFechaUltimoAcceso(LocalDateTime fechaUltimoAcceso) {
 			this.fechaUltimoAcceso = fechaUltimoAcceso;
 		}
+		
+		public LocalDateTime getFechaCompletado() {
+			return fechaCompletado;
+		}
+		public void setFechaCompletado(LocalDateTime fechaCompletado) {
+			this.fechaCompletado = fechaCompletado;
+		}
 		public Integer getProgreso() {
 			return progreso;
 		}
@@ -63,7 +74,64 @@ public class EstudianteCursoDTO {
 		public void setModulos(List<EstudianteCursoModuloDTO> modulos) {
 			this.modulos = modulos;
 		}
-        
+        // Para obtener lod datos del curso
+		public Long getId() {
+			return this.curso.getId();
+		}
+		public String getTitulo() {
+			return this.curso.getTitulo();
+		}
+		public String getDescripcion() {
+			return this.curso.getDescripcion();
+		}
+		public String getUriImagen() {
+			return this.curso.getUriImagen();
+		}
+		public Integer getNivel() {
+			return this.curso.getNivel();
+		}
+		public Long getAreaTematicaId() {
+			return this.curso.getAreaTematicaId();
+		}
+		public String getAreaTematicaText() {
+			return this.curso.getAreaTematicaText();
+		}
+
+		public Long getResponsableId() {
+			return this.curso.getResponsableId();
+		}
+		
+		public String getNombreResponsable() {
+			return this.curso.getNombreResponsable();
+		}
+
+	    public Integer getDuracion() {
+			return this.curso.getDuracion();
+		}
+
+		public LocalDate getFIni() {
+			return this.curso.getFIni();
+		}
+
+		public LocalDate getFFin() {
+			return this.curso.getfFin();
+		}
+
+		public BigDecimal getValoracion() {
+			return this.curso.getValoracion();
+		}
+
+		public Integer getUsuariosRegistrados() {
+			return this.curso.getUsuariosRegistrados();
+		}
+
+		public List<ContenidoExtraDTO> getContenidosExtra() {
+			return this.curso.getContenidosExtra();
+		}
+		public Integer getNumVistas() {
+			return this.curso.getNumVistas();
+		}
+
         
 }
 

@@ -29,17 +29,22 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import es.alumno.uned.dto.CursoDTO;
 import es.alumno.uned.dto.ModuloDTO;
 import es.alumno.uned.dto.ValoracionDTO;
+import es.alumno.uned.exception.FileSizeExcedeedException;
 import es.alumno.uned.model.entities.Curso;
 import es.alumno.uned.model.entities.SecurityUser;
 import es.alumno.uned.model.records.FicheroData;
 import es.alumno.uned.model.util.Paginacion;
-import es.alumno.uned.model.util.UserUtil;
 import es.alumno.uned.service.AreaTematicaService;
 import es.alumno.uned.service.CursoService;
 import es.alumno.uned.service.ModuloService;
 import es.alumno.uned.service.UsuarioService;
 import jakarta.validation.Valid;
-
+/**
+ * Controlador de Curso
+ * 
+ * <p>Se definen la operaciones básicas sobre {@link Curso}
+ * 
+ */
 @Controller
 public class CursoController extends BaseCrudController {
 
@@ -120,6 +125,9 @@ public class CursoController extends BaseCrudController {
 	    	    .map(entry -> {
 	    	        try {
 	    	            MultipartFile file = entry.getValue();
+	    	            if (file.getSize() > 1048576) {
+	    	                throw new FileSizeExcedeedException("error.archivo.demasiado_grande", form);
+	    	            }
 	    	            // Extraemos el índice del nombre del campo 
 	    	            int index = Integer.parseInt(entry.getKey().split("_")[1]);
 	    	            return new FicheroData(
@@ -164,16 +172,25 @@ public class CursoController extends BaseCrudController {
 	    model.addAttribute("modulosDisponibles", todos);
 	    
 	}
+	/**
+	 * Consulta individual del Curso.
+	 * @param userConnected Usuario Conectado para determinar la dirección de 
+	 * @param id
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/curso/curso/{id}")
     public String modifica(@AuthenticationPrincipal SecurityUser userConnected, 
     		@PathVariable("id") Long id,
     		Model model) {
-		var rol = userConnected.getRol();
 		var curso = cursoService.getCurso(id);
 		prepararVistaEdicion(curso,model);
 		model.addAttribute("url", "/curso/guardar");
 		model.addAttribute("urlCancel", getUrlBack("/curso",userConnected.getRol()));
-		model.addAttribute("form", cursoService.getCurso(id));
+	    if (!model.containsAttribute("form")) {
+	    	model.addAttribute("form", cursoService.getCurso(id));
+	    }
+		
 	    model.addAttribute("usuarios", usuarioService.listarProfesores());
 		return "curso/curso";
 	}
@@ -184,7 +201,7 @@ public class CursoController extends BaseCrudController {
 	 * @return Vista del Curso.
 	 */
 	@GetMapping("/viewcurso/{id}")
-    public String verFicha(Model model, 
+    public String verFicha(@AuthenticationPrincipal SecurityUser userConnected,Model model, 
     		@PathVariable("id") Long id) {
 		model.addAttribute("url", "/curso/guardar");
 		model.addAttribute("urlBack", "/");
@@ -215,9 +232,7 @@ public class CursoController extends BaseCrudController {
     		paramsBusqueda.put("responsableId", userConnected.getId().toString());
     	}
     	Paginacion<Curso, CursoDTO> paginacion = cursoService.listadoPaginado(getParams(page), paramsToMap(paramsBusqueda));
-        model.addAttribute("url", "curso");
-        model.addAttribute("urlAlta", "/curso/nuevo");
-        model.addAttribute("urlBack", "/home");
+    	setModeloListado(model, "curso/cursos", "/curso/nuevo", "curso", "/home");
         model.addAttribute("paginacion", paginacion);
         model.addAttribute("responsableId", userConnected.getId());
         model.addAttribute("responsables", usuarioService.listarProfesores());
@@ -235,7 +250,7 @@ public class CursoController extends BaseCrudController {
     * @return
     */
 	@PostMapping("/valoracionCurso")
-    @ResponseBody // CRUCIAL: Indica que el retorno es JSON, no una vista HTML
+    @ResponseBody 
     public ResponseEntity<Map<String, Object>> guardarValoracion(
     		@AuthenticationPrincipal UserDetails userDetails,
     		@RequestBody ValoracionDTO datos) {
@@ -248,17 +263,21 @@ public class CursoController extends BaseCrudController {
             return ResponseEntity.badRequest().body(error);
         }
 
-        // 2. Guardamos valoración y devolvemos nuevo cálculo de media.
         BigDecimal mediaValoracion = cursoService.guardarValoracion(datos.getIdElemento(), datos.getValoracion(), userDetails.getUsername());
-        // 3. Construcción de la respuesta JSON
         Map<String, Object> respuesta = new HashMap<>();
-        
             respuesta.put("success", true);
             respuesta.put("mensaje", "¡Gracias por tu valoración!");
-            // Opcional: devolver la nueva valoración promedio si quieres actualizarla en el frontend
             respuesta.put("nuevaPromedio", mediaValoracion); 
             return ResponseEntity.ok(respuesta);
     }
+	/**
+	 * Método para obtener de forma paginada los curos "Más visitados".
+	 * <p>Se realiza la búsqueda y se injecta en el fragmento de la vista para refrescar los cursos.
+	 * @param paramsBusqueda Parámetros opcionales para la búsqueda.
+	 * @param page Número de página de datos a devolver.
+	 * @param model Modelo de la vista.
+	 * @return La vista y el fragmento en el que se va a insertar el resultado.
+	 */
 	@GetMapping("/cursos/ajax/masvisitados")
 	public String paginarDestacadosAJAX(
 			@RequestParam Map<String, String> paramsBusqueda,
@@ -266,9 +285,16 @@ public class CursoController extends BaseCrudController {
 
 		Paginacion<Curso, CursoDTO> paginacion = cursoService.listadoOrderByNumVisistas( getParams( page, 3), paramsToMap(paramsBusqueda));
 	    model.addAttribute("paginacion", paginacion);
-	    // Retorna la vista de cursos, pero solo el fragmento del bloque seleccionado
 	    return "home :: #bloqueMasVisitados"; 
 	}
+	/**
+	 * Método para obtener de forma paginada los curos ordenados por su valoración de forma descendente.
+	 * <p>Se realiza la búsqueda y se injecta en el fragmento de la vista para refrescar los cursos.
+	 * @param paramsBusqueda Parámetros opcionales para la búsqueda.
+	 * @param page Número de página de datos a devolver.
+	 * @param model Modelo de la vista.
+	 * @return La vista y el fragmento en el que se va a insertar el resultado.
+	 */
 	@GetMapping("/cursos/ajax/masvalorados")
 	public String paginarValoradosAJAX(
 			@RequestParam Map<String, String> paramsBusqueda,
@@ -279,6 +305,14 @@ public class CursoController extends BaseCrudController {
 	    // Retorna la vista de cursos, pero solo el fragmento del bloque seleccionado
 	    return "home :: #bloqueMasValorados"; 
 	}
+	/**
+	 * Método para obtener de forma paginada los curos ordenados por el número de personas inscritas descendente.
+	 * <p>Se realiza la búsqueda y se injecta en el fragmento de la vista para refrescar los cursos.
+	 * @param paramsBusqueda Parámetros opcionales para la búsqueda.
+	 * @param page Número de página de datos a devolver.
+	 * @param model Modelo de la vista.
+	 * @return La vista y el fragmento en el que se va a insertar el resultado.
+	 */
 	@GetMapping("/cursos/ajax/massubscritos")
 	public String paginarMasInscritosAJAX(
 			@RequestParam Map<String, String> paramsBusqueda,

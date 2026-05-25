@@ -1,6 +1,9 @@
 package es.alumno.uned.service;
 
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -8,32 +11,32 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 
-import es.alumno.uned.dto.CursoDTO;
 import es.alumno.uned.dto.EstudianteCursoDTO;
+import es.alumno.uned.exception.CursoModuloEstadoIncompatibleException;
 import es.alumno.uned.exception.CursoNotExistException;
 import es.alumno.uned.exception.EstudianteNotExistException;
 import es.alumno.uned.exception.MandatoryModuloException;
+import es.alumno.uned.exception.ModuloNotFoundException;
 import es.alumno.uned.mapper.EstudianteCursoMapper;
 import es.alumno.uned.model.entities.Curso;
 import es.alumno.uned.model.entities.CursoModulo;
 import es.alumno.uned.model.entities.EstadoCursoModulo;
 import es.alumno.uned.model.entities.Estudiante;
 import es.alumno.uned.model.entities.EstudianteCurso;
+import es.alumno.uned.model.entities.EstudianteCursoId;
 import es.alumno.uned.model.entities.EstudianteCursoModulo;
-import es.alumno.uned.model.entities.Modulo;
+import es.alumno.uned.model.entities.EstudianteCursoModuloId;
 import es.alumno.uned.model.entities.TipoModulo;
+import es.alumno.uned.model.records.FicheroData;
 import es.alumno.uned.model.records.PageParams;
 import es.alumno.uned.model.repository.CursoRepository;
 import es.alumno.uned.model.repository.EstudianteCursoModuloRepository;
 import es.alumno.uned.model.repository.EstudianteCursoRepository;
 import es.alumno.uned.model.repository.EstudianteRepository;
 import es.alumno.uned.model.util.Paginacion;
-import jakarta.transaction.Transactional;
+
 
 @Service
 @Transactional
@@ -43,7 +46,7 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
     private final CursoRepository cursoRepository;
     private final EstudianteCursoRepository estudianteCursoRepository;
     private final EstudianteCursoModuloRepository estudianteCursoModuloRepository;
-    
+    private final FileStorageService fileStorageService;
     private final EstudianteCursoMapper estudianteCursoMapper;
 
     public EstudianteCursoServiceImpl(
@@ -51,6 +54,7 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
             CursoRepository cursoRepository,
             EstudianteCursoRepository estudianteCursoRepository,
             EstudianteCursoModuloRepository estudianteCursoModuloRepository,
+            FileStorageService fileStorageService,
             EstudianteCursoMapper estudianteCursoMapper) {
 
         this.estudianteRepository = estudianteRepository;
@@ -58,8 +62,14 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
         this.estudianteCursoRepository = estudianteCursoRepository;
         this.estudianteCursoModuloRepository = estudianteCursoModuloRepository;
         this.estudianteCursoMapper = estudianteCursoMapper;
+        this.fileStorageService = fileStorageService;
     }
 
+	@Override
+	public EstudianteCursoDTO getCurso(Long idEstudiante, Long idCurso) {
+		
+		return estudianteCursoMapper.toDTO(estudianteCursoRepository.getReferenceById(new EstudianteCursoId(idEstudiante, idCurso)));
+	}	
     @Transactional
     @Override
     public EstudianteCursoDTO subscribirAlumnoACurso(Long estudianteId, Long cursoId) {
@@ -77,20 +87,23 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
         }
 
         EstudianteCurso ec = new EstudianteCurso(estudiante, curso);
+        estudianteCursoRepository.saveAndFlush(ec);
 
-        // 5. Crear EstudianteCursoModulo para cada módulo del curso
-        //List<Modulo> modulos = moduloRepository.findByCursoId(cursoId);
         List<CursoModulo> modulos = curso.getModulos();
         boolean first = true;
         for (CursoModulo cursoModulo : modulos) {
             EstudianteCursoModulo ecm = new EstudianteCursoModulo(ec, cursoModulo.getModulo());
             ecm.setOrden(cursoModulo.getOrden());
             ecm.setTitulo(cursoModulo.getModulo().getTitulo());
+            ecm.setDescripcion(cursoModulo.getModulo().getDescripcion());
+            ecm.setContenido(cursoModulo.getModulo().getContenido());
             ecm.setPeso(cursoModulo.getPeso());
+            ecm.setTipo(cursoModulo.getModulo().getTipo());
             ecm.setEstado(first?EstadoCursoModulo.ACTIVO:EstadoCursoModulo.BLOQUEADO);
             first = false;
             ec.addModuloCurso(ecm);
         }
+        estudianteCursoModuloRepository.saveAll(ec.getModulos());
         curso.addUserRegistred();
         cursoRepository.save(curso);
         return estudianteCursoMapper.toDTO(estudianteCursoRepository.save(ec));
@@ -108,38 +121,88 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
     }
 
     @Override
-    public void recalcularProgreso(String username, Long cursoId) {
-        // TODO: implementar recálculo de progreso
+    public void recalcularProgreso(EstudianteCursoModulo ecm) {
+        if (ecm.getEstado() == EstadoCursoModulo.COMPLETADO) {
+        	ecm.getEstudianteCurso().addProgreso(ecm.getPeso());
+        }
     }
 	@Override
-	public void completarModulo(Modulo modulo, Estudiante estudiante, MultipartFile entregable) {
-		switch (modulo.getTipo()) {
-
-        case TipoModulo.ENTREGA_OBLIGATORIA:
-            if (entregable == null || entregable.isEmpty()) {
-                throw new MandatoryModuloException("cualquier cosa",null, "entregable" );
-            }
-            guardarArchivo(entregable);
-            marcarComoCompletado(estudiante, modulo);
-            break;
-
-        case TipoModulo.FINALIZACION_MANUAL:
-            marcarComoCompletado(estudiante, modulo);
-            break;
-    }
+	public void completarModulo(Long estudianteId, Long cursoId, Long moduloId, TipoModulo tipoModulo, FicheroData ficheroEntrega) throws IOException {
 		
+		EstudianteCursoModulo ecm = estudianteCursoModuloRepository.getReferenceById(
+				new EstudianteCursoModuloId(new EstudianteCursoId(estudianteId, cursoId), moduloId));
+
+		if (ecm == null) {
+			throw new ModuloNotFoundException("modulo.not.found", null, "");
+		}
+		
+		if ((ecm.getEstado() != EstadoCursoModulo.ACTIVO)  && 
+		   (ecm.getEstado() != EstadoCursoModulo.REVISADO)){
+			throw new CursoModuloEstadoIncompatibleException("modulo.not.found", null, "");
+		}
+        if ( ecm.getTipo() == TipoModulo.ENTREGA_OBLIGATORIA ) {
+        	if (ecm.getEstado() == EstadoCursoModulo.ACTIVO) {
+	            if (ficheroEntrega == null ) {
+	                throw new MandatoryModuloException("cualquier cosa", null, "entregable" );
+	                }
+	    		ecm.setUrlEntrega(fileStorageService.saveDocumento(ficheroEntrega));
+	    		ecm.setFechaEntrega(LocalDateTime.now());
+	    		ecm.setEstado(EstadoCursoModulo.PENDIENTE_REVISION);
+        	}
+        	if (ecm.getEstado() == EstadoCursoModulo.REVISADO) {
+        		marcarModuloComoCompletado( ecm);
+        		
+        	}
+        }
+        else {
+    		marcarModuloComoCompletado( ecm);
+        }
+        recalcularProgreso(ecm);
+        revisarEstado(ecm);
 	}
 
-	private void guardarArchivo(MultipartFile entregable) {
-		// TODO Auto-generated method stub
-		
+	/**
+	 * De acuerdo al estado del EstudianteCursoModulo recibido se busca el
+	 * siguiente módulo.
+	 * <ol>
+	 * <li>Existe. Se asigna al módulo siguiente el estado a ABIERTO.
+	 * <li>No existe. Se marca al EstudianteCurso como completado.
+	 * @param ecm
+	 */
+	private void revisarEstado(EstudianteCursoModulo ecm) {
+		if (ecm.getEstado() == EstadoCursoModulo.COMPLETADO) {
+			var siguienteModulo = ecm.getEstudianteCurso().getModulos().stream()
+				    .sorted(Comparator.comparingInt(EstudianteCursoModulo::getOrden)) // Cambia Modulo::getOrden por tu getter real
+				    .filter(m -> m.getOrden() > ecm.getOrden())
+				    .findFirst()
+				    .orElse(null); // Retorna null si no hay un módulo siguiente
+			if (siguienteModulo == null) {
+				//CURSO COMPLETADO
+				ecm.getEstudianteCurso().setFechaCompletado(LocalDateTime.now());
+				ecm.getEstudianteCurso().setEstado(EstadoCursoModulo.COMPLETADO);
+			}
+			else {
+				if (siguienteModulo.getEstado() == EstadoCursoModulo.BLOQUEADO) {
+					siguienteModulo.setEstado(EstadoCursoModulo.ACTIVO);
+				}
+			}
+		}
+		else {
+			ecm.getEstudianteCurso().setEstado(ecm.getEstado());
+		}
+		ecm.getEstudianteCurso().setFechaUltimoAcceso(LocalDateTime.now());
 	}
 
-	private void marcarComoCompletado(Estudiante estudiante, Modulo modulo) {
-		// TODO Auto-generated method stub
+	/**
+	 * Se define el estado y la fecha de COMPLETADO
+	 * @param ecm El EstudianteCursoModulo completado.
+	 */
+	private void marcarModuloComoCompletado(EstudianteCursoModulo ecm) {
+		ecm.setFechaCompletado(LocalDateTime.now());
+		ecm.setEstado(EstadoCursoModulo.COMPLETADO);
 		
 	}
-
+	@Transactional(readOnly = true)
 	@Override
 	public Paginacion<EstudianteCurso, EstudianteCursoDTO> listadoPaginado(PageParams pageData,
 			Map<String, String> params) {
@@ -154,7 +217,8 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 			return estudianteCursoRepository.findByIdEstudianteId(Long.valueOf(params.get("estudianteId")),pageable);
 		}
 		return null;
-	}	
+	}
+
 	
 
 

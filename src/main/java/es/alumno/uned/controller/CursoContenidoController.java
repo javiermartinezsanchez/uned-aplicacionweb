@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import es.alumno.uned.dto.ContenidoExtraDTO;
+import es.alumno.uned.exception.ContenidoExtraNotFoundException;
 import es.alumno.uned.model.entities.TipoContenido;
 import es.alumno.uned.service.ContenidoExtraService;
 
@@ -24,7 +25,7 @@ public class CursoContenidoController {
 	
 	@GetMapping("/contenido-extra/{idCurso}/{idContenido}")
 	public ResponseEntity<?> consultarContenido(@PathVariable Long idCurso,
-			@PathVariable Long idContenido) {
+			@PathVariable Long idContenido) throws ContenidoExtraNotFoundException {
 		
 		
 		ContenidoExtraDTO contenido = contenidoExtraService.getContenido(idCurso, idContenido);

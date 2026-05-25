@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +22,7 @@ import jakarta.servlet.http.HttpServletRequest;
  * 
  */
 @ControllerAdvice
+@Order(Ordered.LOWEST_PRECEDENCE)
 public class GlobalModelAttributes {
 
 	@Autowired

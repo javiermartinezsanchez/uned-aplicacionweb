@@ -1,16 +1,10 @@
 package es.alumno.uned.mapper;
 
-import java.time.LocalDateTime;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import es.alumno.uned.dto.CursoDTO;
 import es.alumno.uned.dto.EstudianteCursoDTO;
-import es.alumno.uned.dto.EstudianteCursoModuloDTO;
-import es.alumno.uned.dto.EstudianteDTO;
-import es.alumno.uned.model.entities.EstadoCursoModulo;
 import es.alumno.uned.model.entities.EstudianteCurso;
 
 /**
@@ -35,6 +29,7 @@ public class EstudianteCursoMapper {
         dto.setCurso(cursoMapper.toDTO(entity.getCurso()));
         dto.setFechaSubscripcion(entity.getFechaSubscripcion());
         dto.setFechaUltimoAcceso(entity.getFechaUltimoAcceso());
+        dto.setFechaCompletado(entity.getFechaCompletado());
         dto.setProgreso(entity.getProgreso());
         dto.setCalificacionFinal(entity.getCalificacionFinal());
         dto.setEstado(entity.getEstado());
@@ -42,6 +37,6 @@ public class EstudianteCursoMapper {
         		.map(estudianteCursoModuloMapper :: toDTO)
         		.toList());
 		
-		return null;
+		return dto;
 	}
 }

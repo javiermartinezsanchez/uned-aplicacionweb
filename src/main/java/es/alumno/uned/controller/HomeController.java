@@ -67,6 +67,7 @@ public class HomeController extends BaseCrudController {
 		if (authentication !=null) {
 		 urlUser =  UserUtil.defineHome(UserUtil.getRoles(authentication));
 		 modelo.addAttribute("urlUser", "admin");
+			return "redirect:/" + urlUser + "/home";
 		}
 		else {
 
@@ -106,10 +107,6 @@ public class HomeController extends BaseCrudController {
 		return "admin/home";
 	}
 
-	@GetMapping("/profesor/home")
-	public String profeHome(Model modelo) {
-		return "profesor/home";
-	}
 	@GetMapping("/miperfil")
 	public String miperfil(Authentication authentication) {
 		return String.format("redirect:%s/miperfil", UserUtil.defineHome(UserUtil.getRoles(authentication)));

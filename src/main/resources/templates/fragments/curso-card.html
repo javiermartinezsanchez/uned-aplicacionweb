@@ -5,8 +5,7 @@
              : @{/images/curso/default-curso.png}"
          class="card-img-top card-img-fixed"
          alt="Imagen del curso">
-<!--     <div class="card-body p-4"> -->
-		<div class="card-body d-flex flex-column p-3 pb-3" style="min-height: 50px">
+	<div class="card-body d-flex flex-column p-3 pb-3" style="min-height: 50px">
         <h5 class="card-title fw-bold" style="min-height: 48px;" th:text="${curso.titulo}"></h5>
         <p class="card-text text-muted small flex-grow-1 descripcion-limitada"
            th:text="${curso.descripcion}">
@@ -14,6 +13,9 @@
         <span class="text-secundary small mb-3 d-block"
            th:text="${curso.areaTematicaText}">
         </span>
+        <th:block th:if="${yaInscrito}">
+    		<div th:insert="~{::infocursoEstudiante}"></div>
+		</th:block>
 		<div class="d-flex align-items-center justify-content-between mb-3">
 		    <div th:insert="~{fragments/botones :: btnLink(
 		        #{curso.vercurso},
@@ -21,13 +23,47 @@
 		        'btn-primary btn-sm px-2 text-nowrap',
 		        'bi-info-circle'
 		    )}"></div>
-		    <div th:insert="~{fragments/botones :: btnLink(
-		        #{curso.subscribirse},
-		        @{'/estudiante/subscribircurso/' + ${curso.id} },
-		        'btn-outline-success btn-sm px-2 text-nowrap',
-		        'bi-clipboard-check'
-		    )}"></div>
+		    <th:block th:unless="${isProfesor}">
+		        <div th:if="${yaInscrito == null or !yaInscrito}" 
+		             th:insert="~{fragments/botones :: btnLink(
+		                #{curso.subscribirse},
+		                @{'/estudiante/subscribircurso/' + ${curso.id} },
+		                'btn-outline-success btn-sm px-2 text-nowrap',
+		                'bi-clipboard-check'
+		             )}">
+		        </div>
+		        <th:block th:if="${yaInscrito}" th:switch="${#strings.toString(estadoCurso)}">
+		            <div th:case="'ACTIVO'" th:insert="~{fragments/botones :: btnLink(
+		                'Continuar',
+		                @{'/estudiante/micurso/' + ${curso.id} },
+		                'btn-success btn-sm px-2 text-nowrap',
+		                'bi-play-fill'
+		            )}"></div>
+		            <div th:case="'REVISADO'" th:insert="~{fragments/botones :: btnLink(
+		                'Continuar',
+		                @{'/estudiante/micurso/' + ${curso.id} },
+		                'btn-success btn-sm px-2 text-nowrap',
+		                'bi-play-fill'
+		            )}"></div>
+		            <div th:case="'COMPLETADO'" th:insert="~{fragments/botones :: btnLinkTarget(
+		                'Certificado',
+		                @{'/estudiante/curso/certificado/' + ${curso.id} },
+		                false,
+		                '_blank',
+		                'btn-success btn-sm px-2 text-nowrap',
+		                'bi-award'
+		            )}"></div>
+		            <div th:case="'PENDIENTE_REVISION'" th:insert="~{fragments/botones :: btnLink(
+		                'Ver Entregas',
+		                @{'/estudiante/revision/' + ${curso.id} },
+		                'btn-outline-warning btn-sm px-2 text-nowrap',
+		                'bi-eye'
+		            )}"></div>
+		            <div th:case="*"></div>
+		        </th:block>
+		    </th:block>
 		</div>
+
         <div class="d-flex align-items-center justify-content-between text-muted small border-top pt-2">
             <span class="fw-semibold">⭐ <span th:text="${curso.valoracion}">4.8</span> / 5</span>
 			<span><i class="bi bi-clock me-2"></i><strong th:text="${curso.duracion}">40</strong>h.</span>
@@ -39,6 +75,53 @@
 </div>
 
 </fichacurso>
+<!-- Bloque visual de progreso/estado exclusivo para alumnos inscritos -->
+<div th:fragment="infocursoEstudiante">
+    <div class="mb-3" th:switch="${#strings.toString(estadoCurso)}">
+        <div th:case="'ACTIVO'">
+            <div class="d-flex justify-content-between align-items-center mb-1 small">
+                <span class="text-muted fw-medium">Progreso del curso</span>
+                <span class="text-primary fw-bold" th:text="${progresoCurso + '%'}">0%</span>
+            </div>
+            <div class="progress" style="height: 6px; background-color: #e9ecef;">
+                <div class="progress-bar bg-primary rounded" role="progressbar" th:style="'width: ' + ${progresoCurso} + '%'"></div>
+            </div>
+        </div>
+        <div th:case="'REVISADO'">
+            <div class="d-flex justify-content-between align-items-center mb-1 small">
+                <span class="text-muted fw-medium">Progreso (Revisado)</span>
+                <span class="text-primary fw-bold" th:text="${progresoCurso + '%'}">0%</span>
+            </div>
+            <div class="progress" style="height: 6px; background-color: #e9ecef;">
+                <div class="progress-bar bg-info rounded" role="progressbar" th:style="'width: ' + ${progresoCurso} + '%'"></div>
+            </div>
+        </div>
+        <div th:case="'COMPLETADO'">
+            <div class="d-flex justify-content-between align-items-center mb-1 small">
+                <span class="text-success fw-bold"><i class="bi bi-patch-check-fill me-1"></i> ¡Completado!</span>
+                <span class="text-success fw-bold">100%</span>
+            </div>
+            <div class="progress" style="height: 6px; background-color: #e9ecef;">
+                <div class="progress-bar bg-success rounded" role="progressbar" style="width: 100%"></div>
+            </div>
+        </div>
+        <div th:case="'PENDIENTE_REVISION'">
+            <div class="d-flex justify-content-between align-items-center mb-1 small">
+                <span class="text-warning fw-semibold"><i class="bi bi-hourglass-split me-1"></i> Esperando revisión</span>
+                <span class="text-warning fw-bold" th:text="${progresoCurso + '%'}">0%</span>
+            </div>
+            <div class="progress" style="height: 6px; background-color: #e9ecef;">
+                <div class="progress-bar bg-warning rounded" role="progressbar" th:style="'width: ' + ${progresoCurso} + '%'"></div>
+            </div>
+        </div>
+        <div th:case="'BLOQUEADO'">
+            <span class="badge bg-secondary text-wrap py-2 w-100"><i class="bi bi-lock-fill me-1"></i> Curso Bloqueado</span>
+        </div>
+        <div th:case="'BAJA'">
+            <span class="badge bg-danger text-wrap py-2 w-100"><i class="bi bi-exclamation-octagon me-1"></i> Tramitado de Baja</span>
+        </div>
+    </div>
+</div>
 
 <div th:fragment="contenidoExtra" class="card mt-3">
 

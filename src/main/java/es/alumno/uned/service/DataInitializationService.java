@@ -260,10 +260,59 @@ public class DataInitializationService {
 				moduloRepo.save(new Modulo("Características Avanzadas a Implementar","Características Avanzadas a Implementar","",TipoModulo.FINALIZACION_MANUAL,LocalDateTime.now(),"CARGAINICIAL"));
 			}
 			if (moduloRepo.findByTituloContainingIgnoreCase("Criterios de Éxito (Checklist)") == null) {
-				moduloRepo.save(new Modulo("Criterios de Éxito (Checklist)","Criterios de Éito (Checklist)","",TipoModulo.FINALIZACION_MANUAL,LocalDateTime.now(),"CARGAINICIAL"));
+				moduloRepo.save(new Modulo("Criterios de Éxito (Checklist)","Criterios de Éxito (Checklist)","",TipoModulo.FINALIZACION_MANUAL,LocalDateTime.now(),"CARGAINICIAL"));
 			}
 			if (moduloRepo.findByTituloContainingIgnoreCase("Ejercicio Práctico para el Alumno API-REST") == null ) {
-				moduloRepo.save(new Modulo("Ejercicio Práctico para el Alumno API-REST","Ejercicio Práctico para el Alumno","",TipoModulo.FINALIZACION_MANUAL,LocalDateTime.now(),"CARGAINICIAL"));
+				moduloRepo.save(new Modulo("Ejercicio Práctico para el Alumno API-REST","Ejercicio Práctico para el Alumno","",TipoModulo.ENTREGA_OBLIGATORIA,LocalDateTime.now(),"CARGAINICIAL"));
+			}
+			if (moduloRepo.findByTituloContainingIgnoreCase("Introducción a React y Componentes") == null ) {
+				moduloRepo.save(new Modulo("Introducción a React y Componentes","Configuración del entorno, JSX y creación de componentes funcionales.",
+						"""
+				     Configuración del entorno con Vite, sintaxis JSX, componentes funcionales, renderizado condicional, manejo de eventos básicos y uso de fragmentos (<></>).
+					    """,TipoModulo.FINALIZACION_MANUAL,LocalDateTime.now(),"CARGAINICIAL"));
+			}
+			if (moduloRepo.findByTituloContainingIgnoreCase("React Props y Estado (State)") == null ) {
+				moduloRepo.save(new Modulo("React Props y Estado (State)","Pasando datos entre componentes y manejo de estados locales con useState.",
+						""" 
+				Comunicación entre componentes (padre a hijo) mediante props, validación con PropTypes, desestructuración, introducción al hook useState y actualización asíncrona del estado.
+				
+				Crear un lista de tareas (Todo App) interactiva donde se puedan añadir más elementos.
+				""",TipoModulo.ENTREGA_OBLIGATORIA,LocalDateTime.now(),"CARGAINICIAL"));
+			}
+			if (moduloRepo.findByTituloContainingIgnoreCase("React Efectos y Ciclo de Vida") == null ) {
+				moduloRepo.save(new Modulo("React Efectos y Ciclo de Vida","Sincronización con APIs externas y uso avanzado del hook useEffect", 
+						"""
+					    - Ciclo de vida de los componentes.
+					    - Efectos secundarios con el hook useEffect.
+					    - Consumo de APIs REST usando fetch o axios.
+					    - Manejo de estados de carga (loading) y errores.
+					    - Limpieza de efectos (cleanup functions).
+					    """, TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(),"CARGAINICIAL"));
+			}
+			if (moduloRepo.findByTituloContainingIgnoreCase("Enrutamiento con React Router") == null ) {
+				moduloRepo.save(new Modulo("Enrutamiento con React Router","Creación de aplicaciones de múltiples páginas y navegación interna.", 
+						"""
+				Instalación y configuración de react-router-dom, definición de rutas estáticas y dinámicas (/productos/:id), uso de enlaces de navegación (Link, NavLink) y redirecciones programáticas con useNavigate.
+				""", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(),"CARGAINICIAL"));
+			}
+			if (moduloRepo.findByTituloContainingIgnoreCase("React. Gestión de Estado") == null ) {
+				moduloRepo.save(new Modulo("React. Gestión de Estado","Compartir información en toda la app usando Context API o Redux Toolkit.", 
+						"""
+				 - Limitaciones del prop drilling
+				 - Uso de Context API (createContext, useContext)
+				 - Proveedores de estado
+				 - Persistencia de datos en localStorage 
+				 - Optimización de renderizados.
+						""", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(),"CARGAINICIAL"));
+			}
+			if (moduloRepo.findByTituloContainingIgnoreCase("React. Ejercicio Práctico para el Alumno") == null ) {
+				moduloRepo.save(new Modulo("React. Ejercicio Práctico para el Alumno","Entrega final",
+						""" 
+				E-commerce Completo. 
+				--------------------
+				Integración de todas las entregas anteriores en una tienda virtual con catálogo (API), carrito de compras gestionado de forma global y pasarela de pago simulada.
+				
+				""",TipoModulo.ENTREGA_OBLIGATORIA,LocalDateTime.now(),"CARGAINICIAL"));
 			}
 
 			System.out.println("--------------------------------------------");

@@ -3,8 +3,12 @@ package es.alumno.uned.config;
 
 import java.util.Locale;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.support.MultipartFilter;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -46,18 +50,18 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
     }
-/**
- * Añadimos las rutas de las imágenes.
- * 
- * <ul><li>
- * 1.- La ruta "externa" para guardar tanto imágenes 
- * 2.- La ruta "externa" para guardar documentos que 
- * son enviados por el admin, profesor o los alumnos
- * </li>
- * <li>
- * 2.- La ruta de los recursos que se incluyen con la aplicación (banderas y otras imágenes)</li>
- * </ul>
- */
+	/**
+	 * Añadimos las rutas de las imágenes.
+	 * 
+	 * <ul><li>
+	 * 1.- La ruta "externa" para guardar imágenes 
+	 * 2.- La ruta "externa" para guardar documentos que 
+	 * son enviados por el admin, profesor o los alumnos
+	 * </li>
+	 * <li>
+	 * 3.- La ruta de los recursos que se incluyen con la aplicación (banderas y otras imágenes)</li>
+	 * </ul>
+	 */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
@@ -71,5 +75,18 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/images/**")
                 .addResourceLocations("classpath:/static/images/");
 
+    }
+    
+    /**
+     * Se genera este Filtro para detectar la excepción del tamaño de los ficheros
+     * uploados (por Admin-Profesor-Estudiantes).
+     * <p>Se establece en "application.properties" el máximo
+     * @return
+     */
+    @Bean
+    public MultipartResolver multipartResolver() {
+        StandardServletMultipartResolver resolver = new StandardServletMultipartResolver();
+        resolver.setResolveLazily(true); // Permite que el error llegue al ControllerAdvice
+        return resolver;
     }
 }

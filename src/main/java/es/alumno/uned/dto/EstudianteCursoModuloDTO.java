@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import es.alumno.uned.model.entities.EstadoCursoModulo;
+import es.alumno.uned.model.entities.TipoModulo;
 
 public class EstudianteCursoModuloDTO {
 	    private Long estudianteId;
@@ -11,8 +12,11 @@ public class EstudianteCursoModuloDTO {
 	    private Long moduloId;
 	    private Boolean completado;
         private String titulo;
+        private String descripcion;
+        private String contenido;
         private Integer orden;
         private Integer peso;
+        private TipoModulo tipoModulo;
         private EstadoCursoModulo estado; // ACTIVO, COMPLETADO, BLOQUEADO, BAJA
         private LocalDateTime fechaCompletado;
         private LocalDateTime fechaUltimoAcceso;
@@ -74,6 +78,23 @@ public class EstudianteCursoModuloDTO {
 		public void setTitulo(String titulo) {
 			this.titulo = titulo;
 		}
+		
+		public String getDescripcion() {
+			return descripcion;
+		}
+
+		public void setDescripcion(String descripcion) {
+			this.descripcion = descripcion;
+		}
+
+		public String getContenido() {
+			return contenido;
+		}
+
+		public void setContenido(String contenido) {
+			this.contenido = contenido;
+		}
+
 		public Integer getOrden() {
 			return orden;
 		}
@@ -86,6 +107,15 @@ public class EstudianteCursoModuloDTO {
 		public void setPeso(Integer peso) {
 			this.peso = peso;
 		}
+		
+		public TipoModulo getTipoModulo() {
+			return tipoModulo;
+		}
+
+		public void setTipoModulo(TipoModulo tipo) {
+			this.tipoModulo = tipo;
+		}
+
 		public EstadoCursoModulo getEstado() {
 			return estado;
 		}
@@ -134,9 +164,5 @@ public class EstudianteCursoModuloDTO {
 		public void setNotasCalificacion(String notasCalificacion) {
 			this.notasCalificacion = notasCalificacion;
 		}
-
-     
-        
-
 }
 

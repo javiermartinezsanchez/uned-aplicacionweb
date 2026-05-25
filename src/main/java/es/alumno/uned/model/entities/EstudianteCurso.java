@@ -16,7 +16,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "estudiante_curso")
+@Table(name = "estudiante_cursos")
 public class EstudianteCurso {
 
     @EmbeddedId
@@ -141,9 +141,17 @@ public class EstudianteCurso {
 	 * Utilidad para añadir modulos a EstudianteCurso
 	 * @param ecm EstudianteCursoModulo a añadir (sólo en inscripciones)
 	 */
-    public void addModuloCurso(EstudianteCursoModulo ecm) {
+    public void addModuloCurso( EstudianteCursoModulo ecm) {
     	modulos.add(ecm);
+    	ecm.setEstudianteCurso(this);
     }
-    
+    /**
+     * Utilidad para ir añadiendo el progreso de un curso.
+     * 
+     * 
+     */
+    public void addProgreso(Integer incremento) {
+    	this.progreso = Math.min((progreso == null ? 0 : this.progreso ) + incremento,100);
+    }
 }
 

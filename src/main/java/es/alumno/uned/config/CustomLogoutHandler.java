@@ -15,7 +15,12 @@ import org.springframework.stereotype.Component;
 
 import es.alumno.uned.model.entities.UserAudit;
 import es.alumno.uned.model.repository.UserAuditRepository;
-
+/**
+ * Manejador propio de "Logout".
+ * 
+ * <p> Si está autenticado se elimina de {@link SessionRegistry} y
+ * añadimos el evento "LOGOUT" en nuestra tabla de auditoría de accesos.
+ */
 @Component
 public class CustomLogoutHandler implements LogoutHandler {
 
@@ -28,6 +33,7 @@ public class CustomLogoutHandler implements LogoutHandler {
     
     private CustomLogoutHandler(SessionRegistry sessionRegistry) {
     	this.sessionRegistry = sessionRegistry ;   }
+ 
     @Override
     public void logout(HttpServletRequest request,
                        HttpServletResponse response,

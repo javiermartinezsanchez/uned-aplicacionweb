@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Diploma de Certificación</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/{version}/css/bootstrap.min.css(version=${@webjarsConfig.bootstrap})}" />
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/{version}/font/bootstrap-icons.css(version=${@webjarsConfig.bootstrapicons})}"/>
+
+</head>
+<body class="bg-light d-flex justify-content-center align-items-center min-vh-100 p-4">
+
+    <!-- Contenedor Principal con Bordes Estilo Diploma -->
+    <div class="card bg-white shadow-lg p-5 text-center position-relative" 
+         style="width: 850px; min-height: 550px; border: 12px double #2c3e50; border-radius: 4px;">
+        
+        <!-- Esquinas Decorativas con Utilidades de Bootstrap -->
+        <div class="position-absolute border border-dark" style="top: 10px; left: 10px; width: 30px; height: 30px; border-right: none !important; border-bottom: none !important;"></div>
+        <div class="position-absolute border border-dark" style="top: 10px; right: 10px; width: 30px; height: 30px; border-left: none !important; border-bottom: none !important;"></div>
+        <div class="position-absolute border border-dark" style="bottom: 10px; left: 10px; width: 30px; height: 30px; border-right: none !important; border-top: none !important;"></div>
+        <div class="position-absolute border border-dark" style="bottom: 10px; right: 10px; width: 30px; height: 30px; border-left: none !important; border-top: none !important;"></div>
+
+        <!-- Encabezado -->
+        <h1 class="display-3 text-uppercase font-weight-bold text-secondary tracking-wide my-4" style="letter-spacing: 6px;">
+            Diploma
+        </h1>
+        <p class="h6 font-italic text-muted text-uppercase mb-5" style="letter-spacing: 2px;">
+            Certificado de Finalización
+        </p>
+
+        <p class="lead text-dark mb-2">Se otorga el presente documento a:</p>
+        
+        <h2 class="display-6 font-weight-bold text-success border-bottom pb-2 d-inline-block w-70 mx-auto mb-1" th:text="${nombreEstudiante}">
+            Juan Pérez Gómez
+        </h2>
+        <p class="small text-muted mb-4" th:text="${email}">
+            juan.perez@email.com
+        </p>
+
+        <p class="lead text-dark mb-3">Por haber cursado y aprobado satisfactoriamente el curso de:</p>
+        
+        <h3 class="h2 font-weight-bold text-dark mb-5" th:text="${tituloCurso}">
+            REACT core y ecosistema avanzado
+        </h3>
+
+        <div class="mt-auto pt-4 border-top w-50 mx-auto">
+            <p class="small text-muted mb-0">
+                Otorgado el <span class="font-weight-bold" th:text="${fechaFinalizacion}">24 de Mayo de 2026</span>
+            </p>
+        </div>
+    </div>
+
+</body>
+</html>

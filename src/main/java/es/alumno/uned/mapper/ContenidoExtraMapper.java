@@ -16,4 +16,12 @@ public class ContenidoExtraMapper {
 				dto.getNombreReal(),
 				dto.getContentType());
 	}
+	
+	public ContenidoExtraDTO toDTO(ContenidoExtra entity) {
+		ContenidoExtraDTO dto = new ContenidoExtraDTO();
+		dto.setUri(entity.getUri());
+		dto.setTipoContenido(entity.getTipoContenido());
+		
+		return dto;
+	}
 }
