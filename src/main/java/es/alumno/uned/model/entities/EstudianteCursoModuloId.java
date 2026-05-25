@@ -2,6 +2,7 @@ package es.alumno.uned.model.entities;
 
 import java.io.Serializable;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
@@ -12,6 +13,7 @@ public class EstudianteCursoModuloId implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private EstudianteCursoId estudianteCursoId;
+	@Column(name = "MODULO_ID", nullable = false)
     private Long moduloId;
     public EstudianteCursoModuloId() {};
     public EstudianteCursoModuloId(EstudianteCursoId estudianteCursoId, Long moduloId) {

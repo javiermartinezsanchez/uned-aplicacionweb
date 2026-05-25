@@ -2,6 +2,9 @@ package es.alumno.uned.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
+/** 
+ * Clase DTO de AreaTemática para el transporte Vista-Controlador-Modelo (Service).
+ */
 public class AreaTematicaDTO {
 
 	private Long id;
@@ -12,6 +15,7 @@ public class AreaTematicaDTO {
 	@NotBlank(message = "{validations.descripcion.mandatory}")
 	private String descripcion;
 	
+	private Integer numCursos;
 	public AreaTematicaDTO() {};
 	public AreaTematicaDTO(Long id, String titulo, String descripcion) {
 		this.id = id;
@@ -38,6 +42,12 @@ public class AreaTematicaDTO {
 
 	public String getDescripcion() {
 		return descripcion;
+	}
+	public Integer getNumCursos() {
+		return numCursos;
+	}
+	public void setNumCursos(Integer numCursos) {
+		this.numCursos = numCursos;
 	}
 
 

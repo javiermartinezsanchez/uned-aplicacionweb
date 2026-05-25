@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import es.alumno.uned.dto.AreaTematicaDTO;
@@ -33,7 +34,7 @@ public class AreaTematicaServiceImpl implements AreaTematicaService {
 	public Paginacion<AreaTematica, AreaTematicaDTO> listadoPaginado(Map<String, String> params, PageParams pageData) {
 		
 		return new Paginacion.Builder<AreaTematica, AreaTematicaDTO>()
-				.pagina(getPaginaBusqueda(PageRequest.of(pageData.page(), pageData.size()), params))
+				.pagina(getPaginaBusqueda(PageRequest.of(pageData.page(), pageData.size(), Sort.by("titulo")), params))
                 .mapper(mapper::toDTO)
                 .build();
 	}

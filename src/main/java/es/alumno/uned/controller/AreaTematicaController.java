@@ -62,7 +62,7 @@ public class AreaTematicaController extends BaseCrudController{
 	@GetMapping("/{urlBase}/areaTematica/{id}")
 	@PreAuthorize(
 		    "(#urlBase == 'admin' and hasRole('ADMIN')) or " +
-		    "(#urlBase == 'profesor' and hasRole('PROFESOR'))"
+		    "(#urlBase == 'profesor' and hasRole('PROFE'))"
 		)
 	public String modifica(
 			@PathVariable("urlBase") String urlBase,

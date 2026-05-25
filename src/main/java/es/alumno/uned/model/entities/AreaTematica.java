@@ -57,6 +57,13 @@ public class AreaTematica {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
+	
+	/**
+	 * Método utilitario para obtener el total de cursos de esta area.
+	 */
+	public Integer getNumCursosArea() {
+		return this.cursos.size();
+	}
 	@Override
 	public int hashCode() {
 		return Objects.hash(descripcion, id, titulo);

@@ -32,6 +32,7 @@ public class AreaTematicaMapper {
 		areaDto.setId(entity.getId());
 		areaDto.setTitulo(entity.getTitulo());
 		areaDto.setDescripcion(entity.getDescripcion());
+		areaDto.setNumCursos(entity.getNumCursosArea());
 		return areaDto;
 	}
 }

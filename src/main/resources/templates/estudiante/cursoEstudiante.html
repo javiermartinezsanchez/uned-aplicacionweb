@@ -10,7 +10,6 @@
 	<section>
 		<div class="container py-5" th:object="${curso}">
 
-			<!-- CABECERA -->
 			<div class="row mb-4">
 				<div class="col-md-5">
 					<img th:src="@{/images/curso/{img}(img=*{uriImagen})}"
@@ -46,7 +45,6 @@
 					<div class="accordion-item mb-2" th:each="modulo, i : ${curso.modulos}" 
 					     th:with="esExpandido=${modulo.estado?.name() == 'ACTIVO' or modulo.estado?.name() == 'REVISADO'}">
 
-						<!-- CABECERA DE ACORDEÓN COMPORTAMIENTO DINÁMICO -->
 						<h2 class="accordion-header" th:id="'modulo-' + ${i.index}">
 							<button th:class="'accordion-button ' + (${esExpandido} ? '' : 'collapsed')" 
 							        type="button"
@@ -58,17 +56,14 @@
 							</button>
 						</h2>
 
-						<!-- CUERPO DEL ACORDEÓN COMPORTAMIENTO DINÁMICO -->
 						<div th:id="'collapse-' + ${i.index}"
 						     th:class="'accordion-collapse collapse ' + (${esExpandido} ? 'show' : '')"
 						     th:aria-labelledby="'modulo-' + ${i.index}"
 						     data-bs-parent="#modulosAccordion">
 
 							<div class="accordion-body">
-								<!-- Descripción corta -->
 								<p class="text-muted" th:text="${modulo.titulo}">Operativa</p>
 
-								<!-- CONTENIDO -->
 								<div class="mt-3" th:if="${modulo.contenido != null}">
 									<strong th:text="#{curso.modulo.contenido}">Contenido:</strong>
 									<pre class="bg-light p-3 rounded mt-2 text-dark border-0 text-break" 
@@ -76,47 +71,41 @@
 										 th:text="${modulo.contenido}"></pre>
 								</div>
 
-								<!-- PIE DEL MÓDULO -->
-<!-- REEMPLAZO DEL PIE DEL MÓDULO ACTUAL -->
-<div class="border-top pt-3 mt-3">
-    
-    <!-- 1. SI EL MÓDULO YA ESTÁ COMPLETADO -->
-    <div th:if="${modulo.estado?.name() == 'COMPLETADO'}" class="text-success small fw-semibold">
-        <i class="bi bi-check-circle-fill me-1"></i> Completado el 
-        <span th:text="${#temporals.format(modulo.fechaCompletado, 'dd/MM/yyyy HH:mm')}">23/05/2026</span>
-    </div>
-
-    <!-- 2. SI EL MÓDULO ESTÁ ACTIVO (Zona de Acción) -->
-    <div th:if="${modulo.estado?.name() == 'ACTIVO'}" th:switch="${modulo.tipoModulo?.name()}">
-        <form th:action="@{/estudiante/modulo/completar}" method="POST" enctype="multipart/form-data" class="row g-2 align-items-center">
-                <input type="hidden" name="idCurso" th:value="${modulo.cursoId}" />
-                <input type="hidden" name="idModulo" th:value="${modulo.moduloId}" />
-                <input type="hidden" name="tipoModulo" th:value="${modulo.tipoModulo}"/>
-       
-        <!-- CASO A: FINALIZACIÓN MANUAL (Botón Directo) -->
-        <div th:case="'FINALIZACION_MANUAL'">
-                 <button type="submit" class="btn btn-success btn-sm">
-                    <i class="bi bi-bookmark-check-fill me-1"></i> COMPLETAR MÓDULO
-                </button>
-        </div>
-
-        <!-- CASO B: ENTREGA OBLIGATORIA (Formulario de Archivo) -->
-        <div th:case="'ENTREGA_OBLIGATORIA'">
-                 
-                <div class="col-sm-8 col-md-6">
-                    <label class="form-label small text-muted mb-1 fw-medium">Adjuntar tarea obligatoria:</label>
-                    <input type="file" name="ficheroTarea" class="form-control form-control-sm" required />
-                </div>
-                <div class="col-sm-4 col-md-3 align-self-end">
-                    <button type="submit" class="btn btn-primary btn-sm w-100">
-                        <i class="bi bi-file-earmark-arrow-up-fill me-1"></i> Enviar Tarea
-                    </button>
-                </div>
-           
-        </div>
-        </form> 
-    </div>
-</div>
+								<div class="border-top pt-3 mt-3">
+								    
+								    <div th:if="${modulo.estado?.name() == 'COMPLETADO'}" class="text-success small fw-semibold">
+								        <i class="bi bi-check-circle-fill me-1"></i> Completado el 
+								        <span th:text="${#temporals.format(modulo.fechaCompletado, 'dd/MM/yyyy HH:mm')}">23/05/2026</span>
+								    </div>
+								
+								    <div th:if="${modulo.estado?.name() == 'ACTIVO'}" th:switch="${modulo.tipoModulo?.name()}">
+								        <form th:action="@{/estudiante/modulo/completar}" method="POST" enctype="multipart/form-data" class="row g-2 align-items-center">
+								                <input type="hidden" name="idCurso" th:value="${modulo.cursoId}" />
+								                <input type="hidden" name="idModulo" th:value="${modulo.moduloId}" />
+								                <input type="hidden" name="tipoModulo" th:value="${modulo.tipoModulo}"/>
+								       
+								        <div th:case="'FINALIZACION_MANUAL'">
+								                 <button type="submit" class="btn btn-success btn-sm">
+								                    <i class="bi bi-bookmark-check-fill me-1"></i> COMPLETAR MÓDULO
+								                </button>
+								        </div>
+								
+								        <div th:case="'ENTREGA_OBLIGATORIA'">
+								                 
+								                <div class="col-sm-8 col-md-6">
+								                    <label class="form-label small text-muted mb-1 fw-medium">Adjuntar tarea obligatoria:</label>
+								                    <input type="file" name="ficheroTarea" class="form-control form-control-sm" required />
+								                </div>
+								                <div class="col-sm-4 col-md-3 align-self-end">
+								                    <button type="submit" class="btn btn-primary btn-sm w-100">
+								                        <i class="bi bi-file-earmark-arrow-up-fill me-1"></i> Enviar Tarea
+								                    </button>
+								                </div>
+								           
+								        </div>
+								        </form> 
+								    </div>
+								</div>
 
 							</div>
 						</div>
@@ -154,60 +143,7 @@
 <!-- 				</ul> -->
 <!-- 			</div> -->
 
-			<div class="card border border-light shadow-sm rounded-3 mt-4">
-				<div class="card-header bg-light border-0 py-3">
-					<h4 class="mb-0">
-						<button class="btn btn-link w-100 text-start d-flex justify-content-between align-items-center text-decoration-none fw-bold p-0 text-dark" 
-						        type="button" 
-						        data-bs-toggle="collapse" 
-						        data-bs-target="#collapseFichaTecnica" 
-						        aria-expanded="false" 
-						        aria-controls="#collapseFichaTecnica">
-							<span th:text="#{curso.ficha.title}">Ficha técnica</span>
-							<i class="bi bi-chevron-down"></i>
-						</button>
-					</h4>
-				</div>
-				<div id="collapseFichaTecnica" class="collapse">
-					<div class="card-body p-4 bg-white">
-						<div class="row mb-3">
-							<div class="col-md-4">
-								<p class="mb-2">
-									<strong th:text="#{comun.fini}">Fecha inicio</strong>: <span
-										th:text="${#temporals.format(curso.fIni, 'dd/MM/yyyy')}"></span>
-								</p>
-							</div>
-							<div class="col-md-4">
-								<p class="mb-2">
-									<strong th:text="#{comun.fFin}">Fecha fin</strong>: <span
-										th:text="${#temporals.format(curso.fFin, 'dd/MM/yyyy')}"></span>
-								</p>
-							</div>
-							<div class="col-md-4">
-								<p class="mb-2">
-									<strong th:text="#{curso.nivel}">Nivel</strong>: <span
-										th:text="${curso.nivel}"></span>
-								</p>
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-md-6">
-								<p class="mb-0">
-									<strong>👨‍🏫 <span th:text="#{curso.responsable}">Responsable</span>: </strong> 
-									<span th:text="${curso.nombreResponsable}"></span>
-								</p>
-							</div>
-							<div class="col-md-6">
-								<p class="mb-0">
-									<strong>⏱ <span th:text="#{curso.duracion}">Duración</span>: </strong> 
-									<span th:text="${curso.duracion}"></span> <span th:text="#{curso.ficha.horas}">horas</span>
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+				<div th:insert="~{fragments/curso ::fichaTecnica}"></div>
 
 		</div>
 		<script th:src="@{/js/enviarvaloracion.js}"></script>

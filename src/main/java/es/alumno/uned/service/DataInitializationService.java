@@ -159,6 +159,15 @@ public class DataInitializationService {
 		if (areaRepo.findByTitulo("Metodología") == null) {
 			areaRepo.save(new AreaTematica("Metodología", "Enfoques y técnicas pedagógicas empleadas en el proceso educativo."));
 		}
+		if (areaRepo.findByTitulo("Frameworks Java MVC") == null) {
+			areaRepo.save(new AreaTematica("Frameworks Java MVC", "Frameworks en Java para el desarrollo de aplicaciones Web MVC."));
+		}
+		if (areaRepo.findByTitulo("Frameworks Front-End") == null) {
+			areaRepo.save(new AreaTematica("Frameworks Front-End", "Frameworks en JS para el desarrollo de aplicaciones Web MVC."));
+		}
+		if (areaRepo.findByTitulo("Lenguajes de Base de Datos") == null) {
+			areaRepo.save(new AreaTematica("Lenguajes de Base de Datos", "Formación sobre el lenguaje SQL normalizado en las consultas a Bases de datos relacionales."));
+		}
 
 		/*
 		  CARGA INICIAL DE CURSOS

@@ -65,16 +65,16 @@ public class PaginacionComun<T> {
 			}
 			else if (pagActual >= totalPag - numRows/2) {
 				desde = totalPag - numRows + 1;
-				hasta = numRows;
+				hasta = totalPag;
 			}
 			else {
 				desde = pagActual - numRows/2;
-				hasta = numRows;
+				hasta = desde + numRows - 1;
 			}
 		}
 		
-		for (int i=1; i<hasta;i++) {
-			paginas.add(new Pagina(desde+i, pagActual == desde+1));
+		for (int i=1; i<=hasta;i++) {
+			paginas.add(new Pagina(i, pagActual == i));
 		}
 		
 	}
