@@ -1,6 +1,14 @@
-<div class="card shadow-sm" th:fragment="opcionesPanel(icono, link, texto)">
-   <div class="card-body"><i th:class="'bi '+${icono}" style="font-size: 2rem;"></i>
-    <a class="navbar-brand" th:href="@{${link}}"><span th:text="#{${texto}}">Roles</span></a>
+<div class="card shadow-sm" th:fragment="opcionesPanel(icono, link, texto, mostrarValor)">
+   <div class="card-body">
+    <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{${link}}">
+    <i th:class="'bi '+${icono}" style="font-size: 2rem;"></i>
+    <span th:text="#{${texto}}">Roles</span>
+    <div th:if="${mostrarValor and trabajosPendientes != null}" 
+           class="text-white rounded-circle d-inline-flex align-items-center justify-content-center fw-bold fs-6 flex-shrink-0" 
+           style="width: 32px; height: 32px;"
+           th:classappend="${trabajosPendientes.intValue() == 0} ? 'bg-success' : (${trabajosPendientes.intValue() <= 10} ? 'bg-warning text-dark' : 'bg-danger')"
+           th:text="${trabajosPendientes}">
+      </div></a>
   </div>
 </div>
 		          

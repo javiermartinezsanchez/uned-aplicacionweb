@@ -60,7 +60,7 @@ public class Curso {
 	private String userIns;
 	
 	@Column(precision = 2, scale = 1)
-	private BigDecimal valoracion;
+	private BigDecimal valoracion = BigDecimal.ZERO;
 
 	@Column(name="USUARIOS_REGISTRADOS", nullable=false)
 	private Integer usuariosRegistrados = 0;

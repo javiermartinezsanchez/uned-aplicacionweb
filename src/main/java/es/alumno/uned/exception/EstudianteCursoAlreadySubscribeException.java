@@ -2,7 +2,7 @@ package es.alumno.uned.exception;
 /**
  * Excepción de cuando un Estudiante está ya subscrito en un curso.
  */
-public class  EstudianteCursoAlreadySubscribeException extends RuntimeException {
+public final class  EstudianteCursoAlreadySubscribeException extends SinDTOException {
 
 	/**
 	 * 

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import es.alumno.uned.dto.EstudianteCursoDTO;
+import es.alumno.uned.model.entities.EstadoCursoModulo;
 import es.alumno.uned.model.entities.EstudianteCurso;
 
 /**
@@ -54,5 +55,18 @@ public class EstudianteCursoMapper {
 		return dto;
 		
 	}
-	
+	/**
+	 * Mapeo al DTO pero sólo volcando el módulo en estado PENDIENTE_REVISION
+	 * @param entity Entidad a mapear
+	 * @return DTO Con el módulo (sólo debería existir uno) Pendiente
+	 */
+	public EstudianteCursoDTO toDTOPendientes(EstudianteCurso entity) {
+		var dto = toDTOList( entity);
+		var estadoPendiente = EstadoCursoModulo.PENDIENTE_REVISION.toString();
+        dto.setModulos(entity.getModulos().stream()
+        		.filter(m -> m.getEstado().equals(estadoPendiente))
+        		.map(estudianteCursoModuloMapper :: toDTO)
+        		.toList());
+       return dto;
+	}
 }

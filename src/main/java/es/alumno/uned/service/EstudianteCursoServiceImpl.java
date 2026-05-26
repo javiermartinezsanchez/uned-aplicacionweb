@@ -10,12 +10,14 @@ import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.alumno.uned.dto.EstudianteCursoDTO;
 import es.alumno.uned.exception.CursoModuloEstadoIncompatibleException;
 import es.alumno.uned.exception.CursoNotExistException;
+import es.alumno.uned.exception.CursoResponsableMandatoryException;
 import es.alumno.uned.exception.EstudianteCursoAlreadySubscribeException;
 import es.alumno.uned.exception.EstudianteNotExistException;
 import es.alumno.uned.exception.MandatoryModuloException;
@@ -110,6 +112,27 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 
     }
 
+	@Override
+	public Paginacion<EstudianteCurso, EstudianteCursoDTO> listadoTareasPendientes(PageParams pageData,
+			Map<String, String> params) {
+		if (!params.containsKey("responsableId")) {
+			throw new CursoResponsableMandatoryException("validations.curso.responsable.mandatory");
+		}
+		var idResponsable = Long.valueOf(params.get("responsableId"));
+		
+		return construirPaginacion(estudianteCursoRepository.findByEstadoAndCursoResponsableId(
+				EstadoCursoModulo.PENDIENTE_REVISION.toString(),
+				idResponsable,
+				PageRequest.of(pageData.page(), pageData.size(),Sort.by("m.fechaEntrega").descending())));
+	}
+
+	private Paginacion<EstudianteCurso, EstudianteCursoDTO> construirPaginacion( Page<EstudianteCurso> page){
+		
+		return new Paginacion.Builder<EstudianteCurso, EstudianteCursoDTO>()
+				.pagina(page)
+				.mapper(estudianteCursoMapper :: toDTOPendientes)
+				.build();
+	}
     @Override
     public void actualizarUltimoAcceso(String username, Long cursoId) {
         // TODO: implementar actualización de último acceso
@@ -213,6 +236,13 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 		}
 		return null;
 	}
+
+	@Override
+	public Long getTareasPendientes(Long idResponsable) {
+		
+		return estudianteCursoRepository.getNumTareasPendientes(EstadoCursoModulo.PENDIENTE_REVISION.toString(), idResponsable);
+	}
+
 
 	
 

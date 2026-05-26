@@ -37,8 +37,29 @@ public interface EstudianteCursoService {
 	 */
 	EstudianteCursoDTO subscribirAlumnoACurso(Long estudianteId, Long cursoId);
 	
+	/**
+	 * Obtenemos el listado de Estudiante Curso Paginado
+	 * @param pageData Configuración de la paginación
+	 * @param params Parámetros de búsqueda
+	 * @return Página de datos encontrados.
+	 */
 	public Paginacion<EstudianteCurso, EstudianteCursoDTO> listadoPaginado( PageParams pageData, Map<String, String> params);
 
+	/**
+	 * Devuelve el número de módulos (tareas) en estado PENDIENTE_REVISION
+	 * @param idResponsable Identificador del Responsable (Profesor)
+	 * @return El número de tareas pendientes.
+	 */
+	public Long getTareasPendientes(Long idResponsable);
+	/**
+	 * Devolvemos la lista de tareas pendientes (estudianteCursoModulo.estado = PENDIENTE_REVISION)
+	 * <p>Se devolverá ordenado por fecha de entrega descendente.
+	 * @param pageData Datos de la paginación.
+	 * @param params Parámetros de búsqueda.
+	 * @return Página de datos
+	 */
+	public Paginacion<EstudianteCurso, EstudianteCursoDTO> listadoTareasPendientes( PageParams pageData, Map<String, String> params);
+	
     void actualizarUltimoAcceso(String username, Long cursoId);
 
     /**

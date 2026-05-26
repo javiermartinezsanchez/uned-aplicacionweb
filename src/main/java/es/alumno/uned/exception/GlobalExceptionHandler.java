@@ -56,7 +56,7 @@ public class GlobalExceptionHandler {
     
     @ExceptionHandler({
     	FileSizeExcedeedException.class, 
-    	EstudianteCursoAlreadySubscribeException.class}
+    	SinDTOException.class}
     )
     public String handleFileSizeException(Exception ex, HttpServletRequest request,
     		Model model) {
