@@ -85,3 +85,37 @@
 				</ul>
     </div>
 </div>
+<!-- fragment: valoracionCurso -->
+<div th:fragment="valoracionCurso(notaMedia, totalVotos, esFormulario)" class="w-100 bg-transparent p-0 m-0">
+    <div class="row align-items-center g-2 w-100">
+        
+        <!-- BLOQUE 1: Mostrar Media Actual (Ocupa la mitad izquierda) -->
+        <div class="col-sm-6 d-flex align-items-center gap-2 text-nowrap">
+            <span class="fs-4 fw-bold text-dark avg-rating-text" th:text="${#numbers.formatDecimal(notaMedia, 1, 1)}">0.0</span>
+            <div class="text-warning fs-5">
+                <i th:each="i : ${#numbers.sequence(1, 5)}" 
+                   th:class="${i <= notaMedia} ? 'bi bi-star-fill' : (${i - 0.5 <= notaMedia} ? 'bi bi-star-half' : 'bi bi-star')"></i>
+            </div>
+            <span class="text-muted small" th:text="'(' + ${totalVotos} + ' valoraciones)'">(0 valoraciones)</span>
+        </div>
+
+        <!-- BLOQUE 2: Formulario para votar (Ocupa la mitad derecha y se alinea al extremo derecho) -->
+        <div th:if="${esFormulario}" class="col-sm-6 d-flex align-items-center justify-content-sm-end gap-3 text-nowrap">
+            <!-- Texto de pregunta -->
+            <span class="small fw-semibold text-secondary rating-label">¿Qué te parece el curso?</span>
+            
+            <!-- Div contenedor del mensaje dinámico (Alineado en el mismo flujo) -->
+            <div id="ratingFeedback" class="badge bg-success px-3 py-2 rounded-pill d-none" style="font-size: 0.85rem;"></div>
+
+            <!-- Estrellas fijas -->
+            <div class="d-inline-flex align-items-center interaction-stars" th:data-id-curso="${curso.id}">
+                <i class="bi bi-star fs-5 text-warning" style="cursor: pointer;" data-value="1"></i>
+                <i class="bi bi-star fs-5 text-warning" style="cursor: pointer;" data-value="2"></i>
+                <i class="bi bi-star fs-5 text-warning" style="cursor: pointer;" data-value="3"></i>
+                <i class="bi bi-star fs-5 text-warning" style="cursor: pointer;" data-value="4"></i>
+                <i class="bi bi-star fs-5 text-warning" style="cursor: pointer;" data-value="5"></i>
+            </div>
+        </div>
+        
+    </div>
+</div>

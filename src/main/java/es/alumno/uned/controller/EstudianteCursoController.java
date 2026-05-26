@@ -7,7 +7,11 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +33,7 @@ import es.alumno.uned.model.entities.SecurityUser;
 import es.alumno.uned.model.entities.TipoModulo;
 import es.alumno.uned.model.records.FicheroData;
 import es.alumno.uned.model.util.Paginacion;
+import es.alumno.uned.service.ContenidoExtraService;
 import es.alumno.uned.service.CursoService;
 import es.alumno.uned.service.EstudianteCursoService;
 import es.alumno.uned.service.EstudianteService;
@@ -42,7 +47,8 @@ public class EstudianteCursoController extends BaseCrudController {
 	CursoService cursoService;
 	@Autowired
 	EstudianteService estudianteService;
-	
+	@Autowired
+	ContenidoExtraService contenidoExtraService;
 	
 	@GetMapping("/home")
 	public String estudianteHome(@AuthenticationPrincipal SecurityUser userConnected,
@@ -115,6 +121,37 @@ public class EstudianteCursoController extends BaseCrudController {
 	    // 3. Redirigimos de vuelta a la ficha de seguimiento del curso del estudiante
 	    return "redirect:/estudiante/micurso/" + idCurso;
 	}
+
+	@GetMapping("/curso/{idCurso}/modulo/{idModulo}/verEntrega")
+	public ResponseEntity<?> descargarEntrega(
+	        @PathVariable Long idCurso,
+	        @PathVariable Long idModulo,
+	        @AuthenticationPrincipal SecurityUser userConnected) {
+
+	    	EstudianteCursoDTO ec = estudianteCursoService.getCurso(userConnected.getId(), idCurso);        
+			if (ec == null) {
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No estás inscrito a este curso");
+			}
+		
+	    	String nombreArchivo = ec.getModulos().stream()
+	    						   .filter(m -> m.getModuloId().equals(idModulo))
+	    						   .filter(m -> m.getUrlEntrega() != null && !m.getUrlEntrega().isBlank())
+	    						   .map(m -> m.getUrlEntrega())
+	    						   .findFirst()
+	    						   .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe entrega."));
+				    						   
+			Resource resource = contenidoExtraService.getResource(nombreArchivo);
+			if (resource == null) {
+				throw new org.springframework.web.server.ResponseStatusException(HttpStatus.NOT_FOUND, "El archivo físico no se encuentra en el servidor");
+			}
+			
+			return ResponseEntity.ok()
+	                .contentType(MediaType.parseMediaType("application/pdf"))
+	                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + nombreArchivo.substring(nombreArchivo.indexOf("_") + 1) + "\"")
+	                .body(resource);
+	}
+
+	
 	/**
 	 * Obtención del certificado del curso.
 	 * 

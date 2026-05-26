@@ -17,13 +17,30 @@ public class EstudianteCursoMapper {
 	@Autowired
 	CursoMapper cursoMapper;
 	@Autowired
+	ContenidoExtraMapper contenidoExtraMapper;
+	@Autowired
 	EstudianteCursoModuloMapper estudianteCursoModuloMapper;
 	public EstudianteCurso toEntity(EstudianteCursoDTO dto) {
 		return null;
 	}
 	
 	public EstudianteCursoDTO toDTO(EstudianteCurso entity) {
+		var dto = toDTOList( entity);
+        dto.setModulos(entity.getModulos().stream()
+        		.map(estudianteCursoModuloMapper :: toDTO)
+        		.toList());
+		dto.setContenidosExtra(entity.getCurso().getContenidosExtra().stream()
+				.map(contenidoExtraMapper:: toDTO)
+				.toList());		
 		
+		return dto;
+	}
+	/**
+	 * Se genera un DTO "reducido" para listados.
+	 * @param entity Entidad a convertir.
+	 * @return DTO resultante.
+	 */
+	public EstudianteCursoDTO toDTOList(EstudianteCurso entity) {
 		EstudianteCursoDTO dto = new EstudianteCursoDTO();
 		dto.setEstudiante(estudianteMapper.toDTO(entity.getEstudiante()));
         dto.setCurso(cursoMapper.toDTO(entity.getCurso()));
@@ -33,10 +50,9 @@ public class EstudianteCursoMapper {
         dto.setProgreso(entity.getProgreso());
         dto.setCalificacionFinal(entity.getCalificacionFinal());
         dto.setEstado(entity.getEstado());
-        dto.setModulos(entity.getModulos().stream()
-        		.map(estudianteCursoModuloMapper :: toDTO)
-        		.toList());
 		
 		return dto;
+		
 	}
+	
 }

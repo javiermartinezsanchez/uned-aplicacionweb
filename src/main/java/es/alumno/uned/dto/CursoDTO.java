@@ -23,6 +23,7 @@ public class CursoDTO {
     private String titulo;
 
     @NotBlank(message = "{validations.descripcion.mandatory}")
+    @Size(max = 512, message = "{validations.curso.descripcion.format}")
     private String descripcion;
 
     // Nombre del fichero guardado en /curso/images/
@@ -57,6 +58,7 @@ public class CursoDTO {
     private LocalDateTime fIns;
     private String userIns;
     private BigDecimal valoracion;
+    private Integer numValoraciones;
     private Integer usuariosRegistrados;
     private Integer numVistas;
     @Valid
@@ -219,6 +221,12 @@ public class CursoDTO {
 		this.valoracion = valoracion;
 	}
 
+	public Integer getNumValoraciones() {
+		return numValoraciones;
+	}
+	public void setNumValoraciones(Integer numValoraciones) {
+		this.numValoraciones = numValoraciones;
+	}
 	public Integer getUsuariosRegistrados() {
 		return usuariosRegistrados;
 	}

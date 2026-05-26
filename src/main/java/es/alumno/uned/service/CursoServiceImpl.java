@@ -232,6 +232,8 @@ public class  CursoServiceImpl implements CursoService{
 	                .mapper(cursoMapper::toDTO)
 	                .build();
 	    }
+	
+	@Transactional
 	@Override
 	public BigDecimal guardarValoracion(Long cursoId, Integer valoracion, String usuario) {
 	    Curso curso = cursoRepository.findById(cursoId).orElse(null);

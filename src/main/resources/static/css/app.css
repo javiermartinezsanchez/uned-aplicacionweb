@@ -28,3 +28,16 @@
 [data-bs-toggle="collapse"][aria-expanded="true"] .icono-giro {
     transform: rotate(180deg);
 }
+/* Efecto hover interactivo para las estrellas de votación */
+.rating-input {
+    display: flex;
+    flex-direction: row-reverse; /* Permite iluminar hacia atrás en CSS puro */
+    justify-content: flex-end;
+}
+.rating-input input:checked ~ label i,
+.rating-input label:hover ~ label i,
+.rating-input label:hover i {
+    content: "\F586"; /* Cambia dinámicamente el código de bi-star por bi-star-fill */
+    font-family: "bootstrap-icons" !important;
+}
+

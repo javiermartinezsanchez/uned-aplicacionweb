@@ -4,6 +4,7 @@ package es.alumno.uned.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import es.alumno.uned.model.entities.EstadoCursoModulo;
@@ -18,6 +19,7 @@ public class EstudianteCursoDTO {
         private Double calificacionFinal;
         private EstadoCursoModulo estado;
         private List<EstudianteCursoModuloDTO> modulos;
+        private List<ContenidoExtraDTO> contenidosExtra = new ArrayList<>();
 		public EstudianteCursoDTO() {}
 		public EstudianteDTO getEstudiante() {
 			return estudiante;
@@ -74,7 +76,7 @@ public class EstudianteCursoDTO {
 		public void setModulos(List<EstudianteCursoModuloDTO> modulos) {
 			this.modulos = modulos;
 		}
-        // Para obtener lod datos del curso
+        // Para obtener los datos del curso
 		public Long getId() {
 			return this.curso.getId();
 		}
@@ -130,6 +132,12 @@ public class EstudianteCursoDTO {
 		}
 		public Integer getNumVistas() {
 			return this.curso.getNumVistas();
+		}
+		public Integer getNumValoraciones() {
+			return this.curso.getNumValoraciones();
+		}
+		public void setContenidosExtra(List<ContenidoExtraDTO> contenidosExtra) {
+			this.contenidosExtra = contenidosExtra;
 		}
 
         

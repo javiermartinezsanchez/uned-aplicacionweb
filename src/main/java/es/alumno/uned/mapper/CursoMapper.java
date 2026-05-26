@@ -91,6 +91,7 @@ public class CursoMapper {
         dto.setfIns(entity.getfIns());
         dto.setUserIns(entity.getUserIns());
         dto.setValoracion(entity.getValoracion());
+        dto.setNumValoraciones(entity.getValoraciones().size());
         dto.setUsuariosRegistrados(entity.getUsuariosRegistrados());
         dto.setNumVistas(entity.getNumVistas());
         dto.setModulos(entity.getModulos().stream()

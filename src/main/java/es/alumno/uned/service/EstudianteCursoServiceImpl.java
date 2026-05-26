@@ -203,7 +203,7 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 			Map<String, String> params) {
 	return new Paginacion.Builder<EstudianteCurso, EstudianteCursoDTO>()
 			.pagina(getPaginaBusqueda(PageRequest.of(pageData.page(), pageData.size()),params))
-			.mapper(estudianteCursoMapper :: toDTO)
+			.mapper(estudianteCursoMapper :: toDTOList)
 			.build();
 	}
 

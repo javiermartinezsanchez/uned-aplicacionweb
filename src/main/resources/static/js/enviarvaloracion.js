@@ -1,74 +1,99 @@
-/**
- * 
- */
-function enviarValoracion(idElemento, valoracion, idContenedorBase) {
-	// 1. Obtener el token CSRF y el nombre del header desde los meta tags
-	const csrfToken = document.querySelector('meta[name="_csrf"]').content;
-	const csrfHeaderName = document.querySelector('meta[name="_csrf_header"]').content;
+document.addEventListener("DOMContentLoaded", () => {
+    const stars = document.querySelectorAll(".interaction-stars i");
+    const container = document.querySelector(".interaction-stars");
+    const feedbackDiv = document.getElementById("ratingFeedback");
+    const ratingLabel = document.querySelector(".rating-label");
 
-	// 2. Preparar los encabezados
-	const headers = {
-	    'Content-Type': 'application/json',
-	    // Añadimos el header CSRF con el token
-	    [csrfHeaderName]: csrfToken 
-	};
-	// 3. Identificar el elemento valorado
-	const idContenedor = 'corazones-container-' + idElemento;
-    const idMensaje = 'mensaje-' + idElemento;
+    const csrfElement = document.querySelector('meta[name="_csrf"]');
+    const csrfHeaderElement = document.querySelector('meta[name="_csrf_header"]');
+    const csrfToken = csrfElement ? csrfElement.content : "";
+    const csrfHeaderName = csrfHeaderElement ? csrfHeaderElement.content : "";
 
-    const contenedor = document.getElementById(idContenedor);
-    const mensaje = document.getElementById(idMensaje);
+    stars.forEach(star => {
+        star.addEventListener("mouseover", function() {
+            const val = parseInt(this.getAttribute("data-value"));
+            stars.forEach((s, idx) => {
+                s.classList.toggle("bi-star-fill", idx < val);
+                s.classList.toggle("bi-star", idx >= val);
+            });
+        });
 
-    if (!contenedor || !mensaje) {
-        console.error("Contenedor no encontrado para ID:", idElemento);
-        return;
-    }
+        star.addEventListener("click", function() {
+            const valoracion = this.getAttribute("data-value");
+            const idElemento = container.getAttribute("data-id-curso");
 
-    const corazones = contenedor.querySelectorAll('span');
+            this.style.transform = 'scale(1.2)';
+            setTimeout(() => this.style.transform = 'scale(1)', 200);
 
-    corazones.forEach((corazon, index) => {
-        const valorActual = index + 1;
-        
-        // Efecto visual
-        corazon.style.transform = 'scale(1.2)';
-        setTimeout(() => corazon.style.transform = 'scale(1)', 200);
+            const headers = { 'Content-Type': 'application/json' };
+            if (csrfHeaderName && csrfToken) { headers[csrfHeaderName] = csrfToken; }
 
-        // Lógica de relleno y color
-        if (valorActual <= valoracion) {
-            // Amarillo (text-warning) y relleno (bi-heart-fill)
-            // Tamaño fs-5 ya está en el HTML, pero lo forzamos por seguridad
-            corazon.className = 'bi bi-heart-fill text-warning fs-5 me-1';
-        } else {
-            // Gris (text-secondary) y vacío (bi-heart)
-            corazon.className = 'bi bi-heart text-secondary fs-5 me-1';
-        }
+            fetch('/valoracionCurso', {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({
+                    idElemento: parseInt(idElemento),
+                    valoracion: parseInt(valoracion)
+                })
+            })
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+				// Busca esta sección dentro de tu .then(data => { ... }) y actualízala:
+				if (data.success) {
+				    // 1. Actualizar nota media
+				    const avgRatingText = document.querySelector(".avg-rating-text");
+				    if (avgRatingText && data.nuevaPromedio !== undefined) {
+				        avgRatingText.textContent = Number(data.nuevaPromedio).toFixed(1);
+				    }
+
+				    // 2. Control visual del mensaje sin mover estrellas
+				    if (feedbackDiv) {
+				        feedbackDiv.textContent = data.mensaje;
+				        feedbackDiv.className = "badge bg-success px-3 py-2 rounded-pill";
+				        
+				        if (ratingLabel) ratingLabel.classList.add("d-none"); // 👈 Oculta el texto para ceder el espacio
+				        feedbackDiv.classList.remove("d-none"); // 👈 Muestra el cartel verde
+
+				        setTimeout(() => {
+				            feedbackDiv.classList.add("d-none");
+				            if (ratingLabel) ratingLabel.classList.remove("d-none"); // 👈 Restaura el texto original
+				        }, 2000);
+				    }
+
+				    if (container) container.style.pointerEvents = "none";
+				}
+				 else {
+                    mostrarError(data.mensaje);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mostrarError('No se pudo guardar tu valoración.');
+            });
+        });
     });
 
-    // Llamada al servidor
-    fetch('/valoracionCurso', {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify({
-            idElemento: idElemento,
-            valoracion: valoracion
-        })
-    })
-    .then(response => 	{
-	        // Si la respuesta no es OK (ej: 401, 403, 500), lanzamos error
-	        if (!response.ok) {
-	            throw new Error(`HTTP error! status: ${response.status}`);
-	        }
-	        return response.json();
-	    })
-    .then(data => {
-        if (data.success) {
-			console.log("Éxito:", data);
-            mensaje.textContent = data.mensaje;
-            mensaje.classList.remove('d-none');
-            setTimeout(() => mensaje.classList.add('d-none'), 3000);
-        } else {
-            alert('Error: ' + data.mensaje);
+    // Función auxiliar para pintar errores con el mismo diseño pero en rojo
+    function mostrarError(msg) {
+        if (feedbackDiv) {
+            feedbackDiv.textContent = msg;
+            feedbackDiv.className = "badge bg-danger px-3 py-2 rounded-pill"; // Color rojo para error
+            if (ratingLabel) ratingLabel.classList.add("d-none");
+            feedbackDiv.classList.remove("d-none");
+            setTimeout(() => {
+                feedbackDiv.classList.add("d-none");
+                if (ratingLabel) ratingLabel.classList.remove("d-none");
+            }, 2000);
         }
-    })
-    .catch(error => console.error('Error:', error));
-}
+    }
+
+    container?.addEventListener("mouseleave", () => {
+        stars.forEach(s => {
+            s.classList.remove("bi-star-fill");
+            s.classList.add("bi-star");
+        });
+    });
+});

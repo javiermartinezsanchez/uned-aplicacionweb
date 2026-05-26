@@ -30,7 +30,7 @@ public class Curso {
 	private Long id;
 	@Column(name="Titulo", length=50, nullable=false)
 	private String titulo;
-	@Column(name="Descripcion", length=255, nullable=false)
+	@Column(name="Descripcion", length=512, nullable=false)
 	private String descripcion;
 
 	@Column(name="Imagen_Curso", length=255, nullable=true)
