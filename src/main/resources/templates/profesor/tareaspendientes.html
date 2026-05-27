@@ -8,7 +8,7 @@
 <body>
 <section>
  <div class="container">
-	<h1 th:text="#{comun.lista(#{curso.lista})}">Accesos</h1>
+	<h1 th:text="#{panel.profesor.tareas}">Accesos</h1>
 	<div class="form-group">
 	    <div class="col-md-2 d-flex align-items-end" th:insert="~{fragments/botones :: btnLink(
 			        #{command.volver}, 
@@ -17,7 +17,7 @@
 			     )}">
 	    </div>
 	</div>
-	<div th:if="${pagina.empty}" class="alert alert-success d-flex align-items-center th-shadow-sm" role="alert">
+	<div th:if="${paginacion.contenido.empty}" class="alert alert-success d-flex align-items-center th-shadow-sm" role="alert">
     <!-- El ícono verde de éxito indica que todo está corregido -->
     <i class="bi bi-check-circle-fill me-2 fs-4 text-success"></i>
     <div>
@@ -26,18 +26,16 @@
 </div>
 
 <!-- 2. TABLA: Solo se renderiza si SÍ existen tareas pendientes -->
-<div th:unless="${pagina.empty}" class="table-responsive shadow-sm rounded">
+<div th:unless="${paginacion.contenido.empty}" class="table-responsive shadow-sm rounded">
 	
 	<table class="table table-striped table-bordered">
 		<thead class="table-dark">
 			<tr>
 				<th th:text="#{curso.titulo}">default</th>
-				<th th:text="#{comun.descripcion}">default</th>
-				<th th:text="#{areatematica.title}">default</th>
-				<th th:text="#{curso.duracion}">default</th>
-				<th th:text="#{curso.inscritos}">default</th>
-				<th th:text="#{comun.fini}">default</th>
-				<th th:text="#{comun.fFin}">default</th>
+				<th th:text="#{modulo.title}">default</th>
+				<th th:text="#{estudiante.titulo}">default</th>
+				<th th:text="#{modulo.fechaEntrega}">default</th>
+				<th th:text="#{modulo.revisar}">default</th>
 				<th></th>
 			</tr>
 		</thead>
@@ -51,11 +49,11 @@
 				<span th:text="${ec.curso.titulo}">ID</span>
 				</td>
 				<td class="align-middle fw-semibold" th:text="${ec.estudiante.nombreCompleto}">
-        			Juan Pérez Gómez
+        			estudiante
     			</td>
     			   <td class="align-middle">
         <span th:if="${not #lists.isEmpty(ec.modulos)}" th:text="${ec.modulos[0].titulo}">
-            Introducción a Java
+            nombre modulo
         </span>
     </td>
 				  <td class="align-middle text-muted">
@@ -67,7 +65,7 @@
    
  <td class="align-middle text-end">
         <a th:if="${not #lists.isEmpty(ec.modulos)}" 
-           th:href="@{/profesor/calificar/{id}(id=${ec.modulos[0].id})}" 
+           th:href="@{/profesor/calificar/{estudianteId}/{idCurso}/{idModulo}(estudianteId=${ec.estudiante.id},idCurso=${ec.id},idModulo=${ec.modulos[0].moduloId})}" 
            class="btn btn-sm btn-primary">
             <i class="bi bi-pencil-square"></i> Calificar
         </a>

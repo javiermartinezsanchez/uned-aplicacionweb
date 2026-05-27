@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.alumno.uned.dto.EstudianteCursoDTO;
+import es.alumno.uned.dto.EstudianteCursoModuloDTO;
 import es.alumno.uned.exception.CursoModuloEstadoIncompatibleException;
 import es.alumno.uned.exception.CursoNotExistException;
 import es.alumno.uned.exception.CursoResponsableMandatoryException;
@@ -22,6 +23,7 @@ import es.alumno.uned.exception.EstudianteCursoAlreadySubscribeException;
 import es.alumno.uned.exception.EstudianteNotExistException;
 import es.alumno.uned.exception.MandatoryModuloException;
 import es.alumno.uned.exception.ModuloNotFoundException;
+import es.alumno.uned.exception.ResponsableNotMachtException;
 import es.alumno.uned.mapper.EstudianteCursoMapper;
 import es.alumno.uned.model.entities.Curso;
 import es.alumno.uned.model.entities.CursoModulo;
@@ -40,7 +42,10 @@ import es.alumno.uned.model.repository.EstudianteCursoRepository;
 import es.alumno.uned.model.repository.EstudianteRepository;
 import es.alumno.uned.model.util.Paginacion;
 
-
+/**
+ * Implementación del servicio de Estudiante curso.
+ * <p>
+ */
 @Service
 @Transactional
 public class EstudianteCursoServiceImpl implements EstudianteCursoService {
@@ -73,6 +78,23 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 		
 		return estudianteCursoMapper.toDTO(estudianteCursoRepository.getReferenceById(new EstudianteCursoId(idEstudiante, idCurso)));
 	}	
+	
+	@Override
+	public EstudianteCursoDTO getCursoModulo(Long idResponsable, Long idEstudiante, Long idCurso, Long idModulo) {
+		var ec = estudianteCursoRepository.getReferenceById(new EstudianteCursoId(idEstudiante, idCurso));
+		if (ec == null) 
+			throw new CursoNotExistException("msg.exception.notfound.", null, "curso.title");
+		
+		if (!ec.getCurso().getResponsable().getId().equals(idResponsable)){
+			throw new ResponsableNotMachtException("error.curso.responsablenotmatch");
+		}
+		var dto = estudianteCursoMapper.toDTOPendientes(ec);
+		if (dto.getModulos().size() == 0) {
+			throw new CursoModuloEstadoIncompatibleException("modulo.not.found", null, "");
+		}
+		
+		return dto;
+	}
     @Transactional
     @Override
     public EstudianteCursoDTO subscribirAlumnoACurso(Long estudianteId, Long cursoId) {
@@ -119,11 +141,11 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 			throw new CursoResponsableMandatoryException("validations.curso.responsable.mandatory");
 		}
 		var idResponsable = Long.valueOf(params.get("responsableId"));
-		
+		// ,Sort.by("m.fechaEntrega").descending() La ordenación la realizamos en la query.
 		return construirPaginacion(estudianteCursoRepository.findByEstadoAndCursoResponsableId(
-				EstadoCursoModulo.PENDIENTE_REVISION.toString(),
+				EstadoCursoModulo.PENDIENTE_REVISION,
 				idResponsable,
-				PageRequest.of(pageData.page(), pageData.size(),Sort.by("m.fechaEntrega").descending())));
+				PageRequest.of(pageData.page(), pageData.size())));
 	}
 
 	private Paginacion<EstudianteCurso, EstudianteCursoDTO> construirPaginacion( Page<EstudianteCurso> page){
@@ -240,8 +262,34 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 	@Override
 	public Long getTareasPendientes(Long idResponsable) {
 		
-		return estudianteCursoRepository.getNumTareasPendientes(EstadoCursoModulo.PENDIENTE_REVISION.toString(), idResponsable);
+		return estudianteCursoRepository.getNumTareasPendientes(EstadoCursoModulo.PENDIENTE_REVISION, idResponsable);
 	}
+	@Transactional
+	@Override
+	public void calificarModulo(EstudianteCursoModuloDTO ec) {
+		EstudianteCursoModulo ecm = estudianteCursoModuloRepository.getReferenceById(
+				new EstudianteCursoModuloId(new EstudianteCursoId(
+						ec.getEstudianteId(), 
+						ec.getCursoId()), 
+						ec.getModuloId()));
+
+		if (ecm == null) {
+			throw new ModuloNotFoundException("modulo.not.found", null, "");
+		}
+		
+		if (ecm.getEstado() != EstadoCursoModulo.PENDIENTE_REVISION){
+			throw new CursoModuloEstadoIncompatibleException("modulo.not.found", null, "");
+		}
+		ecm.setCalificacion(ec.getCalificacion());
+		ecm.setNotasCalificacion(ec.getNotasCalificacion());
+		ecm.setFechaRevision(LocalDateTime.now());
+		ecm.setEstado(EstadoCursoModulo.REVISADO);
+		ecm.getEstudianteCurso().setEstado(EstadoCursoModulo.REVISADO);
+		estudianteCursoModuloRepository.save(ecm);
+		
+	}
+
+
 
 
 	

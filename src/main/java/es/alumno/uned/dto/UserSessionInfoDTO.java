@@ -1,7 +1,10 @@
-package es.alumno.uned.controller;
+package es.alumno.uned.dto;
 
 import java.util.Date;
-
+/**
+ * DTO para envolver los usuario en Sesión 
+ * 
+ */
 public class UserSessionInfoDTO {
 	private String usuario;
 	private Date lastRequest;

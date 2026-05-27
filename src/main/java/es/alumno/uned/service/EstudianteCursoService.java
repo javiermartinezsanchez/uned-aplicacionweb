@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.web.multipart.MultipartFile;
 
 import es.alumno.uned.dto.EstudianteCursoDTO;
+import es.alumno.uned.dto.EstudianteCursoModuloDTO;
 import es.alumno.uned.model.entities.Estudiante;
 import es.alumno.uned.model.entities.EstudianteCurso;
 import es.alumno.uned.model.entities.EstudianteCursoModulo;
@@ -80,4 +81,22 @@ public interface EstudianteCursoService {
      */
 	public void completarModulo(Long estudianteId, Long cursoId, Long moduloId, TipoModulo tipoModulo, FicheroData ficheroEntrega) throws IOException;
 	
+	/**
+	 * Se actualiza los datos del EstudianteCurso y del EstudianteCursoModulo revisado por el responsable.
+	 * <p>En caso de éxito, se persisten datos, y se actualiza estado. 
+	 * <p>El módulo deberá de estar en estado PENDIENTE_REVISIÓN y pasará a REVISADO.
+	 * @param ec EstudianteCurso con el módulo calificado.
+	 */
+	public void calificarModulo(EstudianteCursoModuloDTO ec);
+	
+	/**
+	 * Devuelve el EstudianteCurso según los parámetros enviados.
+	 * 
+	 * @param idResponsable Identificador del responsable.
+	 * @param idEstudiante Identificador del Estudiante.
+	 * @param idCurso Identificador del Curso
+	 * @param idModulo Identificador del módulo.
+	 * @return DTO encontrado.
+	 */
+	EstudianteCursoDTO getCursoModulo(Long idResponsable, Long idEstudiante, Long idCurso, Long idModulo);
 }

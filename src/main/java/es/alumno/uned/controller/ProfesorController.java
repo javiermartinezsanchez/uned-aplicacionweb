@@ -4,18 +4,25 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import es.alumno.uned.dto.CursoDTO;
+import es.alumno.uned.dto.EstudianteCursoDTO;
 import es.alumno.uned.model.entities.Curso;
 import es.alumno.uned.model.entities.SecurityUser;
 import es.alumno.uned.model.util.Paginacion;
 import es.alumno.uned.service.CursoService;
 import es.alumno.uned.service.EstudianteCursoService;
+import jakarta.validation.Valid;
 @Controller
 @RequestMapping("/profesor")
 public class ProfesorController extends BaseCrudController {
@@ -38,16 +45,61 @@ public class ProfesorController extends BaseCrudController {
 		modelo.addAttribute("trabajosPendientes", estudianteCursoService.getTareasPendientes(userConnected.getId()));
 		return "profesor/home";
 	}
+	/**
+	 * Devolvemos la vista de Tareas Pendientes del Profesor
+	 * @param userConnected Usuario Conectado (el profesor)
+	 * @param paramsBusqueda Mapa de parámetros
+	 * @param page Número de página
+	 * @param model Modelo a enviar  a la vista
+	 * @return Vista a visualizar
+	 */
 	@GetMapping("/pendientes")
 	public String listaTareasPendientes(
 			@AuthenticationPrincipal SecurityUser userConnected,
 			@RequestParam Map<String, String> paramsBusqueda,
 			@RequestParam(defaultValue = "0") int page, Model model) {
-		
+		setModeloListado(model, "profesor/tareasPendientes" , 
+	    		"",	"/profesor/calificar/", "/home");
 		paramsBusqueda.put("responsableId", userConnected.getId().toString());
 		var paginacion = estudianteCursoService.listadoTareasPendientes(getParams(page), paramsToMap(paramsBusqueda)); 
 		model.addAttribute("paginacion", paginacion);
-		return "profesor/tareasPendientes";
+		return model.getAttribute("viewName").toString();
+	}
+	/**
+	 * Calificamos una tarea.
+	 * <p>Se captura el id del usuario de SecurityUser.
+	 * <p>Si el curso no corresponde al usuario generará una excepción.
+	 * 
+	 * @param userConnected Usuario conectado (profesor)
+	 * @param idEstudiante Identificador del Estudiante
+	 * @param idCurso Identificador del curso
+	 * @param idModulo Identificador del módulo que se ha entregado.
+	 * @param model Modelo a rellenar.
+	 * @return Vista a mostrar.
+	 */
+	@GetMapping("/calificar/{idEstudiante}/{idCurso}/{idModulo}")
+	public String calificarEntrega(@AuthenticationPrincipal SecurityUser userConnected,
+			@PathVariable("idEstudiante") Long idEstudiante,
+			@PathVariable("idCurso") Long idCurso,
+			@PathVariable("idModulo") Long idModulo,
+			Model model
+			) {
+		
+			var ec = estudianteCursoService.getCursoModulo(userConnected.getId(),
+					idEstudiante, idCurso, idModulo);
+			setModeloFormulario(model, "profesor/revisartrabajo","/profesor/cursorevisado", "/profesor/pendientes");
+			model.addAttribute("curso", ec);
+		return model.getAttribute("viewName").toString();
+	}
+	
+	@PostMapping("/cursorevisado")
+	public String grabarRevision(
+			@AuthenticationPrincipal SecurityUser userConnected,
+			@ModelAttribute("form") EstudianteCursoDTO form,
+			RedirectAttributes redirectAttributes, 
+	        Model model) {
+			estudianteCursoService.calificarModulo(form.getModulos().get(0));
+		return "redirect:/profesor/pendientes";
 	}
 	@GetMapping("/cursos/ajax/miscursos")
 	public String paginarMisCursosAJAX(

@@ -19,9 +19,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import es.alumno.uned.controller.UserSessionInfoDTO;
 import es.alumno.uned.dto.UserPasswordAdminChangeDTO;
 import es.alumno.uned.dto.UserPasswordChangeDTO;
+import es.alumno.uned.dto.UserSessionInfoDTO;
 import es.alumno.uned.dto.UsuarioRegistroDTO;
 import es.alumno.uned.exception.UserPasswordNotMatchException;
 import es.alumno.uned.mapper.UsuarioRegistroMapper;

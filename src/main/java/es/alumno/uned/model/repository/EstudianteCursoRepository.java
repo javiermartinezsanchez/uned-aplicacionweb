@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import es.alumno.uned.model.entities.EstadoCursoModulo;
 import es.alumno.uned.model.entities.EstudianteCurso;
 import es.alumno.uned.model.entities.EstudianteCursoId;
 
@@ -25,11 +26,13 @@ public interface EstudianteCursoRepository extends JpaRepository<EstudianteCurso
 	 * @param pageable Datos de paginación
 	 * @return Página de datos encontrados.
 	 */
-    @Query("SELECT DISTINCT ec FROM EstudianteCurso ec " +
-            "LEFT JOIN ec.modulos m " +
-            "WHERE ec.estado = :estado AND ec.curso.responsable.id = :idResponsable")
-     Page<EstudianteCurso> findByEstadoAndCursoResponsableId(
-             @Param("estado") String estado, 
+	@Query("SELECT ec FROM EstudianteCurso ec " +
+		       "LEFT JOIN ec.modulos m " +
+		       "WHERE ec.estado = :estado " + 
+		       "AND m.estado = :estado AND ec.curso.responsable.id = :idResponsable " +
+		       "ORDER BY m.fechaEntrega DESC") 
+	Page<EstudianteCurso> findByEstadoAndCursoResponsableId(
+             @Param("estado") EstadoCursoModulo estado, 
              @Param("idResponsable") Long idResponsable, 
              Pageable pageable
      );
@@ -44,6 +47,6 @@ public interface EstudianteCursoRepository extends JpaRepository<EstudianteCurso
     	       "WHERE ec.estado = :estado " +
     	       "AND m.estado = :estado " + // Filtro de seguridad defensiva
     	       "AND ec.curso.responsable.id = :idResponsable")
-    Long getNumTareasPendientes(@Param("estado") String estado, 
+    Long getNumTareasPendientes(@Param("estado") EstadoCursoModulo estado, 
              @Param("idResponsable") Long idResponsable);
 }

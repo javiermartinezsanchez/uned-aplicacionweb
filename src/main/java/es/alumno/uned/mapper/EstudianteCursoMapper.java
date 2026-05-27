@@ -62,7 +62,7 @@ public class EstudianteCursoMapper {
 	 */
 	public EstudianteCursoDTO toDTOPendientes(EstudianteCurso entity) {
 		var dto = toDTOList( entity);
-		var estadoPendiente = EstadoCursoModulo.PENDIENTE_REVISION.toString();
+		var estadoPendiente = EstadoCursoModulo.PENDIENTE_REVISION;
         dto.setModulos(entity.getModulos().stream()
         		.filter(m -> m.getEstado().equals(estadoPendiente))
         		.map(estudianteCursoModuloMapper :: toDTO)

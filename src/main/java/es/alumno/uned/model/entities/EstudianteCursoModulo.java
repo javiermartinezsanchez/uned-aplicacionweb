@@ -69,7 +69,6 @@ public class EstudianteCursoModulo {
     private LocalDateTime fechaEntrega;
 
     @Column(name = "FECHA_REVISION")
-    
     private LocalDateTime fechaRevision;
     @Column(name = "CALIFICACION", precision = 2, scale = 1)
 	private BigDecimal calificacion; // si el módulo tiene nota

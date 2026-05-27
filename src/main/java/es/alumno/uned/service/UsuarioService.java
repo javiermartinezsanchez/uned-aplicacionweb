@@ -5,9 +5,9 @@ import java.util.Map;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import es.alumno.uned.controller.UserSessionInfoDTO;
 import es.alumno.uned.dto.UserPasswordAdminChangeDTO;
 import es.alumno.uned.dto.UserPasswordChangeDTO;
+import es.alumno.uned.dto.UserSessionInfoDTO;
 import es.alumno.uned.dto.UsuarioRegistroDTO;
 import es.alumno.uned.model.entities.Usuario;
 import es.alumno.uned.model.records.PageParams;
