@@ -1,0 +1,327 @@
+<fichacurso th:fragment="cursoCard(curso)">
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 w-100">
+    <img th:src="${curso.uriImagen != null and !#strings.isEmpty(curso.uriImagen)} 
+             ? @{/images/curso/{img}(img=${curso.uriImagen})} 
+             : @{/images/curso/default-curso.png}"
+         class="card-img-top card-img-fixed"
+         alt="Imagen del curso">
+	<div class="card-body d-flex flex-column p-3 pb-3" style="min-height: 50px">
+        <h5 class="card-title fw-bold" style="min-height: 48px;" th:text="${curso.titulo}"></h5>
+        <p class="card-text text-muted small flex-grow-1 descripcion-limitada"
+           th:text="${curso.descripcion}">
+        </p>
+        <span class="text-secundary small mb-3 d-block"
+           th:text="${curso.areaTematicaText}">
+        </span>
+        <th:block th:if="${yaInscrito}">
+    		<div th:insert="~{::infocursoEstudiante}"></div>
+		</th:block>
+		<div class="d-flex align-items-center justify-content-between mb-3">
+		    <div th:insert="~{fragments/botones :: btnLink(
+		        #{curso.vercurso},
+		        @{'/viewcurso/' + ${curso.id}},
+		        'btn-primary btn-sm px-2 text-nowrap',
+		        'bi-info-circle'
+		    )}"></div>
+		    <th:block th:unless="${isProfesor}">
+		        <div th:if="${yaInscrito == null or !yaInscrito}" 
+		             th:insert="~{fragments/botones :: btnLink(
+		                #{curso.subscribirse},
+		                @{'/estudiante/subscribircurso/' + ${curso.id} },
+		                'btn-outline-success btn-sm px-2 text-nowrap',
+		                'bi-clipboard-check'
+		             )}">
+		        </div>
+		        <th:block th:if="${yaInscrito}" th:switch="${#strings.toString(estadoCurso)}">
+		            <div th:case="'ACTIVO'" th:insert="~{fragments/botones :: btnLink(
+		                'Continuar',
+		                @{'/estudiante/micurso/' + ${curso.id} },
+		                'btn-success btn-sm px-2 text-nowrap',
+		                'bi-play-fill'
+		            )}"></div>
+		            <div th:case="'REVISADO'" th:insert="~{fragments/botones :: btnLink(
+		                'Continuar',
+		                @{'/estudiante/micurso/' + ${curso.id} },
+		                'btn-success btn-sm px-2 text-nowrap',
+		                'bi-play-fill'
+		            )}"></div>
+		            <div th:case="'COMPLETADO'" th:insert="~{fragments/botones :: btnLinkTarget(
+		                'Certificado',
+		                @{'/estudiante/curso/certificado/' + ${curso.id} },
+		                false,
+		                '_blank',
+		                'btn-success btn-sm px-2 text-nowrap',
+		                'bi-award'
+		            )}"></div>
+		            <div th:case="'PENDIENTE_REVISION'" th:insert="~{fragments/botones :: btnLink(
+		                'Ver Entregas',
+		                @{'/estudiante/micurso/' + ${curso.id} },
+		                'btn-outline-warning btn-sm px-2 text-nowrap',
+		                'bi-eye'
+		            )}"></div>
+		            <div th:case="*"></div>
+		        </th:block>
+		    </th:block>
+		</div>
+
+        <div class="d-flex align-items-center justify-content-between text-muted small border-top pt-2">
+            <span class="fw-semibold">⭐ <span th:text="${curso.valoracion}">4.8</span> / 5</span>
+			<span><i class="bi bi-clock me-2"></i><strong th:text="${curso.duracion}">40</strong>h.</span>
+            <span class="fw-semibold text-secondary">👥 <span th:text="${curso.usuariosRegistrados}">0</span></span>
+
+        </div>
+   
+    </div>
+</div>
+
+</fichacurso>
+<th:block th:fragment="cabeceraCurso">
+			<div class="row mb-4">
+				<div class="col-md-5">
+					<img th:src="@{/images/curso/{img}(img=*{uriImagen})}"
+						class="img-fluid rounded shadow-sm" alt="Imagen del curso">
+				</div>
+
+				<div class="col-md-7 d-flex flex-column justify-content-between">
+					<div>
+						<h1 class="fw-bold" th:text="*{titulo}">Título del curso</h1>
+						<p class="text-muted fs-5" th:text="*{descripcion}">Descripción del curso...</p>
+					</div>
+					<div th:insert="~{fragments/cursofragments ::infocursoEstudiante}"
+					th:with="yaInscrito=true, 
+						              progresoCurso=${curso.progreso}, 
+						              estadoCurso=${curso.estado}"></div>
+					
+					<div class="mt-2">
+						<span class="fw-semibold text-secondary fs-6"> 👥 <span
+							th:text="*{usuariosRegistrados}">0</span> <span
+							th:text="#{curso.inscritos}">inscritos</span>
+						</span>
+					</div>
+			        <div class="row mt-4">
+			            <div class="col-12">
+			                <div th:replace="~{fragments/cursofragments :: valoracionCurso(${curso.valoracion}, ${curso.numValoraciones}, true)}"></div>
+			            </div>
+			        </div>
+				</div>
+			</div>
+</th:block>
+<!-- Bloque visual de progreso/estado exclusivo para alumnos inscritos -->
+<div th:fragment="infocursoEstudiante">
+    <div class="mb-3" th:switch="${#strings.toString(estadoCurso)}">
+        <div th:case="'ACTIVO'">
+            <div class="d-flex justify-content-between align-items-center mb-1 small">
+                <span class="text-muted fw-medium" th:text="#{curso.progreso}">Progreso del curso</span>
+                <span class="text-primary fw-bold" th:text="${progresoCurso + '%'}">0%</span>
+            </div>
+            <div class="progress" style="height: 6px; background-color: #e9ecef;">
+                <div class="progress-bar bg-primary rounded" role="progressbar" th:style="'width: ' + ${progresoCurso} + '%'"></div>
+            </div>
+        </div>
+        <div th:case="'REVISADO'">
+            <div class="d-flex justify-content-between align-items-center mb-1 small">
+                <span class="text-muted fw-medium" th:text="#{curso.progreso.revisado}">Progreso (Revisado)</span>
+                <span class="text-primary fw-bold" th:text="${progresoCurso + '%'}">0%</span>
+            </div>
+            <div class="progress" style="height: 6px; background-color: #e9ecef;">
+                <div class="progress-bar bg-info rounded" role="progressbar" th:style="'width: ' + ${progresoCurso} + '%'"></div>
+            </div>
+        </div>
+        <div th:case="'COMPLETADO'">
+            <div class="d-flex justify-content-between align-items-center mb-1 small">
+                <span class="text-success fw-bold"><i class="bi bi-patch-check-fill me-1"></i> <span th:text="#{curso.completado}"> ¡Completado!</span>
+                <span class="text-success fw-bold">100%</span>
+            </div>
+            <div class="progress" style="height: 6px; background-color: #e9ecef;">
+                <div class="progress-bar bg-success rounded" role="progressbar" style="width: 100%"></div>
+            </div>
+        </div>
+        <div th:case="'PENDIENTE_REVISION'">
+            <div class="d-flex justify-content-between align-items-center mb-1 small">
+                <span class="text-warning fw-semibold"><i class="bi bi-hourglass-split me-1"></i> <span th:text="#{curso.esperando.revision}"> ¡Completado!</span></span>
+                <span class="text-warning fw-bold" th:text="${progresoCurso + '%'}">0%</span>
+            </div>
+            <div class="progress" style="height: 6px; background-color: #e9ecef;">
+                <div class="progress-bar bg-warning rounded" role="progressbar" th:style="'width: ' + ${progresoCurso} + '%'"></div>
+            </div>
+        </div>
+        <div th:case="'BLOQUEADO'">
+            <span class="badge bg-secondary text-wrap py-2 w-100"><i class="bi bi-lock-fill me-1"></i> <span th:text="#{curso.bloqueado}"> ¡Completado!</span></span>
+        </div>
+        <div th:case="'BAJA'">
+            <span class="badge bg-danger text-wrap py-2 w-100"><i class="bi bi-exclamation-octagon me-1"></i> <span tx:text="curso.tramitado.baja">Tramitado de Baja</span></span>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="fichaTecnica">
+			<div class="card border border-light shadow-sm rounded-3 mt-4">
+				<div class="card-header bg-light border-0 py-3">
+					<h4 class="mb-0">
+						<button class="btn btn-link w-100 text-start d-flex justify-content-between align-items-center text-decoration-none fw-bold p-0 text-dark" 
+						        type="button" 
+						        data-bs-toggle="collapse" 
+						        data-bs-target="#collapseFichaTecnica" 
+						        aria-expanded="false" 
+						        aria-controls="#collapseFichaTecnica">
+							<span th:text="#{curso.ficha.title}">Ficha técnica</span>
+							<i class="bi bi-chevron-down"></i>
+						</button>
+					</h4>
+				</div>
+				<div id="collapseFichaTecnica" class="collapse">
+					<div class="card-body p-4 bg-white">
+						<div class="row mb-3">
+							<div class="col-md-4">
+								<p class="mb-2">
+									<strong th:text="#{comun.fini}">Fecha inicio</strong>: <span
+										th:text="${#temporals.format(curso.fIni, 'dd/MM/yyyy')}"></span>
+								</p>
+							</div>
+							<div class="col-md-4">
+								<p class="mb-2">
+									<strong th:text="#{comun.fFin}">Fecha fin</strong>: <span
+										th:text="${#temporals.format(curso.fFin, 'dd/MM/yyyy')}"></span>
+								</p>
+							</div>
+							<div class="col-md-4">
+								<p class="mb-2">
+									<strong th:text="#{curso.nivel}">Nivel</strong>: <span
+										th:text="${curso.nivel}"></span>
+								</p>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-6">
+								<p class="mb-0">
+									<strong>👨‍🏫 <span th:text="#{curso.responsable}">Responsable</span>: </strong> 
+									<span th:text="${curso.nombreResponsable}"></span>
+								</p>
+							</div>
+							<div class="col-md-6">
+								<p class="mb-0">
+									<strong>⏱ <span th:text="#{curso.duracion}">Duración</span>: </strong> 
+									<span th:text="${curso.duracion}"></span> <span th:text="#{curso.ficha.horas}">horas</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+</div>
+<div th:fragment="contenidosExtra">
+		
+			<div th:if="${not #lists.isEmpty(curso.contenidosExtra)}">
+			<hr class="my-5">
+				<h3 class="fw-bold mb-3" th:text="#{curso.contenidosExtra}">Contenidos extra</h3>
+
+				<ul class="list-group">
+				    <li class="list-group-item d-flex justify-content-between align-items-center" 
+				        th:each="extra : ${curso.contenidosExtra}">
+				        
+				        <span th:text="${extra.descripcion}">Contenido extra...</span>
+				        
+				        <div>
+				            <span sec:authorize="isAuthenticated()">
+				                <a th:href="@{/contenido-extra/{idCurso}/{idConten}(idCurso=${curso.id}, idConten=${extra.id})}" 
+				                   target="_blank" 
+				                   class="btn btn-primary btn-sm">
+				                   <span th:text="#{curso.contenidoextra.ver.contenido}">Iniciar sesión</span>
+				                </a>
+				            </span>
+				
+				            <span sec:authorize="isAnonymous()">
+				                <button class="btn btn-secondary btn-sm" disabled>
+				                   🔒 <span th:text="#{login.iniciar.sesion}">Iniciar sesión</span>
+				                </button>
+				            </span>
+				        </div>
+				    </li>
+				</ul>
+    </div>
+</div>
+<!-- fragment: valoracionCurso -->
+<div th:fragment="valoracionCurso(notaMedia, totalVotos, esFormulario)" class="w-100 bg-transparent p-0 m-0">
+    <div class="row align-items-center g-2 w-100">
+        
+        <!-- BLOQUE 1: Mostrar Media Actual (Ocupa la mitad izquierda) -->
+        <div class="col-sm-6 d-flex align-items-center gap-2 text-nowrap">
+            <span class="fs-4 fw-bold text-dark avg-rating-text" th:text="${#numbers.formatDecimal(notaMedia, 1, 1)}">0.0</span>
+            <div class="text-warning fs-5">
+                <i th:each="i : ${#numbers.sequence(1, 5)}" 
+                   th:class="${i <= notaMedia} ? 'bi bi-star-fill' : (${i - 0.5 <= notaMedia} ? 'bi bi-star-half' : 'bi bi-star')"></i>
+            </div>
+            <span class="text-muted small" th:text="#{curso.valoraciones.contador(${totalVotos})}">(1 valoración)</span>
+        </div>
+
+        <div th:if="${esFormulario}" class="col-sm-6 d-flex align-items-center justify-content-sm-end gap-3 text-nowrap">
+            <span class="small fw-semibold text-secondary rating-label" th:text="#{curso.pregunta.opinion}">pregunta</span>
+            
+            <div id="ratingFeedback" class="badge bg-success px-3 py-2 rounded-pill d-none" style="font-size: 0.85rem;"></div>
+
+            <div class="d-inline-flex align-items-center interaction-stars" th:data-id-curso="${curso.id}">
+                <i class="bi bi-star fs-5 text-warning" style="cursor: pointer;" data-value="1"></i>
+                <i class="bi bi-star fs-5 text-warning" style="cursor: pointer;" data-value="2"></i>
+                <i class="bi bi-star fs-5 text-warning" style="cursor: pointer;" data-value="3"></i>
+                <i class="bi bi-star fs-5 text-warning" style="cursor: pointer;" data-value="4"></i>
+                <i class="bi bi-star fs-5 text-warning" style="cursor: pointer;" data-value="5"></i>
+            </div>
+        </div>
+        
+    </div>
+</div>
+<!-- BLOQUE DE LA ENTREGA CON COLOR DINÁMICO SEGÚN EL ESTADO -->
+<!-- BLOQUE DE CALIFICACIÓN Y NOTAS -->
+
+<th:block th:fragment="entregarevision">
+<div th:if="${(modulo.estado?.name() == 'PENDIENTE_REVISION' or modulo.estado?.name() == 'REVISADO' or modulo.estado?.name() == 'COMPLETADO') and modulo.tipoModulo?.name() =='ENTREGA_OBLIGATORIA'}" 
+     th:class="${modulo.estado?.name() == 'PENDIENTE_REVISION'} ? 'text-warning small fw-semibold d-flex align-items-center gap-2 mb-3' : 'text-primary small fw-semibold d-flex align-items-center gap-2 mb-3'">
+    
+    <!-- Icono dinámico opcional: Ojo para pendiente, Check de ojo para revisado -->
+    <i th:class="${modulo.estado?.name() == 'PENDIENTE_REVISION'} ? 'bi bi-eye me-1' : 'bi bi-eye-fill me-1'"></i> 
+    
+ 	<span th:text="${modulo.estado?.name() == 'PENDIENTE_REVISION'} ? #{modulo.estado.enviado} : #{modulo.estado.revisado}">Estado de Entrega</span>
+    <span th:text="${#temporals.format(modulo.fechaEntrega, 'dd/MM/yyyy HH:mm')}">23/05/2026</span>
+    
+    <!-- Botón Ver Entrega (Cambia su clase de contorno de 'btn-outline-warning' a 'btn-outline-primary' dinámicamente) -->
+    <th:block th:replace="~{fragments/botones :: btnLinkTarget(
+        #{modulo.verEntrega}, 
+        @{|/estudiante/curso/${modulo.cursoId}/modulo/${modulo.moduloId}/verEntrega|}, 
+        false, 
+        '_blank', 
+        ${modulo.estado?.name() == 'PENDIENTE_REVISION'} ? 'btn-outline-warning btn-sm px-2 text-nowrap' : 'btn-outline-primary btn-sm px-2 text-nowrap', 
+        'bi-file-earmark-arrow-down-fill me-1')}"></th:block>
+</div>
+
+
+<div th:if="${(modulo.estado?.name() == 'PENDIENTE_REVISION' or modulo.estado?.name() == 'REVISADO' or modulo.estado?.name() == 'COMPLETADO') and modulo.tipoModulo?.name() =='ENTREGA_OBLIGATORIA'}" class="row g-3 mb-3">
+    
+    <!-- Calificación (Solo si está REVISADO) -->
+    <div th:if="${modulo.estado?.name() == 'REVISADO' or modulo.estado?.name() == 'COMPLETADO'}" class="col-md-3">
+        <strong class="text-dark d-block mb-1" th:text="#{curso.modulo.calificacion}">Calificación</strong>
+        <p class="text-secondary fs-5 mb-0 fw-bold" th:text="${modulo.calificacion}">5.0</p>
+    </div>
+    
+    <!-- Notas / Descripción -->
+    <div class="col-md-9">
+        <strong class="text-dark d-block mb-1" th:text="#{curso.modulo.notascalificacion}">Notas calificación</strong>
+        <p class="text-secondary fs-6 mb-0" style="white-space: pre-line;" th:text="${modulo.notasCalificacion}">Notas...</p>
+    </div>
+    <th:block th:if="${modulo.estado?.name() == 'REVISADO'}">
+    <!-- Botón Completar Módulo (En su propia fila inferior para que no empuje el diseño) -->
+    <div class="col-12 mt-3">
+        <form th:action="@{/estudiante/modulo/completar}" method="POST" enctype="multipart/form-data" class="d-inline">
+            <input type="hidden" name="idCurso" th:value="${modulo.cursoId}" />
+            <input type="hidden" name="idModulo" th:value="${modulo.moduloId}" />
+            <input type="hidden" name="tipoModulo" th:value="${modulo.tipoModulo}"/>
+
+            <button type="submit" class="btn btn-success btn-sm px-3 py-2 fw-semibold shadow-sm">
+                <i class="bi bi-bookmark-check-fill me-1"></i> COMPLETAR MÓDULO
+            </button>
+        </form>
+    </div>
+    </th:block>
+</div>
+
+</th:block>>

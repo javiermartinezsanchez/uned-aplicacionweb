@@ -32,7 +32,14 @@ public class ProfesorController extends BaseCrudController {
 	
 	@Autowired
 	EstudianteCursoService estudianteCursoService;
-	
+	/**
+	 * Home principal del profesor
+	 * @param userConnected Usuario Conectado
+	 * @param paramsBusqueda Parámetros de búsqueda
+	 * @param page Número de página (para el slide de cursos)
+	 * @param modelo Model a rellenar
+	 * @return la vista que muestra el modelo
+	 */
 	@GetMapping("/home")
 	public String profeHome(@AuthenticationPrincipal SecurityUser userConnected,
 			@RequestParam Map<String, String> paramsBusqueda,
@@ -62,6 +69,22 @@ public class ProfesorController extends BaseCrudController {
 	    		"",	"/profesor/calificar/", "/home");
 		paramsBusqueda.put("responsableId", userConnected.getId().toString());
 		var paginacion = estudianteCursoService.listadoTareasPendientes(getParams(page), paramsToMap(paramsBusqueda)); 
+		model.addAttribute("paginacion", paginacion);
+		return model.getAttribute("viewName").toString();
+	}
+	@GetMapping("/seguimientocurso/{idCurso}")
+	public String seguimientoCurso(
+			@AuthenticationPrincipal SecurityUser userConnected,
+			@PathVariable("idCurso") Long idCurso,
+			@RequestParam Map<String, String> paramsBusqueda,
+			@RequestParam(defaultValue = "0") int page, Model model
+			) {
+		setModeloListado(model, "profesor/seguimientocurso" , 
+	    		"",	"/profesor/calificar/", "/home");
+		paramsBusqueda.put("curso.usuario.id", userConnected.getId().toString());
+		paramsBusqueda.put("curso.id", idCurso.toString());
+		var paginacion = estudianteCursoService.listadoPaginado(getParams(page), paramsToMap(paramsBusqueda));
+		model.addAttribute("curso", paginacion.getContenido().get(0));
 		model.addAttribute("paginacion", paginacion);
 		return model.getAttribute("viewName").toString();
 	}

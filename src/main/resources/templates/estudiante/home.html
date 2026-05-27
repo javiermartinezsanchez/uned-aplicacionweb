@@ -12,7 +12,7 @@
 		            <div th:replace="~{fragments/paginacionComun :: navegacionLateralAJAX(${paginacion}, 'bloqueMisCursos', '/estudiante/cursos/ajax/miscursos')}"></div>
 		            <div class="row row-cols-1 row-cols-md-3 g-4" style="width: 100% !important; min-width: 100%;"> 
 		                <div class="col flex-grow-0 flex-shrink-0" th:each="cursoestudiante : ${paginacion.contenido}">
-		                    <div th:insert="~{fragments/curso-card :: cursoCard1(${cursoestudiante.curso})}"
+		                    <div th:insert="~{fragments/cursofragments :: cursoCard(${cursoestudiante.curso})}"
 		                    	th:with="yaInscrito=true, 
 						              progresoCurso=${cursoestudiante.progreso}, 
 						              estadoCurso=${cursoestudiante.estado}">
@@ -33,7 +33,7 @@
 		            <div th:replace="~{fragments/paginacionComun :: navegacionLateralAJAX(${paginacionCD}, 'bloqueCursosDisponibles', '/estudiante/cursos/ajax/cursosdisponibles')}"></div>
 		            <div class="row row-cols-1 row-cols-md-3 g-4" style="width: 100% !important; min-width: 100%;"> 
 		                <div class="col flex-grow-0 flex-shrink-0" th:each="curso : ${paginacionCD.contenido}">
-		                    <div th:insert="~{fragments/curso-card :: cursoCard1(${curso})}"></div>
+		                    <div th:insert="~{fragments/cursofragments :: cursoCard(${curso})}"></div>
 		                </div>
 		            </div>
 		        </div>

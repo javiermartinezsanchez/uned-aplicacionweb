@@ -106,7 +106,16 @@
 				<td class="text-truncate" style="max-width: 350px;" th:text="${curso.descripcion}" th:title="${curso.descripcion}">ID</td>
 				<td th:text="${curso.areaTematicaText}">ID</td>
 				<td class="text-end" th:text="${curso.duracion}">ID</td>
-				<td class="text-center" th:text="${curso.usuariosRegistrados}"></td>
+				<td class="text-center" >
+				<span th:if="${curso.usuariosRegistrados == 0}" th:text="${curso.usuariosRegistrados}">0</span>
+
+<a th:unless="${curso.usuariosRegistrados == 0}" 
+   th:href="@{/profesor/seguimientocurso/{id}(id=${curso.id})}" 
+   class="btn btn-primary btn-sm" 
+   title="Ver seguimiento del curso">
+    <i class="bi bi-pencil-square"></i>
+</a>
+				</td>
 				<td th:text="${#temporals.format(curso.fIni, 'dd/MM/yyyy')}">ID</td>
 				<td th:text="${#temporals.format(curso.fFin, 'dd/MM/yyyy')}">ID</td>
 				<td><a th:href="@{/{url}/curso/{id}(url=${url},id=${curso.id})}" class="btn btn-primary btn-sm" ><i class="bi bi-pencil-square"></i></a></td>

@@ -1,5 +1,10 @@
 <configuration>
 
+    <springProperty scope="context" name="LOG_DIR" source="app.log.ruta"/>
+    <springProperty scope="context" name="MAX_HISTORY" source="app.log.historial"/>
+    <springProperty scope="context" name="MAX_FILE_SIZE" source="app.log.tamano-maximo"/>
+    <springProperty scope="context" name="TOTAL_SIZE" source="app.log.limite-total"/>
+	<springProperty scope="context" name="LOG_LEVEL" source="app.log.level"/>
     <!-- Consola -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -9,13 +14,16 @@
 
     <!-- Archivo con rotación diaria -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/app.log</file>
+        <file>${LOG_DIR}/app.log</file>
 
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- Un archivo por día -->
-            <fileNamePattern>logs/app-%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <fileNamePattern>${LOG_DIR}/app-%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <!-- Tamaño máximo -->
+            <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
             <!-- Mantener 30 días -->
-            <maxHistory>7</maxHistory>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+            <totalSizeCap>${TOTAL_SIZE}</totalSizeCap>
         </rollingPolicy>
 
         <encoder>
@@ -24,7 +32,7 @@
     </appender>
 
     <!-- Niveles por defecto -->
-    <root level="INFO">
+    <root level="${LOG_LEVEL}">
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="FILE" />
     </root>

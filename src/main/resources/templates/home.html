@@ -19,7 +19,7 @@
 		            <div th:replace="~{fragments/paginacionComun :: navegacionLateralAJAX(${paginacion}, 'bloqueMasVisitados', '/cursos/ajax/masvisitados')}"></div>
 		            <div class="row row-cols-1 row-cols-md-3 g-4" style="width: 100% !important; min-width: 100%;"> 
 		                <div class="col" th:each="curso : ${paginacion.contenido}">
-		                    <div th:insert="~{fragments/curso-card :: cursoCard1(${curso})}" class="w-100"></div>
+		                    <div th:insert="~{fragments/cursofragments :: cursoCard(${curso})}" class="w-100"></div>
 		                </div>
 		            </div>
 		        </div>
@@ -32,7 +32,7 @@
 		            <div th:replace="~{fragments/paginacionComun :: navegacionLateralAJAX(${paginacionMV}, 'bloqueMasValorados', '/cursos/ajax/masvalorados')}"></div>
 		            <div class="row row-cols-1 row-cols-md-3 g-4" style="width: 100% !important; min-width: 100%;"> 
 		                <div class="col" th:each="curso : ${paginacionMV.contenido}">
-		                    <div th:insert="~{fragments/curso-card :: cursoCard1(${curso})}" class="w-100"></div>
+		                    <div th:insert="~{fragments/cursofragments :: cursoCard(${curso})}" class="w-100"></div>
 		                </div>
 		            </div>
 		        </div>
@@ -45,7 +45,7 @@
 		            <div th:replace="~{fragments/paginacionComun :: navegacionLateralAJAX(${paginacionME}, 'bloqueMasSubscritos', '/cursos/ajax/massubscritos')}"></div>
 		            <div class="row row-cols-1 row-cols-md-3 g-4" style="width: 100% !important; min-width: 100%;"> 
 		                <div class="col" th:each="curso : ${paginacionME.contenido}">
-		                    <div th:insert="~{fragments/curso-card :: cursoCard1(${curso})}" class="w-100"></div>
+		                    <div th:insert="~{fragments/cursofragments :: cursoCard(${curso})}" class="w-100"></div>
 		                </div>
 		            </div>
 		        </div>

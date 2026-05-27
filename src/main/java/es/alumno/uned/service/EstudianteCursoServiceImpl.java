@@ -199,6 +199,7 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
         }
         recalcularProgreso(ecm);
         revisarEstado(ecm);
+        estudianteCursoModuloRepository.save(ecm);
 	}
 
 	/**
@@ -224,6 +225,8 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 			else {
 				if (siguienteModulo.getEstado() == EstadoCursoModulo.BLOQUEADO) {
 					siguienteModulo.setEstado(EstadoCursoModulo.ACTIVO);
+					siguienteModulo.getEstudianteCurso().setEstado(EstadoCursoModulo.ACTIVO);
+					
 				}
 			}
 		}
@@ -255,6 +258,9 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 	private Page<EstudianteCurso> getPaginaBusqueda(Pageable pageable, Map<String, String> params){
 		if (params.containsKey("estudianteId")){
 			return estudianteCursoRepository.findByIdEstudianteId(Long.valueOf(params.get("estudianteId")),pageable);
+		}
+		if (params.containsKey("curso.id") && params.containsKey("curso.usuario.id")) {
+			return estudianteCursoRepository.findByCursoIdAndCursoResponsableId(Long.valueOf(params.get("curso.id")),Long.valueOf(params.get("curso.usuario.id") ),pageable);
 		}
 		return null;
 	}

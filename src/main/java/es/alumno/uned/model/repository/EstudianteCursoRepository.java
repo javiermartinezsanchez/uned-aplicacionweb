@@ -49,4 +49,12 @@ public interface EstudianteCursoRepository extends JpaRepository<EstudianteCurso
     	       "AND ec.curso.responsable.id = :idResponsable")
     Long getNumTareasPendientes(@Param("estado") EstadoCursoModulo estado, 
              @Param("idResponsable") Long idResponsable);
+    /**
+     * Listado de EstudianteCursos para un Curso y un Profesor
+     * @param cursoId
+     * @param responsableId
+     * @param pageable
+     * @return Datos encontrados
+     */
+	Page<EstudianteCurso> findByCursoIdAndCursoResponsableId(Long cursoId, Long responsableId, Pageable pageable);
 }

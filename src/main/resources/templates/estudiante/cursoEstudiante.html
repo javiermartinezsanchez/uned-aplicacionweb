@@ -9,36 +9,7 @@
 <body>
 	<section>
 		<div class="container py-5" th:object="${curso}">
-
-			<div class="row mb-4">
-				<div class="col-md-5">
-					<img th:src="@{/images/curso/{img}(img=*{uriImagen})}"
-						class="img-fluid rounded shadow-sm" alt="Imagen del curso">
-				</div>
-
-				<div class="col-md-7 d-flex flex-column justify-content-between">
-					<div>
-						<h1 class="fw-bold" th:text="*{titulo}">Título del curso</h1>
-						<p class="text-muted fs-5" th:text="*{descripcion}">Descripción del curso...</p>
-					</div>
-					<div th:insert="~{fragments/curso-card ::infocursoEstudiante}"
-					th:with="yaInscrito=true, 
-						              progresoCurso=${curso.progreso}, 
-						              estadoCurso=${curso.estado}"></div>
-					
-					<div class="mt-2">
-						<span class="fw-semibold text-secondary fs-6"> 👥 <span
-							th:text="*{usuariosRegistrados}">0</span> <span
-							th:text="#{curso.inscritos}">inscritos</span>
-						</span>
-					</div>
-			        <div class="row mt-4">
-			            <div class="col-12">
-			                <div th:replace="~{fragments/curso :: valoracionCurso(${curso.valoracion}, ${curso.numValoraciones}, true)}"></div>
-			            </div>
-			        </div>
-				</div>
-			</div>
+          <th:block th:replace="~{fragments/cursofragments :: cabeceraCurso}"></th:block>
 
 			<hr class="my-5">
 
@@ -57,6 +28,13 @@
 							        th:data-bs-target="'#collapse-' + ${i.index}"
 							        th:aria-expanded="${esExpandido} ? 'true' : 'false'"
 							        th:aria-controls="'collapse-' + ${i.index}">
+								<span th:switch="${modulo.estado?.name()}" class="me-3 fs-5 d-inline-flex align-items-center">
+						            <i th:case="'ACTIVO'" class="bi bi-play-circle-fill text-info" title="En curso"></i>
+						            <i th:case="'PENDIENTE_REVISION'" class="bi bi-hourglass-split text-warning" title="Esperando revisión"></i>
+						            <i th:case="'REVISADO'" class="bi bi-eye-fill text-primary" title="Revisado"></i>
+						            <i th:case="'COMPLETADO'" class="bi bi-check-circle-fill text-success" title="Completado"></i>
+						            <i th:case="*" class="bi bi-circle text-muted"></i>
+						        </span>
 								<span class="fw-bold" th:text="${modulo.titulo}">Operativa de la plataforma</span> 
 							</button>
 						</h2>
@@ -77,23 +55,16 @@
 								</div>
 
 								<div class="border-top pt-3 mt-3">
-								    
-								    <div th:if="${modulo.estado?.name() == 'COMPLETADO'}" class="text-success small fw-semibold">
-								        <i class="bi bi-check-circle-fill me-1"></i> Completado el 
-								        <span th:text="${#temporals.format(modulo.fechaCompletado, 'dd/MM/yyyy HH:mm')}">23/05/2026</span>
+								    <th:block th:if="${modulo.estado?.name() == 'COMPLETADO'}">
+								    <div  class="text-success small fw-semibold">
+								        
+										<th:block th:replace="~{fragments/cursofragments :: entregarevision}"></th:block>
+								        <i class="bi bi-check-circle-fill me-1"></i> Completado el <span th:text="${#temporals.format(modulo.fechaCompletado, 'dd/MM/yyyy HH:mm')}">23/05/2026</span>
 								    </div>
-								    <div th:if="${modulo.estado?.name() == 'PENDIENTE_REVISION'}" class="text-warning small fw-semibold d-flex align-items-center gap-2">
-								        <i class="bi bi-eye me-1"></i> Enviado el  
-								        <span th:text="${#temporals.format(modulo.fechaEntrega, 'dd/MM/yyyy HH:mm')}">23/05/2026</span>
-										<th:block th:replace="~{fragments/botones :: btnLinkTarget(
-										#{modulo.verEntrega}, 
-										@{|/estudiante/curso/${modulo.cursoId}/modulo/${modulo.moduloId}/verEntrega|}, 
-										false, 
-										'_blank', 
-										'btn-outline-warning btn-sm px-2 text-nowrap', 
-										'bi-file-earmark-arrow-down-fill me-1')}"></th:block>
-								    </div>
-								
+ 									</th:block>
+ 									<th:block th:unless="${modulo.estado?.name() == 'COMPLETADO'}">
+ 									<div  th:replace="~{fragments/cursofragments :: entregarevision}"></div>
+								    </th:block>
 								    <div th:if="${modulo.estado?.name() == 'ACTIVO'}" th:switch="${modulo.tipoModulo?.name()}">
 								        <form th:action="@{/estudiante/modulo/completar}" method="POST" enctype="multipart/form-data" class="row g-2 align-items-center">
 								                <input type="hidden" name="idCurso" th:value="${modulo.cursoId}" />
@@ -129,36 +100,8 @@
 			</div>
 
 			<hr class="my-5">
-
-<!-- 			<div th:if="${not #lists.isEmpty(curso.curso.contenidosExtra)}"> -->
-<!-- 				<h3 class="fw-bold mb-3" th:text="#{curso.contenidosExtra}">Contenidos extra</h3> -->
-
-<!-- 				<ul class="list-group mb-5"> -->
-<!-- 					<li class="list-group-item d-flex justify-content-between align-items-center"  -->
-<!-- 						th:each="extra : ${curso.curso.contenidosExtra}"> -->
-						
-<!-- 						<span th:text="${extra.descripcion}">Contenido extra...</span> -->
-						
-<!-- 						<div> -->
-<!-- 							<span sec:authorize="isAuthenticated()"> -->
-<!-- 								<a th:href="@{/contenido-extra/{idCurso}/{idConten}(idCurso=${curso.id}, idConten=${extra.id})}"  -->
-<!-- 								   target="_blank"  -->
-<!-- 								   class="btn btn-primary btn-sm"> -->
-<!-- 								   Ver contenido -->
-<!-- 								</a> -->
-<!-- 							</span> -->
-<!-- 							<span sec:authorize="isAnonymous()"> -->
-<!-- 								<button class="btn btn-secondary btn-sm" disabled> -->
-<!-- 								   🔒 Iniciar sesión -->
-<!-- 								</button> -->
-<!-- 							</span> -->
-<!-- 						</div> -->
-<!-- 					</li> -->
-<!-- 				</ul> -->
-<!-- 			</div> -->
-
-				<div th:insert="~{fragments/curso ::fichaTecnica}"></div>
-
+			<th:block th:replace="~{fragments/cursofragments :: contenidosExtra}"></th:block>
+			<div th:insert="~{fragments/cursofragments ::fichaTecnica}"></div>
 		</div>
 		<script th:src="@{/js/enviarvaloracion.js}"></script>
 	</section>

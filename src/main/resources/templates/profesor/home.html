@@ -24,7 +24,7 @@
 			            <div th:replace="~{fragments/paginacionComun :: navegacionLateralAJAX(${paginacion}, 'bloqueMisCursos', '/profesor/cursos/ajax/miscursos')}"></div>
 			            <div class="row row-cols-1 row-cols-md-3 g-4" style="width: 100% !important; min-width: 100%;"> 
 			                <div class="col flex-grow-0 flex-shrink-0" th:each="curso : ${paginacion.contenido}">
-			                    <div th:insert="~{fragments/curso-card :: cursoCard1(${curso})}"></div>
+			                    <div th:insert="~{fragments/cursofragments :: cursoCard(${curso})}"></div>
 			                </div>
 			            </div>
 			        </div>
