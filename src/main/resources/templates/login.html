@@ -16,9 +16,22 @@
 
                 <h3 class="text-center mb-4" th:text="#{login.initSession}">traducir</h3>
 
-                <div th:if="${param.error}" class="alert alert-danger text-center" th:text="#{login.mensaje.error}">
-                    traducir
-                </div>
+				<div th:if="${param.error}" class="alert alert-danger text-center">
+				    
+				    <!-- CASO A: Cuenta Desactivada (Usa 'instanceof' de forma segura) -->
+				    <span th:if="${session != null and session['SPRING_SECURITY_LAST_EXCEPTION'] instanceof T(org.springframework.security.authentication.DisabledException)}"
+				          th:text="#{login.mensaje.desactivado}">
+				        Cuenta desactivada
+				    </span>
+				
+				    <!-- CASO B: Credenciales Incorrectas -->
+				    <span th:if="${session == null or !(session['SPRING_SECURITY_LAST_EXCEPTION'] instanceof T(org.springframework.security.authentication.DisabledException))}"
+				          th:text="#{login.mensaje.error}">
+				        Usuario o contraseña incorrectos
+				    </span>
+				    
+				</div>
+
 
                 <div th:if="${param.logout}" class="alert alert-success text-center" th:text="#{login.mensaje.logout}">
                     traducir

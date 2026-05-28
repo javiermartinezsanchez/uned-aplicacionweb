@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.DefaultRedirectStrategy;
+import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import es.alumno.uned.model.entities.UserAudit;
 import es.alumno.uned.model.repository.UserAuditRepository;
+import es.alumno.uned.model.repository.UsuarioRepository;
 import es.alumno.uned.model.util.UserUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,6 +37,9 @@ public class CustomLoginSuccessHandler extends SavedRequestAwareAuthenticationSu
     @Autowired
     private UserAuditRepository audit;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+    
     private final SessionAuthenticationStrategy sessionStrategy;
 
     private final RequestCache requestCache = new HttpSessionRequestCache();
@@ -52,6 +56,10 @@ public class CustomLoginSuccessHandler extends SavedRequestAwareAuthenticationSu
             throws ServletException, IOException {
 
         audit.save(new UserAudit(authentication.getName(), "Login usuario", LocalDateTime.now()));
+        var usuario = usuarioRepository.findByEmail(authentication.getName()).get();
+        usuario.setfUltimoAcceso(LocalDateTime.now());
+        usuarioRepository.save(usuario);
+        
         sessionStrategy.onAuthentication(authentication, request, response);
         SavedRequest savedRequest = requestCache.getRequest(request, response);
 

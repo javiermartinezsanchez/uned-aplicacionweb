@@ -1,20 +1,43 @@
 <div th:fragment="frmUsuario">
 	<input type="hidden" th:field="*{id}" />
-    <div class="row">
-	    <div class="col-md-6 mb-3">
-	        <label class="form-label" th:text="#{usuario.email}">Email</label>
-	        <input type="email" th:field="*{email}" class="form-control w-50">
-	        <div class="text-danger" th:errors="*{email}"></div>
+<div class="row align-items-end">
+    
+    <!-- COLUMNA 1: Email (Ocupa 5 de 12 espacios) -->
+    <div class="col-md-5 mb-3">
+        <label class="form-label fw-semibold" th:text="#{usuario.email}">Email</label>
+        <input type="email" th:field="*{email}" class="form-control">
+        <div class="text-danger small" th:errors="*{email}"></div>
+    </div>
+
+    <!-- COLUMNA 2: Rol (Ocupa 5 de 12 espacios) -->
+    <!-- Si es Usuario común ocupará 5, si es Admin insertamos tu fragmento que también se ajustará a esos 5 espacios -->
+    <div class="col-md-5 mb-3">
+        <!-- Vista para el Usuario Común -->
+        <div th:if="${isUser}">
+            <label class="form-label fw-semibold" th:text="#{usuario.role}">Rol</label>
+            <input type="text" th:field="*{rol}" readonly class="form-control-plaintext">
         </div>
-        <div th:if="${isUser}" class="col-md-6 mb-3" >
-        	<label class="form-label" th:text="#{usuario.role}">Rol</label>
-	    	<input type="text" th:field="*{rol}" readonly class="form-control-plaintext w-50">
-   		</div>
-   		<th:block th:unless="${isUser}">
-        	<div th:replace="~{fragments/frmUsuario :: rolSelect(${roles}, 'rol', *{rol}, true)}"></div>
+        
+        <th:block th:unless="${isUser}">
+            <div th:replace="~{fragments/frmUsuario :: rolSelect(${roles}, 'rol', ${paramsBusqueda['rol']}, false, 'mb-0')}"></div>
         </th:block>
     </div>
-    <div th:if="*{id} == null">
+
+    <!-- COLUMNA 3: Estado Switch (Ocupa los 2 espacios restantes) -->
+    <!-- Añadimos 'pb-2' para contrarrestar la altura de las etiquetas (labels) de los inputs de al lado y que quede perfectamente alineado al centro -->
+    <div th:unless="${isUser}" class="col-md-2 mb-3 pb-2">
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" 
+                   th:field="*{activo}" th:id="switchActivo">
+            <label class="form-check-label fw-bold ms-2" th:id="labelSwitchActivo" th:for="switchActivo"
+                   th:text="*{activo} ? #{usuario.estado.activo} : #{usuario.estado.inactivo}">
+                Activo
+            </label>
+        </div>
+    </div>
+
+</div>
+   <div th:if="*{id} == null">
     <div  th:replace="~{fragments/frmChangePass :: frmChangePass}"></div>
     </div>
     <div class="mb-3" th:if="*{id} != null and *{id} != ''">
@@ -46,10 +69,12 @@
 
 
 </div>
-<div th:fragment="rolSelect(rolList, fieldName, selectedValue, showErrors)" class="col-md-2" sec:authorize="hasRole('ADMIN')">
-    <label class="form-label" th:text="#{usuario.role}">Rol</label>
+<div th:fragment="rolSelect(rolList, fieldName, selectedValue, showErrors, colClass)" 
+     sec:authorize="hasRole('ADMIN')"
+     th:class="${colClass != null ? colClass + '' : ''}">
     
-    <!-- Usamos name e id dinámicos en lugar de th:field -->
+    <label class="form-label fw-semibold" th:text="#{usuario.role}">Rol</label>
+    
     <select class="form-select" th:id="${fieldName}" th:name="${fieldName}">
         <option th:value="${''}" th:text="#{rol.select}"></option>
         <option th:each="r : ${rolList}"
@@ -59,7 +84,7 @@
         </option>
     </select>
     
-    <div class="text-danger" th:if="${showErrors} and ${#fields.hasErrors(fieldName)}" th:errors="*{__${fieldName}__}"></div>
+    <div class="text-danger small" th:if="${showErrors} and ${#fields.hasErrors(fieldName)}" th:errors="*{__${fieldName}__}"></div>
 </div>
 
 <div th:fragment="frmEstudiante()">

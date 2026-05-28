@@ -169,6 +169,14 @@ public class Usuario {
 	}
 
 	
+	public LocalDateTime getfUltimoAcceso() {
+		return fUltimoAcceso;
+	}
+
+	public void setfUltimoAcceso(LocalDateTime fUltimoAcceso) {
+		this.fUltimoAcceso = fUltimoAcceso;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

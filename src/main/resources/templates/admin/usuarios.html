@@ -7,47 +7,64 @@
 </head>
 <body>
 <section>
-	<div class="container">
-		<h1 th:text="#{comun.lista(#{usuario.lista})}">Título</h1>
+<div class="container">
+    <!-- Cabecera Flexbox: Título a la izquierda, acciones globales a la derecha -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0" th:text="#{comun.lista(#{usuario.lista})}">Título</h1>
+        
+        <div class="d-flex gap-2">
+            <!-- Botón Nuevo Usuario -->
+            <div th:replace="~{fragments/botones :: btnLink(
+                    #{mensaje.nuevo} + ' ' + #{usuario.title},
+                    @{${urlAlta}},
+                    'btn-success', 'bi bi-plus-circle'
+                )}">
+            </div>
+            <!-- Botón Volver -->
+            <div th:replace="~{fragments/botones :: btnLink(
+                    #{command.volver}, 
+                    ${urlBack}, 
+                    'btn-outline-secondary', 'bi-arrow-left'
+                )}">
+            </div>
+        </div>
+    </div>
 
-		<div class="form-group">
-			<form class="row g-3 align-items-end mb-4" method="get" th:action="@{${urlBuilder.cloneBuilder().removePathExtension()}}">
-			    <div class="col-md-3">
-			        <label class="form-label" th:text="#{comun.nombre('')}">TRADUCIR</label>
-			        <input type="text" name="nombre" class="form-control"
-			               th:value="${paramsBusqueda['nombre']}">
-				</div>
-		    	<div class="col-md-3">
-			        <label class="form-label" >E-mail</label>
-			        <input type="text" name="email" class="form-control"
-			               th:value="${paramsBusqueda['email']}">
-				</div>
-				<div th:replace="~{fragments/frmUsuario :: rolSelect(${roles}, 'rol', ${paramsBusqueda['rol']}, false)}"></div>
-				<div class="col-md-4 d-flex gap-2">
-				    <div  th:insert="~{fragments/botones :: btnSubmit(
-					        #{command.buscar},
-					        'btn-primary',
-					        'bi-search'
-					    )}">">
-			    	</div>
-		            
-					<div  th:replace="~{fragments/botones :: btnLink(
-					        #{mensaje.nuevo} + ' ' + #{usuario.title},
-					        @{${urlAlta}},
-					        'btn-success', 'bi bi-plus-circle'
-					    )}">
-					</div>
-					<div  th:replace="~{fragments/botones :: btnLink(
-			        #{command.volver}, 
-			        ${urlBack}, 
-			        'btn-outline-secondary', 'bi-arrow-left'
-				    )}">
-				    </div>
-			  	</div>
-   
-			</form>
+<div class="form-group">
+    <!-- El contenedor d-flex organiza la línea horizontal -->
+    <form class="d-flex align-items-end gap-3 mb-4" method="get" th:action="@{${urlBuilder.cloneBuilder().removePathExtension()}}">
+        
+        <!-- 1. Nombre (Alineado al fondo) -->
+        <div style="flex: 2;" class="align-self-end">
+            <label class="form-label fw-semibold" th:text="#{comun.nombre('')}">Nombre</label>
+            <input type="text" name="nombre" class="form-control" th:value="${paramsBusqueda['nombre']}">
+        </div>
+        
+        <!-- 2. E-mail (Alineado al fondo) -->
+        <div style="flex: 2;" class="align-self-end">
+            <label class="form-label fw-semibold">E-mail</label>
+            <input type="text" name="email" class="form-control" th:value="${paramsBusqueda['email']}">
+        </div>
+        
+        <!-- 3. Rol (Alineado al fondo. Su etiqueta interna subirá de forma natural sin empujar nada) -->
+        <div style="flex: 1.5;" class="align-self-end">
+            <div th:replace="~{fragments/frmUsuario :: rolSelect(${roles}, 'rol', ${paramsBusqueda['rol']}, false, null)}"></div>
+        </div>
+        
+        <!-- 4. Botón Buscar (Alineado al fondo y forzando que no tenga márgenes extras) -->
+        <!-- Quitamos cualquier 'mb-3' o 'pb-1' para que descanse exactamente sobre la misma línea base -->
+        <div class="align-self-end">
+            <div th:insert="~{fragments/botones :: btnSubmit(
+                    #{command.buscar},
+                    'btn-primary px-3 text-nowrap',
+                    'bi-search'
+                )}">
+            </div>
+        </div>
+        
+    </form>
+</div>
 
-		</div>
 
 		<table class="table table-striped table-bordered">
 			<thead class="table-dark">
@@ -55,7 +72,12 @@
 					<th th:text="#{usuario.email}">default</th>
 					<th th:text="#{comun.nombre('')}">default</th>
 					<th th:text="#{usuario.role}">default</th>
-					<th></th>
+					<th class="text-center">Estado</th>
+		            <th>Último Acceso</th>
+		            <th>Fecha Alta</th>
+		            <th>Creado Por</th>
+		            <th>Acciones</th>
+
 				</tr>
 			</thead>
 			<tbody>
@@ -63,6 +85,13 @@
 					<td th:text="${usuario.email}">ID</td>
 					<td th:text="${usuario.nombreCompleto}">ID</td>
 					<td th:text="${usuario.rol}">ID</td>
+		            <td class="text-center">
+		                <span th:if="${usuario.activo}" class="badge bg-success" th:text="#{usuario.estado.activo}">Activo</span>
+		                <span th:unless="${usuario.activo}" class="badge bg-danger" th:text="#{usuario.estado.inactivo}">Inactivo</span>
+		            </td>
+		            <td th:text="${usuario.fUltimoAcceso != null ? #temporals.format(usuario.fUltimoAcceso, 'dd/MM/yyyy HH:mm') : '-'}">01/01/2026 12:30</td>
+		            <td th:text="${usuario.fAlta != null ? #temporals.format(usuario.fAlta, 'dd/MM/yyyy HH:mm') : '-'}">01/01/2026 10:00</td>
+		            <td th:text="${usuario.usuarioAlta != null ? usuario.usuarioAlta : '-'}">admin@ejemplo.com</td>
 					<td><a th:href="@{/admin/usuario/{id}(id=${usuario.id})}" class="btn btn-primary" ><i class="bi bi-pencil-square"></i></a></td>
 				</tr>
 			</tbody>

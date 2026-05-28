@@ -23,7 +23,7 @@
 		        'btn-primary btn-sm px-2 text-nowrap',
 		        'bi-info-circle'
 		    )}"></div>
-		    <th:block th:unless="${isProfesor}">
+		    <th:block sec:authorize="not hasAnyRole('PROFE', 'ADMIN')">
 		        <div th:if="${yaInscrito == null or !yaInscrito}" 
 		             th:insert="~{fragments/botones :: btnLink(
 		                #{curso.subscribirse},
@@ -34,19 +34,19 @@
 		        </div>
 		        <th:block th:if="${yaInscrito}" th:switch="${#strings.toString(estadoCurso)}">
 		            <div th:case="'ACTIVO'" th:insert="~{fragments/botones :: btnLink(
-		                'Continuar',
+		                #{curso.accion.continuar},
 		                @{'/estudiante/micurso/' + ${curso.id} },
 		                'btn-success btn-sm px-2 text-nowrap',
 		                'bi-play-fill'
 		            )}"></div>
 		            <div th:case="'REVISADO'" th:insert="~{fragments/botones :: btnLink(
-		                'Continuar',
+		                #{curso.accion.continuar},
 		                @{'/estudiante/micurso/' + ${curso.id} },
 		                'btn-success btn-sm px-2 text-nowrap',
 		                'bi-play-fill'
 		            )}"></div>
 		            <div th:case="'COMPLETADO'" th:insert="~{fragments/botones :: btnLinkTarget(
-		                'Certificado',
+		                #{curso.accion.certificado},
 		                @{'/estudiante/curso/certificado/' + ${curso.id} },
 		                false,
 		                '_blank',
@@ -54,11 +54,20 @@
 		                'bi-award'
 		            )}"></div>
 		            <div th:case="'PENDIENTE_REVISION'" th:insert="~{fragments/botones :: btnLink(
-		                'Ver Entregas',
+		                 #{curso.accion.revisar},
 		                @{'/estudiante/micurso/' + ${curso.id} },
 		                'btn-outline-warning btn-sm px-2 text-nowrap',
 		                'bi-eye'
 		            )}"></div>
+		            <div th:case="'BLOQUEADO'" th:insert="~{fragments/botones :: btnLinkTarget(
+		                #{curso.accion.bloqueado},
+		                '' },
+		                true,
+		                '_blank',
+		                'btn-disabled btn-sm px-2 text-nowrap',
+		                'bi-lock'
+		            )}"></div>
+		            
 		            <div th:case="*"></div>
 		        </th:block>
 		    </th:block>

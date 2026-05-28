@@ -24,6 +24,7 @@ public abstract class BaseCrudController {
 
 	/**
 	 * Injectamos el "messageSource" para los textos.
+	 * <p> Con ello desde cualquier Controller que extienda de esta clase podremos "traducir" un mensaje.
 	 */
 	@Autowired
     private MessageSource messageSource;
@@ -93,8 +94,8 @@ public abstract class BaseCrudController {
     		String urlAlta,
     		String urlDetalle, 
     		String urlBack) {
-        model.addAttribute("urlAlta", urlAlta);
         model.addAttribute("viewName", viewName);
+        model.addAttribute("urlAlta", urlAlta);
         model.addAttribute("url", urlDetalle);
         model.addAttribute("urlBack", urlBack);
     }
@@ -128,7 +129,7 @@ public abstract class BaseCrudController {
         return new PageParams(page, size);
     }
 	/**
-	 * Limpia el mapa de parametros que llegan desde el formulario.
+	 * Limpia el mapa de parametros vacíos o sin informar que llegan desde el formulario.
 	 * <p>Genera un nuevo mapa de valores:
 	 * <ul>
 	 * <li>Elimina los parámetro sin valor, o con espacios en blanco </li>
@@ -136,7 +137,8 @@ public abstract class BaseCrudController {
 	 * </ul>
 	 * <p>Nos sirve para mantener los campos de búsqueda en el modelo y no tener que generar "n" variables.
 	 * 
-	 * <p>El "Service" lo recibirá y nos devuele la consulta adecuada a los mismos.
+	 * <p>Ideal para no tener que realizar la comprobación de "si existe" y si "está informado".
+	 * <p>Aseguramos que sólo los parámetros informados se envíen a los "Service" para ejecutar la lógica de negocio necesaria.
 	 * @param params Mapa de parámetros recibidos por el controller.
 	 * @return Mapa de clave-valor sin "page" y sin los parámetros vacios.
 	 */

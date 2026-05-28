@@ -43,6 +43,7 @@ public class UsuarioRegistroDTO {
     
     private boolean activo;
     private LocalDateTime fAlta;
+    private LocalDateTime fUltimoAcceso;
     private String usuarioAlta;
 	
 	public UsuarioRegistroDTO() {
@@ -149,7 +150,15 @@ public class UsuarioRegistroDTO {
 		this.usuarioAlta = usuarioAlta;
 	}
 	
-    public String getNombreCompleto() {
+    public LocalDateTime getfUltimoAcceso() {
+		return fUltimoAcceso;
+	}
+
+	public void setfUltimoAcceso(LocalDateTime fUltimoAcceso) {
+		this.fUltimoAcceso = fUltimoAcceso;
+	}
+
+	public String getNombreCompleto() {
     	return (nombre!=null?nombre:"")+ 
                (apellido1 !=null?" ".concat(apellido1):"") +
     	       (apellido2 !=null?" ".concat(apellido2):"");

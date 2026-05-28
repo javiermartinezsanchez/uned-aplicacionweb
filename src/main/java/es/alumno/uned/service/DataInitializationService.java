@@ -83,7 +83,7 @@ public class DataInitializationService {
 			
 		}
 		if (userRepo.findByEmail("admin@correo.es").isEmpty()) {
-			userRepo.save(new Usuario("admin", "admin@correo.es", "", "", passEncoder.encode("admin@correo.es")  , "ADMIN", true, LocalDateTime.now(), "CARGA INICIAL"));
+			userRepo.save(new Usuario("admin", "admin@correo.es", "number", "one", passEncoder.encode("admin@correo.es")  , "ADMIN", true, LocalDateTime.now(), "CARGA INICIAL"));
 			
 		}
 		if (userRepo.findByEmail("profe1@correo.es").isEmpty()) {

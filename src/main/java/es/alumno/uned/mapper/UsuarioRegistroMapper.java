@@ -22,6 +22,7 @@ public class UsuarioRegistroMapper {
 				user.getfAlta(),
 				user.getUsuarioAlta()
 				       );
+		userDTO.setfUltimoAcceso(user.getfUltimoAcceso());
 		return userDTO;
 	}
 	

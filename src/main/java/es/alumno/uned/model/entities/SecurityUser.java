@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * Clase "wrapper" del Usuario de la aplicación con el UserDetails de Spring Security
+ * <p> Por defecto todas las cuentas están "no bloquedas" y no hay política de "expiración".
  */
 public class SecurityUser implements UserDetails{
 
@@ -48,4 +49,25 @@ public class SecurityUser implements UserDetails{
 	public String getRol() {
 		return user.getRol();
 	}
+	
+	@Override
+	public boolean isEnabled() {
+		return user.isActivo(); 
+	}
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true; 
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true; 
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true; 
+    }
+
 }
