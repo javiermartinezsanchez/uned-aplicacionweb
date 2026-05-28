@@ -17,6 +17,10 @@ import es.alumno.uned.exception.ContenidoExtraNotFoundException;
 import es.alumno.uned.model.entities.TipoContenido;
 import es.alumno.uned.service.ContenidoExtraService;
 
+/**
+ * Controller para la visualización/descarga de contenidos extra de un curso.
+ * <p>Nos sirve también para la descarga de las entregas de trabajos del estudiante 
+ */
 @Controller
 public class CursoContenidoController {
 
@@ -40,9 +44,6 @@ public class CursoContenidoController {
 			throw new org.springframework.web.server.ResponseStatusException(HttpStatus.NOT_FOUND, "El archivo físico no se encuentra en el servidor");
 		}
 		String contentType = contenido.getContentType() != null ? contenido.getContentType() : "application/pdf";
-		
-		
-		
 		return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + contenido.getNombreReal() + "\"")

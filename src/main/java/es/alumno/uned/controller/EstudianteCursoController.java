@@ -93,6 +93,7 @@ public class EstudianteCursoController extends BaseCrudController {
             Model model) {
 		
 		model.addAttribute("curso", estudianteCursoService.getCurso(userConnected.getId(), idCurso));
+		model.addAttribute("isProfesor", false);
 		return "estudiante/cursoEstudiante";
 		
 	}

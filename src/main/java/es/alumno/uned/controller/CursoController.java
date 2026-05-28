@@ -206,6 +206,7 @@ public class CursoController extends BaseCrudController {
 		model.addAttribute("url", "/curso/guardar");
 		model.addAttribute("urlBack", "/");
 		model.addAttribute("curso", cursoService.getCurso(id));
+		model.addAttribute("isProfesor", false);
 		return "curso/fichacurso";
 	}
 

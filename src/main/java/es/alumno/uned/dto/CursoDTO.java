@@ -259,6 +259,13 @@ public class CursoDTO {
 	public void setNumVistas(Integer numVistas) {
 		this.numVistas = numVistas;
 	}
+	public Integer getProgreso() {
+		return 0;
+	}
+	public Integer getEstado() {
+		return 0;
+	}
 
+	
 	
 }

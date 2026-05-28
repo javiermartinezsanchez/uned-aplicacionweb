@@ -84,6 +84,7 @@ public class ProfesorController extends BaseCrudController {
 		paramsBusqueda.put("curso.usuario.id", userConnected.getId().toString());
 		paramsBusqueda.put("curso.id", idCurso.toString());
 		var paginacion = estudianteCursoService.listadoPaginado(getParams(page), paramsToMap(paramsBusqueda));
+		model.addAttribute("isProfesor", true);
 		model.addAttribute("curso", paginacion.getContenido().get(0));
 		model.addAttribute("paginacion", paginacion);
 		return model.getAttribute("viewName").toString();
@@ -112,6 +113,7 @@ public class ProfesorController extends BaseCrudController {
 					idEstudiante, idCurso, idModulo);
 			setModeloFormulario(model, "profesor/revisartrabajo","/profesor/cursorevisado", "/profesor/pendientes");
 			model.addAttribute("curso", ec);
+			model.addAttribute("isProfesor", true);
 		return model.getAttribute("viewName").toString();
 	}
 	

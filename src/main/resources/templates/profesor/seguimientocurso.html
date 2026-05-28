@@ -9,7 +9,7 @@
 <body>
 	<section>
 	<div class="container py-5" th:object="${curso}">
-	<th:block th:replace="~{fragments/cursofragments :: cabeceraCurso}"></th:block>
+	<th:block th:replace="~{fragments/cursofragments :: cabeceraCurso(false)}"></th:block>
 	<hr class="my-5">
 	<table class="table table-striped table-bordered">
 		<thead class="table-dark">

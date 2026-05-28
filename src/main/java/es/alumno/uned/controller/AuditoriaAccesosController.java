@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import es.alumno.uned.service.UserAuditService;
-
+/**
+ * Controlador de la Auditoría de Accesos.
+ */
 @Controller
 public class AuditoriaAccesosController extends BaseCrudController{
 
@@ -26,9 +28,12 @@ public class AuditoriaAccesosController extends BaseCrudController{
 		var paginacion = auditService.listadoPaginado(  getParams(page), paramsToMap(params));
 
 		model.addAttribute("titulo", "Auditoria Accesos");
-		model.addAttribute("urlBack", "/home");
+		setModeloListado(model, "admin/accesos", 
+				"/home",
+				"/home", 
+				"/home");
 		model.addAttribute("paginacion", paginacion);
-		return "admin/accesos";
+		return model.getAttribute("viewName").toString();
 	}
 
 }
