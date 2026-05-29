@@ -5,7 +5,7 @@
 <!--  Uso: th:insert="fragments/botones :: btnLink('Texto', '/ruta', 'btn-primary', 'bi-save')" -->
 <!-- ========================================================= -->
 <div th:fragment="btnLink(texto, url, estilo, icono)">
-    <div th:replace="~{::btnLinkTarget(
+    <a th:replace="~{::btnLinkTarget(
     texto=${texto},
     url=${url},
     deshabilitado=false,
@@ -13,13 +13,13 @@
     estilo=${estilo},
     icono=${icono}
     )}">
-    </div>    
+    </a>    
 </div>
 
 <div th:fragment="btnLinkTarget(texto, url, deshabilitado, target, estilo, icono)">
     <a th:href="${deshabilitado} ? '#' : ${url}"
        th:target="${deshabilitado} ? null : ${target}"
-       th:class="'btn ' + ${estilo}"
+       th:class="'text-nowrap btn ' + ${estilo}"
        th:classappend="${deshabilitado} ? ' disabled' : ''">
         <i th:class="${deshabilitado} ? 'bi bi-lock-fill' : ${icono}" 
            th:if="${deshabilitado} or ${icono != null}"></i>
@@ -28,10 +28,10 @@
 </div>
 
 
-<!-- ========================================================= -->
-<!--  BOTÓN SUBMIT (btnSubmit)                                 -->
+<!-- ====================================================================================== -->
+<!--  BOTÓN SUBMIT (btnSubmit)                                                              -->
 <!--  Uso: th:insert="fragments/botones :: btnSubmit('Guardar', 'btn-success', 'bi-check')" -->
-<!-- ========================================================= -->
+<!-- ====================================================================================== -->
 <div th:fragment="btnSubmit(texto, estilo, icono)">
     <button type="submit"
             th:class="'btn ' + ${estilo}">
@@ -41,13 +41,13 @@
 </div>
 
 
-<!-- ========================================================= -->
-<!--  BOTÓN VOLVER (btnVolver)                                 -->
+<!-- ================================================================== -->
+<!--  BOTÓN VOLVER (btnVolver)                                          -->
 <!--  Uso: th:insert="fragments/botones :: btnVolver('/admin/usuario')" -->
-<!-- ========================================================= -->
+<!-- ================================================================== -->
 <div th:fragment="btnVolver(url)">
-    <a th:href="@{${url}}" class="btn btn-secondary">
-        <i class="bi bi-arrow-left-circle"></i> Volver
+    <a th:href="@{${url}}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left-circle"></i> <span th:text="#{command.volver}"></span>
     </a>
 </div>
 
@@ -55,10 +55,10 @@
 <i class="bi bi-arrow-counterclockwise"></i>
 	<span th:text="#{command.limpiar}"></span>
 </button>
-<!-- ========================================================= -->
-<!--  BOTÓN ELIMINAR (btnEliminar)                             -->
+<!-- =============================================================================== -->
+<!--  BOTÓN ELIMINAR (btnEliminar)                                                   -->
 <!--  Uso: th:insert="fragments/botones :: btnEliminar('/admin/usuario/eliminar/7')" -->
-<!-- ========================================================= -->
+<!-- =============================================================================== -->
 <div th:fragment="btnEliminar(url)">
     <a th:href="@{${url}}" class="btn btn-danger">
         <i class="bi bi-trash"></i> Eliminar

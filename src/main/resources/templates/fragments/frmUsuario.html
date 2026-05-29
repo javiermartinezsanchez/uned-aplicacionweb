@@ -19,7 +19,7 @@
         </div>
         
         <th:block th:unless="${isUser}">
-            <div th:replace="~{fragments/frmUsuario :: rolSelect(${roles}, 'rol', ${paramsBusqueda['rol']}, false, 'mb-0')}"></div>
+            <div th:replace="~{fragments/frmUsuario :: rolSelect(${roles}, 'rol', *{rol}, true, 'mb-0')}"></div>
         </th:block>
     </div>
 

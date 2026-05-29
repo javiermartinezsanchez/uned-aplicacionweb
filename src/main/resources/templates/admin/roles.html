@@ -8,9 +8,12 @@
 <body>
 <section>
 	<div class="container">
-		<h1 th:text="#{comun.lista(#{rol.list})}">traducir</h1>
-		<br>
-		<div th:replace="fragments/botones ::btnLink(#{command.volver}, ${urlBack}, 'btn-outline-secondary', 'bi-arrow-left')"></div>
+		<div class="d-flex justify-content-between align-items-center mb-4">
+	        <h1 class="mb-0" th:text="#{comun.lista(#{rol.list})}">Título</h1>
+	        <div class="d-flex gap-2">
+	            <a th:replace="~{fragments/botones :: btnVolver(${urlBack})}"></a>
+	        </div>
+	    </div>
 		<table class="table table-striped table-bordered">
 			<thead class="table-dark">
 				<tr>

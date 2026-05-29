@@ -8,7 +8,19 @@
 <body>
 <section>
  <div class="container">
-	<h1 th:text="#{comun.lista(#{curso.lista})}">Accesos</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0" th:text="#{comun.lista(#{curso.lista})}">Título</h1>
+        
+        <div class="d-flex gap-2">
+            <a th:replace="~{fragments/botones :: btnLink(
+     			 #{mensaje.nuevo} + ' ' + #{curso.title},
+	       		 @{${urlAlta}},
+	        	'btn-success', 'bi bi-plus-circle'
+                )}">
+            </a>
+            <a th:replace="~{fragments/botones :: btnVolver(${urlBack})}"></a>
+        </div>
+    </div>
 	<div class="form-group">
 		<form class="row g-3 mb-4" method="get" th:action="@{${urlBuilder.cloneBuilder().removePathExtension()}}">
 	    <div class="col-md-3">
@@ -67,18 +79,7 @@
 			        icono='bi-arrow-counterclockwise'
 			    )}">
 	    </div>
-		<div class="col-md-2 d-flex align-items-end" th:insert="~{fragments/botones :: btnLink(
-	        #{mensaje.nuevo} + ' ' + #{curso.title},
-	        @{${urlAlta}},
-	        'btn-success', 'bi bi-plus-circle'
-	    )}">
-	    </div>
-	    <div class="col-md-2 d-flex align-items-end" th:insert="~{fragments/botones :: btnLink(
-			        #{command.volver}, 
-			        ${urlBack}, 
-			        'btn-outline-secondary', 'bi-arrow-left'
-			     )}">
-	    </div>
+
 		</form>
 	</div>
 	<table class="table table-striped table-bordered">
@@ -108,13 +109,16 @@
 				<td class="text-end" th:text="${curso.duracion}">ID</td>
 				<td class="text-center" >
 				<span th:if="${curso.usuariosRegistrados == 0}" th:text="${curso.usuariosRegistrados}">0</span>
-
-<a th:unless="${curso.usuariosRegistrados == 0}" 
-   th:href="@{/profesor/seguimientocurso/{id}(id=${curso.id})}" 
-   class="btn btn-primary btn-sm" 
-   title="Ver seguimiento del curso">
-    <i class="bi bi-pencil-square"></i>
-</a>
+				<span th:unless="${curso.usuariosRegistrados == 0}">
+				<a sec:authorize="hasAnyRole('PROFE')" th:replace="~{fragments/botones :: btnLink(
+			        ${curso.usuariosRegistrados},
+			        @{/profesor/seguimientocurso/{id}(id=${curso.id})},
+			        'btn-primary w-100',
+			        'bi-card-checklist'
+			    )}">
+				</a>
+				<span sec:authorize="not hasAnyRole('PROFE')" th:text="${curso.usuariosRegistrados}"></span>
+				</span>
 				</td>
 				<td th:text="${#temporals.format(curso.fIni, 'dd/MM/yyyy')}">ID</td>
 				<td th:text="${#temporals.format(curso.fFin, 'dd/MM/yyyy')}">ID</td>

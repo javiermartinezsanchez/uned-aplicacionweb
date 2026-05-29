@@ -111,12 +111,13 @@ public class UserDetailsServiceImpl implements UsuarioService, UserDetailsServic
 			user.setPassword(passEncoder.encode(registroDTO.getNewPassword()));
 			user.setUsuarioAlta(usuarioAlta);
 			user.setfAlta(LocalDateTime.now());
-			user.setActivo(true);
+			
 		}
 		user.setRol(registroDTO.getRol());
 		user.setNombre(registroDTO.getNombre());
 		user.setApellido1(registroDTO.getApellido1());
 		user.setApellido2(registroDTO.getApellido2());
+		user.setActivo(registroDTO.isActivo());
 		return userRepository.save(user);
 	}
 
