@@ -5,6 +5,9 @@ import org.springframework.stereotype.Component;
 import es.alumno.uned.dto.UsuarioRegistroDTO;
 import es.alumno.uned.model.entities.Usuario;
 
+/**
+ * Mapper de usuario utilizado en la administración de usuarios.
+ */
 @Component
 public class UsuarioRegistroMapper {
 

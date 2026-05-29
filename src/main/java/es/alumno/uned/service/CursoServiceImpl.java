@@ -69,6 +69,7 @@ public class  CursoServiceImpl implements CursoService{
 
 	/**
 	 * Obtenemos un curso válido.
+	 * <
      *
 	 * <ul>
 	 *     <li>Si el id es null -> Nuevo Curso</li>
@@ -87,6 +88,10 @@ public class  CursoServiceImpl implements CursoService{
 		Curso curso = (id != null)
 				? cursoRepository.findById(id).orElse(new Curso())
 				: new Curso();
+		if (curso.getId() != null) {
+			curso.addVista();
+			cursoRepository.save(curso);
+		}
 		return curso;
 	}
 	@Transactional

@@ -26,6 +26,7 @@ import jakarta.servlet.http.HttpServletResponse;
  * Handler customizado del login de usuarios.
  * 
  * <p>Generamos la auditoría de acceso de los usuarios.
+ * <p>Se registra la "fecha de último acceso" del usuario.
  * <p>Redirigimos dependiendo de los casos
  * <ul><li>Si viene del login directo vamos la home de cada uno de los roles.</li>
  * <li>Si es de la subscripción a un curso </li>

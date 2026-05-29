@@ -14,7 +14,9 @@ import es.alumno.uned.model.records.PageParams;
 import es.alumno.uned.model.util.Paginacion;
 
 
-
+/**
+ * Interface público de los métodos de acceso a Cursos.
+ */
 public interface CursoService {
 
 	/**
