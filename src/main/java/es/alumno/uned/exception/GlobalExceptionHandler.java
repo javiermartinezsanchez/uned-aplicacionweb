@@ -1,6 +1,9 @@
 package es.alumno.uned.exception;
 
 
+import java.util.Arrays;
+import java.util.Locale;
+
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.Ordered;
@@ -66,14 +69,19 @@ public class GlobalExceptionHandler {
         FlashMap flashMap = RequestContextUtils.getOutputFlashMap(request);
         if (flashMap != null) {
             // Guardamos el error directamente en la infraestructura de Spring
-            flashMap.put("errorGlobal", getMsgLocale(ex.getMessage(), ""));
+            
             // Aprovechando que utilizamos Java 21 utilizamos "Patter maching"
             switch (ex) {
             case FileSizeExcedeedException fileException -> 
-                flashMap.put("form", fileException.getDto());
-            case EstudianteCursoAlreadySubscribeException estudianteException -> {}
-            
-            default -> { }
+                {flashMap.put("form", fileException.getDto());
+                flashMap.put("errorGlobal", getMsgLocale(ex.getMessage()));
+                }
+            case SinDTOException sinDtoException -> {
+            	flashMap.put("errorGlobal", getMsgLocale(sinDtoException.getMessage(), sinDtoException.getArgs()));
+            }
+            default -> { 
+            	flashMap.put("errorGlobal", getMsgLocale(ex.getMessage()));
+            }
             }
 
         }
@@ -93,6 +101,11 @@ public class GlobalExceptionHandler {
     	model.addAttribute("urlBack", backUrl != null ? backUrl : "/");
         model.addAttribute("errorGlobal", getMsgLocale(ex.getMessage(), ex.getArgs()));
         model.addAttribute("form", ex.getDto());
+        if (request.getAttribute("viewName") == null) {
+        	return "redirect:" + backUrl;
+        	
+        }
+        
         return (String) request.getAttribute("viewName");
 	}
 	/**
@@ -102,13 +115,13 @@ public class GlobalExceptionHandler {
 	 * @return Texto traducido.
 	 */
     private String getMsgLocale(String claveMensaje, Object...args) {
-		return messageSource.getMessage(
-				claveMensaje,   // la clave del fichero "traducciones"
-				args,
-                LocaleContextHolder.getLocale()
-            );
+    	Locale locale = LocaleContextHolder.getLocale();
+
+        Object[] argsTraducidos = Arrays.stream(args)
+                .map(arg -> arg instanceof String key ? messageSource.getMessage(key, null, key, locale) : arg)
+                .toArray();
+
+        return messageSource.getMessage(claveMensaje, argsTraducidos, locale);
 	}
-    
-    
 }
 

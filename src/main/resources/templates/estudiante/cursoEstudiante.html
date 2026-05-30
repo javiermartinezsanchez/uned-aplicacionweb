@@ -72,8 +72,7 @@
 								                <input type="hidden" name="tipoModulo" th:value="${modulo.tipoModulo}"/>
 								       
 								        <div th:case="'FINALIZACION_MANUAL'">
-								                 <button type="submit" class="btn btn-success btn-sm">
-								                    <i class="bi bi-bookmark-check-fill me-1"></i> COMPLETAR MÓDULO
+								                 <button th:replace="~{fragments/botones :: btnSubmit(#{curso.modulo.marcarCompletado},'btn-outline-success btn-sm','bi-check-circle-fill me-2')}">
 								                </button>
 								        </div>
 								

@@ -19,7 +19,14 @@ public abstract class SinDTOException extends RuntimeException {
 	 */
 	private static final long serialVersionUID = -5223919151333529225L;
 
-	protected SinDTOException(String messageKey) {
+	private final Object[] args;
+	
+	protected SinDTOException(String messageKey, String...args) {
 		super(messageKey);
+		this.args = args;
 	}
+	
+	public Object[] getArgs() {
+        return args;
+    }
 }

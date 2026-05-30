@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,12 +16,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import es.alumno.uned.dto.CursoDTO;
 import es.alumno.uned.dto.EstudianteCursoDTO;
+import es.alumno.uned.exception.CursoNotExistException;
 import es.alumno.uned.model.entities.Curso;
 import es.alumno.uned.model.entities.SecurityUser;
 import es.alumno.uned.model.util.Paginacion;
 import es.alumno.uned.service.CursoService;
 import es.alumno.uned.service.EstudianteCursoService;
-import jakarta.validation.Valid;
+/**
+ * Controlador principal acciones del profesor.
+ */
+
 @Controller
 @RequestMapping("/profesor")
 public class ProfesorController extends BaseCrudController {
@@ -85,6 +88,9 @@ public class ProfesorController extends BaseCrudController {
 		paramsBusqueda.put("curso.id", idCurso.toString());
 		var paginacion = estudianteCursoService.listadoPaginado(getParams(page), paramsToMap(paramsBusqueda));
 		model.addAttribute("isProfesor", true);
+		if (paginacion.getContenido().isEmpty())  {
+			throw new CursoNotExistException("msg.exception.notfound", "curso.title");
+		}
 		model.addAttribute("curso", paginacion.getContenido().get(0));
 		model.addAttribute("paginacion", paginacion);
 		return model.getAttribute("viewName").toString();

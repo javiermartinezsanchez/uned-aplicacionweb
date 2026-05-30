@@ -48,16 +48,11 @@ public class ModuloServiceImpl implements ModuloService {
     @Override
 	public ModuloDTO grabar(ModuloDTO dto, String userIns) {
 
-	        // Validación: el curso debe existir
-//	        Curso curso = cursoRepository.findById(dto.cursoId())
-//	                .orElseThrow(() -> new CursoNotExistException("curso.no.encontrado", dto, dto.cursoId().toString()));
-
 	        Modulo modulo = moduloMapper.toEntity(dto);
 
 	        if (dto.getId() == null) {
 	            modulo.setUserIns(userIns);
 	            modulo.setfIns(LocalDateTime.now());
-	           // modulo.setCurso(curso);
 	        }
             return moduloMapper.toDTO(moduloRepository.save(modulo));	
 	    }

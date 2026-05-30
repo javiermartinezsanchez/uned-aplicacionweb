@@ -15,74 +15,160 @@ th:replace="~{plantilla::layout(~{::section})}">
 
     <input type="hidden" th:field="*{id}"/>
     <input type="hidden" th:field="*{uriImagen}"/>
-    
-    <div class="row p-3">
-	    <div class="col-md-6">
-	     <label class="form-label" th:text="#{curso.imagen}">Imagen del curso</label>
-	        <div class="mt-2" th:if="*{uriImagen} != null and *{uriImagen} != ''">
-	            <img th:src="@{/images/curso/{img}(img=*{uriImagen})}"
-	                 class="img-thumbnail"
-	                 style="max-width: 200px;">
-	        </div>
-	        <input type="file" class="form-control" name="imagen" accept="image/*">
-	    </div>
-	    <div class="col-md-6 align-self-end">
-	        <label class="form-label" th:text="#{curso.titulo}">Título</label>
-	        <input type="text" class="form-control" th:field="*{titulo}">
-	        <div class="text-danger" th:errors="*{titulo}"></div>
-	    </div>
-	</div>
-    <div class="mb-3">
-        <label class="form-label" th:text="#{comun.descripcion}">Descripción</label>
-        <textarea class="form-control" th:field="*{descripcion}" rows="3"></textarea>
-        <div class="text-danger" th:errors="*{descripcion}"></div>
+<div class="row p-3 g-4">
+    <!-- COLUMNA IZQUIERDA: Imagen y su botón de carga -->
+    <div class="col-md-4">
+        <label class="form-label fw-bold" th:text="#{curso.imagen}">Imagen del curso</label>
+        
+        <div class="mt-2 mb-3" th:if="*{uriImagen} != null and *{uriImagen} != ''">
+            <img th:src="@{/images/curso/{img}(img=*{uriImagen})}"
+                 class="img-thumbnail"
+                 style="max-width: 200px; height: auto; object-fit: contain;">
+        </div>
+        
+        <!-- El input de archivo queda perfectamente posicionado debajo de la foto -->
+        <input type="file" class="form-control" name="imagen" accept="image/*">
     </div>
-    <div class="row g-3 align-items-end mb-1">
-      <div class="col-md-3">
-        <label class="form-label" th:text="#{areatematica.title}">Área Temática</label>
-        <select class="form-select" th:field="*{areaTematicaId}">
-            <option th:value="${''}" th:text="#{comun.select.any}"></option>
-            <option th:each="a : ${areas}"
-                    th:value="${a.id}"
-                    th:text="${a.titulo}">
-            </option>
-        </select>
-        <div class="text-danger" th:errors="*{areaTematicaId}"></div>
-      </div>
-      <div class="col-auto">
-        <label class="form-label" th:text="#{curso.nivel}">Nivel</label>
-        <input type="number" class="form-control" style="width: 7ch;" th:field="*{nivel}">
-        <div class="text-danger" th:errors="*{nivel}"></div>
-      </div>
-      <div class="col-auto">
-        <label class="form-label" th:text="#{curso.duracion}"></label>
- 		<input type="number" class="form-control" style="width: 8ch;" th:field="*{duracion}">        <div class="text-danger" th:errors="*{areaTematicaId}"></div>
-      </div>
-      <div class="col-auto">
-            <label class="form-label" th:text="#{comun.fini}">Fecha Inicio</label>
-            <input type="date" class="form-control" th:field="*{fIni}">
-            <div class="text-danger" th:errors="*{fIni}"></div>
-      </div>
-      <div class="col-auto">
-            <label class="form-label"th:text="#{comun.fFin}">Fecha Fin</label>
-            <input type="date" class="form-control" th:field="*{fFin}">
-            <div class="text-danger" th:errors="*{fFin}"></div>
-      </div>
-      <div class="col-md-3" sec:authorize="hasAnyRole('ADMIN')">
-        <label class="form-label" th:text="#{curso.responsable}">Responsable</label>
-        <select class="form-select" th:field="*{responsableId}">
-            <option th:value="${''}" th:text="#{responsable.select}"></option>
-            <option th:each="u : ${usuarios}"
-                    th:value="${u.id}"
-                    th:text="${u.nombreCompleto}">
-            </option>
-        </select>
-        <div class="text-danger" th:errors="*{responsableId}"></div>
-      </div>
-      <div sec:authorize="hasAnyRole('PROFE')">
-         <input type="hidden" th:field="*{responsableId}"/>
-      </div>
+
+    <!-- COLUMNA DERECHA: Título arriba y Descripción abajo -->
+    <div class="col-md-8 d-flex flex-column justify-content-between">
+        <!-- Bloque del Título -->
+        <div class="mb-3">
+            <label class="form-label fw-bold" th:text="#{curso.titulo}">Título</label>
+            <input type="text" class="form-control" th:field="*{titulo}">
+            <div class="text-danger small mt-1" th:errors="*{titulo}"></div>
+        </div>
+        
+        <!-- Bloque de la Descripción (Se acopla de forma natural debajo del título) -->
+        <div class="mb-0">
+            <label class="form-label fw-bold" th:text="#{comun.descripcion}">Descripción</label>
+            <textarea class="form-control" th:field="*{descripcion}" rows="3"></textarea>
+            <div class="text-danger small mt-1" th:errors="*{descripcion}"></div>
+        </div>
     </div>
+</div>
+
+<!--     <div class="row g-3 align-items-end mb-1"> -->
+<!--       <div class="col-md-3"> -->
+<!--         <label class="form-label fw-bold" th:text="#{areatematica.title}">Área Temática</label> -->
+<!--         <select class="form-select" th:field="*{areaTematicaId}"> -->
+<!--             <option th:value="${''}" th:text="#{comun.select.any}"></option> -->
+<!--             <option th:each="a : ${areas}" -->
+<!--                     th:value="${a.id}" -->
+<!--                     th:text="${a.titulo}"> -->
+<!--             </option> -->
+<!--         </select> -->
+<!--         <div class="text-danger" th:errors="*{areaTematicaId}"></div> -->
+<!--       </div> -->
+<!--       <div class="col-auto"> -->
+<!--         <label class="form-label fw-bold" th:text="#{curso.nivel}">Nivel</label> -->
+<!--         <input type="number" class="form-control" style="width: 7ch;" th:field="*{nivel}"> -->
+<!--         <div class="text-danger" th:errors="*{nivel}"></div> -->
+<!--       </div> -->
+<!--       <div class="col-auto"> -->
+<!--         <label class="form-label fw-bold" th:text="#{curso.duracion}"></label> -->
+<!--  		<input type="number" class="form-control" style="width: 8ch;" th:field="*{duracion}">        <div class="text-danger" th:errors="*{areaTematicaId}"></div> -->
+<!--       </div> -->
+<!--       <div class="col-auto"> -->
+<!--             <label class="form-label" th:text="#{comun.fini}">Fecha Inicio</label> -->
+<!--             <input type="date" class="form-control" th:field="*{fIni}"> -->
+<!--             <div class="text-danger" th:errors="*{fIni}"></div> -->
+<!--       </div> -->
+<!--       <div class="col-auto"> -->
+<!--             <label class="form-label"th:text="#{comun.fFin}">Fecha Fin</label> -->
+<!--             <input type="date" class="form-control" th:field="*{fFin}"> -->
+<!--             <div class="text-danger" th:errors="*{fFin}"></div> -->
+<!--       </div> -->
+<!--       <div class="col-md-3" sec:authorize="hasAnyRole('ADMIN')"> -->
+<!--         <label class="form-label" th:text="#{curso.responsable}">Responsable</label> -->
+<!--         <select class="form-select" th:field="*{responsableId}"> -->
+<!--             <option th:value="${''}" th:text="#{responsable.select}"></option> -->
+<!--             <option th:each="u : ${usuarios}" -->
+<!--                     th:value="${u.id}" -->
+<!--                     th:text="${u.nombreCompleto}"> -->
+<!--             </option> -->
+<!--         </select> -->
+<!--         <div class="text-danger" th:errors="*{responsableId}"></div> -->
+<!--       </div> -->
+<!--       <div sec:authorize="hasAnyRole('PROFE')"> -->
+<!--          <input type="hidden" th:field="*{responsableId}"/> -->
+<!--       </div> -->
+<!--       <div> -->
+<!-- 		<select class="form-select" th:field="*{estado}"> -->
+<!-- 		    <option th:each="est : ${T(es.alumno.uned.model.entities.EstadoCursoModulo).values()}" -->
+<!-- 		            th:if="${est.esValidoParaCurso()}" -->
+<!-- 		            th:value="${est}" -->
+<!-- 		            th:text="${est}">ACTIVO</option> -->
+<!-- 		</select> -->
+<!--       </div> -->
+<!--     </div> -->
+<div class="row g-3 align-items-end mb-4">
+  
+  <!-- 1. Área Temática (Compactado) -->
+  <div class="col-md-2">
+    <label class="form-label fw-bold" th:text="#{areatematica.title}">Área Temática</label>
+    <select class="form-select" th:field="*{areaTematicaId}">
+        <option th:value="${''}" th:text="#{comun.select.any}"></option>
+        <option th:each="a : ${areas}" th:value="${a.id}" th:text="${a.titulo}"></option>
+    </select>
+    <div class="text-danger" th:errors="*{areaTematicaId}"></div>
+  </div>
+  
+  <!-- 2. Nivel -->
+  <div class="col-auto">
+    <label class="form-label fw-bold" th:text="#{curso.nivel}">Nivel</label>
+    <input type="number" class="form-control" style="width: 6ch;" th:field="*{nivel}">
+    <div class="text-danger" th:errors="*{nivel}"></div>
+  </div>
+  
+  <!-- 3. Duración -->
+  <div class="col-auto">
+    <label class="form-label fw-bold" th:text="#{curso.duracion}"></label>
+    <input type="number" class="form-control" style="width: 7ch;" th:field="*{duracion}">        
+    <div class="text-danger" th:errors="*{areaTematicaId}"></div>
+  </div>
+  
+  <!-- 4. Fecha Inicio -->
+  <div class="col-auto">
+    <label class="form-label fw-bold" th:text="#{comun.fini}">Fecha Inicio</label>
+    <input type="date" class="form-control" th:field="*{fIni}">
+    <div class="text-danger" th:errors="*{fIni}"></div>
+  </div>
+  
+  <!-- 5. Fecha Fin -->
+  <div class="col-auto">
+    <label class="form-label fw-bold" th:text="#{comun.fFin}">Fecha Fin</label>
+    <input type="date" class="form-control" th:field="*{fFin}">
+    <div class="text-danger" th:errors="*{fFin}"></div>
+  </div>
+  
+  <!-- 6. Responsable (Cambiado col-md-3 a col-md para que consuma de forma flexible el espacio libre) -->
+  <div class="col-md" sec:authorize="hasAnyRole('ADMIN')">
+    <label class="form-label fw-bold" th:text="#{curso.responsable}">Responsable</label>
+    <select class="form-select" th:field="*{responsableId}">
+        <option th:value="${''}" th:text="#{responsable.select}"></option>
+        <option th:each="u : ${usuarios}" th:value="${u.id}" th:text="${u.nombreCompleto}"></option>
+    </select>
+    <div class="text-danger" th:errors="*{responsableId}"></div>
+  </div>
+  
+  <!-- CORRECCIÓN CLAVE: El input oculto ya no se mete dentro de un div que rompa la rejilla -->
+  <input type="hidden" th:field="*{responsableId}" sec:authorize="hasAnyRole('PROFE')"/>
+  
+  <!-- 7. Estado (Con un ancho fijo controlado de col-md-2) -->
+  <div class="col-md-2">
+    <label class="form-label fw-bold">Estado</label>
+    <select class="form-select" th:field="*{estado}">
+        <option th:each="est : ${T(es.alumno.uned.model.entities.EstadoCursoModulo).values()}"
+                th:if="${est.esValidoParaCurso()}"
+                th:value="${est}"
+                th:text="${est}">ACTIVO</option>
+    </select>
+  </div>
+
+</div>
+
+
     <div class="card mb-4 border-tertiary">
         <div class="card-header bg-body-tertiary text-black">
 			<a class="d-inline-flex align-items-center text-dark text-decoration-none" 
@@ -150,7 +236,7 @@ th:replace="~{plantilla::layout(~{::section})}">
         </div>
         </div>
     </div>
-	<div th:replace="~{fragments/curso-card :: contenidoExtra}"></div>
+	<div th:replace="~{fragments/cursofragments :: gestioncontenidoExtra}"></div>
 
     <div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, @{${urlCancel}})}"></div>
  

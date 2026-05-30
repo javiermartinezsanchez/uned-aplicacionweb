@@ -35,6 +35,11 @@ import es.alumno.uned.model.repository.UsuarioRepository;
 import es.alumno.uned.model.util.Paginacion;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
+/**
+ * Clase implementadora de {@link CursoService}
+ * 
+ * 
+ */
 @Transactional(readOnly = true)
 @Service
 public class  CursoServiceImpl implements CursoService{
@@ -234,7 +239,7 @@ public class  CursoServiceImpl implements CursoService{
 	private Paginacion<Curso, CursoDTO> construirPaginacion( Page<Curso> page) {
 	        return new Paginacion.Builder<Curso, CursoDTO>()
 	                .pagina(page)
-	                .mapper(cursoMapper::toDTO)
+	                .mapper(cursoMapper::toDTOList)
 	                .build();
 	    }
 	

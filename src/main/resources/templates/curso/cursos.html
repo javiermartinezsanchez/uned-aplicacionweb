@@ -82,6 +82,7 @@
 
 		</form>
 	</div>
+	<div th:replace="~{fragments/mensajesresultado :: errorgeneral}"></div>
 	<table class="table table-striped table-bordered">
 		<thead class="table-dark">
 			<tr>
@@ -106,7 +107,7 @@
 				</td>
 				<td class="text-truncate" style="max-width: 350px;" th:text="${curso.descripcion}" th:title="${curso.descripcion}">ID</td>
 				<td th:text="${curso.areaTematicaText}">ID</td>
-				<td class="text-end" th:text="${curso.duracion}">ID</td>
+				<td class="text-end"><span th:text="${curso.duracion}"></span> h.</td>
 				<td class="text-center" >
 				<span th:if="${curso.usuariosRegistrados == 0}" th:text="${curso.usuariosRegistrados}">0</span>
 				<span th:unless="${curso.usuariosRegistrados == 0}">

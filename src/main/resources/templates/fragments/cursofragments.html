@@ -23,63 +23,80 @@
 		        'btn-primary btn-sm px-2 text-nowrap',
 		        'bi-info-circle'
 		    )}"></div>
-		    <th:block sec:authorize="not hasAnyRole('PROFE', 'ADMIN')">
-		        <div th:if="${yaInscrito == null or !yaInscrito}" 
-		             th:insert="~{fragments/botones :: btnLink(
-		                #{curso.subscribirse},
-		                @{'/estudiante/subscribircurso/' + ${curso.id} },
-		                'btn-outline-success btn-sm px-2 text-nowrap',
-		                'bi-clipboard-check'
-		             )}">
-		        </div>
-		        <th:block th:if="${yaInscrito}" th:switch="${#strings.toString(estadoCurso)}">
-		            <div th:case="'ACTIVO'" th:insert="~{fragments/botones :: btnLink(
-		                #{curso.accion.continuar},
-		                @{'/estudiante/micurso/' + ${curso.id} },
-		                'btn-success btn-sm px-2 text-nowrap',
-		                'bi-play-fill'
-		            )}"></div>
-		            <div th:case="'REVISADO'" th:insert="~{fragments/botones :: btnLink(
-		                #{curso.accion.continuar},
-		                @{'/estudiante/micurso/' + ${curso.id} },
-		                'btn-success btn-sm px-2 text-nowrap',
-		                'bi-play-fill'
-		            )}"></div>
-		            <div th:case="'COMPLETADO'" th:insert="~{fragments/botones :: btnLinkTarget(
-		                #{curso.accion.certificado},
-		                @{'/estudiante/curso/certificado/' + ${curso.id} },
-		                false,
-		                '_blank',
-		                'btn-success btn-sm px-2 text-nowrap',
-		                'bi-award'
-		            )}"></div>
-		            <div th:case="'PENDIENTE_REVISION'" th:insert="~{fragments/botones :: btnLink(
-		                 #{curso.accion.revisar},
-		                @{'/estudiante/micurso/' + ${curso.id} },
-		                'btn-outline-warning btn-sm px-2 text-nowrap',
-		                'bi-eye'
-		            )}"></div>
-		            <div th:case="'BLOQUEADO'" th:insert="~{fragments/botones :: btnLinkTarget(
-		                #{curso.accion.bloqueado},
-		                '' },
-		                true,
-		                '_blank',
-		                'btn-disabled btn-sm px-2 text-nowrap',
-		                'bi-lock'
-		            )}"></div>
-		            
-		            <div th:case="*"></div>
-		        </th:block>
-		    </th:block>
+			<th:block sec:authorize="not hasAnyRole('PROFE', 'ADMIN')">
+			    <div th:with="
+			        ahora=${#temporals.createNow().toLocalDate()},
+			        esCursoActivo=${#strings.toString(curso.estado) == 'ACTIVO'},
+			        plazoAbierto=${(curso.fIni == null or !ahora.isBefore(curso.fIni)) and (curso.fFin == null or !ahora.isAfter(curso.fFin))},
+			        puedeSubscribirse=${(yaInscrito == null or !yaInscrito) and esCursoActivo and plazoAbierto}
+			    ">
+			        <div th:if="${puedeSubscribirse}" 
+			             th:insert="~{fragments/botones :: btnLink(
+			                #{curso.subscribirse},
+			                @{'/estudiante/subscribircurso/' + ${curso.id} },
+			                'btn-outline-success btn-sm px-2 text-nowrap',
+			                'bi-clipboard-check'
+			             )}">
+			        </div>
+					<div th:if="${(yaInscrito == null or !yaInscrito) and (not esCursoActivo or not plazoAbierto)}">
+					    <button class="btn btn-secondary btn-sm px-2 text-nowrap ms-2" disabled>
+					        <i class="bi bi-calendar-x me-1"></i>
+					        <span th:text="${esCursoActivo} ? #{curso.accion.fueradefecha} : #{curso.accion.nodisponible}">No disponible</span>
+					    </button>
+					</div>
+			        <th:block th:if="${yaInscrito}" th:switch="${#strings.toString(estadoCurso)}">
+			            <div th:case="'ACTIVO'" th:insert="~{fragments/botones :: btnLink(
+			                #{curso.accion.continuar},
+			                @{'/estudiante/micurso/' + ${curso.id} },
+			                'btn-success btn-sm px-2 text-nowrap',
+			                'bi-play-fill'
+			            )}"></div>
+			            <div th:case="'REVISADO'" th:insert="~{fragments/botones :: btnLink(
+			                #{curso.accion.continuar},
+			                @{'/estudiante/micurso/' + ${curso.id} },
+			                'btn-success btn-sm px-2 text-nowrap',
+			                'bi-play-fill'
+			            )}"></div>
+			            <div th:case="'COMPLETADO'" th:insert="~{fragments/botones :: btnLinkTarget(
+			                #{curso.accion.certificado},
+			                @{'/estudiante/curso/certificado/' + ${curso.id} },
+			                false,
+			                '_blank',
+			                'btn-success btn-sm px-2 text-nowrap',
+			                'bi-award'
+			            )}"></div>
+			            <div th:case="'PENDIENTE_REVISION'" th:insert="~{fragments/botones :: btnLink(
+			                 #{curso.accion.revisar},
+			                @{'/estudiante/micurso/' + ${curso.id} },
+			                'btn-outline-warning btn-sm px-2 text-nowrap',
+			                'bi-eye'
+			            )}"></div>
+			            <div th:case="'BLOQUEADO'" th:insert="~{fragments/botones :: btnLinkTarget(
+			                #{curso.accion.bloqueado},
+			                '' },
+			                true,
+			                '_blank',
+			                'btn-disabled btn-sm px-2 text-nowrap',
+			                'bi-lock'
+			            )}"></div>
+			            <div th:case="'BAJA'" th:insert="~{fragments/botones :: btnLinkTarget(
+			                #{curso.accion.deshabilitado},
+			                '' },
+			                true,
+			                '_blank',
+			                'btn-danger btn-sm px-2 text-nowrap d-none',
+			                'bi-slash-circle'
+			            )}"></div>
+			            <div th:case="*"></div>
+			        </th:block>
+			    </div>
+			</th:block>
 		</div>
-
         <div class="d-flex align-items-center justify-content-between text-muted small border-top pt-2">
             <span class="fw-semibold">⭐ <span th:text="${curso.valoracion}">4.8</span> / 5</span>
 			<span><i class="bi bi-clock me-2"></i><strong th:text="${curso.duracion}">40</strong>h.</span>
             <span class="fw-semibold text-secondary">👥 <span th:text="${curso.usuariosRegistrados}">0</span></span>
-
         </div>
-   
     </div>
 </div>
 
@@ -96,7 +113,9 @@
 					<div>
 						<h1 class="fw-bold" th:text="*{titulo}">Título del curso</h1>
 						<p class="text-muted fs-5" th:text="*{descripcion}">Descripción del curso...</p>
-					</div>
+        <span class="text-secundary small mb-3 d-block"
+           th:text="${curso.areaTematicaText}">
+        </span>					</div>
 					
 					<div th:insert="~{:: infocursoEstudiante}"
 					th:with="yaInscrito=${esEstudiante}, 
@@ -225,40 +244,130 @@
 </div>
 <div th:fragment="contenidosExtra">
 		
-			<div th:if="${not #lists.isEmpty(curso.contenidosExtra)}">
-			<hr class="my-5">
-				<h3 class="fw-bold mb-3" th:text="#{curso.contenidosExtra}">Contenidos extra</h3>
+	<div th:if="${not #lists.isEmpty(curso.contenidosExtra)}">
+	<hr class="my-5">
+    <div class="accordion mb-3" id="extraSectionAccordion">
+        <div class="accordion-item border rounded shadow-sm">
+            
+            <!-- Cabecera idéntica a la de módulos -->
+            <h3 class="accordion-header">
+                <!-- px-3 py-3 para despegar el texto y el chevron; bg-light y rounded para consistencia -->
+                <button class="accordion-button bg-light text-dark fw-bold px-3 py-3 fs-3 shadow-none rounded" 
+                        type="button" 
+                        data-bs-toggle="collapse" 
+                        data-bs-target="#contenedorGlobalExtra" 
+                        aria-expanded="true" 
+                        aria-controls="contenedorGlobalExtra"
+                        th:text="#{curso.contenidosExtra}">
+                    Contenidos extra
+                </button>
+            </h3>
 
-				<ul class="list-group">
-				    <li class="list-group-item d-flex justify-content-between align-items-center" 
-				        th:each="extra : ${curso.contenidosExtra}">
-				        
-				        <span th:text="${extra.descripcion}">Contenido extra...</span>
-				        
-				        <div>
-				            <span sec:authorize="isAuthenticated()">
-				                <a th:href="@{/contenido-extra/{idCurso}/{idConten}(idCurso=${curso.id}, idConten=${extra.id})}" 
-				                   target="_blank" 
-				                   class="btn btn-primary btn-sm">
-				                   <span th:text="#{curso.contenidoextra.ver.contenido}">Iniciar sesión</span>
-				                </a>
-				            </span>
+            <!-- Contenedor colapsable (inicialmente expandido gracias a 'show') -->
+            <div id="contenedorGlobalExtra" class="accordion-collapse collapse show">
+                <!-- p-3 para que la lista interna no toque las paredes del contenedor principal -->
+                <div class="accordion-body p-3">
+					<ul class="list-group">
+					    <li class="list-group-item d-flex justify-content-between align-items-center" 
+					        th:each="extra : ${curso.contenidosExtra}">
+					        
+					        <span th:text="${extra.descripcion}">Contenido extra...</span>
+					        
+					        <div>
+					            <span sec:authorize="isAuthenticated()">
+					                <a th:href="@{/contenido-extra/{idCurso}/{idConten}(idCurso=${curso.id}, idConten=${extra.id})}" 
+					                   target="_blank" 
+					                   class="btn btn-primary btn-sm">
+					                   <span th:text="#{curso.contenidoextra.ver.contenido}">Iniciar sesión</span>
+					                </a>
+					            </span>
+					
+					            <span sec:authorize="isAnonymous()">
+					                <button class="btn btn-secondary btn-sm" disabled>
+					                   🔒 <span th:text="#{login.iniciar.sesion}">Iniciar sesión</span>
+					                </button>
+					            </span>
+					        </div>
+					    </li>
+					</ul>
+				</div>
+			</div>	
+		</div>
+    </div>
+    </div>
+</div>
+
+<div th:fragment="gestioncontenidoExtra" class="card mt-3">
+
+   <div class="card-header bg-body-tertiary text-black">
+		<a class="d-inline-flex align-items-center text-dark text-decoration-none" 
+           data-bs-toggle="collapse" data-bs-target="#datosExtra" role="button" aria-expanded="false">
+           <span class="me-2 icono-giro">▼</span>
+           <h5 class="mb-0" th:text="#{curso.contenidosExtra}"></h5>
+   		</a>
+   </div>
+   <div class="collapse" id="datosExtra">
+      <div class="card-body">
+        <table class="table" id="tablaContenidos">
+            <thead>
+                <tr>
+                    <th th:text="#{curso.contenidosExtra}">Descripción</th>
+                    <th th:text="#{comun.tipo(#{curso.contenido})}">Tipo</th>
+                    <th th:text="#{curso.contenidosExtra}">Recurso (Archivo/URL)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+        		<tr th:each="contenido, stat : *{contenidosExtra}">
+            		<input type="hidden" th:field="*{contenidosExtra[__${stat.index}__].id}" />
+            		<td>
+                		<input type="text" th:field="*{contenidosExtra[__${stat.index}__].descripcion}" 
+                       class="form-control" required />
+            		</td>
+            		<td>
+                		<select th:field="*{contenidosExtra[__${stat.index}__].tipoContenido}" 
+                        	class="form-select" th:onchange="|toggleInputType(this, ${stat.index})|">
+                    		<option value="EXTERNO" th:text="#{curso.contenidoextra.externo.url}">Externo (URL)</option>
+                    		<option value="PROPIO" th:text="#{curso.contenidoextra.propio.archivo}">Propio (Archivo)</option>
+                		</select>
+            		</td>
+            		<td>
+						<div th:switch="${contenido.tipoContenido?.name()}" class="d-inline">
 				
-				            <span sec:authorize="isAnonymous()">
-				                <button class="btn btn-secondary btn-sm" disabled>
-				                   🔒 <span th:text="#{login.iniciar.sesion}">Iniciar sesión</span>
-				                </button>
-				            </span>
-				        </div>
-				    </li>
-				</ul>
+				    		<div th:case="PROPIO" class="input-group d-inline-flex" style="vertical-align: middle;">
+				        		<label class="btn btn-outline-secondary btn-sm" th:for="'file-' + ${stat.index}">
+				            		<i class="bi bi-file-earmark-pdf"></i> <span th:text="#{curso.modulo.adjuntar}">Adjuntar</span>
+				        		</label>
+				        		<input type="file" name="file" th:id="'file-' + ${stat.index}" class="d-none" accept="application/pdf" />
+				        		<input type="text" class="form-control form-control-sm bg-light text-truncate" 
+									th:value="${contenido.nombreReal != null ? '📄  ' + contenido.nombreReal : #messages.msg('contenido.archivo.vacio')}" readonly />
+				                <input type="hidden" th:field="*{contenidosExtra[__${stat.index}__].id}" />
+				        		<input type="hidden" th:field="*{contenidosExtra[__${stat.index}__].nombreReal}" />
+				    		</div>
+						    <input th:case="EXTERNO" type="url" th:field="*{contenidosExtra[__${stat.index}__].uri}" 
+				           		class="form-control form-control-sm d-inline-block" placeholder="https://..." style="width: auto;" />
+				    		<span th:case="*" class="badge bg-secondary"></span>	            
+						</div>
+            		</td>
+            		<td>
+                		<button type="button" class="btn text-danger" 
+                       		th:onclick="this.closest('tr').remove()">
+                   			<i class="bi bi-x-circle-fill"></i>
+                		</button>
+            		</td>
+        		</tr>
+        </table>
+        <div class="text-end">
+	        <button type="button" class="btn btn-sm btn-outline-success" onclick="addContenidoExtraRow()">
+	            <i class="bi bi-plus-lg"></i><span th:text="#{curso.contenidosExtra}">Extra</span>
+	        </button>
+        </div>
+      </div>
     </div>
 </div>
 <!-- fragment: valoracionCurso -->
 <div th:fragment="valoracionCurso(notaMedia, totalVotos, esFormulario)" class="w-100 bg-transparent p-0 m-0">
     <div class="row align-items-center g-2 w-100">
-        
-        <!-- BLOQUE 1: Mostrar Media Actual (Ocupa la mitad izquierda) -->
         <div class="col-sm-6 d-flex align-items-center gap-2 text-nowrap">
             <span class="fs-4 fw-bold text-dark avg-rating-text" th:text="${#numbers.formatDecimal(notaMedia, 1, 1)}">0.0</span>
             <div class="text-warning fs-5">
@@ -282,15 +391,33 @@
 	            </div>
 	        </div>
         </th:block>
-        <div th:if="!${esFormulario}" sec:authorize="!isAuthenticated() or hasAnyRole('ESTUD')"
-		        class="col-sm-6 d-flex align-items-center justify-content-sm-end gap-3 text-nowrap" 
-		        th:insert="~{fragments/botones :: btnLink(
-						        #{curso.subscribirse},
-						        @{'/estudiante/subscribircurso/' + ${curso.id} },
-						        'btn-outline-success btn-sm px-2 text-nowrap',
-						        'bi-clipboard-check'
-							    )}" >
-		</div>			           
+		<div th:if="!${esFormulario}" sec:authorize="!isAuthenticated() or hasAnyRole('ESTUD')"
+		     class="col-sm-6 d-flex align-items-center justify-content-sm-end gap-3 text-nowrap"
+		     th:with="
+		        ahora=${#temporals.createNow().toLocalDate()},
+		        esCursoActivo=${#strings.toString(curso.estado) == 'ACTIVO'},
+		        plazoAbierto=${(curso.fIni == null or !ahora.isBefore(curso.fIni)) and (curso.fFin == null or !ahora.isAfter(curso.fFin))},
+		        puedeSubscribirse=${esCursoActivo and plazoAbierto}
+		     ">
+		
+		    <!-- CASO 1: Permite la suscripción (Activo y dentro de plazo) -->
+		    <th:block th:if="${puedeSubscribirse}" 
+		              th:insert="~{fragments/botones :: btnLink(
+		                            #{curso.subscribirse},
+		                            @{'/estudiante/subscribircurso/' + ${curso.id} },
+		                            'btn-outline-success btn-sm px-2 text-nowrap',
+		                            'bi-clipboard-check'
+		                          )}" />
+		
+		    <!-- CASO 2: Botón deshabilitado (Fuera de plazo o Inactivo) -->
+		    <th:block th:if="${not puedeSubscribirse}">
+		        <button class="btn btn-secondary btn-sm px-2 text-nowrap" disabled>
+		            <i class="bi bi-calendar-x me-1"></i>
+		            <span th:text="${esCursoActivo} ? #{curso.accion.fueradefecha} : #{curso.accion.nodisponible}">No disponible</span>
+		        </button>
+		    </th:block>
+		    
+		</div>
     </div>
 </div>
 <!-- BLOQUE DE LA ENTREGA CON COLOR DINÁMICO SEGÚN EL ESTADO -->
@@ -315,8 +442,6 @@
         ${modulo.estado?.name() == 'PENDIENTE_REVISION'} ? 'btn-outline-warning btn-sm px-2 text-nowrap' : 'btn-outline-primary btn-sm px-2 text-nowrap', 
         'bi-file-earmark-arrow-down-fill me-1')}"></th:block>
 </div>
-
-
 <div th:if="${(modulo.estado?.name() == 'PENDIENTE_REVISION' or modulo.estado?.name() == 'REVISADO' or modulo.estado?.name() == 'COMPLETADO') and modulo.tipoModulo?.name() =='ENTREGA_OBLIGATORIA'}" class="row g-3 mb-3">
     
     <!-- Calificación (Solo si está REVISADO) -->
@@ -324,14 +449,11 @@
         <strong class="text-dark d-block mb-1" th:text="#{curso.modulo.calificacion}">Calificación</strong>
         <p class="text-secondary fs-5 mb-0 fw-bold" th:text="${modulo.calificacion}">5.0</p>
     </div>
-    
-    <!-- Notas / Descripción -->
     <div class="col-md-9">
         <strong class="text-dark d-block mb-1" th:text="#{curso.modulo.notascalificacion}">Notas calificación</strong>
         <p class="text-secondary fs-6 mb-0" style="white-space: pre-line;" th:text="${modulo.notasCalificacion}">Notas...</p>
     </div>
     <th:block th:if="${modulo.estado?.name() == 'REVISADO'}">
-    <!-- Botón Completar Módulo (En su propia fila inferior para que no empuje el diseño) -->
     <div class="col-12 mt-3">
         <form th:action="@{/estudiante/modulo/completar}" method="POST" enctype="multipart/form-data" class="d-inline">
             <input type="hidden" name="idCurso" th:value="${modulo.cursoId}" />

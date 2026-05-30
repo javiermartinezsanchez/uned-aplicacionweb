@@ -11,6 +11,8 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -53,6 +55,9 @@ public class Curso {
 	private LocalDate fIni;
 	@Column(name="FECHA_FIN")
 	private LocalDate fFin;
+    @Enumerated(EnumType.STRING)
+    private EstadoCursoModulo estado = EstadoCursoModulo.ACTIVO; // ACTIVO, COMPLETADO, BLOQUEADO, BAJA
+
 	@Column(name="FECHA_INS")
 	private LocalDateTime fIns;
 
@@ -175,6 +180,16 @@ public class Curso {
 	public void setfIns(LocalDateTime fIns) {
 		this.fIns = fIns;
 	}
+
+	public EstadoCursoModulo getEstado() {
+		return estado;
+	}
+
+
+	public void setEstado(EstadoCursoModulo estado) {
+		this.estado = estado;
+	}
+
 
 	public String getUserIns() {
 		return userIns;

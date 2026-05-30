@@ -35,7 +35,7 @@ public class InscripcionServiceImpl implements InscripcionService {
     public void suscribirEstudiante(Long cursoId, String username) {
         // 1. Recuperamos las entidades base
         Curso curso = cursoRepository.findById(cursoId)
-            .orElseThrow(() -> new CursoNotExistException("msg.exception.notfound", null, "curso.title"));
+            .orElseThrow(() -> new CursoNotExistException("msg.exception.notfound", "curso.title"));
             
         Estudiante estudiante = estudianteRepository.findByUsuarioEmail(username)
             .orElseThrow(() -> new EstudianteNotExistException("msg.exception.notfound", null, "estudiante.titulo"));

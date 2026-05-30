@@ -9,6 +9,9 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
+import es.alumno.uned.model.entities.EstadoCursoModulo;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -54,6 +57,7 @@ public class CursoDTO {
     @NotNull(message = "{validations.curso.fechaFin.mandatory}")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fFin;
+    private EstadoCursoModulo estado; // ACTIVO, COMPLETADO, BLOQUEADO, BAJA
 
     private LocalDateTime fIns;
     private String userIns;
@@ -177,6 +181,12 @@ public class CursoDTO {
 	public void setFFin(LocalDate fFin) {
 		this.fFin = fFin;
 	}
+	public EstadoCursoModulo getEstado() {
+		return estado;
+	}
+	public void setEstado(EstadoCursoModulo estado) {
+		this.estado = estado;
+	}
 
 	public LocalDateTime getfIns() {
 		return fIns;
@@ -257,12 +267,10 @@ public class CursoDTO {
 		return numVistas;
 	}
 	public void setNumVistas(Integer numVistas) {
+		
 		this.numVistas = numVistas;
 	}
 	public Integer getProgreso() {
-		return 0;
-	}
-	public Integer getEstado() {
 		return 0;
 	}
 

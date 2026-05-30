@@ -52,7 +52,7 @@ public class CursoMapper {
         entity.setDuracion(dto.getDuracion());
         entity.setfIni(dto.getFIni());
         entity.setfFin(dto.getFFin());
-
+        entity.setEstado(dto.getEstado());
         AreaTematica area = areaTematicaRepository.findById(dto.getAreaTematicaId())
                 .orElseThrow(() -> new IllegalArgumentException("Área temática no encontrada"));
         entity.setAreaTematica(area);
@@ -73,9 +73,23 @@ public class CursoMapper {
      * @return CursoDTO correspondiente.
      */
     public CursoDTO toDTO(Curso entity) {
-
+    	var dto = toDTOList(entity);
+        dto.setModulos(entity.getModulos().stream()
+        		.map(cursoModuloMapper :: toDTO)
+        		.toList());
+        dto.setContenidosExtra(entity.getContenidosExtra().stream()
+        		.map(c -> new ContenidoExtraDTO(c.getId(), c.getDescripcion(), c.getUri(), c.getTipoContenido(),
+        				c.getNombreReal(), c.getContentType()))
+        		.toList());
+        return dto;
+    }
+	/**
+	 * Se genera un DTO "reducido" para listados.
+	 * @param entity Entidad a convertir.
+	 * @return DTO resultante.
+	 */
+    public CursoDTO toDTOList(Curso entity) {
         CursoDTO dto = new CursoDTO();
-
         dto.setId(entity.getId());
         dto.setTitulo(entity.getTitulo());
         dto.setDescripcion(entity.getDescripcion());
@@ -88,21 +102,17 @@ public class CursoMapper {
         dto.setResponsableId(entity.getResponsable().getId());
         dto.setNombreResponsable(getNombreCompleto(entity.getResponsable()));       
         dto.setUriImagen(entity.getUriImagen());
+        dto.setEstado(entity.getEstado());
         dto.setfIns(entity.getfIns());
         dto.setUserIns(entity.getUserIns());
         dto.setValoracion(entity.getValoracion());
         dto.setNumValoraciones(entity.getValoraciones().size());
         dto.setUsuariosRegistrados(entity.getUsuariosRegistrados());
         dto.setNumVistas(entity.getNumVistas());
-        dto.setModulos(entity.getModulos().stream()
-        		.map(cursoModuloMapper :: toDTO)
-        		.toList());
-        dto.setContenidosExtra(entity.getContenidosExtra().stream()
-        		.map(c -> new ContenidoExtraDTO(c.getId(), c.getDescripcion(), c.getUri(), c.getTipoContenido(),
-        				c.getNombreReal(), c.getContentType()))
-        		.toList());
+    	
         return dto;
     }
+    
     /**
      * Devolvemos el nombre completo del Usuario responsable del curso (profesor)
      * <p>El formato será: (nombre + " "+ apellido1 + " "+ apellido2)

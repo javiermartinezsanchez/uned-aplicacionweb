@@ -83,7 +83,7 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 	public EstudianteCursoDTO getCursoModulo(Long idResponsable, Long idEstudiante, Long idCurso, Long idModulo) {
 		var ec = estudianteCursoRepository.getReferenceById(new EstudianteCursoId(idEstudiante, idCurso));
 		if (ec == null) 
-			throw new CursoNotExistException("msg.exception.notfound.", null, "curso.title");
+			throw new CursoNotExistException("msg.exception.notfound.", "curso.title");
 		
 		if (!ec.getCurso().getResponsable().getId().equals(idResponsable)){
 			throw new ResponsableNotMachtException("error.curso.responsablenotmatch");
