@@ -238,7 +238,7 @@ th:replace="~{plantilla::layout(~{::section})}">
     </div>
 	<div th:replace="~{fragments/cursofragments :: gestioncontenidoExtra}"></div>
 
-    <div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, @{${urlCancel}})}"></div>
+    <div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, ${urlCancel})}"></div>
  
 </form>
 

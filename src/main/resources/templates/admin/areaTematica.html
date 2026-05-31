@@ -24,7 +24,7 @@ th:replace="~{plantilla::layout(~{::section})}">
         </div> 
         <div class="text-danger" th:errors="*{descripcion}"></div>
     </div>
-    <div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, @{${urlCancel}})}"></div>
+    <div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, ${urlCancel})}"></div>
 </form>
 <div th:replace="~{fragments/mensajesresultado :: errorgeneral}"></div>
 </section>

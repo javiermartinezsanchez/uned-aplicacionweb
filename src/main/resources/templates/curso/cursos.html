@@ -74,7 +74,7 @@
 	    </div>
 	   <div class="col-md-2 d-flex align-items-end" th:insert="~{fragments/botones :: btnLink(
 			        texto=#{command.limpiar},
-			        url=${url},
+			        url=@{${url}},
 			        estilo='btn-secondary w-100',
 			        icono='bi-arrow-counterclockwise'
 			    )}">

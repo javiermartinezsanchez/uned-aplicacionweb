@@ -74,7 +74,7 @@ th:replace="~{plantilla::layout(~{::section})}">
             </small>
         </div>
     </div>
-        <div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, @{${urlCancel}})}"></div>
+        <div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, ${urlCancel})}"></div>
 </form>
 </div>
 

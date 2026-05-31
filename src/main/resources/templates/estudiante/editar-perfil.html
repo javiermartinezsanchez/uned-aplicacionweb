@@ -12,7 +12,7 @@
 <form th:action="@{${url}}" th:object="${form}" method="post">
 	<frmUsuario th:replace="~{fragments/frmUsuario :: frmUsuario}"></frmUsuario>
 	<frmUsuario th:replace="~{fragments/frmUsuario :: frmEstudiante()}"></frmUsuario>
-	<div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, @{${urlCancel}})}"></div>
+	<div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, ${urlCancel})}"></div>
 </form>
 
 </section>

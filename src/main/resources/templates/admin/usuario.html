@@ -11,7 +11,7 @@ th:replace="~{plantilla::layout(~{::section})}">
 <div th:replace="~{fragments/mensajesresultado :: mensajes}"></div>
 <form th:action="@{${url}}" th:object="${form}" method="post">
 <div th:replace="~{fragments/frmUsuario :: frmUsuario}"></div>
-<div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, @{${urlCancel}})}"></div>
+<div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, ${urlCancel})}"></div>
 </form>
 <div th:replace="~{fragments/mensajesresultado :: errorgeneral}"></div>
 </section>

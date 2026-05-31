@@ -38,9 +38,9 @@ public class AdminFicherosController extends BaseCrudController {
 	    boolean eliminado = mantenimientoFicherosService.deleteFile(nombreArchivo, tipoFichero);
 	    
 	    if (eliminado) {
-	        redirectAttributes.addFlashAttribute("success", "Archivo " + tipoFichero + " eliminado correctamente.");
+	        redirectAttributes.addFlashAttribute("success", "mantenimiento.feedback.exito");
 	    } else {
-	        redirectAttributes.addFlashAttribute("error", "No se pudo eliminar el recurso.");
+	        redirectAttributes.addFlashAttribute("error", "mantenimiento.feedback.error");
 	    }
 	    return "redirect:/admin/ficheros";
 	}

@@ -119,11 +119,9 @@
                       th:text="${modulo.notasCalificacion}"></textarea>
         </div>
     </div>
-    
-    <!-- FILA INFERIOR: Botones de acción -->
     <div class="row">
         <div class="col-12 d-flex justify-content-end gap-2 border-top pt-2">
-            <div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, @{${urlCancel}})}"></div>
+            <div th:replace="~{fragments/botones :: btnGroup(#{command.save}, #{command.cancel}, ${urlCancel})}"></div>
         </div>
     </div>
     

@@ -28,15 +28,15 @@ public interface CursoService {
 	
 	/**
 	 * Devolvemos un curso para el id enviado y el responsable.id que le enviamos.
-	 * <p>Básicamente lo utilizaremos en los diferentes "get" de cursos para evitar que un profesor (responsable), pueda ver/modificar los 
-	 * demás cursos asignados a otros profesores.
-	 * <p>En el caso de no existir, o que esté asignado a otro profesor, se generará un {@code CursoNotExistException}
+	 * <p>Se utilizará para registrar las visitas a un curso por parte de usuarios anónimos o estudiantes 
+	 * 
+	 * <p>En el caso de no existir, se devuelve un curso vacio.
 	 * 
 	 * @param idCurso Id del Curso a Buscar.
-	 * @param idUsuario Id del Usuario que realiza la consulta.
+	 * @param marcarVisita Cadena que nos indica que hay que registrar la visita.
 	 * @return {@link CursoDTO} Encontrado.
 	 */
-	public CursoDTO getCurso(Long idCurso, Long idUsuario);
+	public CursoDTO getCurso(Long idCurso, String marcarVisita);
 	
 	/**
 	 * Método para dar de alta o modificar un curso.

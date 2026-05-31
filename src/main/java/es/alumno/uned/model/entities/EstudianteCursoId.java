@@ -12,9 +12,9 @@ public class EstudianteCursoId implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 6586141451583889745L;
-	@Column(name = "USUARIO_ID", nullable = false)
+	@Column(name = "usuario_id", nullable = false)
 	private Long estudianteId;
-	@Column(name = "CURSO_ID", nullable = false)
+	@Column(name = "curso_id", nullable = false)
     private Long cursoId;
     public EstudianteCursoId() {};
 	public EstudianteCursoId(Long estudianteId, Long cursoId) {

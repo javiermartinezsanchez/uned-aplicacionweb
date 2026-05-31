@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToMany;
@@ -24,10 +25,12 @@ public class EstudianteCurso {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("estudianteId")
+    @JoinColumn(name = "usuario_id")
     private Estudiante estudiante;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("cursoId")
+    @JoinColumn(name = "curso_id")
     private Curso curso;
 
     @Column(name="FECHA_SUBSCRIPCION", nullable = false)

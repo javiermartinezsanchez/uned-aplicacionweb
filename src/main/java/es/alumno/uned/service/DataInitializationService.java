@@ -185,65 +185,65 @@ public class DataInitializationService {
 				.orElse(null);
 		if (profesor != null) {		
 			if (cursoRepo.findByTitulo("Spring Boot desde Cero").isEmpty()) {
-				cursoRepo.save(new Curso(null,"Spring Boot desde Cero" , "Curso práctico para aprender a crear aplicaciones web con Spring Boot.",
+				cursoRepo.save(new Curso("Spring Boot desde Cero" , "Curso práctico para aprender a crear aplicaciones web con Spring Boot.",
 					"", 1, areaRepo.findByTitulo("Comunicación"),profesor, 40, LocalDate.parse("2026-05-10"),  LocalDate.parse("2026-06-10"), LocalDateTime.now(), "CARGAINICIAL"));
 			}
 			if (cursoRepo.findByTitulo("Java Profesional").isEmpty()) {
-				cursoRepo.save(new Curso(null,"Java Profesional","Conceptos avanzados de Java, colecciones, concurrencia y buenas prácticas.",
+				cursoRepo.save(new Curso("Java Profesional","Conceptos avanzados de Java, colecciones, concurrencia y buenas prácticas.",
 					"",3,areaRepo.findByTitulo("Comunicación"),profesor,60,LocalDate.parse("2026-04-15"),LocalDate.parse("2026-05-30"), LocalDateTime.now(), "CARGAINICIAL"));
 			}
 			if (cursoRepo.findByTitulo("Ciberseguridad para Principiantes").isEmpty()) {
-				cursoRepo.save(new Curso(null,"Ciberseguridad para Principiantes","Fundamentos de seguridad informática, amenazas y medidas de protección.",
+				cursoRepo.save(new Curso("Ciberseguridad para Principiantes","Fundamentos de seguridad informática, amenazas y medidas de protección.",
 					"",1,areaRepo.findByTitulo("Comunicación"), profesor,30,LocalDate.parse("2026-06-01"),  LocalDate.parse("2026-06-20"), LocalDateTime.now(), "CARGAINICIAL"));
 			}
 			if (cursoRepo.findByTitulo("Machine Learning con Python").isEmpty()) {
-				cursoRepo.save(new Curso(null,"Machine Learning con Python","Modelos supervisados, no supervisados y pipelines de ML.",
+				cursoRepo.save(new Curso("Machine Learning con Python","Modelos supervisados, no supervisados y pipelines de ML.",
 					"", 4, areaRepo.findByTitulo("Comunicación"),profesor,80,LocalDate.parse("2026-07-01"),LocalDate.parse("2026-08-15"), LocalDateTime.now(), "CARGAINICIAL"));
 			}
 			if (cursoRepo.findByTitulo("SQL desde Cero").isEmpty()) {
-				cursoRepo.save(new Curso(null,"SQL desde Cero", "Consultas, joins, funciones y modelado relacional.",
+				cursoRepo.save(new Curso("SQL desde Cero", "Consultas, joins, funciones y modelado relacional.",
 					"",1, areaRepo.findByTitulo("Comunicación"),profesor,35,LocalDate.parse("2026-05-05"), LocalDate.parse("2026-05-25"), LocalDateTime.now(), "CARGAINICIAL"));
 			}
 			if (cursoRepo.findByTitulo("Linux para Administradores").isEmpty()) {
-				cursoRepo.save(new Curso(null,"Linux para Administradores","Gestión de usuarios, permisos, servicios y seguridad.",
+				cursoRepo.save(new Curso("Linux para Administradores","Gestión de usuarios, permisos, servicios y seguridad.",
 					"", 3, areaRepo.findByTitulo("Comunicación"), profesor,50,LocalDate.parse("2026-06-10"),LocalDate.parse("2026-07-05"), LocalDateTime.now(), "CARGAINICIAL"));
 			}
 			if (cursoRepo.findByTitulo("React Moderno").isEmpty()) {
-				cursoRepo.save(new Curso(null,"React Moderno","Hooks, componentes, estado global y buenas prácticas.",
+				cursoRepo.save(new Curso("React Moderno","Hooks, componentes, estado global y buenas prácticas.",
 			"", 2, areaRepo.findByTitulo("Comunicación"),profesor,45, LocalDate.parse("2026-04-20"),  LocalDate.parse("2026-05-25"), LocalDateTime.now(), "CARGAINICIAL"));
 			}
 			if (cursoRepo.findByTitulo("Power BI Profesional").isEmpty()) {
-				cursoRepo.save(new Curso(null,"Power BI Profesional","Modelado, DAX, dashboards y publicación."
+				cursoRepo.save(new Curso("Power BI Profesional","Modelado, DAX, dashboards y publicación."
 					,"", 2, areaRepo.findByTitulo("Comunicación"),profesor,30,LocalDate.parse("2026-05-15"),LocalDate.parse("2026-06-05"), LocalDateTime.now(), "CARGAINICIAL"));
 			}
 			if (cursoRepo.findByTitulo("Fundamentos de Redes").isEmpty()) {
-				cursoRepo.save(new Curso(null,"Fundamentos de Redes","TCP/IP, routing, switching y configuración básica.",
+				cursoRepo.save(new Curso("Fundamentos de Redes","TCP/IP, routing, switching y configuración básica.",
 					"",1, areaRepo.findByTitulo("Comunicación"),profesor,40,LocalDate.parse("2026-06-01"), LocalDate.parse("2026-06-30"), LocalDateTime.now(), "CARGAINICIAL"));
 			}
 
 			if (cursoRepo.findByTitulo("Diseño y Arquitectura").isEmpty()) {
-				cursoRepo.save(new Curso(null,"Diseño y Arquitectura","Patrones, principios SOLID y arquitectura hexagonal.",
+				cursoRepo.save(new Curso("Diseño y Arquitectura","Patrones, principios SOLID y arquitectura hexagonal.",
 					"", 4, areaRepo.findByTitulo("Comunicación"), profesor,70,LocalDate.parse("2026-07-10"), LocalDate.parse("2026-08-20"), LocalDateTime.now(), "CARGAINICIAL"));
 			}
 			if (cursoRepo.findByTitulo("Gestión del Estrés").isEmpty()) {
-				cursoRepo.save(new Curso(null,"Gestión del Estrés","Técnicas prácticas para identificar, reducir y gestionar el estrés en la vida diaria.",
+				cursoRepo.save(new Curso("Gestión del Estrés","Técnicas prácticas para identificar, reducir y gestionar el estrés en la vida diaria.",
 					"",1,areaRepo.findByTitulo("Comunicación"), profesor,20,LocalDate.parse("2026-05-10"),  LocalDate.parse("2026-05-20"), LocalDateTime.now(), "CARGAINICIAL"));
 			}
 			if (cursoRepo.findByTitulo("Hablar en Público").isEmpty()) {
-				cursoRepo.save(new Curso(null,"Hablar en Público", "Desarrollo de habilidades de comunicación, oratoria y control del lenguaje corporal.",
+				cursoRepo.save(new Curso("Hablar en Público", "Desarrollo de habilidades de comunicación, oratoria y control del lenguaje corporal.",
 					"", 2, areaRepo.findByTitulo("Comunicación"), profesor,25,LocalDate.parse("2026-06-01"), LocalDate.parse("2026-06-18"), LocalDateTime.now(), "CARGAINICIAL"));
 			}
 			if (cursoRepo.findByTitulo("Nutrición para la Vida").isEmpty()) {
-				cursoRepo.save(new Curso(null,"Nutrición para la Vida", "Fundamentos de alimentación equilibrada, lectura de etiquetas y planificación de menús.",
+				cursoRepo.save(new Curso("Nutrición para la Vida", "Fundamentos de alimentación equilibrada, lectura de etiquetas y planificación de menús.",
 					"", 1, areaRepo.findByTitulo("Comunicación"),profesor,30,	LocalDate.parse("2026-05-15"), LocalDate.parse("2026-06-05"), LocalDateTime.now(), "CARGAINICIAL"));
 			}
 			if (cursoRepo.findByTitulo("Inteligencia Emocional").isEmpty()) {
-					cursoRepo.save(new Curso(null,"Inteligencia Emocional", "Gestión de emociones, empatía, autocontrol y habilidades sociales para el día a día.",
+					cursoRepo.save(new Curso("Inteligencia Emocional", "Gestión de emociones, empatía, autocontrol y habilidades sociales para el día a día.",
 					"",3, areaRepo.findByTitulo("Comunicación"),profesor,40,LocalDate.parse("2026-07-01"),LocalDate.parse("2026-07-25"), LocalDateTime.now(), "CARGAINICIAL"));
 			}
 
 			if (cursoRepo.findByTitulo("Creatividad Práctica").isEmpty()) {
-				cursoRepo.save(new Curso(null,"Creatividad Práctica", "Métodos creativos para generar ideas, resolver problemas y fomentar la innovación personal."
+				cursoRepo.save(new Curso("Creatividad Práctica", "Métodos creativos para generar ideas, resolver problemas y fomentar la innovación personal."
 					,"",2, areaRepo.findByTitulo("Comunicación"), profesor,35, LocalDate.parse("2026-06-10"), LocalDate.parse("2026-06-30") , LocalDateTime.now(), "CARGAINICIAL"));
 			}
 			
@@ -324,6 +324,8 @@ public class DataInitializationService {
 				""",TipoModulo.ENTREGA_OBLIGATORIA,LocalDateTime.now(),"CARGAINICIAL"));
 			}
 
+			// generación de cursomodulo para datos iniciales.
+			// CursoModulo(Curso curso, Modulo modulo, Integer orden, Integer peso)
 			System.out.println("--------------------------------------------");
 			System.out.println("----------FIN DE CARGA DE DATOS-------------");
 			System.out.println("--------------------------------------------");

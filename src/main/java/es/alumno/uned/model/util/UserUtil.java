@@ -19,9 +19,9 @@ public class UserUtil {
 	 *   Nos define la url base a partir del rol
 	 *   
 	 *   <ul>
-	 *   <li>ROLE_ADMIN -> admin </li>
-	 *   <li>ROLE_PROFE -> profesor </li>
-	 *   <li>ROLE_ESTUD -> estudiante </li>
+	 *   <li>ROLE_ADMIN -> /admin </li>
+	 *   <li>ROLE_PROFE -> /profesor </li>
+	 *   <li>ROLE_ESTUD -> /estudiante </li>
 	 *   <li>Si no está logado: -> "" </li>
 	 *   
 	 *   </ul>
@@ -30,13 +30,13 @@ public class UserUtil {
 	 */
 	public static String defineHome(Set<String> roles) {
 	    if (roles.contains("ROLE_ADMIN")) {
-	        return "admin";
+	        return "/admin";
 	    }
 	    if (roles.contains("ROLE_PROFE")) {
-	        return "profesor";
+	        return "/profesor";
 	    }
 	    if (roles.contains("ROLE_ESTUD")) {
-	        return "estudiante";
+	        return "/estudiante";
 	    }
 	    return "";
      }

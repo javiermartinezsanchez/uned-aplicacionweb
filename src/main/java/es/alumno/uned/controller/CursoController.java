@@ -100,11 +100,11 @@ public class CursoController extends BaseCrudController {
 	public String guarda(@AuthenticationPrincipal UserDetails userDetails,
 			@Valid @ModelAttribute("form") CursoDTO form,
 	        BindingResult result,
-	        MultipartFile imagen,
 	        MultipartHttpServletRequest contenidoExtrasFile,
 	        RedirectAttributes redirectAttributes, 
 	        Model model) throws IOException {
 
+		MultipartFile imagen = contenidoExtrasFile.getFile("imagen");
 		FicheroData imagenData = null;
 		if (!imagen.isEmpty()) {
 			imagenData = new FicheroData(0,
@@ -196,16 +196,22 @@ public class CursoController extends BaseCrudController {
 	}
 	/**
 	 * Método público de vista de la ficha de un curso.
-	 * @param model Modelo a construir.
 	 * @param id Id del Curso a visualizar.
+	 * @param model Modelo a construir.
 	 * @return Vista del Curso.
 	 */
 	@GetMapping("/viewcurso/{id}")
-    public String verFicha(@AuthenticationPrincipal SecurityUser userConnected,Model model, 
-    		@PathVariable("id") Long id) {
+    public String verFicha(@AuthenticationPrincipal SecurityUser userConnected, 
+    		@PathVariable("id") Long id,
+    		Model model) {
 		model.addAttribute("url", "/curso/guardar");
 		model.addAttribute("urlBack", "/");
-		model.addAttribute("curso", cursoService.getCurso(id));
+		if ((userConnected == null) || (userConnected.getRol() == "ESTUD")) {
+			model.addAttribute("curso", cursoService.getCurso(id, "visita"));
+		}
+		else {
+			model.addAttribute("curso", cursoService.getCurso(id));
+		}
 		return "curso/fichacurso";
 	}
 

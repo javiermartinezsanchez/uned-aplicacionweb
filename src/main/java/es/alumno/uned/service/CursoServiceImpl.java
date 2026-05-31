@@ -65,11 +65,15 @@ public class  CursoServiceImpl implements CursoService{
 	public CursoDTO getCurso(Long id) {
 		return cursoMapper.toDTO(getValidCurso(id));
 	}
-	
+	@Transactional
 	@Override
-	public CursoDTO getCurso(Long idCurso, Long idUsuario) {
-		// TODO Auto-generated method stub
-		return null;
+	public CursoDTO getCurso(Long idCurso, String marcarVisita) {
+		Curso curso = getValidCurso(idCurso);
+		if (curso.getId() != null) {
+			curso.addVista();
+			cursoRepository.save(curso);
+		}
+		return cursoMapper.toDTO(curso);
 	}
 
 	/**
@@ -93,10 +97,6 @@ public class  CursoServiceImpl implements CursoService{
 		Curso curso = (id != null)
 				? cursoRepository.findById(id).orElse(new Curso())
 				: new Curso();
-		if (curso.getId() != null) {
-			curso.addVista();
-			cursoRepository.save(curso);
-		}
 		return curso;
 	}
 	@Transactional

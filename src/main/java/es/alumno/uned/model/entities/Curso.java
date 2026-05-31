@@ -91,10 +91,10 @@ public class Curso {
 	public Curso() {}
 	
 
-	public Curso(Long id, String titulo, String descripcion, String uriImagen, Integer nivel, AreaTematica areaTematica,
+	public Curso(String titulo, String descripcion, String uriImagen, Integer nivel, AreaTematica areaTematica,
 			Usuario responsable, Integer duracion, LocalDate fIni, LocalDate fFin, LocalDateTime fIns,
 			String userIns) {
-		this.id = id;
+		
 		this.titulo = titulo;
 		this.descripcion = descripcion;
 		this.uriImagen = uriImagen;

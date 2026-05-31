@@ -21,7 +21,8 @@ public class AppApplication extends SpringBootServletInitializer{
         return builder.sources(AppApplication.class)
         		// Desactiva el registro automático del filtro de errores
                 // para que Tomcat tome el control total o Spring lo maneje internamente sin colisionar
-                .properties("server.error.registration=bean");
+                .properties("server.error.registration=bean")
+                .properties("spring.main.web-application-type=servlet");
     }
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(AppApplication.class);

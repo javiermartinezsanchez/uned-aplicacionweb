@@ -124,7 +124,7 @@ public class UsuarioController extends BaseCrudController {
         model.addAttribute("form", userService.grabar(form,userConnected.getUsername()));
         model.addAttribute("success", "mensaje.grabacionOK");
         
-        return "redirect:/" + urlBase + "/miperfil?sucess";
+        return "redirect:" + urlBase + "/miperfil?sucess";
 	}
 	/**
 	 * Método para la edición de un usuario

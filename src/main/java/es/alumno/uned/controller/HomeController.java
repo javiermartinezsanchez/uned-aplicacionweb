@@ -67,7 +67,7 @@ public class HomeController extends BaseCrudController {
 		if (authentication !=null) {
 		 urlUser =  UserUtil.defineHome(UserUtil.getRoles(authentication));
 		 modelo.addAttribute("urlUser", "admin");
-			return "redirect:/" + urlUser + "/home";
+			return "redirect:" + urlUser + "/home";
 		}
 		else {
 

@@ -115,20 +115,24 @@ se llama al fragmento "PaginadorLateral":
         <div class="position-absolute top-50 start-0 translate-middle-y" style="z-index: 1050;">
             <button class="btn btn-outline-secondary btn-sm rounded-circle px-2 btn-paginar-ajax"
                     th:if="${paginacion.hasPrevious}"
-                    th:data-url="@{{url}(url=${fragmentUrl}, page=${paginacion.pagActual - 2})}"
+                    th:data-url="@{${fragmentUrl}(page=${paginacion.pagActual - 2})}"
                     th:data-target="'#' + ${targetId}">
                 <i class="bi bi-chevron-left"></i>
             </button>
+            <!--                     th:data-url="@{{url}(url=${fragmentUrl}, page=${paginacion.pagActual - 2})}"-->
+            
         </div>
 
         <!-- Flecha Derecha -->
         <div class="position-absolute top-50 end-0 translate-middle-y" style="z-index: 1050;">
             <button class="btn btn-outline-secondary btn-sm rounded-circle px-2 btn-paginar-ajax"
                     th:if="${paginacion.hasNext}"
-                    th:data-url="@{{url}(url=${fragmentUrl}, page=${paginacion.pagActual})}"
+					th:data-url="@{${fragmentUrl}(page=${paginacion.pagActual})}"
                     th:data-target="'#' + ${targetId}">
                 <i class="bi bi-chevron-right"></i>
             </button>
+               <!--                   th:data-url="@{{url}(url=${fragmentUrl}, page=${paginacion.pagActual})}" -->
+            
         </div>
     </div>
 </nav>
