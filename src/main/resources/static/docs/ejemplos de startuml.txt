@@ -1,0 +1,93 @@
+@startuml
+skinparam handwritten false
+skinparam monochrome false
+skinparam shadowing false
+skinparam class {
+    BackgroundColor White
+    ArrowColor #2b579a
+    BorderColor #2b579a
+}
+
+class Curso {
+    - Long id
+    - String titulo
+    - String descripcion
+    - String uriImagen
+    - LocalDate fIni
+    - LocalDate fFin
+    - EstadoCursoModulo estado
+    - List<Modulo> modulos
+    - List<String> contenidosExtra
+}
+
+class Modulo {
+    - Long id
+    - String titulo
+    - String descripcionCorta
+    - String contenidoLargo
+    - TipoModulo tipo
+    - LocalDateTime fechaCarga
+    - String usuarioCarga
+}
+
+enum EstadoCursoModulo {
+    BLOQUEADO
+    ACTIVO
+    PENDIENTE_REVISION
+    REVISADO
+    COMPLETADO
+    BAJA
+    - Ambito[] ambitos
+    + boolean esValidoParaCurso()
+    + boolean esValidoParaModulo()
+}
+
+enum Ambito {
+    CURSO
+    MODULO
+}
+
+Curso "1" *-- "0..*" Modulo : contiene >
+EstadoCursoModulo +-- Ambito
+Curso --> EstadoCursoModulo : tiene
+Modulo --> EstadoCursoModulo : tiene
+@endum
+
+
+
+@startuml
+actor Estudiante
+boundary "Vista (Thymeleaf)" as Vista
+control "CursoController" as Controller
+control "GlobalControllerAdvice" as Advice
+database "PostgreSQL" as DB
+
+Estudiante -> Vista : Clic en "Suscribirse"
+Vista -> Controller : POST /estudiante/subscribircurso/{id}
+Activate Controller
+
+Controller -> DB : Comprobar estado del curso
+Activate DB
+DB --> Controller : Curso (Estado: BAJA)
+Deactivate DB
+
+Controller -> Controller : Validar (estado != ACTIVO)
+Controller -> Advice : throws SinDTOException("msg.exception.curso.inactivo")
+Deactivate Controller
+Activate Advice
+
+Advice -> Advice : getMsgLocale() con Streams (i18n)
+Advice -> Request : RequestContextUtils.getOutputFlashMap()
+Activate Request
+Request --> Advice : flashMap
+Deactivate Request
+
+Advice -> Request : flashMap.put("errorGlobal", mensajeTraducido)
+Advice --> Vista : redirect:/ [Referer]
+Deactivate Advice
+
+Activate Vista
+Vista -> Vista : Evalúa th:if="${errorGlobal}"
+Vista --> Estudiante : Renderiza Alerta Roja HTML
+Deactivate Vista
+@endum

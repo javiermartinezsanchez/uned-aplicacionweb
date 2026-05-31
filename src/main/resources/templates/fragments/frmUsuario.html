@@ -8,7 +8,7 @@
     </div>
     <div class="col-md-5 mb-3">
         <div th:if="${isUser}">
-            <label class="form-label fw-semibold" th:text="#{usuario.role}">Rol</label>
+            <label class="form-label fw-semibold" th:text="#{usuario.role}">Rol</label><span th:text="${isUser}"></span>
             <input type="text" th:field="*{rol}" readonly class="form-control-plaintext">
         </div>
         <th:block th:unless="${isUser}">

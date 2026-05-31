@@ -73,7 +73,7 @@ public class UsuarioController extends BaseCrudController {
 	@GetMapping("/admin/newUser")
 	public String nuevo(Model model) {
         model.addAttribute("form", new UsuarioRegistroDTO());
-		return getVistaUsuario(model, true);
+		return getVistaUsuario(model, false);
 	}
 	@GetMapping("/admin/usuario/{id}")
     public String modificar(@RequestParam(required = false) String success, 
@@ -97,6 +97,7 @@ public class UsuarioController extends BaseCrudController {
 			@AuthenticationPrincipal SecurityUser userConnected, 
 			Model model) {
 			model.addAttribute("form", userService.getUsuario(userConnected.getId()));
+model.addAttribute("success", success);
 			setModeloFormulario(model, "admin/usuario", "/" + urlBase + "/miperfil", "/");
 			model.addAttribute("isUser", true);
 			return "admin/usuario";
@@ -124,7 +125,7 @@ public class UsuarioController extends BaseCrudController {
         model.addAttribute("form", userService.grabar(form,userConnected.getUsername()));
         model.addAttribute("success", "mensaje.grabacionOK");
         
-        return "redirect:" + urlBase + "/miperfil?sucess";
+        return "redirect:/" + urlBase + "/miperfil?sucess";
 	}
 	/**
 	 * Método para la edición de un usuario

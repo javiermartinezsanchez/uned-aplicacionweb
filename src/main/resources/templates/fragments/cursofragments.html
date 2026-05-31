@@ -39,10 +39,15 @@
 			             )}">
 			        </div>
 					<div th:if="${(yaInscrito == null or !yaInscrito) and (not esCursoActivo or not plazoAbierto)}">
-					    <button class="btn btn-secondary btn-sm px-2 text-nowrap ms-2" disabled>
-					        <i class="bi bi-calendar-x me-1"></i>
-					        <span th:text="${esCursoActivo} ? #{curso.accion.fueradefecha} : #{curso.accion.nodisponible}">No disponible</span>
-					    </button>
+					    <a th:replace="~{fragments/botones :: btnLinkTarget(
+					    ${esCursoActivo} ? #{curso.accion.fueradefecha} : #{curso.accion.nodisponible},
+					    '', 
+					    true,
+					    '',
+					    'btn-secondary btn-sm px-2 text-nowrap ms-2',
+					    'bi-calendar-x me-1'
+					    )}">
+					    </a>
 					</div>
 			        <th:block th:if="${yaInscrito}" th:switch="${#strings.toString(estadoCurso)}">
 			            <div th:case="'ACTIVO'" th:insert="~{fragments/botones :: btnLink(
@@ -73,7 +78,7 @@
 			            )}"></div>
 			            <div th:case="'BLOQUEADO'" th:insert="~{fragments/botones :: btnLinkTarget(
 			                #{curso.accion.bloqueado},
-			                '' },
+			                '' ,
 			                true,
 			                '_blank',
 			                'btn-disabled btn-sm px-2 text-nowrap',
@@ -81,7 +86,7 @@
 			            )}"></div>
 			            <div th:case="'BAJA'" th:insert="~{fragments/botones :: btnLinkTarget(
 			                #{curso.accion.deshabilitado},
-			                '' },
+			                '' ,
 			                true,
 			                '_blank',
 			                'btn-danger btn-sm px-2 text-nowrap d-none',

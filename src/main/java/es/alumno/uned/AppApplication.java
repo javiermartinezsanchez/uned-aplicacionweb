@@ -16,14 +16,12 @@ public class AppApplication extends SpringBootServletInitializer{
 
 	@Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        // Esta línea es la clave:
-        setRegisterErrorPageFilter(false); 
-        return builder.sources(AppApplication.class)
+        // Esta línea es la clave se configura en el application-pro.properties:
+        //setRegisterErrorPageFilter(false); 
+        return builder.sources(AppApplication.class);
         		// Desactiva el registro automático del filtro de errores
                 // para que Tomcat tome el control total o Spring lo maneje internamente sin colisionar
-                .properties("server.error.registration=bean")
-                .properties("spring.main.web-application-type=servlet");
-    }
+     }
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(AppApplication.class);
 		app.run(args);
