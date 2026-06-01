@@ -99,9 +99,11 @@
 		<tbody>
 			<tr th:each="curso : ${paginacion.contenido}">
 				<td > <th:block th:if="${curso.uriImagen} != null and ${curso.uriImagen} != ''">
-						<img th:src="@{/images/curso/{img}(img=${curso.uriImagen})}"
-	                 class="img-thumbnail"
-	                 style="width: 40px; height: 40px; object-fit: cover; vertical-align: middle; margin-right: 8px;">
+				<img th:src="${curso.uriImagen != null and !#strings.isEmpty(curso.uriImagen)} ? (@{|/images/${#strings.length(curso.uriImagen) > 36 and #strings.contains(curso.uriImagen, '-') ? 'curso/' : ''}${curso.uriImagen}|}) : @{/images/default-curso.png}" class="img-thumbnail" style="width: 40px; height: 40px; object-fit: cover; vertical-align: middle; margin-right: 8px;" alt="Imagen del curso">
+
+<!-- 						<img th:src="@{/images/curso/{img}(img=${curso.uriImagen})}" -->
+<!-- 	                 class="img-thumbnail" -->
+<!-- 	                 style="width: 40px; height: 40px; object-fit: cover; vertical-align: middle; margin-right: 8px;"> -->
 	                 </th:block>
 				<span th:text="${curso.titulo}">ID</span>
 				</td>

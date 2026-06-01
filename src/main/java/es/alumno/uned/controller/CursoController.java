@@ -78,7 +78,7 @@ public class CursoController extends BaseCrudController {
 		setModeloFormulario(model, "curso/curso", "/curso/guardar", urlBack);
 		var curso = new CursoDTO(userConnected.getId());
 	    prepararVistaEdicion(curso,model);
-	    model.addAttribute("form", curso);
+	    model.addAttribute("curso", curso);
 	    model.addAttribute("usuarios", usuarioService.listarProfesores());
 	   
 	    return model.getAttribute("viewName").toString();
@@ -98,7 +98,7 @@ public class CursoController extends BaseCrudController {
 	 */
 	@PostMapping("/curso/guardar")
 	public String guarda(@AuthenticationPrincipal UserDetails userDetails,
-			@Valid @ModelAttribute("form") CursoDTO form,
+			@Valid @ModelAttribute("curso") CursoDTO form,
 	        BindingResult result,
 	        MultipartHttpServletRequest contenidoExtrasFile,
 	        RedirectAttributes redirectAttributes, 
@@ -143,7 +143,7 @@ public class CursoController extends BaseCrudController {
 	    	    })
 	    	    .toList();
 	    var cursoGrabado = cursoService.grabar(form, imagenData,archivosExtra,  userDetails.getUsername());
-	    model.addAttribute("form", cursoGrabado);
+	    model.addAttribute("curso", cursoGrabado);
 	    redirectAttributes.addFlashAttribute("success", "mensaje.grabacionOK");
 		return String.format("redirect:/curso/curso/%d", cursoGrabado.getId());
 	}
@@ -187,8 +187,8 @@ public class CursoController extends BaseCrudController {
 		prepararVistaEdicion(curso,model);
 		model.addAttribute("url", "/curso/guardar");
 		model.addAttribute("urlCancel", getUrlBack("/curso",userConnected.getRol()));
-	    if (!model.containsAttribute("form")) {
-	    	model.addAttribute("form", cursoService.getCurso(id));
+	    if (!model.containsAttribute("curso")) {
+	    	model.addAttribute("curso", cursoService.getCurso(id));
 	    }
 		
 	    model.addAttribute("usuarios", usuarioService.listarProfesores());

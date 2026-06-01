@@ -24,13 +24,13 @@ public class EstudianteCurso {
     private EstudianteCursoId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("estudianteId")
-    @JoinColumn(name = "usuario_id")
+    //@MapsId("estudianteId")
+    @JoinColumn(name = "estudiante_id", referencedColumnName="usuario_id", insertable = false, updatable=false)
     private Estudiante estudiante;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("cursoId")
-    @JoinColumn(name = "curso_id")
+    //@MapsId("cursoId")
+    @JoinColumn(name = "curso_id", referencedColumnName="curso_id", insertable=false, updatable=false)
     private Curso curso;
 
     @Column(name="FECHA_SUBSCRIPCION", nullable = false)

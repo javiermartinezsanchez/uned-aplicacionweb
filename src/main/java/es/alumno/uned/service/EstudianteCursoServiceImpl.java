@@ -20,6 +20,7 @@ import es.alumno.uned.exception.CursoModuloEstadoIncompatibleException;
 import es.alumno.uned.exception.CursoNotExistException;
 import es.alumno.uned.exception.CursoResponsableMandatoryException;
 import es.alumno.uned.exception.EstudianteCursoAlreadySubscribeException;
+import es.alumno.uned.exception.EstudianteCursoNotExistException;
 import es.alumno.uned.exception.EstudianteNotExistException;
 import es.alumno.uned.exception.MandatoryModuloException;
 import es.alumno.uned.exception.ModuloNotFoundException;
@@ -95,25 +96,30 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 		
 		return dto;
 	}
-    @Transactional
-    @Override
-    public EstudianteCursoDTO subscribirAlumnoACurso(Long estudianteId, Long cursoId) {
+	private EstudianteCurso comprobarEstudianteYCurso(Long estudianteId, Long cursoId) {
         Estudiante estudiante = estudianteRepository.findById(estudianteId)
                 .orElseThrow(() -> new EstudianteNotExistException("msg.exception.notfound", null, "estudiante.titulo"));
 
         Curso curso = cursoRepository.findById(cursoId)
                 .orElseThrow(() -> new CursoNotExistException("msg.exception.notfound.", null, "curso.title"));
-
-
-
-        if (estudianteCursoRepository.existsByIdEstudianteIdAndIdCursoId(estudiante.getId(), cursoId)) {
+        return new EstudianteCurso(estudiante, curso);
+	}
+ 
+	
+	
+    @Transactional
+    @Override
+    public EstudianteCursoDTO subscribirAlumnoACurso(Long estudianteId, Long cursoId) {
+        if (estudianteCursoRepository.existsByIdEstudianteIdAndIdCursoId(estudianteId, cursoId)) {
             throw new EstudianteCursoAlreadySubscribeException("error.curso.yainscrito");
         }
 
-        EstudianteCurso ec = new EstudianteCurso(estudiante, curso);
+        EstudianteCurso ec = comprobarEstudianteYCurso(estudianteId, cursoId);
         estudianteCursoRepository.saveAndFlush(ec);
 
-        List<CursoModulo> modulos = curso.getModulos();
+        List<CursoModulo> modulos = ec.getCurso().getModulos();
+
+
         boolean first = true;
         for (CursoModulo cursoModulo : modulos) {
             EstudianteCursoModulo ecm = new EstudianteCursoModulo(ec, cursoModulo.getModulo());
@@ -128,12 +134,25 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
             ec.addModuloCurso(ecm);
         }
         estudianteCursoModuloRepository.saveAll(ec.getModulos());
-        curso.addUserRegistred();
-        cursoRepository.save(curso);
+        ec.getCurso().addUserRegistred();
+        cursoRepository.save(ec.getCurso());
         return estudianteCursoMapper.toDTO(estudianteCursoRepository.save(ec));
 
     }
+    @Override
+    public EstudianteCursoDTO bajaAlumnoCurso(Long estudianteId, Long cursoId) {
+    	EstudianteCurso ec = comprobarEstudianteYCurso(estudianteId, cursoId);
+    	ec = estudianteCursoRepository.getReferenceById(new EstudianteCursoId(estudianteId, cursoId));	
+    	if (ec == null) {
+    		throw new EstudianteCursoNotExistException("error.curso.no_inscrito", "");
+    	}
+    	if (ec.getEstado() != EstadoCursoModulo.BAJA) {
+    		ec.setEstado(EstadoCursoModulo.BAJA);
+    	}
+    	return estudianteCursoMapper.toDTO(estudianteCursoRepository.save(ec));
+    }
 
+    
 	@Override
 	public Paginacion<EstudianteCurso, EstudianteCursoDTO> listadoTareasPendientes(PageParams pageData,
 			Map<String, String> params) {

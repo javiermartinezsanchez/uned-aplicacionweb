@@ -1,10 +1,6 @@
 <fichacurso th:fragment="cursoCard(curso)">
 <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 w-100">
-    <img th:src="${curso.uriImagen != null and !#strings.isEmpty(curso.uriImagen)} 
-             ? @{/images/curso/{img}(img=${curso.uriImagen})} 
-             : @{/images/curso/default-curso.png}"
-         class="card-img-top card-img-fixed"
-         alt="Imagen del curso">
+	<img th:src="${curso.uriImagen != null and !#strings.isEmpty(curso.uriImagen)} ? (@{|/images/${#strings.length(curso.uriImagen) > 36 and #strings.contains(curso.uriImagen, '-') ? 'curso/' : ''}${curso.uriImagen}|}) : @{/images/default-curso.png}" class="card-img-top card-img-fixed" alt="Imagen del curso">
 	<div class="card-body d-flex flex-column p-3 pb-3" style="min-height: 50px">
         <h5 class="card-title fw-bold" style="min-height: 48px;" th:text="${curso.titulo}"></h5>
         <p class="card-text text-muted small flex-grow-1 descripcion-limitada"
@@ -14,7 +10,8 @@
            th:text="${curso.areaTematicaText}">
         </span>
         <th:block th:if="${yaInscrito}">
-    		<div th:insert="~{::infocursoEstudiante}"></div>
+    		<div th:insert="~{::infocursoEstudiante}"
+    		th:with="isFicha=true"></div>
 		</th:block>
 		<div class="d-flex align-items-center justify-content-between mb-3">
 		    <div th:insert="~{fragments/botones :: btnLink(
@@ -108,43 +105,48 @@
 </fichacurso>
 <th:block th:fragment="cabeceraCurso(esEstudiante)">
 
-			<div class="row mb-4">
-				<div class="col-md-5">
-					<img th:src="@{/images/curso/{img}(img=*{uriImagen})}"
-						class="img-fluid rounded shadow-sm" alt="Imagen del curso">
-				</div>
+<div class="row mb-4">
+	<div class="col-md-5">
+<!-- 		<img th:src="@{/images/curso/{img}(img=*{uriImagen})}" -->
+<!-- 			class="img-fluid rounded shadow-sm" alt="Imagen del curso"> -->
+				<img th:src="${curso.uriImagen != null and !#strings.isEmpty(curso.uriImagen)} ? (@{|/images/${#strings.length(curso.uriImagen) > 36 and #strings.contains(curso.uriImagen, '-') ? 'curso/' : ''}${curso.uriImagen}|}) : @{/images/default-curso.png}" class="img-fluid rounded shadow-sm" alt="Imagen del curso">
+			
+	</div>
 
-				<div class="col-md-7 d-flex flex-column justify-content-between">
-					<div>
-						<h1 class="fw-bold" th:text="*{titulo}">Título del curso</h1>
-						<p class="text-muted fs-5" th:text="*{descripcion}">Descripción del curso...</p>
-        <span class="text-secundary small mb-3 d-block"
-           th:text="${curso.areaTematicaText}">
-        </span>					</div>
-					
-					<div th:insert="~{:: infocursoEstudiante}"
-					th:with="yaInscrito=${esEstudiante}, 
-						              progresoCurso=${curso?.progreso ?:0}, 
-						              estadoCurso=${curso?.estado ?:0}"></div>
-					
-					<div class="mt-2">
-						<span class="fw-semibold text-secondary fs-6"> 👥 <span
-							th:text="*{usuariosRegistrados}">0</span> <span
-							th:text="#{curso.inscritos}">inscritos</span>
-						</span>
-					</div>
-			        <div class="row mt-4">
-			            <div class="col-12">
-			                <div th:replace="~{:: valoracionCurso(${curso.valoracion}, ${curso.numValoraciones}, ${esEstudiante})}"></div>
-			            </div>
-			        </div>
-				</div>
-			</div>
+	<div class="col-md-7 d-flex flex-column justify-content-between">
+		<div>
+			<h1 class="fw-bold" th:text="*{titulo}">Título del curso</h1>
+			<p class="text-muted fs-5" th:text="*{descripcion}">Descripción del curso...</p>
+	        <span class="text-secundary small mb-3 d-block"
+	           th:text="${curso.areaTematicaText}">
+	        </span>					
+	    </div>
+		
+		<div th:insert="~{:: infocursoEstudiante}"
+		th:with="yaInscrito=${esEstudiante}, 
+			              progresoCurso=${curso?.progreso ?:0}, 
+			              estadoCurso=${curso?.estado ?:0},
+			              isFicha=false"></div>
+		
+		<div class="mt-2">
+			<span class="fw-semibold text-secondary fs-6"> 👥 <span
+				th:text="*{usuariosRegistrados}">0</span> <span
+				th:text="#{curso.inscritos}">inscritos</span>
+			</span>
+		</div>
+        <div class="row mt-4">
+            <div class="col-12">
+                <div th:replace="~{:: valoracionCurso(${curso.valoracion}, ${curso.numValoraciones}, ${esEstudiante})}"></div>
+            </div>
+        </div>
+	</div>
+</div>
 </th:block>
 <!-- Bloque visual de progreso/estado exclusivo para alumnos inscritos -->
 <div th:fragment="infocursoEstudiante">
 <th:block th:if="${yaInscrito}">
-    <div class="mb-3" th:switch="${#strings.toString(estadoCurso)}">
+    <div class="mb-3 d-flex align-items-end gap-3" th:switch="${#strings.toString(estadoCurso)}">
+		<div class="flex-grow-1">
         <div th:case="'ACTIVO'">
             <div class="d-flex justify-content-between align-items-center mb-1 small">
                 <span class="text-muted fw-medium" th:text="#{curso.progreso}">Progreso del curso</span>
@@ -159,7 +161,7 @@
                 <span class="text-muted fw-medium" th:text="#{curso.progreso.revisado}">Progreso (Revisado)</span>
                 <span class="text-primary fw-bold" th:text="${progresoCurso + '%'}">0%</span>
             </div>
-            <div class="progress" style="height: 6px; background-color: #e9ecef;">
+            <div class="progress" style="height: 8px; background-color: #e9ecef;">
                 <div class="progress-bar bg-info rounded" role="progressbar" th:style="'width: ' + ${progresoCurso} + '%'"></div>
             </div>
         </div>
@@ -187,8 +189,19 @@
         <div th:case="'BAJA'">
             <span class="badge bg-danger text-wrap py-2 w-100"><i class="bi bi-exclamation-octagon me-1"></i> <span tx:text="curso.tramitado.baja">Tramitado de Baja</span></span>
         </div>
-    </div>
-    </th:block>
+        </div>
+    <th:block th:if="${!isFicha}">
+   <div class="flex-shrink-0" th:insert="~{fragments/botones :: btnLink(
+			                 'Baja',
+			                @{'/estudiante/curso/baja/' + ${curso.id} },
+			                'btn-outline-danger btn-sm px-2 text-nowrap',
+			                'bi-x-circle-fill'
+			            )}">
+	</div>
+	</th:block>		 
+	</div>           
+</th:block>
+    
 </div>
 
 <div th:fragment="fichaTecnica">

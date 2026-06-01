@@ -10,6 +10,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
@@ -27,12 +28,16 @@ public class EstudianteCursoModulo {
     private EstudianteCursoModuloId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("estudianteCursoId")
+    //@MapsId("estudianteCursoId")
+    @JoinColumns({
+        @JoinColumn(name = "estudiante_id", referencedColumnName = "estudiante_id", insertable = false, updatable = false),
+        @JoinColumn(name = "curso_id", referencedColumnName = "curso_id", insertable = false, updatable = false)
+    })
     private EstudianteCurso estudianteCurso;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("moduloId")
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "modulo_id")
     private Modulo modulo;
     
     @Column(name="titulo")

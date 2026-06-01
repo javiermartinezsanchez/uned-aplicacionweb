@@ -39,6 +39,14 @@ public interface EstudianteCursoService {
 	EstudianteCursoDTO subscribirAlumnoACurso(Long estudianteId, Long cursoId);
 	
 	/**
+	 * Proceso de baja de un curso activo para un alumno
+	 * @param estudianteId Identificador del Estudiante
+	 * @param cursoId Identificador del Curso
+	 * @return El EstudianteCursoDTO actualizado EstadoCursoModulo.BAJA
+	 */
+	EstudianteCursoDTO bajaAlumnoCurso(Long estudianteId, Long cursoId);
+	
+	/**
 	 * Obtenemos el listado de Estudiante Curso Paginado
 	 * @param pageData Configuración de la paginación
 	 * @param params Parámetros de búsqueda

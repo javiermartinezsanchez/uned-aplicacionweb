@@ -184,6 +184,18 @@ public class EstudianteCursoController extends BaseCrudController {
 		model.addAttribute("fechaFinalizacion", ec.getFechaCompletado().format(formateador));
 		return "estudiante/certificadocurso";
 	}
+	@GetMapping("/curso/baja/{idCurso}")
+	public String bajaCurso(
+			@AuthenticationPrincipal SecurityUser userConnected,
+			@PathVariable("idCurso") Long idCurso,
+			Model model
+			) {
+		model.addAttribute("curso", estudianteCursoService.bajaAlumnoCurso(userConnected.getId(), idCurso));
+		model.addAttribute("isProfesor", false);
+		return "estudiante/cursoEstudiante";
+	}
+
+	
 	@GetMapping("/cursos/ajax/miscursos")
 	public String paginarMisCursosAJAX(
 			@AuthenticationPrincipal SecurityUser userConnected,
