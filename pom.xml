@@ -134,6 +134,19 @@
 
 			</plugin>
 		</plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <!-- Incluye el properties genérico y SOLO el del entorno activo -->
+                <includes>
+                    <include>application.properties</include>
+                    <include>application-${profile.name}.properties</include>
+                    <include>logback-spring.xml</include> <!-- Asegura tus logs -->
+                </includes>
+            </resource>
+        </resources>
+
 	</build>
 	<profiles>
 		<profile>

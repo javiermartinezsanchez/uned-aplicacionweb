@@ -8,11 +8,11 @@
     </div>
     <div class="col-md-5 mb-3">
         <div th:if="${isUser}">
-            <label class="form-label fw-semibold" th:text="#{usuario.role}">Rol</label><span th:text="${isUser}"></span>
+            <label class="form-label fw-semibold" th:text="#{usuario.role}">Rol</label>
             <input type="text" th:field="*{rol}" readonly class="form-control-plaintext">
         </div>
         <th:block th:unless="${isUser}">
-            <div th:replace="~{fragments/frmUsuario :: rolSelect(${roles}, 'rol', *{rol}, true, 'mb-0')}"></div>
+            <div th:replace="~{ :: rolSelect(${roles}, 'rol', *{rol}, true, 'mb-0')}"></div>
         </th:block>
     </div>
     <div th:unless="${isUser}" sec:authorize="hasRole('ADMIN')" class="col-md-2 mb-3 pb-2">
@@ -108,7 +108,6 @@
         <div class="col-md-6">
             <h5 th:text="#{areatematica.estudiante.select}">Áreas de Interés Seleccionadas</h5>
             <div class="area-list" id="listaSeleccionadas">
-                <!-- Aquí se renderizarán los checkboxes dinámicamente o estáticamente -->
                 <div th:each="area : ${form.areasInteres}" class="d-flex align-items-center justify-content-between mb-2 p-1 border-bottom">
                     <i class="bi bi-check-square-fill text-secondary"></i>
                     <input type="hidden" name="areasSeleccionadas" 

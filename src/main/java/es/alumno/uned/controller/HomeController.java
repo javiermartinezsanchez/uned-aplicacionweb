@@ -79,7 +79,7 @@ public class HomeController extends BaseCrudController {
 	   		modelo.addAttribute("paginacionMV", paginacionMV);
 	   		modelo.addAttribute("paginacionME", paginacionME);
 		}
-		return urlUser.concat("/home");
+		return urlUser.concat("home");
 	}
 	/**
 	 * Método que redirige al /home de cada rol.
