@@ -10,7 +10,7 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "cursos_modulos")
+@Table(name = "curso_modulos")
 public class CursoModulo {
 
 	@EmbeddedId

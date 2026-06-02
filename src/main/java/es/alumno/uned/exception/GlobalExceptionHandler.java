@@ -107,12 +107,16 @@ public class GlobalExceptionHandler {
 
     private String putDataException(AppGlobalException ex, HttpServletRequest request, Model model) {
 		String backUrl = request.getHeader("Referer");
+		
+		
 		model.addAttribute("viewName", (String) request.getAttribute("viewName"));
 		model.addAttribute("url", (String) request.getAttribute("url"));
 		model.addAttribute("urlCancel", (String) request.getAttribute("urlCancel"));
     	model.addAttribute("urlBack", backUrl != null ? backUrl : "/");
         model.addAttribute("errorGlobal", getMsgLocale(ex.getMessage(), ex.getArgs()));
         model.addAttribute("form", ex.getDto());
+        recuperaUrlBuilder( model,  request);
+        recuperaParamsBusqueda(model, request);
         if (request.getAttribute("viewName") == null) {
         	return "redirect:" + backUrl;
         	
@@ -195,11 +199,50 @@ public class GlobalExceptionHandler {
     public List<AreaTematicaDTO> getAreas() {
         return ordenadaPorTitulo(areaTematicaService.listAll());
     }
-
+    /**
+     * Ordenamos la lisa de áreas temáticas por Título
+     * @param listaAreas Lista obtenida de la BD.
+     * @return Lista ordenada.
+     */
     private List<AreaTematicaDTO> ordenadaPorTitulo(List<AreaTematicaDTO> listaAreas){
     	listaAreas.sort(Comparator.comparing(AreaTematicaDTO :: getTitulo));
     	return listaAreas;
     }
+
+    /**
+     * Método "último recurso" para recuperar el urlBuilder después de una excepción.
+     * @param model Modelo de la vista
+     * @param request HttPServletRequest que ha generado la excepción.
+     */
+    private void recuperaUrlBuilder(Model model, HttpServletRequest request) {
+    	   try {
+    	        model.addAttribute("urlBuilder", ServletUriComponentsBuilder.fromRequest(request));
+    	    } catch (Exception e) {
+    	        // Fallback seguro en caso de que el contexto de la petición esté corrupto tras la excepción
+    	        model.addAttribute("urlBuilder", ServletUriComponentsBuilder.fromContextPath(request));
+    	    }
+
+    }
+    
+    /**
+     * Método "último recurso" para recuperar el valor de paramsBusqueda después de una excepción.
+     * @param model Modelo de la vista
+     * @param request HttPServletRequest que ha generado la excepción.
+     */
+ 	private void recuperaParamsBusqueda(Model model, HttpServletRequest request) {
+		   Map<String, String> params = new HashMap<>();
+		   Map<String, String[]> requestMap = request.getParameterMap();
+		    if (requestMap != null) {
+		        for (Map.Entry<String, String[]> entry : requestMap.entrySet()) {
+		            // Tomamos el primer valor del array de parámetros
+		            if (entry.getValue() != null && entry.getValue().length > 0) {
+		                params.put(entry.getKey(), entry.getValue()[0]);
+		            }
+		        }
+		    }
+		    model.addAttribute("paramsBusqueda", params);
+		
+	}
 
 }
 

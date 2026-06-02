@@ -236,6 +236,7 @@ public class Curso {
 	}
 
 	public List<CursoModulo> getModulos() {
+	
 		return cursoModulos;
 	}
 	public Integer getNumVistas() {

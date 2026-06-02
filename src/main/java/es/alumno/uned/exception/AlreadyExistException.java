@@ -17,7 +17,7 @@ public abstract class AlreadyExistException extends AppGlobalException {
 	private static final long serialVersionUID = -4028748522198142783L;
 
     public AlreadyExistException(String messageKey, Object dto, Object... args) {
-    	super(messageKey, dto, args);   // pasamos parámetros al padre
+    	super(messageKey, dto, args);  
     }
 }
 

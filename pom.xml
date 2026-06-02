@@ -126,7 +126,36 @@
 
 	<build>
 		<finalName>app</finalName>
+		
 		<plugins>
+		<plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>3.5.0</version>
+            <executions>
+                <execution>
+                    <id>incluir-fuentes-en-war</id>
+                    <phase>prepare-package</phase> 
+                    <goals>
+                        <goal>copy-resources</goal>
+                    </goals>
+                    <configuration>
+                        <!-- Copia los archivos dentro de la carpeta temporal del WAR -->
+                        <outputDirectory>${project.build.directory}/${project.build.finalName}/src</outputDirectory>
+                        <resources>
+                            <resource>
+                                <directory>${project.basedir}/src</directory>
+                                <includes>
+                                    <include>main/java/**/*.java</include>
+                                    <include>main/resources/templates/**/*.html</include>
+                                    <include>main/resources/static/**/*</include>
+                                </includes>
+                            </resource>
+                        </resources>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
 			<!-- Plugin estándar de Spring Boot -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

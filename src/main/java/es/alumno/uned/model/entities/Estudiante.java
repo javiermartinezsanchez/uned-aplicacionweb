@@ -52,10 +52,8 @@ public class Estudiante {
 		
 		public Estudiante() {}
 
-		public Estudiante(Long id, String direccion, String poblacion, String provincia, String codPostal,
+		public Estudiante(String direccion, String poblacion, String provincia, String codPostal,
 				Usuario usuario) {
-			super();
-			this.id = id;
 			this.direccion = direccion;
 			this.poblacion = poblacion;
 			this.provincia = provincia;
