@@ -37,6 +37,15 @@ import es.alumno.uned.service.ContenidoExtraService;
 import es.alumno.uned.service.CursoService;
 import es.alumno.uned.service.EstudianteCursoService;
 import es.alumno.uned.service.EstudianteService;
+/**
+ * Controlador de acciones del Estudiante
+ * <p>Subscribirse a un curso
+ * <p>Visualizar el estado de un curso activo.
+ * <p>Darse de baja de un curso
+ * <p>Mostrar los cursos activos y los que ha terminado.
+ * <p>Obtener el certificado de finalización.
+ * <p>Completar módulos del curso
+ */
 @RequestMapping("/estudiante")
 @Controller
 public class EstudianteCursoController extends BaseCrudController {
@@ -49,7 +58,20 @@ public class EstudianteCursoController extends BaseCrudController {
 	EstudianteService estudianteService;
 	@Autowired
 	ContenidoExtraService contenidoExtraService;
-	
+	/**
+	 * Método para visualizar al "home" del estudiante
+	 * <p> Se muestran los 3 apartados en los que se ha dividio. 
+	 * <ul>
+	 * <li>Cursos activos del estudiante</li>
+	 * <li>Cursos que por las áreas de interés pueden interesar al estudiantee</li>
+	 * <li>Cursos terminados o que el estudiante ha dado de baja</li>
+	 * </ul>
+	 * @param userConnected Usuario conectado (estudiante).
+	 * @param paramsBusqueda Parámetros de búsqueda desde la home
+	 * @param page Número de página para mostrar resultados (normalmente 0, la primera), la paginación posterior se realiza por AJAX.
+	 * @param modelo Modelo de la vista a mostrar
+	 * @return Vista (estudiantes/home.html)
+	 */
 	@GetMapping("/home")
 	public String estudianteHome(@AuthenticationPrincipal SecurityUser userConnected,
 			@RequestParam Map<String, String> paramsBusqueda,
@@ -59,11 +81,15 @@ public class EstudianteCursoController extends BaseCrudController {
 		//String rol = userConnected.getRol(); // ESTUD
 
 		paramsBusqueda.put("estudianteId", userConnected.getId().toString());
+		paramsBusqueda.put("activos", "true");		
 		Paginacion<EstudianteCurso, EstudianteCursoDTO> paginacion = estudianteCursoService.listadoPaginado( getParams( 0, 3), paramsToMap(paramsBusqueda));
 		Paginacion<Curso, CursoDTO> paginacionCD =cursoService.listadoCursosDisponiblesPorAreas(  getParams( page, 3), userConnected.getId(), getAreasEstudiante( userConnected.getId() ));
-
+		paramsBusqueda.put("activos", "false");		
+		Paginacion<EstudianteCurso, EstudianteCursoDTO> paginacionCF = estudianteCursoService.listadoPaginado( getParams( 0, 3), paramsToMap(paramsBusqueda));
+		
 		modelo.addAttribute("paginacion", paginacion);
 		modelo.addAttribute("paginacionCD", paginacionCD);
+		modelo.addAttribute("paginacionCF", paginacionCF);
 
 
 		return "estudiante/home";
@@ -202,6 +228,7 @@ public class EstudianteCursoController extends BaseCrudController {
 			@RequestParam Map<String, String> paramsBusqueda,
 			@RequestParam(defaultValue = "0") int page, Model model) {
 		paramsBusqueda.put("estudianteId", userConnected.getId().toString());
+		paramsBusqueda.put("activos", "true");
 		Paginacion<EstudianteCurso, EstudianteCursoDTO> paginacion = estudianteCursoService.listadoPaginado( getParams( page, 3), paramsToMap(paramsBusqueda));
 	    model.addAttribute("paginacion", paginacion);
 	    // Retorna la vista de cursos, pero solo el fragmento del bloque seleccionado
@@ -217,6 +244,18 @@ public class EstudianteCursoController extends BaseCrudController {
 		Paginacion<Curso, CursoDTO> paginacion =cursoService.listadoCursosDisponiblesPorAreas(  getParams( page, 3), userConnected.getId(), areasId);
 		model.addAttribute("paginacionCD", paginacion);
 		return "estudiante/home :: #bloqueCursosDisponibles"; 
+	}
+	
+	@GetMapping("/cursos/ajax/cursosfinalizados")
+	public String paginarCursosFinalizadosAJAX(			
+			@AuthenticationPrincipal SecurityUser userConnected,
+			@RequestParam Map<String, String> paramsBusqueda,
+			@RequestParam(defaultValue = "0") int page, Model model) {
+		paramsBusqueda.put("estudianteId", userConnected.getId().toString());
+		paramsBusqueda.put("activos", "false");
+		Paginacion<EstudianteCurso, EstudianteCursoDTO> paginacion = estudianteCursoService.listadoPaginado( getParams( page, 3), paramsToMap(paramsBusqueda));
+		model.addAttribute("paginacionCF", paginacion);
+		return "estudiante/home :: #bloqueCursosFinalizados"; 
 	}
 	
 	private List<Long> getAreasEstudiante(Long estudianteId){

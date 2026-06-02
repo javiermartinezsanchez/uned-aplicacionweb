@@ -3,6 +3,7 @@ package es.alumno.uned.service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -11,9 +12,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.alumno.uned.dto.CursoDTO;
 import es.alumno.uned.dto.EstudianteCursoDTO;
 import es.alumno.uned.dto.EstudianteCursoModuloDTO;
 import es.alumno.uned.exception.CursoModuloEstadoIncompatibleException;
@@ -42,6 +45,7 @@ import es.alumno.uned.model.repository.EstudianteCursoModuloRepository;
 import es.alumno.uned.model.repository.EstudianteCursoRepository;
 import es.alumno.uned.model.repository.EstudianteRepository;
 import es.alumno.uned.model.util.Paginacion;
+import jakarta.persistence.criteria.Predicate;
 
 /**
  * Implementación del servicio de Estudiante curso.
@@ -104,8 +108,6 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
                 .orElseThrow(() -> new CursoNotExistException("msg.exception.notfound.", null, "curso.title"));
         return new EstudianteCurso(estudiante, curso);
 	}
- 
-	
 	
     @Transactional
     @Override
@@ -165,6 +167,38 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 				EstadoCursoModulo.PENDIENTE_REVISION,
 				idResponsable,
 				PageRequest.of(pageData.page(), pageData.size())));
+	}
+
+	private static Specification<EstudianteCurso> generaCondiciones(Map<String, String> filtros) {
+	    return (root, query, cb) -> {
+
+	        List<Predicate> predicates = new ArrayList<>();
+
+	        if (filtros.containsKey("estudianteId")) {
+	            predicates.add(cb.equal(root.get("id").get("estudianteId"), 
+	                           Long.parseLong(filtros.get("estudianteId"))));
+	        }
+
+	        if (filtros.containsKey("activos")) {
+				   Predicate completado = cb.equal(root.get("estado"), EstadoCursoModulo.COMPLETADO);
+                   Predicate baja = cb.equal(root.get("estado"), EstadoCursoModulo.BAJA);
+
+	            if (filtros.get("activos").equals("true")) { //CURSOS ACTIVOS
+		
+				    predicates.add(cb.not(cb.or(completado,baja)));
+		        }
+				else {    //cursos COMPLETADOS o de BAJA
+					    predicates.add(cb.or(completado,baja));
+	
+	            }
+            }
+	        if (filtros.containsKey("curso.id") && filtros.containsKey("curso.usuario.id")) {
+	 		   Predicate curso = cb.equal(root.get("id").get("cursoId"), Long.valueOf(filtros.get("curso.id")));
+               Predicate responsable = cb.equal(root.get("curso").get("responsable").get("id"), Long.valueOf(filtros.get("curso.usuario.id")));
+               predicates.add(cb.and(curso,responsable));
+	        }
+	        return cb.and(predicates.toArray(new Predicate[0]));
+	    };
 	}
 
 	private Paginacion<EstudianteCurso, EstudianteCursoDTO> construirPaginacion( Page<EstudianteCurso> page){
@@ -268,10 +302,8 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 	@Override
 	public Paginacion<EstudianteCurso, EstudianteCursoDTO> listadoPaginado(PageParams pageData,
 			Map<String, String> params) {
-	return new Paginacion.Builder<EstudianteCurso, EstudianteCursoDTO>()
-			.pagina(getPaginaBusqueda(PageRequest.of(pageData.page(), pageData.size()),params))
-			.mapper(estudianteCursoMapper :: toDTOList)
-			.build();
+		Specification<EstudianteCurso> condiciones = generaCondiciones(params);
+	return construirPaginacionList(estudianteCursoRepository.findAll(condiciones, PageRequest.of(pageData.page(), pageData.size())));
 	}
 
 	private Page<EstudianteCurso> getPaginaBusqueda(Pageable pageable, Map<String, String> params){
@@ -284,6 +316,12 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 		return null;
 	}
 
+	private Paginacion<EstudianteCurso, EstudianteCursoDTO> construirPaginacionList( Page<EstudianteCurso> page) {
+        return new Paginacion.Builder<EstudianteCurso, EstudianteCursoDTO>()
+                .pagina(page)
+                .mapper(estudianteCursoMapper :: toDTOList)
+                .build();
+    }
 	@Override
 	public Long getTareasPendientes(Long idResponsable) {
 		
@@ -313,12 +351,4 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 		estudianteCursoModuloRepository.save(ecm);
 		
 	}
-
-
-
-
-	
-
-
-	
 }

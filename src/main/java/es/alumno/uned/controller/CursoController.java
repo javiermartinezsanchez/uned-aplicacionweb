@@ -312,7 +312,7 @@ public class CursoController extends BaseCrudController {
 	    return "home :: #bloqueMasValorados"; 
 	}
 	/**
-	 * Método para obtener de forma paginada los curos ordenados por el número de personas inscritas descendente.
+	 * Método para obtener de forma paginada los cursos ordenados por el número de personas inscritas descendente.
 	 * <p>Se realiza la búsqueda y se injecta en el fragmento de la vista para refrescar los cursos.
 	 * @param paramsBusqueda Parámetros opcionales para la búsqueda.
 	 * @param page Número de página de datos a devolver.

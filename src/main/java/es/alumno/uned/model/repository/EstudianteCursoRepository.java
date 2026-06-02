@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -12,7 +13,7 @@ import es.alumno.uned.model.entities.EstadoCursoModulo;
 import es.alumno.uned.model.entities.EstudianteCurso;
 import es.alumno.uned.model.entities.EstudianteCursoId;
 
-public interface EstudianteCursoRepository extends JpaRepository<EstudianteCurso, EstudianteCursoId> {
+public interface EstudianteCursoRepository extends JpaRepository<EstudianteCurso, EstudianteCursoId>, JpaSpecificationExecutor<EstudianteCurso> {
 	boolean existsByIdEstudianteIdAndIdCursoId(Long estudianteId, Long cursoId);
 
     Optional<EstudianteCurso> findByEstudianteIdAndIdCursoId(Long estudianteId, Long cursoId);

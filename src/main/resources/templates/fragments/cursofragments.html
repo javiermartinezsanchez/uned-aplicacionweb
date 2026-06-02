@@ -46,7 +46,7 @@
 					    )}">
 					    </a>
 					</div>
-			        <th:block th:if="${yaInscrito}" th:switch="${#strings.toString(estadoCurso)}">
+					<th:block th:if="${yaInscrito}" th:switch="${#strings.toString(estadoCurso)}">
 			            <div th:case="'ACTIVO'" th:insert="~{fragments/botones :: btnLink(
 			                #{curso.accion.continuar},
 			                @{'/estudiante/micurso/' + ${curso.id} },
@@ -142,6 +142,70 @@
 	</div>
 </div>
 </th:block>
+<div th:fragment="buscadorCursos">
+       	<div class="form-group">
+		<form id="frmBuscaCursos" class="row g-3 mb-4" method="get" th:action="@{${urlBuilder.cloneBuilder().removePathExtension()}}">
+	    <div class="col-md-3">
+	        <label class="form-label" th:text="#{curso.titulo}">Título</label>
+	        <input type="text" name="titulo" class="form-control"
+	               th:value="${param.titulo}">
+	    </div>
+	    <div class="col-md-2">
+	        <label class="form-label" th:text="#{curso.nivel}">Nivel</label>
+	        <select name="nivel" class="form-select">
+	            <option th:value="${''}" th:text="#{comun.select.all}">traducir</option>
+	            <option th:each="n : ${#numbers.sequence(1,5)}"
+	                    th:value="${n}"
+	                    th:text="'Nivel ' + ${n}"
+	                    th:selected="${#strings.equals(param.nivel, n)}">
+	            </option>
+	        </select>
+	    </div>
+	    <div class="col-md-3" th:with="areaIdSeleccionada=${param.areaId != null ? param.areaId[0] : null}">
+	        <label class="form-label" th:text="#{areatematica.title}">Área temática</label>
+	        <select th:replace="~{fragments/selectAreaTematica :: selectArea(${areas}, ${areaIdSeleccionada})}">  
+	        </select>
+	    </div>
+	    <div class="col-md-3" sec:authorize="hasAnyRole('ADMIN')">
+	        <label class="form-label" th:text="#{curso.responsable}">Responsable</label>
+	        <select name="responsableId" class="form-select">
+	            <option value="">-- Todos --</option>
+	            <option th:each="u : ${responsables}"
+	                    th:value="${u.id}"
+	                    th:text="${u.nombreCompleto}"
+	                    th:selected="${#strings.equals(param.responsableId , u.id)}">
+	            </option>
+	        </select>
+	    </div>
+		<input type="hidden" name="responsableId" th:value="${responsableId}" sec:authorize="hasAnyRole('PROFE')"/>
+	    <div class="col-md-2">
+	        <label class="form-label" th:text="#{comun.fini}">Fecha inicio</label>
+	        <input type="date" name="fIni" class="form-control"
+	               th:value="${param.fIni}">
+	    </div>
+	    <div class="col-md-2">
+	        <label class="form-label" th:text="#{comun.fFin}">Fecha fin</label>
+	        <input type="date" name="fFin" class="form-control"
+	               th:value="${param.fFin}">
+	    </div>
+	    <div class="col-md-2 d-flex align-items-end" th:insert="~{fragments/botones :: btnSubmit(
+			        #{command.buscar},
+			        'btn-primary w-100',
+			        'bi-search'
+			    )}">">
+	    </div>
+	   <div class="col-md-2 d-flex align-items-end" th:insert="~{fragments/botones :: btnLink(
+			        texto=#{command.limpiar},
+			        url=@{${url}},
+			        estilo='btn-secondary w-100',
+			        icono='bi-arrow-counterclockwise'
+			    )}">
+	    </div>
+
+		</form>
+	</div>
+
+</div>
 <!-- Bloque visual de progreso/estado exclusivo para alumnos inscritos -->
 <div th:fragment="infocursoEstudiante">
 <th:block th:if="${yaInscrito}">
