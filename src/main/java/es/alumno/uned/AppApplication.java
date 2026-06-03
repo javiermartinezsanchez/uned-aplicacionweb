@@ -12,15 +12,14 @@ import es.alumno.uned.config.AppProperties;
 @ConfigurationPropertiesScan
 @EnableConfigurationProperties(AppProperties.class)
 @SpringBootApplication
+/**
+ * Clase principal de arranque de la aplicación.
+ */
 public class AppApplication extends SpringBootServletInitializer{
 
 	@Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        // Esta línea es la clave se configura en el application-pro.properties:
-        //setRegisterErrorPageFilter(false); 
         return builder.sources(AppApplication.class);
-        		// Desactiva el registro automático del filtro de errores
-                // para que Tomcat tome el control total o Spring lo maneje internamente sin colisionar
      }
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(AppApplication.class);

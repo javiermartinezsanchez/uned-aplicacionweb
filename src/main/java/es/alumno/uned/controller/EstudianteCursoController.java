@@ -4,6 +4,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -86,14 +87,16 @@ public class EstudianteCursoController extends BaseCrudController {
 		paramsBusqueda.put("estudianteId", userConnected.getId().toString());
 		paramsBusqueda.put("activos", "true");		
 		Paginacion<EstudianteCurso, EstudianteCursoDTO> paginacion = estudianteCursoService.listadoPaginado( getParams( 0, 3), paramsToMap(paramsBusqueda));
-		Paginacion<Curso, CursoDTO> paginacionCD =cursoService.listadoCursosDisponiblesPorAreas(  getParams( page, 3), userConnected.getId(), getAreasEstudiante( userConnected.getId() ));
+		paramsBusqueda.put("areaIds", getAreasEstudiante( userConnected.getId() ));		
+		Paginacion<Curso, CursoDTO> paginacionCD = cursoService.listadoPaginado(getParams( 0, 3), paramsToMap(paramsBusqueda));
+		//Paginacion<Curso, CursoDTO> paginacionCD =cursoService.listadoCursosDisponiblesPorAreas(  getParams( page, 3), userConnected.getId(), getAreasEstudiante( userConnected.getId() ));
 		paramsBusqueda.put("activos", "false");		
 		Paginacion<EstudianteCurso, EstudianteCursoDTO> paginacionCF = estudianteCursoService.listadoPaginado( getParams( 0, 3), paramsToMap(paramsBusqueda));
 		
 		modelo.addAttribute("paginacion", paginacion);
 		modelo.addAttribute("paginacionCD", paginacionCD);
 		modelo.addAttribute("paginacionCF", paginacionCF);
-		modelo.addAttribute("usuarios", usuarioService.listarProfesores());
+		modelo.addAttribute("responsables", usuarioService.listarProfesores());
 
 		return "estudiante/home";
 	}
@@ -161,7 +164,7 @@ public class EstudianteCursoController extends BaseCrudController {
 		Paginacion<EstudianteCurso, EstudianteCursoDTO> paginacion = estudianteCursoService.listadoPaginado( getParams( 0, 10), paramsToMap(paramsBusqueda));
 		setModeloListado(modelo, "estudiante/miscursos", "", "estudiante/micurso","/"); 
 		modelo.addAttribute("paginacion", paginacion);
-		modelo.addAttribute("usuarios", usuarioService.listarProfesores());
+		modelo.addAttribute("responsables", usuarioService.listarProfesores());
 		return modelo.getAttribute("viewName").toString();
 	}
 	@GetMapping("/curso/{idCurso}/modulo/{idModulo}/verEntrega")
@@ -255,8 +258,10 @@ public class EstudianteCursoController extends BaseCrudController {
 			@AuthenticationPrincipal SecurityUser userConnected,
 			@RequestParam Map<String, String> paramsBusqueda,
 			@RequestParam(defaultValue = "0") int page, Model model) {
-		List<Long> areasId= getAreasEstudiante( userConnected.getId() );
-		Paginacion<Curso, CursoDTO> paginacion =cursoService.listadoCursosDisponiblesPorAreas(  getParams( page, 3), userConnected.getId(), areasId);
+		paramsBusqueda.put("estudianteId", userConnected.getId().toString());
+		paramsBusqueda.put("areaIds", getAreasEstudiante( userConnected.getId() ));		
+		Paginacion<Curso, CursoDTO> paginacion = cursoService.listadoPaginado(getParams( page, 3), paramsToMap(paramsBusqueda));
+
 		model.addAttribute("paginacionCD", paginacion);
 		return "estudiante/home :: #bloqueCursosDisponibles"; 
 	}
@@ -272,12 +277,18 @@ public class EstudianteCursoController extends BaseCrudController {
 		model.addAttribute("paginacionCF", paginacion);
 		return "estudiante/home :: #bloqueCursosFinalizados"; 
 	}
-	
-	private List<Long> getAreasEstudiante(Long estudianteId){
+	/**
+	 * Convertimos la lista de areas de interés del Estudiante en una cadena separada por "," (comas) para inyectarlo como parámetro.
+	 * @param estudianteId Identificador del estudiante conectado.
+	 * @return Cadena de las areas de interes que ha marcado en "miperfil" o al inscribirse en la plataforma.
+	 */
+	private String getAreasEstudiante(Long estudianteId){
 		return estudianteService.findById(estudianteId)
 				.getAreasInteres().stream()
 				.map(a -> a.getId())
-				.toList();
+				.map(String::valueOf)
+                .collect(Collectors.joining(","));
 	}
+	
 	
 }

@@ -5,7 +5,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import es.alumno.uned.model.entities.AreaTematica;
-
+/**
+ * Repositorio de la entidad AreaTematica.
+ */
 public interface AreaTematicaRepository extends JpaRepository<AreaTematica, Long>{
 	/** Búsqueda individual por Título 
 	 * 

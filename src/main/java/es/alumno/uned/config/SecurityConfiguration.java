@@ -12,7 +12,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
-
+/**
+ * Clase de definición de seguridad de acceso 
+ */
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfiguration {
@@ -44,7 +46,6 @@ public class SecurityConfiguration {
 	            .failureUrl("/login?error=true")
 	            .permitAll()
 	        )
-	        // (sessionManagement) -> sessionManagement.invalidSessionUrl("/invalidSession.html")
             .sessionManagement(session -> session
                     .maximumSessions(1)
                     .sessionRegistry(sessionRegistry()))

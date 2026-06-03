@@ -1,7 +1,5 @@
 <nav th:fragment="paginador(paginacion, claseExtra)" th:if="${paginacion.totalPag > 1}">
     <ul class="pagination justify-content-center" th:classappend="${claseExtra}">
-
-        <!-- Primera -->
         <li class="page-item"
             th:classappend="${paginacion.first} ? ' disabled'">
             <a class="page-link"
@@ -10,7 +8,6 @@
             </a>
         </li>
 
-        <!-- Anterior -->
         <li class="page-item"
             th:classappend="${not paginacion.hasPrevious} ? ' disabled'">
             <a class="page-link"
@@ -19,7 +16,6 @@
             </a>
         </li>
 
-        <!-- Números -->
         <li class="page-item"
             th:each="elemento : ${paginacion.paginas}"
             th:classappend="${elemento.numero == paginacion.pagActual} ? ' active'">
@@ -29,7 +25,6 @@
             </a>
         </li>
 
-        <!-- Siguiente -->
         <li class="page-item"
             th:classappend="${not paginacion.hasNext} ? ' disabled'">
             <a class="page-link"
@@ -38,7 +33,6 @@
             </a>
         </li>
 
-        <!-- Última -->
         <li class="page-item"
             th:classappend="${paginacion.last} ? ' disabled'">
             <a class="page-link"
@@ -60,58 +54,8 @@ se llama al fragmento "PaginadorLateral":
 
 <div th:replace="~{layouts/paginador :: navegacionLateral(${miPaginacion}, ~{::#miTextoCentro}, 'my-4')}"></div>
 -->
-<nav th:fragment="navegacionLateralv0(paginacion, contenidoCentral, claseExtra)" th:if="${paginacion.totalPag > 1}">
-    <div class="d-flex align-items-center justify-content-between" th:classappend="${claseExtra}">
-
-        <div th:classappend="${not paginacion.hasPrevious} ? 'opacity-50'">
-            <a class="btn btn-outline-secondary btn-sm rounded-circle px-2"
-               th:href="${not paginacion.hasPrevious} ? '#' : ${urlBuilder.cloneBuilder().replaceQueryParam('page', paginacion.pagActual - 2).replaceQueryParam('lang','').toUriString()}"
-               th:style="${not paginacion.hasPrevious} ? 'cursor: not-allowed;' : ''">
-                <i class="bi bi-chevron-left"></i>
-            </a>
-        </div>
-
-        <!-- Contenido Central Dinámico Recibido por Parámetro -->
-        <div class="mx-3 flex-grow-1 text-center">
-            <div th:insert="${contenidoCentral}"></div>
-        </div>
-
-        <div th:classappend="${not paginacion.hasNext} ? 'opacity-50'">
-            <a class="btn btn-outline-secondary btn-sm rounded-circle px-2"
-               th:href="${not paginacion.hasNext} ? '#' : ${urlBuilder.cloneBuilder().replaceQueryParam('page', paginacion.pagActual).replaceQueryParam('lang','').toUriString()}"
-               th:style="${not paginacion.hasNext} ? 'cursor: not-allowed;' : ''">
-                <i class="bi bi-chevron-right"></i>
-            </a>
-        </div>
-
-    </div>
-</nav>
-<nav th:fragment="navegacionLateral(paginacion, claseExtra)" th:if="${paginacion.totalPag > 1}">
-    <div th:classappend="${claseExtra}">
-
-        <!-- Flecha Izquierda Única -->
-        <div class="position-absolute top-50 start-0 translate-middle-y" th:classappend="${not paginacion.hasPrevious} ? 'opacity-50'" style="z-index: 1050;">
-            <a class="btn btn-outline-secondary btn-sm rounded-circle px-2"
-               th:href="${not paginacion.hasPrevious} ? '#' : ${urlBuilder.cloneBuilder().replaceQueryParam('page', paginacion.pagActual - 2).replaceQueryParam('lang','').toUriString()}"
-               th:style="${not paginacion.hasPrevious} ? 'cursor: not-allowed;' : ''">
-                <i class="bi bi-chevron-left"></i>
-            </a>
-        </div>
-
-        <!-- Flecha Derecha Única -->
-        <div class="position-absolute top-50 end-0 translate-middle-y" th:classappend="${not paginacion.hasNext} ? 'opacity-50'" style="z-index: 1050;">
-            <a class="btn btn-outline-secondary btn-sm rounded-circle px-2"
-               th:href="${not paginacion.hasNext} ? '#' : ${urlBuilder.cloneBuilder().replaceQueryParam('page', paginacion.pagActual).replaceQueryParam('lang','').toUriString()}"
-               th:style="${not paginacion.hasNext} ? 'cursor: not-allowed;' : ''">
-                <i class="bi bi-chevron-right"></i>
-            </a>
-        </div>
-
-    </div>
-</nav>
 <nav th:fragment="navegacionLateralAJAX(paginacion, targetId, fragmentUrl)" th:if="${paginacion.totalPag > 1}">
     <div>
-        <!-- Flecha Izquierda -->
         <div class="position-absolute top-50 start-0 translate-middle-y" style="z-index: 1050;">
             <button class="btn btn-outline-secondary btn-sm rounded-circle px-2 btn-paginar-ajax"
                     th:if="${paginacion.hasPrevious}"
@@ -119,11 +63,8 @@ se llama al fragmento "PaginadorLateral":
                     th:data-target="'#' + ${targetId}">
                 <i class="bi bi-chevron-left"></i>
             </button>
-            <!--                     th:data-url="@{{url}(url=${fragmentUrl}, page=${paginacion.pagActual - 2})}"-->
-            
         </div>
 
-        <!-- Flecha Derecha -->
         <div class="position-absolute top-50 end-0 translate-middle-y" style="z-index: 1050;">
             <button class="btn btn-outline-secondary btn-sm rounded-circle px-2 btn-paginar-ajax"
                     th:if="${paginacion.hasNext}"
@@ -131,8 +72,6 @@ se llama al fragmento "PaginadorLateral":
                     th:data-target="'#' + ${targetId}">
                 <i class="bi bi-chevron-right"></i>
             </button>
-               <!--                   th:data-url="@{{url}(url=${fragmentUrl}, page=${paginacion.pagActual})}" -->
-            
         </div>
     </div>
 </nav>

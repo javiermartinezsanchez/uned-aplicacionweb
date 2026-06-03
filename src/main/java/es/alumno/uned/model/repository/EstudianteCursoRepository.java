@@ -12,13 +12,18 @@ import org.springframework.data.repository.query.Param;
 import es.alumno.uned.model.entities.EstadoCursoModulo;
 import es.alumno.uned.model.entities.EstudianteCurso;
 import es.alumno.uned.model.entities.EstudianteCursoId;
-
+/**
+ * Repositorio de la entidad EstudianteCurso.
+ */
 public interface EstudianteCursoRepository extends JpaRepository<EstudianteCurso, EstudianteCursoId>, JpaSpecificationExecutor<EstudianteCurso> {
+	/**
+	 * Comprueba si existe EstudianteCurso para los datos enviados.
+	 * @param estudianteId Identificador del Estudiante.
+	 * @param cursoId Identificador del Curso.
+	 * @return True o False, dependiendo de si existe o no.
+	 */
 	boolean existsByIdEstudianteIdAndIdCursoId(Long estudianteId, Long cursoId);
 
-    Optional<EstudianteCurso> findByEstudianteIdAndIdCursoId(Long estudianteId, Long cursoId);
-
-	Page<EstudianteCurso> findByIdEstudianteId(Long estudianteId, Pageable pageable);
 
 	/**
 	 * Listado de EstudianteCurso para el estado de PENDIENTE_REVISION por Profesor (idResponsable)
@@ -50,12 +55,4 @@ public interface EstudianteCursoRepository extends JpaRepository<EstudianteCurso
     	       "AND ec.curso.responsable.id = :idResponsable")
     Long getNumTareasPendientes(@Param("estado") EstadoCursoModulo estado, 
              @Param("idResponsable") Long idResponsable);
-    /**
-     * Listado de EstudianteCursos para un Curso y un Profesor
-     * @param cursoId
-     * @param responsableId
-     * @param pageable
-     * @return Datos encontrados
-     */
-	Page<EstudianteCurso> findByCursoIdAndCursoResponsableId(Long cursoId, Long responsableId, Pageable pageable);
 }

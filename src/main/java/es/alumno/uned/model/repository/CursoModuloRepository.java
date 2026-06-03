@@ -4,7 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import es.alumno.uned.model.entities.CursoModulo;
 import es.alumno.uned.model.entities.CursoModuloId;
-
+/**
+ * Repositorio público de la entidad CursoModulo.
+ */
 public interface CursoModuloRepository extends JpaRepository<CursoModulo, CursoModuloId> {
 
 }

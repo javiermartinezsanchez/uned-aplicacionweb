@@ -43,5 +43,5 @@ public interface ModuloRepository extends JpaRepository<Modulo, Long> {
 	 * @return Datos encontrados.
 	 */
 	Page<Modulo> findByTituloContainingIgnoreCaseAndTipo(String Titulo, TipoModulo tipoModulo, Pageable pagable);
-	//List<Modulo> findByCursoId(Long cursoId);
+
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
@@ -18,12 +19,14 @@ public class CursoModulo {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("cursoId")
-    @JoinColumn(name = "curso_id")
+    @JoinColumn(name = "curso_id", 
+    		foreignKey = @ForeignKey(name = "fk_cursosmodulo_curso"))
     private Curso curso;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("moduloId")
-    @JoinColumn(name = "modulo_id")
+    @JoinColumn(name = "modulo_id", 
+    		foreignKey = @ForeignKey(name = "fk_cursomodulo_modulo"))
     private Modulo modulo;
 
     @Column(name = "orden")

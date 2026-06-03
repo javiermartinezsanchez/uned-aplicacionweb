@@ -10,9 +10,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -25,12 +25,14 @@ public class EstudianteCurso {
 
     @ManyToOne(fetch = FetchType.LAZY)
     //@MapsId("estudianteId")
-    @JoinColumn(name = "estudiante_id", referencedColumnName="usuario_id", insertable = false, updatable=false)
+    @JoinColumn(name = "estudiante_id", referencedColumnName="usuario_id", insertable = false, updatable=false,
+    		foreignKey = @ForeignKey(name = "fk_estudiantecursos_estudiante"))
     private Estudiante estudiante;
 
     @ManyToOne(fetch = FetchType.LAZY)
     //@MapsId("cursoId")
-    @JoinColumn(name = "curso_id", referencedColumnName="curso_id", insertable=false, updatable=false)
+    @JoinColumn(name = "curso_id", referencedColumnName="curso_id", insertable=false, updatable=false,
+    		foreignKey = @ForeignKey(name = "fk_estudiantecursos_curso"))
     private Curso curso;
 
     @Column(name="FECHA_SUBSCRIPCION", nullable = false)

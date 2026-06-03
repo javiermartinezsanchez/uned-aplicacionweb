@@ -5,8 +5,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.data.domain.Pageable;
-
 import es.alumno.uned.dto.CursoDTO;
 import es.alumno.uned.model.entities.Curso;
 import es.alumno.uned.model.records.FicheroData;
@@ -49,8 +47,6 @@ public interface CursoService {
 	 */
 	CursoDTO grabar(CursoDTO dto, FicheroData imagen, List<FicheroData> contenidosExtraFiles, String usuario) throws IOException;
 
-	public Paginacion<Curso, CursoDTO> listadoPaginado( Pageable pageable);
-	
 	/**
 	 * Método para consultas de Cursos con un mapa de parámetros para realizar
 	 * consultas de forma dinámica.
@@ -84,17 +80,6 @@ public interface CursoService {
 	 * @return Página de datos encontrados ordenados por NumVisitas descendente.
 	 */
 	public Paginacion<Curso, CursoDTO> listadoOrderByInscritos( PageParams pageData, Map<String, String> params);
-
-	/**
-	 * Consulta de cursos para estudiantes por su área de interés.
-	 * <p> En los casos en los que no tenga áreas de interés se mostrarán todos.
-	 * <p> No se mostrarán los cursos en los que haya participado el Estudiante.
-	 * @param pageData Datos de la paginación
-	 * @param idEstudiante Id del Estudiante
-	 * @param areasId Lista de areas de interés que tiene marcadas. Si no tiene marcada ninguna se devolverán 
-	 * @return
-	 */
-	public Paginacion<Curso, CursoDTO> listadoCursosDisponiblesPorAreas(  PageParams pageData, Long idEstudiante,  List<Long> areasId);
 
     /**
      * Proceso de guardado de una valoración de un curso

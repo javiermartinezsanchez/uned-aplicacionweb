@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
@@ -37,7 +38,8 @@ public class EstudianteCursoModulo {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("moduloId")
-    @JoinColumn(name = "modulo_id")
+    @JoinColumn(name = "modulo_id", nullable=false,
+    		foreignKey = @ForeignKey(name = "fk_estudiantecursos_modulo"))
     private Modulo modulo;
     
     @Column(name="titulo")

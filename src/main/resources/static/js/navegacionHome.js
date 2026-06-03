@@ -1,12 +1,6 @@
 /**
  * Función genérica que llama a nuestro controlador para refrescar el carrusel de cursos. 
  */
-/**
- * Gestor de Paginación Lateral Dinámica por AJAX (Universal)
- */
-/**
- * Gestor de Paginación Lateral Dinámica por AJAX (Para IDs Estáticos)
- */
 $(document).ready(function() {
     $(document).off('click', '.btn-paginar-ajax').on('click', '.btn-paginar-ajax', function(e) {
         e.preventDefault();
@@ -14,7 +8,7 @@ $(document).ready(function() {
         var $boton = $(this);
         var urlALlamar = $boton.data('url');   
         var idDestino = $boton.data('target'); 
-
+		console.log("urlALlamar: ", urlALlamar);
         if (!urlALlamar || urlALlamar === '#' || !idDestino || $boton.hasClass('disabled')) {
             return;
         }

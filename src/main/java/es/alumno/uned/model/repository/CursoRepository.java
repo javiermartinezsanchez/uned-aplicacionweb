@@ -11,7 +11,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import es.alumno.uned.model.entities.Curso;
-
+/**
+ * Repositorio de la entidad Curso.
+ */
 public interface CursoRepository extends JpaRepository<Curso, Long>, JpaSpecificationExecutor<Curso> {
 
 	/**
@@ -31,20 +33,6 @@ public interface CursoRepository extends JpaRepository<Curso, Long>, JpaSpecific
 	 * @return {@code Optional<Curso>} Encontrado
 	 */
 	Optional<Curso> findByTitulo(String titulo);
-	/**
-	 * Consulta de cursos de areas temáticas que interesan al estudiante, eliminando los cursos que ya haya cursado.
-	 * <p> Lo implementamos con <@link @Query> para no complicar la implementación directa.
-	 * @param areaTematicaIds Lista de áreas de interés 
-	 * @param estudianteId Id del estudiante.
-	 * @param pageable Configuración de la página.
-	 * @return Página de resultados.
-	 */
-	  @Query("SELECT c FROM Curso c WHERE c.areaTematica.id IN :areaIds " +
-	           "AND c.id NOT IN (SELECT ec.id.cursoId FROM EstudianteCurso ec WHERE ec.id.estudianteId = :estudianteId)")
-     Page<Curso> findCursosDisponiblesPorAreas(
-             @Param("areaIds") List<Long> areaIds, 
-             @Param("estudianteId") Long estudianteId, 
-             Pageable pageable);	
 	  
 	/**
 	 * Consulta de los cursos que no ha cursado el Estudiante.

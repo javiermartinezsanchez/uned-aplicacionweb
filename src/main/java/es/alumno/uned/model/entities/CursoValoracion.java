@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,7 +25,8 @@ public class CursoValoracion {
 
     // Relación con Curso
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "curso_id", nullable = false)
+    @JoinColumn(name = "curso_id", nullable = false,
+    		foreignKey = @ForeignKey(name = "fk_cursosvaloracion_curso"))
     private Curso curso;
 
     @Column(name = "usuario_valoracion", nullable = true, length=255)

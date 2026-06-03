@@ -6,6 +6,7 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -25,6 +26,7 @@ import es.alumno.uned.mapper.CursoMapper;
 import es.alumno.uned.model.entities.ContenidoExtra;
 import es.alumno.uned.model.entities.Curso;
 import es.alumno.uned.model.entities.CursoValoracion;
+import es.alumno.uned.model.entities.EstudianteCurso;
 import es.alumno.uned.model.entities.TipoContenido;
 import es.alumno.uned.model.records.FicheroData;
 import es.alumno.uned.model.records.PageParams;
@@ -35,6 +37,8 @@ import es.alumno.uned.model.repository.UsuarioRepository;
 import es.alumno.uned.model.util.Paginacion;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Subquery;
 /**
  * Clase implementadora de {@link CursoService}
  * 
@@ -147,12 +151,6 @@ public class  CursoServiceImpl implements CursoService{
 	}
 
 	@Override
-	public Paginacion<Curso, CursoDTO> listadoPaginado(  Pageable pageable){
-		
-		return construirPaginacion( cursoRepository.findAll(pageable));
-	}
-
-	@Override
 	public Paginacion<Curso, CursoDTO> listadoPaginado( PageParams pageData, Map<String, String> params) {
 		Specification<Curso> condiciones = generaCondiciones(params);
 		return construirPaginacion(cursoRepository.findAll(condiciones, PageRequest.of(pageData.page(), pageData.size())));
@@ -173,16 +171,6 @@ public class  CursoServiceImpl implements CursoService{
 	public Paginacion<Curso, CursoDTO> listadoOrderByInscritos(PageParams pageData, Map<String, String> params) {
 		Specification<Curso> condiciones = generaCondiciones(params);
 		return construirPaginacion(cursoRepository.findAll(condiciones, PageRequest.of(pageData.page(), pageData.size(), Sort.by("usuariosRegistrados").descending())));
-	}
-
-	@Override
-	public Paginacion<Curso, CursoDTO> listadoCursosDisponiblesPorAreas(PageParams pageData, Long idEstudiante,
-			List<Long> areasId) {
-		if (!areasId.isEmpty()) {
-			return construirPaginacion(cursoRepository.findCursosDisponiblesPorAreas(areasId, idEstudiante, PageRequest.of(pageData.page(), pageData.size(), Sort.by("c.areaTematica.titulo").descending())));
-			
-		}
-		return construirPaginacion(cursoRepository.findCursosDisponiblesEstudiante(idEstudiante, PageRequest.of(pageData.page(), pageData.size(),Sort.by("numVistas").descending())));
 	}
 
 	/**
@@ -214,6 +202,21 @@ public class  CursoServiceImpl implements CursoService{
 	        if (filtros.containsKey("areaId")) {
 	            predicates.add(cb.equal(root.get("areaTematica").get("id"), 
 	                           Long.parseLong(filtros.get("areaId"))));
+	        }
+	        if (filtros.containsKey("areaIds")) {
+	        	predicates.add(root.get("areaTematica").get("id").in(Arrays.stream(filtros.get("areaIds").split(","))
+	        			.map(Long::parseLong)
+	                    .toList()
+	        			));
+	        }
+	        if (filtros.containsKey("estudianteId")) {
+	            Subquery<Long> subquery = query.subquery(Long.class);
+	            Root<EstudianteCurso> subRoot = subquery.from(EstudianteCurso.class);
+
+	            subquery.select(subRoot.get("id").get("cursoId"));
+	            subquery.where(cb.equal(subRoot.get("id").get("estudianteId"), Long.parseLong(filtros.get("estudianteId"))));
+
+	            predicates.add(cb.not(root.get("id").in(subquery)));
 	        }
 
 	        if (filtros.containsKey("responsableId")) {
