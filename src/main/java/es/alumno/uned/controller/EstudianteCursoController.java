@@ -37,6 +37,7 @@ import es.alumno.uned.service.ContenidoExtraService;
 import es.alumno.uned.service.CursoService;
 import es.alumno.uned.service.EstudianteCursoService;
 import es.alumno.uned.service.EstudianteService;
+import es.alumno.uned.service.UsuarioService;
 /**
  * Controlador de acciones del Estudiante
  * <p>Subscribirse a un curso
@@ -50,6 +51,8 @@ import es.alumno.uned.service.EstudianteService;
 @Controller
 public class EstudianteCursoController extends BaseCrudController {
 
+	@Autowired
+	UsuarioService usuarioService;
 	@Autowired
 	EstudianteCursoService estudianteCursoService;
 	@Autowired
@@ -90,7 +93,7 @@ public class EstudianteCursoController extends BaseCrudController {
 		modelo.addAttribute("paginacion", paginacion);
 		modelo.addAttribute("paginacionCD", paginacionCD);
 		modelo.addAttribute("paginacionCF", paginacionCF);
-
+		modelo.addAttribute("usuarios", usuarioService.listarProfesores());
 
 		return "estudiante/home";
 	}
@@ -149,6 +152,18 @@ public class EstudianteCursoController extends BaseCrudController {
 	    return "redirect:/estudiante/micurso/" + idCurso;
 	}
 
+	@GetMapping("/miscursos")
+	public String verMisCursos(@AuthenticationPrincipal SecurityUser userConnected,
+			@RequestParam Map<String, String> paramsBusqueda,
+			@RequestParam(name="page", defaultValue = "0") int page,
+			Model modelo) {
+		paramsBusqueda.put("estudianteId", userConnected.getId().toString());
+		Paginacion<EstudianteCurso, EstudianteCursoDTO> paginacion = estudianteCursoService.listadoPaginado( getParams( 0, 10), paramsToMap(paramsBusqueda));
+		setModeloListado(modelo, "estudiante/miscursos", "", "estudiante/micurso","/"); 
+		modelo.addAttribute("paginacion", paginacion);
+		modelo.addAttribute("usuarios", usuarioService.listarProfesores());
+		return modelo.getAttribute("viewName").toString();
+	}
 	@GetMapping("/curso/{idCurso}/modulo/{idModulo}/verEntrega")
 	public ResponseEntity<?> descargarEntrega(
 	        @PathVariable Long idCurso,

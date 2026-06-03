@@ -52,7 +52,7 @@
        
                       <!-- Si es estudiante -->
                       <li class="nav-item" sec:authorize="hasAnyRole('ESTUD')">
-                        <a class="dropdown-item" th:href="@{/miscursos}"><i class="bi bi-collection"></i> Mis Cursos</a>
+                        <a class="dropdown-item" th:href="@{/estudiante/miscursos}"><i class="bi bi-collection"></i> <span th:text="#{home.lista.cursos.miscursos}"></span></a>
                       </li>
  
 	                  <li><hr class="dropdown-divider"></li>

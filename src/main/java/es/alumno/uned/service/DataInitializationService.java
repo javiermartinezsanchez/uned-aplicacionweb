@@ -379,42 +379,81 @@ FROM modulos;
 			Le deseamos la mejor experiencia.""", 
 			TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); 
 				}
-			if (moduloRepo.findByTituloContainingIgnoreCase("Ejercicio Práctico para el Alumno API-REST") == null) { moduloRepo.save(new Modulo("Ejercicio Práctico para el Alumno API-REST", "Ejercicio Práctico para el Alumno", "Desafío:
+			if (moduloRepo.findByTituloContainingIgnoreCase("Ejercicio Práctico para el Alumno API-REST") == null) { 
+				moduloRepo.save(new Modulo("Ejercicio Práctico para el Alumno API-REST", "Ejercicio Práctico para el Alumno", 
+						"""
+				Desafío:
+			
+			
 			1.	Crea la API desde cero siguiendo la estructura.
 			2.	Introduce un error intencional en el Service (ej: lanzar una ResourceNotFoundException si el ID no existe).
 			3.	Verifica que el @ControllerAdvice capture la excepción y devuelva un JSON con el código 404 y un mensaje amigable.
 			4.	Envía una petición POST con datos inválidos (ej: nombre vacío) y verifica que el Advice capture el MethodArgumentNotValidException y devuelva los detalles de los campos erróneos.
 			5.	Genera la documentación Javadoc y Swagger y verifica que los endpoints estén listados correctamente.
-			6. Genera un PDF con la estructura básica del proyecto y con las pruebas realizadas y su resultado", TipoModulo.ENTREGA_OBLIGATORIA, LocalDateTime.now(), "CARGAINICIAL")); }
-			if (moduloRepo.findByTituloContainingIgnoreCase("Introducción al curso") == null) { moduloRepo.save(new Modulo("Introducción al curso", "Bienvenida", "Le damos la bienvenida a este curso en la que mediante los apartados que le presentamos adquirirá un magnífico conocimiento sobre lo indicado
-			Podrá navegar por los diferentes apartados e ir avanzando de acuerdo a las características del mismo. ", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); }
-			if (moduloRepo.findByTituloContainingIgnoreCase("Introducción a React y Componentes") == null) { moduloRepo.save(new Modulo("Introducción a React y Componentes", "Configuración del entorno, JSX y creación de componentes funcionales.", "Configuración del entorno con Vite, sintaxis JSX, componentes funcionales, renderizado condicional, manejo de eventos básicos y uso de fragmentos (<></>).
-			", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); }
-			if (moduloRepo.findByTituloContainingIgnoreCase("React Props y Estado (State)") == null) { moduloRepo.save(new Modulo("React Props y Estado (State)", "Pasando datos entre componentes y manejo de estados locales con useState.", "Comunicación entre componentes (padre a hijo) mediante props, validación con PropTypes, desestructuración, introducción al hook useState y actualización asíncrona del estado.
+			6. Genera un PDF con la estructura básica del proyecto y con las pruebas realizadas y su resultado""", 
+			TipoModulo.ENTREGA_OBLIGATORIA, LocalDateTime.now(), "CARGAINICIAL")); 
+				}
+			if (moduloRepo.findByTituloContainingIgnoreCase("Introducción al curso") == null) { 
+				moduloRepo.save(new Modulo("Introducción al curso", "Bienvenida", 
+						"""
+			Le damos la bienvenida a este curso en la que mediante los apartados que le presentamos adquirirá un magnífico conocimiento sobre lo indicado
+			
+			Podrá navegar por los diferentes apartados e ir avanzando de acuerdo a las características del mismo. """, TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); 
+				}
+			if (moduloRepo.findByTituloContainingIgnoreCase("Introducción a React y Componentes") == null) { 
+				moduloRepo.save(new Modulo("Introducción a React y Componentes", "Configuración del entorno, JSX y creación de componentes funcionales.", 
+						"""
+				Configuración del entorno con Vite, sintaxis JSX, componentes funcionales, renderizado condicional, manejo de eventos básicos y uso de fragmentos (<></>).
+						""", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); 
+						
+				}
+			if (moduloRepo.findByTituloContainingIgnoreCase("React Props y Estado (State)") == null) { 
+				moduloRepo.save(new Modulo("React Props y Estado (State)", "Pasando datos entre componentes y manejo de estados locales con useState.", 
+						"""
+				Comunicación entre componentes (padre a hijo) mediante props, validación con PropTypes, desestructuración, introducción al hook useState y actualización asíncrona del estado.
+			
 
 			Crear un lista de tareas (Todo App) interactiva donde se puedan añadir más elementos.
-			", TipoModulo.ENTREGA_OBLIGATORIA, LocalDateTime.now(), "CARGAINICIAL")); }
-			if (moduloRepo.findByTituloContainingIgnoreCase("React Efectos y Ciclo de Vida") == null) { moduloRepo.save(new Modulo("React Efectos y Ciclo de Vida", "Sincronización con APIs externas y uso avanzado del hook useEffect", "- Ciclo de vida de los componentes.
+			""", TipoModulo.ENTREGA_OBLIGATORIA, LocalDateTime.now(), "CARGAINICIAL")); }
+			if (moduloRepo.findByTituloContainingIgnoreCase("React Efectos y Ciclo de Vida") == null) { 
+				moduloRepo.save(new Modulo("React Efectos y Ciclo de Vida", "Sincronización con APIs externas y uso avanzado del hook useEffect", 
+						"""
+			- Ciclo de vida de los componentes.
 			- Efectos secundarios con el hook useEffect.
 			- Consumo de APIs REST usando fetch o axios.
 			- Manejo de estados de carga (loading) y errores.
 			- Limpieza de efectos (cleanup functions).
-			", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); }
-			if (moduloRepo.findByTituloContainingIgnoreCase("Enrutamiento con React Router") == null) { moduloRepo.save(new Modulo("Enrutamiento con React Router", "Creación de aplicaciones de múltiples páginas y navegación interna.", "Instalación y configuración de react-router-dom, definición de rutas estáticas y dinámicas (/productos/:id), uso de enlaces de navegación (Link, NavLink) y redirecciones programáticas con useNavigate.
-			", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); }
-			if (moduloRepo.findByTituloContainingIgnoreCase("React. Gestión de Estado") == null) { moduloRepo.save(new Modulo("React. Gestión de Estado", "Compartir información en toda la app usando Context API o Redux Toolkit.", "- Limitaciones del prop drilling
+			""", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); }
+			if (moduloRepo.findByTituloContainingIgnoreCase("Enrutamiento con React Router") == null) { 
+				moduloRepo.save(new Modulo("Enrutamiento con React Router", "Creación de aplicaciones de múltiples páginas y navegación interna.", 
+						"""
+				Instalación y configuración de react-router-dom, definición de rutas estáticas y dinámicas (/productos/:id), uso de enlaces de navegación (Link, NavLink) y redirecciones programáticas con useNavigate.
+						""", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); 
+				}
+			if (moduloRepo.findByTituloContainingIgnoreCase("React. Gestión de Estado") == null) { 
+				moduloRepo.save(new Modulo("React. Gestión de Estado", "Compartir información en toda la app usando Context API o Redux Toolkit.", 
+						"""
+			- Limitaciones del prop drilling
 			- Uso de Context API (createContext, useContext)
 			- Proveedores de estado
 			- Persistencia de datos en localStorage
 			- Optimización de renderizados.
-			", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); }
-			if (moduloRepo.findByTituloContainingIgnoreCase("React. Ejercicio Práctico para el Alumno") == null) { moduloRepo.save(new Modulo("React. Ejercicio Práctico para el Alumno", "Entrega final", "E-commerce Completo.
-			--------------------
+			""", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); 
+				}
+			if (moduloRepo.findByTituloContainingIgnoreCase("React. Ejercicio Práctico para el Alumno") == null) { 
+				moduloRepo.save(new Modulo("React. Ejercicio Práctico para el Alumno", "Entrega final", 
+						"""
+				E-commerce Completo.
+				--------------------
 			Integración de todas las entregas anteriores en una tienda virtual con catálogo (API), carrito de compras gestionado de forma global y pasarela de pago simulada.
 
-			", TipoModulo.ENTREGA_OBLIGATORIA, LocalDateTime.now(), "CARGAINICIAL")); }
-			if (moduloRepo.findByTituloContainingIgnoreCase("Controlador REST (ResourceController.java)") == null) { moduloRepo.save(new Modulo("Controlador REST (ResourceController.java)", "Controlador REST (ResourceController.java)", "En Spring Boot 3, un Controlador REST es una clase que maneja solicitudes HTTP y produce respuestas en formatos como JSON o XML. Para definir un controlador REST, se utiliza la anotación @RestController, que es una especialización de @Controller y @ResponseBody. Esta anotación indica a Spring que los métodos de la clase producirán respuestas directamente en el cuerpo de la respuesta HTTP, en lugar de renderizar vistas.
-
+			""", TipoModulo.ENTREGA_OBLIGATORIA, LocalDateTime.now(), "CARGAINICIAL")); 
+				}
+			if (moduloRepo.findByTituloContainingIgnoreCase("Controlador REST (ResourceController.java)") == null) { 
+				moduloRepo.save(new Modulo("Controlador REST (ResourceController.java)", "Controlador REST (ResourceController.java)", 
+						"""
+				En Spring Boot 3, un Controlador REST es una clase que maneja solicitudes HTTP y produce respuestas en formatos como JSON o XML. Para definir un controlador REST, se utiliza la anotación @RestController, que es una especialización de @Controller y @ResponseBody. Esta anotación indica a Spring que los métodos de la clase producirán respuestas directamente en el cuerpo de la respuesta HTTP, en lugar de renderizar vistas.
+			
 			Un ejemplo básico de un controlador REST, incluyendo las anotaciones básicas a utilizar:
 
 			package com.ejemplo.demo.controlador;
@@ -429,8 +468,12 @@ FROM modulos;
 			    public String saludar() {
 			        return "¡Hola, mundo!";
 			    }
-			}, TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); }
-			if (moduloRepo.findByTituloContainingIgnoreCase("Manejo Global de Excepciones (GlobalExceptionHandler.java)") == null) { moduloRepo.save(new Modulo("Manejo Global de Excepciones (GlobalExceptionHandler.java)", "Manejo Global de Excepciones (GlobalExceptionHandler.java)", "¿Qué es @ControllerAdvice?
+			}""", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); }
+			if (moduloRepo.findByTituloContainingIgnoreCase("Manejo Global de Excepciones (GlobalExceptionHandler.java)") == null) { 
+				moduloRepo.save(new Modulo("Manejo Global de Excepciones (GlobalExceptionHandler.java)", "Manejo Global de Excepciones (GlobalExceptionHandler.java)", 
+						"""
+				¿Qué es @ControllerAdvice?
+			
 			@ControllerAdvice es una anotación de Spring que nos ayuda a capturar y procesar excepciones desde un solo punto, evitando repetir código en cada controlador.
 
 			¿Por qué usar @ControllerAdvice?
@@ -504,10 +547,13 @@ FROM modulos;
 			Conclusión
 			@ControllerAdvice en Spring Boot nos permite gestionar excepciones de manera eficiente y centralizada. Con esta técnica, podemos dar respuestas más claras y personalizadas, hacer el código más mantenible y seguir buenas prácticas en el desarrollo de aplicaciones.
 
-
-
-			", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); }
-			if (moduloRepo.findByTituloContainingIgnoreCase("DTO y Validación (ResourceDTO.java)") == null) { moduloRepo.save(new Modulo("DTO y Validación (ResourceDTO.java)", "DTO y Validación (ResourceDTO.java)", "El uso de DTO o Data Transfer Object es uno de los conceptos más habituales a nivel de Arquitectura cuando devolvemos en nuestros servicios estructuras de datos . Muchos servicios devuelven objetos de negocio o gráfos con objetos de negocio relacionados . Es decir cuando nosotros tenemos un método que nos devuelve información sobre Personas lo más sencillo es devolver por ejemplo una lista de Personas desde un servicio.
+			""", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); 
+				}
+			if (moduloRepo.findByTituloContainingIgnoreCase("DTO y Validación (ResourceDTO.java)") == null) { moduloRepo.save(new Modulo("DTO y Validación (ResourceDTO.java)", "DTO y Validación (ResourceDTO.java)", 
+					"""
+			
+			El uso de DTO o Data Transfer Object es uno de los conceptos más habituales a nivel de Arquitectura cuando devolvemos en nuestros servicios estructuras de datos . Muchos servicios devuelven objetos de negocio o gráfos con objetos de negocio relacionados . Es decir cuando nosotros tenemos un método que nos devuelve información sobre Personas lo más sencillo es devolver por ejemplo una lista de Personas desde un servicio.
+			
 
 			Vamos a ver un ejemplo con la clase Persona:
 
@@ -543,66 +589,112 @@ FROM modulos;
 			  }
 			}
 
-			", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); }
-			if (moduloRepo.findByTituloContainingIgnoreCase("Módulo 3: Contenedores y Serverless (Computación Moderna)") == null) { moduloRepo.save(new Modulo("Módulo 3: Contenedores y Serverless (Computación Moderna)", "Curso: Arquitectura y Despliegue en Google Cloud. Mod-3", "Contenerización: Introducción a Docker y empaquetado de aplicaciones en Artifact Registry.
+			""", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); 
+			}
+			if (moduloRepo.findByTituloContainingIgnoreCase("Módulo 3: Contenedores y Serverless (Computación Moderna)") == null) { 
+				moduloRepo.save(new Modulo("Módulo 3: Contenedores y Serverless (Computación Moderna)", "Curso: Arquitectura y Despliegue en Google Cloud. Mod-3", 
+						"""
+				
+				Contenerización: Introducción a Docker y empaquetado de aplicaciones en Artifact Registry.
+			
 
 			Orquestación: Fundamentos de Kubernetes y despliegue de microservicios en Google Kubernetes Engine (GKE).
 
 			Serverless: Ejecución de servicios basados en eventos con Cloud Run y Cloud Functions.
 
-			Laboratorio: Migrar la aplicación web del Módulo 1 a un contenedor Docker y desplegarla en Cloud Run.", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); }
-			if (moduloRepo.findByTituloContainingIgnoreCase("Módulo 4: Monitorización, Seguridad y DevOps") == null) { moduloRepo.save(new Modulo("Módulo 4: Monitorización, Seguridad y DevOps", "Curso: Arquitectura y Despliegue en Google Cloud Mod-4", "Observabilidad: Configuración de logs, métricas y alertas utilizando Google Cloud Observability (antiguo Stackdriver).
-
+			Laboratorio: Migrar la aplicación web del Módulo 1 a un contenedor Docker y desplegarla en Cloud Run.""", 
+			TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); }
+			if (moduloRepo.findByTituloContainingIgnoreCase("Módulo 4: Monitorización, Seguridad y DevOps") == null) { 
+				moduloRepo.save(new Modulo("Módulo 4: Monitorización, Seguridad y DevOps", "Curso: Arquitectura y Despliegue en Google Cloud Mod-4", 
+						"""
+			Observabilidad: Configuración de logs, métricas y alertas utilizando Google Cloud Observability (antiguo Stackdriver).
+			
 			Automatización: Introducción a la Infraestructura como Código (IaC) en GCP mediante Deployment Manager o Terraform.
 
 			Seguridad avanzada: Gestión de secretos con Secret Manager y protección de red con Cloud Armor.
 
-			Laboratorio: Crear un cuadro de mando (Dashboard) para monitorizar el tráfico y el consumo de recursos de los servicios desplegados.", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); }
-			if (moduloRepo.findByTituloContainingIgnoreCase("Módulo 1: Fundamentos e Infraestructura Global") == null) { moduloRepo.save(new Modulo("Módulo 1: Fundamentos e Infraestructura Global", "Curso: Arquitectura y Despliegue en Google Cloud Mod-1", "Conceptos clave: Regiones, zonas de disponibilidad y el modelo de responsabilidad compartida de GCP.
-
+			Laboratorio: Crear un cuadro de mando (Dashboard) para monitorizar el tráfico y el consumo de recursos de los servicios desplegados.""", 
+			TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); 
+				}
+			if (moduloRepo.findByTituloContainingIgnoreCase("Módulo 1: Fundamentos e Infraestructura Global") == null) { 
+				moduloRepo.save(new Modulo("Módulo 1: Fundamentos e Infraestructura Global", "Curso: Arquitectura y Despliegue en Google Cloud Mod-1", 
+						"""
+			Conceptos clave: Regiones, zonas de disponibilidad y el modelo de responsabilidad compartida de GCP.
+			
 			Gestión de accesos: Configuración de proyectos, jerarquía de recursos e identidades con Cloud IAM.
 
 			Computación básica: Creación, administración y escalado de máquinas virtuales en Compute Engine.
 
-			Laboratorio: Despliegue de una aplicación web básica sobre una instancia Linux de Compute Engine.", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); }
-			if (moduloRepo.findByTituloContainingIgnoreCase("Módulo 2: Redes y Almacenamiento en la Nube") == null) { moduloRepo.save(new Modulo("Módulo 2: Redes y Almacenamiento en la Nube", "Curso: Arquitectura y Despliegue en Google Cloud Mod-2", "Networking: Diseño de redes virtuales (VPC), subredes, reglas de firewall y asignación de IPs.
-
+			Laboratorio: Despliegue de una aplicación web básica sobre una instancia Linux de Compute Engine.""", 
+			TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); 
+				}
+			if (moduloRepo.findByTituloContainingIgnoreCase("Módulo 2: Redes y Almacenamiento en la Nube") == null) { 
+				moduloRepo.save(new Modulo("Módulo 2: Redes y Almacenamiento en la Nube", "Curso: Arquitectura y Despliegue en Google Cloud Mod-2", 
+						"""
+			Networking: Diseño de redes virtuales (VPC), subredes, reglas de firewall y asignación de IPs.
+			
 			Almacenamiento de objetos: Ciclos de vida y clases de almacenamiento en Cloud Storage.
 
 			Bases de datos: Diferencias y configuración de Cloud SQL (relacional) y Cloud Firestore (NoSQL).
 
-			Laboratorio: Conectar de forma segura un servidor web a una base de datos gestionada en Cloud SQL.", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); }
-			if (moduloRepo.findByTituloContainingIgnoreCase("Módulo 5: Proyecto Fin de Curso (Arquitectura Multicapa Resiliente)") == null) { moduloRepo.save(new Modulo("Módulo 5: Proyecto Fin de Curso (Arquitectura Multicapa Resiliente)", " Curso: Arquitectura y Despliegue en Google Cloud. Mod-5", "Objetivo: Integrar todos los conocimientos adquiridos para diseñar, desplegar y asegurar una infraestructura profesional.
+			Laboratorio: Conectar de forma segura un servidor web a una base de datos gestionada en Cloud SQL.""", 
+			TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); 
+				}
+			if (moduloRepo.findByTituloContainingIgnoreCase("Módulo 5: Proyecto Fin de Curso (Arquitectura Multicapa Resiliente)") == null) { 
+				moduloRepo.save(new Modulo("Módulo 5: Proyecto Fin de Curso (Arquitectura Multicapa Resiliente)", " Curso: Arquitectura y Despliegue en Google Cloud. Mod-5", 
+						"""
+			Objetivo: Integrar todos los conocimientos adquiridos para diseñar, desplegar y asegurar una infraestructura profesional.
+				Requisitos del trabajo final:
+			    Arquitectura detrás de un Cloud Load Balancing (Balanceador de carga).
+			    Uso de bases de datos Cloud SQL aisladas en subredes privadas.
+			    Uso de Secret Manager para almacenar las credenciales de la base de datos de forma segura (sin texto plano).
+			    Escalado automático (Autoscaling) configurado ante picos de tráfico.
 
-			Requisitos del trabajo final:
-			             Arquitectura detrás de un Cloud Load Balancing (Balanceador de carga).
-			             Uso de bases de datos Cloud SQL aisladas en subredes privadas.
-			             Uso de Secret Manager para almacenar las credenciales de la base de datos de forma segura (sin texto plano).
-			             Escalado automático (Autoscaling) configurado ante picos de tráfico.
-
-			Entregables: Diagrama de arquitectura del sistema, código fuente (o scripts de despliegue) y una breve memoria técnica justificando las decisiones de diseño.", TipoModulo.ENTREGA_OBLIGATORIA, LocalDateTime.now(), "CARGAINICIAL")); }
-			if (moduloRepo.findByTituloContainingIgnoreCase("Módulo 1: Fundamentos del Modelo TCP/IP y Direccionamiento") == null) { moduloRepo.save(new Modulo("Módulo 1: Fundamentos del Modelo TCP/IP y Direccionamiento", "Curso: TCP/IP, Routing, Switching y Configuración Básica MOD-1", "Conceptos clave: Comparativa entre el Modelo OSI y el Modelo TCP/IP (Capas de aplicación, transporte, red y acceso al medio).
-
+			Entregables: Diagrama de arquitectura del sistema, código fuente (o scripts de despliegue) y una breve memoria técnica justificando las decisiones de diseño.""", 
+			TipoModulo.ENTREGA_OBLIGATORIA, LocalDateTime.now(), "CARGAINICIAL")); 
+				}
+			if (moduloRepo.findByTituloContainingIgnoreCase("Módulo 1: Fundamentos del Modelo TCP/IP y Direccionamiento") == null) { 
+				moduloRepo.save(new Modulo("Módulo 1: Fundamentos del Modelo TCP/IP y Direccionamiento", "Curso: TCP/IP, Routing, Switching y Configuración Básica MOD-1", 
+						"""
+			Conceptos clave: Comparativa entre el Modelo OSI y el Modelo TCP/IP (Capas de aplicación, transporte, red y acceso al medio).
+			
 			Direccionamiento IPv4: Estructura de una dirección IP, máscaras de red, cálculo de subredes (Subnetting) y direccionamiento público vs. privado.
 
 			Protocolos esenciales: Funcionamiento práctico de ARP, ICMP (Ping/Traceroute) y asignación dinámica mediante DHCP.
 
-			Laboratorio de prueba: Diseño de un esquema de direccionamiento IPv4 para tres departamentos utilizando software de simulación (ej. Packet Tracer).", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); }
-			if (moduloRepo.findByTituloContainingIgnoreCase("Módulo 2: Configuración Básica de Dispositivos de Red (Cisco/Generic)") == null) { moduloRepo.save(new Modulo("Módulo 2: Configuración Básica de Dispositivos de Red (Cisco/Generic)", "Curso: TCP/IP, Routing, Switching y Configuración Básica MOD-2", "Interfaz de línea de comandos (CLI): Modos de operación (Usuario, Privilegiado, Configuración Global).
+			Laboratorio de prueba: Diseño de un esquema de direccionamiento IPv4 para tres departamentos utilizando software de simulación (ej. Packet Tracer).""", 
+			TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); 
+				}
+			if (moduloRepo.findByTituloContainingIgnoreCase("Módulo 2: Configuración Básica de Dispositivos de Red (Cisco/Generic)") == null) { 
+				moduloRepo.save(new Modulo("Módulo 2: Configuración Básica de Dispositivos de Red (Cisco/Generic)", "Curso: TCP/IP, Routing, Switching y Configuración Básica MOD-2", 
+						"""
+				Interfaz de línea de comandos (CLI): Modos de operación (Usuario, Privilegiado, Configuración Global).
+			
 
 			Seguridad inicial: Configuración de nombres de host, contraseñas de acceso (Console, Enable, VTY/SSH) y banners de advertencia.
 
 			Gestión de archivos: Administración de la memoria del dispositivo (Running-config, Startup-config y copias de seguridad de IOS).
 
-			Laboratorio de prueba: Inicialización y securización desde cero de un Router y un Switch de forma local.", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); }
-			if (moduloRepo.findByTituloContainingIgnoreCase("Módulo 3: Tecnologías de Capa 2 (Switching y VLANs)") == null) { moduloRepo.save(new Modulo("Módulo 3: Tecnologías de Capa 2 (Switching y VLANs)", "Curso: TCP/IP, Routing, Switching y Configuración Básica MOD-3", "Operación del Switch: Funcionamiento y construcción automática de la tabla de direcciones MAC.
-
+			Laboratorio de prueba: Inicialización y securización desde cero de un Router y un Switch de forma local.""", 
+			TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); 
+				}
+			if (moduloRepo.findByTituloContainingIgnoreCase("Módulo 3: Tecnologías de Capa 2 (Switching y VLANs)") == null) { 
+				moduloRepo.save(new Modulo("Módulo 3: Tecnologías de Capa 2 (Switching y VLANs)", "Curso: TCP/IP, Routing, Switching y Configuración Básica MOD-3", 
+						"""
+			Operación del Switch: Funcionamiento y construcción automática de la tabla de direcciones MAC.
+			
 			Segmentación de red: Creación, diseño y asignación de puertos en Redes Locales Virtuales (VLANs).
 
 			Enlaces troncales: Configuración de enlaces troncales mediante el protocolo 802.1Q y etiquetado de tramas.
 
-			Laboratorio de prueba: Implementación de VLANs de Voz y Datos en un switch para aislar el tráfico de una oficina.", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); }
-			if (moduloRepo.findByTituloContainingIgnoreCase("Módulo 4: Enrutamiento IP (Routing Estático y Dinámico)") == null) { moduloRepo.save(new Modulo("Módulo 4: Enrutamiento IP (Routing Estático y Dinámico)", "Curso: TCP/IP, Routing, Switching y Configuración Básica MOD-4", "Conceptos de Routing: Funcionamiento de la tabla de enrutamiento y el proceso de reenvío de paquetes.
+			Laboratorio de prueba: Implementación de VLANs de Voz y Datos en un switch para aislar el tráfico de una oficina.""", 
+			TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); 
+				}
+			if (moduloRepo.findByTituloContainingIgnoreCase("Módulo 4: Enrutamiento IP (Routing Estático y Dinámico)") == null) { 
+				moduloRepo.save(new Modulo("Módulo 4: Enrutamiento IP (Routing Estático y Dinámico)", "Curso: TCP/IP, Routing, Switching y Configuración Básica MOD-4", 
+						"""
+				Conceptos de Routing: Funcionamiento de la tabla de enrutamiento y el proceso de reenvío de paquetes.
+			
 
 			Enrutamiento Inter-VLAN: Configuración de routing entre VLANs utilizando la técnica Router-on-a-Stick (Subinterfaces).
 
@@ -610,8 +702,14 @@ FROM modulos;
 
 			Introducción al Routing Dinámico: Conceptos básicos de protocolos de estado de enlace (como OSPF básico de área única).
 
-			Laboratorio de prueba: Interconexión de dos sedes geográficas distintas mediante rutas estáticas flotantes para tolerancia a fallos.", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); }
-			if (moduloRepo.findByTituloContainingIgnoreCase("Módulo 5: Trabajo Final (Diseño e Implementación de una Red Corporativa)") == null) { moduloRepo.save(new Modulo("Módulo 5: Trabajo Final (Diseño e Implementación de una Red Corporativa)", "Curso: TCP/IP, Routing, Switching y Configuración Básica MOD-4", "Objetivo: Integrar los conocimientos de direccionamiento, conmutación y enrutamiento para desplegar la red de una pequeña empresa simulación.
+			Laboratorio de prueba: Interconexión de dos sedes geográficas distintas mediante rutas estáticas flotantes para tolerancia a fallos.""", 
+			TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); 
+				}
+			if (moduloRepo.findByTituloContainingIgnoreCase("Módulo 5: Trabajo Final (Diseño e Implementación de una Red Corporativa)") == null) { 
+				moduloRepo.save(new Modulo("Módulo 5: Trabajo Final (Diseño e Implementación de una Red Corporativa)", "Curso: TCP/IP, Routing, Switching y Configuración Básica MOD-4", 
+						"""
+				Objetivo: Integrar los conocimientos de direccionamiento, conmutación y enrutamiento para desplegar la red de una pequeña empresa simulación.
+			
 
 			Requisitos del trabajo final:
 			           - Diseño de un esquema de subredes eficiente para 4 departamentos diferentes.
@@ -619,7 +717,9 @@ FROM modulos;
 			           - Implementación de un router centralizado que proporcione Routing Inter-VLAN y asignación automática por DHCP a los clientes.
 			           - Habilitación de acceso seguro remoto por SSH en todos los equipos de la topología.
 
-			Entregables: Archivo de simulación de red (.pkt o similar) con la topología operativa, una tabla oficial con el direccionamiento IP de la red y un documento con los comandos CLI utilizados para la auditoría.", TipoModulo.ENTREGA_OBLIGATORIA, LocalDateTime.now(), "CARGAINICIAL")); }
+			Entregables: Archivo de simulación de red (.pkt o similar) con la topología operativa, una tabla oficial con el direccionamiento IP de la red y un documento con los comandos CLI utilizados para la auditoría.""", 
+			TipoModulo.ENTREGA_OBLIGATORIA, LocalDateTime.now(), "CARGAINICIAL")); 
+				}
 
 
 			// generación de cursomodulo para datos iniciales.

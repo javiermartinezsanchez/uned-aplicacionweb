@@ -2,6 +2,7 @@ package es.alumno.uned.service;
 
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -10,13 +11,10 @@ import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import es.alumno.uned.dto.CursoDTO;
 import es.alumno.uned.dto.EstudianteCursoDTO;
 import es.alumno.uned.dto.EstudianteCursoModuloDTO;
 import es.alumno.uned.exception.CursoModuloEstadoIncompatibleException;
@@ -100,6 +98,14 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 		
 		return dto;
 	}
+	/**
+	 * Comprobación de la existencia del Estudiante y el Curso que vamos a recuperar.
+	 * <p> Aunque esta comprobación ya la hace el modelo en la BD, se realiza esta comprobación previa para evitar Error 500.
+	 * <p> Se generan las correspondientes excepciones (propias) para devolver el mensaje correspondiente a la vista que lo solicita.	
+	 * @param estudianteId Identificador del estudiante.
+	 * @param cursoId Identificador del curso.
+	 * @return Un nuevo EstudianteCurso con los datos enviados.
+	 */
 	private EstudianteCurso comprobarEstudianteYCurso(Long estudianteId, Long cursoId) {
         Estudiante estudiante = estudianteRepository.findById(estudianteId)
                 .orElseThrow(() -> new EstudianteNotExistException("msg.exception.notfound", null, "estudiante.titulo"));
@@ -168,7 +174,12 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 				idResponsable,
 				PageRequest.of(pageData.page(), pageData.size())));
 	}
-
+	/**
+	 * Convertimos los filtros de las vistas (Mapa de parámetros), en condiciones para la búsqueda.
+	 * 
+	 * @param filtros Mapa de parámetros ya limpios (eliminados los vacios).
+	 * @return Devuelve un conjunto de "Predicates" que componen las condiciones de búsqueda.
+	 */
 	private static Specification<EstudianteCurso> generaCondiciones(Map<String, String> filtros) {
 	    return (root, query, cb) -> {
 
@@ -197,6 +208,27 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
                Predicate responsable = cb.equal(root.get("curso").get("responsable").get("id"), Long.valueOf(filtros.get("curso.usuario.id")));
                predicates.add(cb.and(curso,responsable));
 	        }
+	        if (filtros.containsKey("titulo")) {
+	            predicates.add(cb.like(cb.lower(root.get("curso").get("titulo")), 
+	                           "%" + filtros.get("titulo").toLowerCase() + "%"));
+	        }
+	        if (filtros.containsKey("nivel")) {
+	            predicates.add(cb.equal(root.get("curso").get("nivel"), filtros.get("nivel")));
+	        }
+	        if (filtros.containsKey("areaId")) {
+	            predicates.add(cb.equal(root.get("curso").get("areaTematica").get("id"), 
+	                           Long.parseLong(filtros.get("areaId"))));
+	        }
+	        if (filtros.containsKey("fIni")) {
+	            predicates.add(cb.greaterThanOrEqualTo(root.get("curso").get("fIni"), 
+	                           LocalDate.parse(filtros.get("fIni"))));
+	        }
+
+	        if (filtros.containsKey("fFin")) {
+	            predicates.add(cb.lessThanOrEqualTo(root.get("curso").get("fFin"), 
+	                           LocalDate.parse(filtros.get("fFin"))));
+	        }
+
 	        return cb.and(predicates.toArray(new Predicate[0]));
 	    };
 	}
@@ -298,6 +330,7 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 		ecm.setEstado(EstadoCursoModulo.COMPLETADO);
 		
 	}
+	
 	@Transactional(readOnly = true)
 	@Override
 	public Paginacion<EstudianteCurso, EstudianteCursoDTO> listadoPaginado(PageParams pageData,
@@ -306,16 +339,12 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 	return construirPaginacionList(estudianteCursoRepository.findAll(condiciones, PageRequest.of(pageData.page(), pageData.size())));
 	}
 
-	private Page<EstudianteCurso> getPaginaBusqueda(Pageable pageable, Map<String, String> params){
-		if (params.containsKey("estudianteId")){
-			return estudianteCursoRepository.findByIdEstudianteId(Long.valueOf(params.get("estudianteId")),pageable);
-		}
-		if (params.containsKey("curso.id") && params.containsKey("curso.usuario.id")) {
-			return estudianteCursoRepository.findByCursoIdAndCursoResponsableId(Long.valueOf(params.get("curso.id")),Long.valueOf(params.get("curso.usuario.id") ),pageable);
-		}
-		return null;
-	}
-
+	/**
+	 * Builder de paginación para listados.
+	 * <p> Recibe la consulta en formato {@link Page} y lo mapea a su DTO.
+	 * @param page Consulta realizada.
+	 * @return Paginación para ser visualizado en la vista.
+	 */
 	private Paginacion<EstudianteCurso, EstudianteCursoDTO> construirPaginacionList( Page<EstudianteCurso> page) {
         return new Paginacion.Builder<EstudianteCurso, EstudianteCursoDTO>()
                 .pagina(page)

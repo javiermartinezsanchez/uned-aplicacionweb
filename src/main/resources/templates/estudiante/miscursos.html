@@ -12,13 +12,7 @@
         <h1 class="mb-0" th:text="#{comun.lista(#{curso.lista})}">Título</h1>
         
         <div class="d-flex gap-2">
-            <a th:replace="~{fragments/botones :: btnLink(
-     			 #{mensaje.nuevo} + ' ' + #{curso.title},
-	       		 @{${urlAlta}},
-	        	'btn-success', 'bi bi-plus-circle'
-                )}">
-            </a>
-            <a th:replace="~{fragments/botones :: btnVolver(${urlBack})}"></a>
+             <a th:replace="~{fragments/botones :: btnVolver(${urlBack})}"></a>
         </div>
     </div>
     <div th:replace="~{fragments/cursofragments :: buscadorCursos}"></div>
@@ -29,10 +23,7 @@
 				<th th:text="#{curso.titulo}">default</th>
 				<th th:text="#{comun.descripcion}">default</th>
 				<th th:text="#{areatematica.title}">default</th>
-				<th th:text="#{curso.duracion}">default</th>
-				<th th:text="#{curso.inscritos}">default</th>
-				<th th:text="#{comun.fini}">default</th>
-				<th th:text="#{comun.fFin}">default</th>
+				<th th:text="#{curso.progreso}"></th>
 				<th></th>
 			</tr>
 		</thead>
@@ -47,23 +38,14 @@
 				</td>
 				<td class="text-truncate" style="max-width: 350px;" th:text="${curso.descripcion}" th:title="${curso.descripcion}">ID</td>
 				<td th:text="${curso.areaTematicaText}">ID</td>
-				<td class="text-end"><span th:text="${curso.duracion}"></span> h.</td>
-				<td class="text-center" >
-				<span th:if="${curso.usuariosRegistrados == 0}" th:text="${curso.usuariosRegistrados}">0</span>
-				<span th:unless="${curso.usuariosRegistrados == 0}">
-				<a sec:authorize="hasAnyRole('PROFE')" th:replace="~{fragments/botones :: btnLink(
-			        ${curso.usuariosRegistrados},
-			        @{/profesor/seguimientocurso/{id}(id=${curso.id})},
-			        'btn-primary w-100',
-			        'bi-card-checklist'
-			    )}">
-				</a>
-				<span sec:authorize="not hasAnyRole('PROFE')" th:text="${curso.usuariosRegistrados}"></span>
-				</span>
+				<td ><div th:insert="~{fragments/cursofragments ::infocursoEstudiante}"
+					th:with="yaInscrito=true, 
+						              progresoCurso=${curso.progreso}, 
+						              estadoCurso=${curso.estado},
+						              isFicha=true"></div>
 				</td>
-				<td th:text="${#temporals.format(curso.fIni, 'dd/MM/yyyy')}">ID</td>
-				<td th:text="${#temporals.format(curso.fFin, 'dd/MM/yyyy')}">ID</td>
-				<td><a th:href="@{/{url}/curso/{id}(url=${url},id=${curso.id})}" class="btn btn-primary btn-sm" ><i class="bi bi-pencil-square"></i></a></td>
+
+				<td><a th:href="@{/{url}/{id}(url=${url},id=${curso.id})}" class="btn btn-primary btn-sm" ><i class="bi bi-pencil-square"></i></a></td>
 			</tr>
 		</tbody>
 	</table>

@@ -161,12 +161,12 @@
 	            </option>
 	        </select>
 	    </div>
-	    <div class="col-md-3" th:with="areaIdSeleccionada=${param.areaId != null ? param.areaId[0] : null}">
+	    <div class="col-md-3" th:with="areaIdSeleccionada=${param.areaId != null ? param.areaId[0] : null}" sec:authorize="!hasAnyRole('ESTUD')">
 	        <label class="form-label" th:text="#{areatematica.title}">Área temática</label>
 	        <select th:replace="~{fragments/selectAreaTematica :: selectArea(${areas}, ${areaIdSeleccionada})}">  
 	        </select>
 	    </div>
-	    <div class="col-md-3" sec:authorize="hasAnyRole('ADMIN')">
+	    <div class="col-md-3" sec:authorize="hasAnyRole('ADMIN','ESTUD')">
 	        <label class="form-label" th:text="#{curso.responsable}">Responsable</label>
 	        <select name="responsableId" class="form-select">
 	            <option value="">-- Todos --</option>
@@ -254,7 +254,7 @@
             <span class="badge bg-danger text-wrap py-2 w-100"><i class="bi bi-exclamation-octagon me-1"></i> <span tx:text="curso.tramitado.baja">Tramitado de Baja</span></span>
         </div>
         </div>
-    <th:block th:if="${!isFicha}">
+    <th:block th:if="${!isFicha  }">
    <div class="flex-shrink-0" th:insert="~{fragments/botones :: btnLink(
 			                 'Baja',
 			                @{'/estudiante/curso/baja/' + ${curso.id} },
@@ -267,6 +267,29 @@
 </th:block>
     
 </div>
+<div th:fragment="buscaCursosHome">
+			<div class="card border border-light shadow-sm rounded-3 mt-4">
+				<div class="card-header bg-light border-0 py-3">
+					<h4 class="mb-0">
+						<button class="btn btn-link w-100 text-start d-flex justify-content-between align-items-center text-decoration-none fw-bold p-0 text-dark" 
+						        type="button" 
+						        data-bs-toggle="collapse" 
+						        data-bs-target="#collapseBuscador" 
+						        aria-expanded="false" 
+						        aria-controls="#collapseBuscador">
+							<span th:text="#{command.buscar}">Ficha técnica</span>
+							<i class="bi bi-chevron-down"></i>
+						</button>
+					</h4>
+				</div>
+				<div id="collapseBuscador" class="collapse">
+					<div class="card-body p-4 bg-white">
+					<div th:replace="~{ :: buscadorCursos}"></div>
+					</div>
+				</div>
+			</div>
+</div>
+
 
 <div th:fragment="fichaTecnica">
 			<div class="card border border-light shadow-sm rounded-3 mt-4">
