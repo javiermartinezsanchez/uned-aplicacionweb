@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import es.alumno.uned.dto.UserPasswordAdminChangeDTO;
 import es.alumno.uned.dto.UserPasswordChangeDTO;
 import es.alumno.uned.dto.UsuarioRegistroDTO;
-import es.alumno.uned.exception.UserPasswordNotMatchException;
 import es.alumno.uned.mapper.UsuarioRegistroMapper;
 import es.alumno.uned.model.entities.SecurityUser;
 import es.alumno.uned.model.entities.Usuario;
@@ -29,6 +27,7 @@ import es.alumno.uned.service.RolService;
 import es.alumno.uned.service.UsuarioService;
 import es.alumno.uned.validation.OnCreate;
 import es.alumno.uned.validation.OnUpdate;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +56,13 @@ public class UsuarioController extends BaseCrudController {
 		this.userService = userService;
 		this.rolService = rolService;
 	}
+	/**
+	 * Listado de usuarios para el administrador.
+	 * @param params Parámetros de búsqueda.
+	 * @param page Número de página.
+	 * @param model Modelo para la vista.
+	 * @return Vista de los datos.
+	 */
 	@GetMapping("/admin/usuario")
 	public String listar(
 			@RequestParam Map<String, String> params,
@@ -70,22 +76,45 @@ public class UsuarioController extends BaseCrudController {
 		setModeloListado(model, "admin/usuarios", "/admin/newUser", "/admin/usuario","/home" );
 		return model.getAttribute("viewName").toString();
 	}
+	/**
+	 * Nuevo usuario desde el listado de usuarios de Administración.
+	 * @param model Modelo para la vista.
+	 * @return Vista de los datos
+	 */
 	@GetMapping("/admin/newUser")
 	public String nuevo(Model model) {
         model.addAttribute("form", new UsuarioRegistroDTO());
 		return getVistaUsuario(model, false);
 	}
+	/**
+	 * Consulta/modificación de un usuario.
+	 * 
+	 * @param success Mensaje de "OK" que viene desde el Post.
+	 * @param id Identificador del usuario a modificar.
+	 * @param model Modelo para la vista.
+	 * @return Vista que va a visualizar los datos.
+	 */
 	@GetMapping("/admin/usuario/{id}")
     public String modificar(@RequestParam(required = false) String success, 
     		@PathVariable Long id, 
     		Model model) {
 		if (success != null) {
 			model.addAttribute("success", "mensaje.grabacionOK");
-			}
+		}
 		model.addAttribute("form", userService.getUsuario(id));
 		return getVistaUsuario(model, false);
 	}
-
+	
+	/**
+	 * Visualización de los datos de mi perfil.
+	 * <p> Para ADMIN y PROFE ya que son usuarios base.
+	 * 
+	 * @param urlBase Diferenciación de si es admin o profesor.
+	 * @param success Mensaje que viene del Post por grabación correcta.
+	 * @param userConnected Usuario conectado para obtener su id.
+	 * @param model 
+	 * @return
+	 */
 	@GetMapping("/{urlBase}/miperfil")
 	@PreAuthorize(
 		    "(#urlBase == 'admin' and hasRole('ADMIN')) or " +
@@ -97,12 +126,43 @@ public class UsuarioController extends BaseCrudController {
 			@AuthenticationPrincipal SecurityUser userConnected, 
 			Model model) {
 			model.addAttribute("form", userService.getUsuario(userConnected.getId()));
-model.addAttribute("success", success);
+			model.addAttribute("success", success);
 			setModeloFormulario(model, "admin/usuario", "/" + urlBase + "/miperfil", "/");
 			model.addAttribute("isUser", true);
 			return "admin/usuario";
 	}
-	
+	/**
+	 * Solicitud de cambio de password.
+	 * @param model Modelo a rellenar para la vista.
+	 * @return Vista que dibuja los datos.
+	 */
+	@GetMapping("/{urlBase}/miperfil/password/{id}")
+	@PreAuthorize(
+		    "(#urlBase == 'admin' and hasRole('ADMIN')) or " +
+		    "(#urlBase == 'profesor' and hasRole('PROFE'))"
+		)
+	public String showPasswordForm(@AuthenticationPrincipal SecurityUser userConnected,
+			@PathVariable("urlBase") String urlBase,
+			@PathVariable Long id,
+			Model model) {
+		
+		model.addAttribute("viewName", "comun/cambio-password");
+		model.addAttribute("url", "/cambiopassword");
+		model.addAttribute("urlCancel", "/" + urlBase + "/miperfil");
+		model.addAttribute("isUser", true);
+	    model.addAttribute("form", new UserPasswordChangeDTO(userConnected.getUsername()));
+	    return "comun/cambio-password";
+	}
+
+	/**
+	 * Grabación de los datos del perfi de Admin o Profesor.
+	 * @param userConnected Usuario conectado para obtener su id.
+	 * @param urlBase  Diferenciación de si es admin o profesor.
+	 * @param form	Datos que vienen de la vista.
+	 * @param result Binding para comprobación de datos.
+	 * @param model
+	 * @return
+	 */
 	@PostMapping("/{urlBase}/miperfil")
 	@PreAuthorize(
 		    "(#urlBase == 'admin' and hasRole('ADMIN')) or " +
@@ -138,6 +198,14 @@ model.addAttribute("success", success);
         model.addAttribute("roles", rolService.getList());
     	return model.getAttribute("viewName").toString();
     }
+	/**
+	 * Modificación de datos de usuario desde Administrador de usuarios.
+	 * @param usuario Usuario que realiza la modificación/alta.
+	 * @param form Datos del Usuario.
+	 * @param result Binding con el resultado de las validaciones.
+	 * @param model Modelo de datos a mostrar.
+	 * @return "Redirección" al controlador origen.
+	 */
 	@PostMapping("/admin/usuario")
 	public String grabarUsuario(@AuthenticationPrincipal UserDetails usuario,
 			@ModelAttribute("form") UsuarioRegistroDTO form,
@@ -162,75 +230,85 @@ model.addAttribute("success", success);
         model.addAttribute("success", "mensaje.grabacionOK");
 		return String.format("redirect:/admin/usuario/%s?success",id.toString());
 	}
+	/**
+	 * Listado de usuarios contectados.
+	 * 
+	 * @param model Modelo a rellenar para la vista.
+	 * @return Vista que dibuja los datos.
+	 */
 	@GetMapping("/admin/usuarioconnected")
     public String modUsuario(Model model) {
 		model.addAttribute("usuarios", userService.getConnectedUsers());
 		model.addAttribute("urlBack", "/home");
 		return "admin/usuariosconectados";
 	}
-	@GetMapping("/cambiopassword")
-	public String showPasswordForm(Model model) {
-	    model.addAttribute("form", new UserPasswordChangeDTO());
-	    return "/comun/cambio-password";
-	}
-
+	/**
+	 * Grabación de cambio de password.
+	 * @param model Modelo a rellenar para la vista.
+	 * @return Vista que dibuja los datos.
+	 */
 	@PostMapping("/cambiopassword")
 	public String changePassword(@AuthenticationPrincipal UserDetails userDetails,
-	                             @Valid @ModelAttribute UserPasswordChangeDTO dto,
+	                             @Valid @ModelAttribute("form") UserPasswordChangeDTO dto,
 	                             BindingResult result,
+	                             HttpServletRequest request,
 	                             Model model) {
-
-		try {
-			userService.cambioPassword(dto, userDetails.getUsername());
-		}
-		catch (UsernameNotFoundException ex) {
-			result.rejectValue("errorGlobal", "error.oldPassword", ex.getMessage());
-		}
-		catch (UserPasswordNotMatchException ex) {
-			result.rejectValue("oldPassword", "error.oldPassword", ex.getMessage());
-		}
+		request.setAttribute("viewName", "comun/cambio-password");
+		model.addAttribute("viewName", "comun/cambio-password");
 	    if (result.hasErrors()) {
+	    	model.addAttribute("isUser", true);
 	    	return "comun/cambio-password";
 	    }
+	    userService.cambioPassword(dto, userDetails.getUsername());
 	    model.addAttribute("success", "{password.change.success}");
 	    return "comun/cambio-password";
 	}
-	@GetMapping("/admin/usuario/{id}/password")
+	/**
+	 * Modificación de password desde Administración de usuarios.
+	 * @param id Id del usuario a modificar contraseña.
+	 * @param success Mensaje "success" de realizado.
+	 * @param model Modelo para visualizar los datos.
+	 * @return Vista para mostrar el mensaje.
+	 */
+	@GetMapping("/admin/usuario/password/{id}")
 	public String showAdminPasswordForm(@PathVariable Long id, 
 			@RequestParam(required = false) String success,
 			Model model) {
 	    model.addAttribute("userId", id);
-	    model.addAttribute("passwordDTO", new UserPasswordAdminChangeDTO(userService.getUsuario(id).getEmail()));
+	    model.addAttribute("form", new UserPasswordAdminChangeDTO(userService.getUsuario(id).getEmail()));
 	    if (success != null) {
 	        model.addAttribute("success", "password.change.success");
 	    }
-	    model.addAttribute("url", "/admin/usuario");
+	    model.addAttribute("isUser", false);
+	    model.addAttribute("url", String.format("/admin/usuario/password/%d", id));
 	    model.addAttribute("urlCancel", String.format("/admin/usuario/%d", id));
-	    return "admin/password-change";
+	    return "comun/cambio-password";
 	}
 
-	@PostMapping("/admin/usuario/{id}/password")
+	/**
+	 * Grabación de la modificación de la contraseña.
+	 * 
+	 * @param id Identificador del usuario a modificar.
+	 * @param dto Dto que contiene los datos.
+	 * @param result Resultado de la operación.
+	 * @param model Modelo para contener los datos.
+ 	 * @return Vista que muestra los datos organizados.
+	 */
+	@PostMapping("/admin/usuario/password/{id}")
 	public String changeUserPassword(@PathVariable Long id,
-	                                 @Valid @ModelAttribute("passwordDTO") UserPasswordAdminChangeDTO dto,
+	                                 @Valid @ModelAttribute("form") UserPasswordAdminChangeDTO dto,
 	                                 BindingResult result,
 	                                 Model model) {
 
-		try {
-			userService.cambioPasswordUserAdmin(dto, id);
-		}
-		catch (UsernameNotFoundException ex) {
-			result.rejectValue("errorGlobal", "error.oldPassword", ex.getMessage());
-		}
-		catch (UserPasswordNotMatchException ex) {
-			result.rejectValue("oldPassword", "error.oldPassword", ex.getMessage());
-		}
+		
 	    if (!result.hasErrors()) {
 	    	model.addAttribute("success", "password.change.success");
 	    }
+	    userService.cambioPasswordUserAdmin(dto, id);
 	    model.addAttribute("userId", id);
-	    model.addAttribute("url", "/admin/usuario");
+	    model.addAttribute("url", "admin/usuario");
 	    model.addAttribute("urlCancel", String.format("/admin/usuario/%d", id));
-	    return "admin/password-change";
+	    return "comun/cambio-password";
 	}
 
 }

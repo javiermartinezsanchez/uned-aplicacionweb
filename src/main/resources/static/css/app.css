@@ -41,3 +41,7 @@
     font-family: "bootstrap-icons" !important;
 }
 
+.bg-gris-verdoso {
+    background-color: #cbd5d0 !important; /* Tono gris-verdoso intermedio */
+    border-bottom: 1px solid #b2beb5 !important; /* Borde inferior a juego */
+}

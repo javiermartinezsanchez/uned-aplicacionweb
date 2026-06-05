@@ -5,6 +5,7 @@ es.alumno.uned.dto
 es.alumno.uned.exception
 es.alumno.uned.mapper
 es.alumno.uned.model.entities
+es.alumno.uned.model.records
 es.alumno.uned.model.repository
 es.alumno.uned.model.util
 es.alumno.uned.service

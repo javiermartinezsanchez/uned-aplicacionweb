@@ -7,13 +7,15 @@
 <body>
   <section th:fragment="content">
     <div class="container">
-<!-- 	    <div th:replace="~{fragments/carruselCursos :: carrusel('bloqueMasVisitados', #{home.lista.cursos.mas.vistos}, ${paginacion}, '/cursos/ajax/masvisitados')}"></div>		 -->
-<!-- 	    <div th:replace="~{fragments/carruselCursos :: carrusel('bloqueMasValorados', #{home.lista.cursos.mas.valorados}, ${paginacionMV}, '/cursos/ajax/masvalorados')}"></div>		 -->
-<!-- 	    <div th:replace="~{fragments/carruselCursos :: carrusel('bloqueMasSubscritos', #{home.lista.cursos.mas.subscritos}, ${paginacionME}, '/cursos/ajax/massubscritos')}"></div>		 -->
-
 
     	<h3 th:text="#{home.lista.cursos.mas.vistos}"></h3>
-		<div class="album pt-3 pb-2 bg-body-tertiary"> 
+    	<div th:if="${paginacion.contenido.empty}" class="alert alert-primary d-flex align-items-center th-shadow-sm" role="alert">
+		    <i class="bi bi-exclamation-circle me-2 fs-4"></i>
+		    <div>
+		        <strong th:text="#{home.lista.cursos.noexiste}"></strong>
+		    </div>
+	    </div>
+		<div th:unless="${paginacion.contenido.empty}" class="album pt-3 pb-2 bg-body-tertiary"> 
 		    <div class="container position-relative px-5 mt-2">
 		        <div id="bloqueMasVisitados" class="w-99">
 		            <div th:replace="~{fragments/paginacionComun :: navegacionLateralAJAX(${paginacion}, 'bloqueMasVisitados', '/cursos/ajax/masvisitados')}"></div>
@@ -26,7 +28,13 @@
 		    </div>
 		</div>
 		<h3 th:text="#{home.lista.cursos.mas.valorados}"></h3>
-		<div class="album pt-3 pb-2 bg-body-tertiary"> 
+		<div th:if="${paginacionMV.contenido.empty}" class="alert alert-primary d-flex align-items-center th-shadow-sm" role="alert">
+		    <i class="bi bi-exclamation-circle me-2 fs-4"></i>
+		    <div>
+		        <strong th:text="#{home.lista.cursos.noexiste}"></strong>
+		    </div>
+	    </div>
+		<div th:unless="${paginacionMV.contenido.empty}" class="album pt-3 pb-2 bg-body-tertiary"> 
 		    <div class="container position-relative px-5 mt-2">
 		        <div id="bloqueMasValorados" class="w-99">
 		            <div th:replace="~{fragments/paginacionComun :: navegacionLateralAJAX(${paginacionMV}, 'bloqueMasValorados', '/cursos/ajax/masvalorados')}"></div>
@@ -39,7 +47,13 @@
 		    </div>
 		</div>
 		<h3 th:text="#{home.lista.cursos.mas.subscritos}"></h3>
-		<div class="album pt-3 pb-2 bg-body-tertiary"> 
+		<div th:if="${paginacionME.contenido.empty}" class="alert alert-primary d-flex align-items-center th-shadow-sm" role="alert">
+		    <i class="bi bi-exclamation-circle me-2 fs-4"></i>
+		    <div>
+		        <strong th:text="#{home.lista.cursos.noexiste}"></strong>
+		    </div>
+	    </div>
+		<div th:unless="${paginacionME.contenido.empty}" class="album pt-3 pb-2 bg-body-tertiary"> 
 		    <div class="container position-relative px-5 mt-2">
 		        <div id="bloqueMasSubscritos" class="w-99">
 		            <div th:replace="~{fragments/paginacionComun :: navegacionLateralAJAX(${paginacionME}, 'bloqueMasSubscritos', '/cursos/ajax/massubscritos')}"></div>
@@ -51,7 +65,6 @@
 		        </div>
 		    </div>
 		</div>
-	<!--     <script th:src="@{/js/enviarvaloracion.js}"></script> -->
 	</div>	
 		<script th:src="@{/webjars/jquery/{version}/jquery.min.js(version=${@webjarsConfig.jquery})}"></script>
 		<script th:src="@{/js/navegacionHome.js}"></script>

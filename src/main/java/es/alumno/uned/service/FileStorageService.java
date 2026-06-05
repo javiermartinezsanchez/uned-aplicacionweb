@@ -31,6 +31,7 @@ import es.alumno.uned.model.records.FicheroData;
 @Service
 public class FileStorageService {
 
+	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(FileStorageService.class);
     private final AppProperties appProperties;
 
     public FileStorageService(AppProperties appProperties) {
@@ -92,19 +93,24 @@ public class FileStorageService {
     private String saveFile(FicheroData file, String basePath) throws IOException {
 
         String nombreArchivo = UUID.randomUUID() + "_" + file.nombreOriginal();
-
+        log.info("[FileStorageService] fichero : '{}'", file.nombreOriginal());
+        log.info("[FileStorageService] nombre : '{}'", nombreArchivo);
+        log.info("[FileStorageService] basePath : '{}'", basePath);
+       
         Path ruta = Paths.get(basePath);
         if (!Files.exists(ruta)) {
         	Files.createDirectories(ruta);
         }
 
         Files.copy(new ByteArrayInputStream(file.contenido()), ruta.resolve(nombreArchivo), StandardCopyOption.REPLACE_EXISTING);
-
+        log.info("[FileStorageService] basePath : '{}'", ruta.resolve(nombreArchivo));
         return nombreArchivo;
     }
     
     /**
      * Estructura utilitaria para obtener los ficheros existentes en el disco.
+     * @param nombre Nombre del archivo.
+     * @param bytes Número de bytes del tamaño del fichero.
      */
     public record ArchivoDiscoInfo(String nombre, long bytes) {}
     
@@ -132,8 +138,8 @@ public class FileStorageService {
     /**
      * Borrado de fichero físico a petición.
      * 
-     * @param basePath Directorio Físico.
      * @param nombreFichero Nombre del fichero.
+     * @param tipo TipoFichero (Imagen/doc).
      * @return Si se borra "true", si existe alguna exception "false".
      */
     public boolean deleteFile(String nombreFichero, TipoFichero tipo) {

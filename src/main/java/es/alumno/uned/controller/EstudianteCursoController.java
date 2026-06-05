@@ -2,7 +2,6 @@ package es.alumno.uned.controller;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -89,7 +88,6 @@ public class EstudianteCursoController extends BaseCrudController {
 		Paginacion<EstudianteCurso, EstudianteCursoDTO> paginacion = estudianteCursoService.listadoPaginado( getParams( 0, 3), paramsToMap(paramsBusqueda));
 		paramsBusqueda.put("areaIds", getAreasEstudiante( userConnected.getId() ));		
 		Paginacion<Curso, CursoDTO> paginacionCD = cursoService.listadoPaginado(getParams( 0, 3), paramsToMap(paramsBusqueda));
-		//Paginacion<Curso, CursoDTO> paginacionCD =cursoService.listadoCursosDisponiblesPorAreas(  getParams( page, 3), userConnected.getId(), getAreasEstudiante( userConnected.getId() ));
 		paramsBusqueda.put("activos", "false");		
 		Paginacion<EstudianteCurso, EstudianteCursoDTO> paginacionCF = estudianteCursoService.listadoPaginado( getParams( 0, 3), paramsToMap(paramsBusqueda));
 		
@@ -110,12 +108,6 @@ public class EstudianteCursoController extends BaseCrudController {
 	        estudianteCursoService.subscribirAlumnoACurso(userConnected.getId(), id);
 	        redirectAttributes.addFlashAttribute("success",
 	                "Te has suscrito correctamente al curso.");
-
-	    	//redirectAttributes.addFlashAttribute("error", e.getMessage());
-
-	        //redirectAttributes.addFlashAttribute("error",
-	        //        "No se pudo completar la suscripción.");
-
 	    return "redirect:/estudiante/home";
 	}
 

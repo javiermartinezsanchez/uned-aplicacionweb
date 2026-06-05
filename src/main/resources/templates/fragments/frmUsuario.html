@@ -8,7 +8,7 @@
     </div>
     <div class="col-md-5 mb-3">
         <div th:if="${isUser}">
-            <label class="form-label fw-semibold" th:text="#{usuario.role}">Rol</label><span th:text="${isUser}"></span>
+            <label class="form-label fw-semibold" th:text="#{usuario.role}">Rol</label>
             <input type="text" th:field="*{rol}" readonly class="form-control-plaintext">
         </div>
         <th:block th:unless="${isUser}">
@@ -33,7 +33,7 @@
     <div class="mb-3" th:if="*{id} != null and *{id} != ''">
         <div th:replace="~{fragments/botones :: btnLink(
         #{command.modificar.password},
-        @{/admin/usuario/{id}/password(id=*{id})},
+        @{|${url}/password/{id}|(id=*{id})},
         'btn-warning', 'bi bi-pencil-square'
 	    )}">
     	</div>

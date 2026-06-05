@@ -46,8 +46,7 @@ public class AreaTematicaServiceImpl implements AreaTematicaService {
      * 
      * 
      * @param pageable Definición de la {@code Page} a devolver.
-     * @param titulo Texto para buscar en título
-     * @param descripcion Texto para buscar en Descripción
+     * @param params Parámetros de búsqueda.
      * @return Página de datos obtenida con los datos solicitados.
      */
 	private Page<AreaTematica> getPaginaBusqueda(Pageable pageable, Map<String, String> params){

@@ -98,33 +98,3 @@
         </div>
     <!-- </div>-->
 </div>
-<!--  botones de progreso del estudiante para incluir en el "card" y en la "ficha" -->
-<div th:fragment="btnProgreso()">
-<div class="d-grid gap-2"> <div th:if="${curso.progreso == 100}" class="text-center">
-        <button class="btn btn-outline-success w-100 fw-bold">
-            <i class="bi bi-trophy-fill me-2"></i> Certificado / Finalizado
-        </button>
-    </div>
-
-    <div th:if="${curso.progreso < 100}">
-        <a th:href="@{/cursos/continuar/{id}(id=${curso.id})}" class="btn btn-primary w-100">
-            <i class="bi bi-play-circle me-2"></i> Continuar aprendiendo
-        </a>
-        
-        <p th:if="${curso.tieneTareaPendiente}" class="text-muted small mt-1 mb-0 text-center">
-            <i class="bi bi-clock-history"></i> Esperando nota del profesor...
-        </p>
-    </div>
-
-</div>
-</div>
-
-<!-- prototipos a probar..de barras de progreso 
-<div th:fragment="btnProgreso2()" class="progress" style="height: 8px;" title="Has completado el 75%">
-  <div class="progress-bar bg-success" role="progressbar" 
-       th:style="'width: ' + ${curso.avance} + '%'" 
-       aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-  </div>
-</div>
-<small class="text-muted" th:text="${curso.avance + '% completado'}"></small>
--->

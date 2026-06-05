@@ -12,7 +12,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-
+@SuppressWarnings("javadoc")
+/**
+ * Entidad de la tabla curso_contenido_extra
+ */
 @Entity
 @Table(name = "curso_contenido_extra")
 public class ContenidoExtra {

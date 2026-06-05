@@ -30,7 +30,7 @@ public class SecurityConfiguration {
 	                             "/webjars/**", "/login", "/login*","/invalidSession",
 	                             "/css/**", "/js/**", "/images/**", "/error", 
 	                             "/valoracionCurso", "/viewcurso/**", "/cursos/ajax/*",
-	                             "/busqueda", "/docs/*").permitAll()
+	                             "/busqueda", "/docs/*", "/javadocs/**").permitAll()
 	            .requestMatchers("/estudiante", "/estudiante/**").hasAnyAuthority("ROLE_ESTUD", "ROLE_ADMIN")
 	            .requestMatchers("/modulo/**","/curso/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_PROFE")
 	            .requestMatchers("/profesor/**").hasAuthority("ROLE_PROFE")

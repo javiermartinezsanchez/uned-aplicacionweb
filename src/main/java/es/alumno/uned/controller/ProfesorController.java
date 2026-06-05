@@ -55,6 +55,7 @@ public class ProfesorController extends BaseCrudController {
 		modelo.addAttribute("trabajosPendientes", estudianteCursoService.getTareasPendientes(userConnected.getId()));
 		return "profesor/home";
 	}
+
 	/**
 	 * Devolvemos la vista de Tareas Pendientes del Profesor
 	 * @param userConnected Usuario Conectado (el profesor)
@@ -68,7 +69,7 @@ public class ProfesorController extends BaseCrudController {
 			@AuthenticationPrincipal SecurityUser userConnected,
 			@RequestParam Map<String, String> paramsBusqueda,
 			@RequestParam(defaultValue = "0") int page, Model model) {
-		setModeloListado(model, "profesor/tareasPendientes" , 
+		setModeloListado(model, "profesor/tareaspendientes" , 
 	    		"",	"/profesor/calificar/", "/home");
 		paramsBusqueda.put("responsableId", userConnected.getId().toString());
 		var paginacion = estudianteCursoService.listadoTareasPendientes(getParams(page), paramsToMap(paramsBusqueda)); 

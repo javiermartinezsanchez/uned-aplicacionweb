@@ -3,8 +3,9 @@ package es.alumno.uned.dto;
 import es.alumno.uned.model.entities.TipoContenido;
 
 /**
- * Clase DTO envolvente de la entidad {@link ContenidoExtra}
+ * Clase DTO envolvente de la entidad ContenidoExtra
  */
+@SuppressWarnings("javadoc")
 public class ContenidoExtraDTO {
     private Long id;
 

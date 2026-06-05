@@ -28,7 +28,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const headers = { 'Content-Type': 'application/json' };
             if (csrfHeaderName && csrfToken) { headers[csrfHeaderName] = csrfToken; }
 
-            fetch('/valoracionCurso', {
+			const contextPath = document.querySelector('meta[name="context-path"]').getAttribute('content');
+
+
+			const urlFinal = `${contextPath}valoracionCurso`.replace('//', '/');
+			
+            fetch(urlFinal, {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify({
@@ -41,12 +46,31 @@ document.addEventListener("DOMContentLoaded", () => {
                 return response.json();
             })
             .then(data => {
-				// Busca esta sección dentro de tu .then(data => { ... }) y actualízala:
 				if (data.success) {
 				    // 1. Actualizar nota media
 				    const avgRatingText = document.querySelector(".avg-rating-text");
 				    if (avgRatingText && data.nuevaPromedio !== undefined) {
+						const nuevoValor = Number(data.nuevaPromedio);
 				        avgRatingText.textContent = Number(data.nuevaPromedio).toFixed(1);
+						const contenedorEstrellas = avgRatingText.parentElement.querySelector(".text-warning");
+						    
+						    if (contenedorEstrellas) {
+						        const estrellas = contenedorEstrellas.querySelectorAll("i");
+						        
+						        estrellas.forEach((estrella, index) => {
+						            const posicion = index + 1;
+						            
+						            estrella.className = "bi"; 
+						            
+						            if (posicion <= nuevoValor) {
+						                estrella.classList.add("bi-star-fill"); // Llena
+						            } else if (posicion - 0.5 <= nuevoValor) {
+						                estrella.classList.add("bi-star-half"); // Media estrella
+						            } else {
+						                estrella.classList.add("bi-star");      // Vacía
+						            }
+						        });
+						    }
 				    }
 
 				    // 2. Control visual del mensaje sin mover estrellas
@@ -54,12 +78,12 @@ document.addEventListener("DOMContentLoaded", () => {
 				        feedbackDiv.textContent = data.mensaje;
 				        feedbackDiv.className = "badge bg-success px-3 py-2 rounded-pill";
 				        
-				        if (ratingLabel) ratingLabel.classList.add("d-none"); // 👈 Oculta el texto para ceder el espacio
-				        feedbackDiv.classList.remove("d-none"); // 👈 Muestra el cartel verde
+				        if (ratingLabel) ratingLabel.classList.add("d-none"); 
+				        feedbackDiv.classList.remove("d-none"); 
 
 				        setTimeout(() => {
 				            feedbackDiv.classList.add("d-none");
-				            if (ratingLabel) ratingLabel.classList.remove("d-none"); // 👈 Restaura el texto original
+				            if (ratingLabel) ratingLabel.classList.remove("d-none"); 
 				        }, 2000);
 				    }
 
@@ -76,11 +100,11 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Función auxiliar para pintar errores con el mismo diseño pero en rojo
+    // Función auxiliar para pintar errores en rojo
     function mostrarError(msg) {
         if (feedbackDiv) {
             feedbackDiv.textContent = msg;
-            feedbackDiv.className = "badge bg-danger px-3 py-2 rounded-pill"; // Color rojo para error
+            feedbackDiv.className = "badge bg-danger px-3 py-2 rounded-pill"; 
             if (ratingLabel) ratingLabel.classList.add("d-none");
             feedbackDiv.classList.remove("d-none");
             setTimeout(() => {

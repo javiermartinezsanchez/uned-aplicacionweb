@@ -4,6 +4,7 @@
 <body>
   <section th:fragment="content">
     <div class="container">
+    	<div th:replace="~{fragments/cursofragments :: buscaCursosHome}"></div>
        <h3 th:text="#{home.lista.cursos.miscursos}"></h3>
        <th:block th:if="${#lists.size(paginacion.contenido)>0}">
        <div class="album py-6 bg-body-tertiary"> 
@@ -27,11 +28,6 @@
        		<span>Aún no se ha inscrito en ninguno de nuestros cursos ¿a qué espera?</span>
 	   </th:block>	       
        <h3 th:text="#{home.lista.cursos.interesados}"></h3>
-       <div th:replace="~{fragments/cursofragments :: buscaCursosHome}"></div>
-
-       
-       
-       
        <div class="album py-6 bg-body-tertiary"> 
 		    <div class="container position-relative px-5 my-5">
 		        <div id="bloqueCursosDisponibles" class="w-100">

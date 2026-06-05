@@ -1,10 +1,13 @@
 package es.alumno.uned.mapper;
 
 
+import java.util.Comparator;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import es.alumno.uned.dto.EstudianteCursoDTO;
+import es.alumno.uned.dto.EstudianteCursoModuloDTO;
 import es.alumno.uned.model.entities.EstadoCursoModulo;
 import es.alumno.uned.model.entities.EstudianteCurso;
 
@@ -29,6 +32,7 @@ public class EstudianteCursoMapper {
 		var dto = toDTOList( entity);
         dto.setModulos(entity.getModulos().stream()
         		.map(estudianteCursoModuloMapper :: toDTO)
+        		.sorted(Comparator.comparingInt(EstudianteCursoModuloDTO::getOrden))
         		.toList());
 		dto.setContenidosExtra(entity.getCurso().getContenidosExtra().stream()
 				.map(contenidoExtraMapper:: toDTO)

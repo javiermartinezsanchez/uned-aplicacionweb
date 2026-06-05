@@ -19,7 +19,7 @@ import jakarta.validation.Valid;
 /**
  * Controlador de Areas Temáticas.
  * 
- * <p>Se definen la operaciones básicas sobre {@link AreaTematica}
+ * <p>Se definen la operaciones básicas sobre  AreaTematica
  * 
  */
 @Controller

@@ -49,7 +49,7 @@ public class ModuloController extends BaseCrudController {
 
 	        paginacion = moduloService.listadoPaginado( getParams( page), paramsToMap(paramsBusqueda));
 
-	        setModeloListado(model,"modulo/modulos", "/modulo/nuevo","/modulo/modulo/",  "/home" );
+	        setModeloListado(model,"modulo/modulos", "/modulo/nuevo","modulo/modulo/",  "/home" );
 	        model.addAttribute("tipos", TipoModulo.values());
 	        model.addAttribute("paginacion", paginacion);
 	        model.addAttribute("paramsBusqueda",paramsBusqueda );

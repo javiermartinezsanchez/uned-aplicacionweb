@@ -150,10 +150,10 @@ public class CursoMapper {
     }
     /**
      * Se mergea los contenidos que vienen informados con los actuales.
-     * <ul>
-     * <ol>Borramos los que no existan en la entidad actual.</ol>
-     * <ol>Actualizamos los que existan y añadimos los nuevos</ol>
-     * </ul>
+     * <ol>
+     * <li>Borramos los que no existan en la entidad actual.</li>
+     * <li>Actualizamos los que existan y añadimos los nuevos</li>
+     * </ol>
      * @param dtos Lista de Contenidos del DTO.
      * @param entity Entidad {@link Curso} destino
      */

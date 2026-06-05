@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 /** 
  * Clase DTO de AreaTemática para el transporte Vista-Controlador-Modelo (Service).
  */
+@SuppressWarnings("javadoc")
 public class AreaTematicaDTO {
 
 	private Long id;

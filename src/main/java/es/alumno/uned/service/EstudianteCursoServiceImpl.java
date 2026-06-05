@@ -293,7 +293,8 @@ public class EstudianteCursoServiceImpl implements EstudianteCursoService {
 	 * <ol>
 	 * <li>Existe. Se asigna al módulo siguiente el estado a ABIERTO.
 	 * <li>No existe. Se marca al EstudianteCurso como completado.
-	 * @param ecm
+	 * </ol>
+	 * @param ecm EstudianteCursoModulo a revisar.
 	 */
 	private void revisarEstado(EstudianteCursoModulo ecm) {
 		if (ecm.getEstado() == EstadoCursoModulo.COMPLETADO) {

@@ -38,14 +38,7 @@ import es.alumno.uned.model.repository.UsuarioRepository;
 * <li>Tabla de modulos</li>
 * <li>Tabla de curso-modulos</li>
 * </ul>
- * @param rolRepo Repositorio de Roles.
- * @param userRepo Repositorio de Usuarios.
- * @param estudianteRepo Repositorio de Estudiantes.
- * @param areaRepo Repositorio de Áreas Temáticas.
- * @param cursoRepo Repositorio de Cursos.
- * @param moduloRepo Repositorio de Módulos.
- * @param passEncoder Clase de encriptación de la contraseña.
- *
+*
 */
 @Service
 public class DataInitializationService {
@@ -219,7 +212,7 @@ FROM modulos;
 			 */
 			
 			
-			if (moduloRepo.findByTituloContainingIgnoreCase("Documentación (Swagger/OpenAPI)")== null) { moduloRepo.save(new Modulo("Documentación (Swagger/OpenAPI)", "Documentación (Swagger/OpenAPI)", "16592", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); }
+			if (moduloRepo.findByTituloContainingIgnoreCase("Documentación (Swagger/OpenAPI)")== null) { moduloRepo.save(new Modulo("Documentación (Swagger/OpenAPI)", "Documentación (Swagger/OpenAPI)", null, TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); }
 			if (moduloRepo.findByTituloContainingIgnoreCase("Características Avanzadas a Implementar")== null) { moduloRepo.save(new Modulo("Características Avanzadas a Implementar", "Características Avanzadas a Implementar", "", TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); }
 			if (moduloRepo.findByTituloContainingIgnoreCase("Introducción al Curso")== null) { moduloRepo.save(new Modulo("Introducción al Curso", "Bienvenida e Introducción al curso", 
 					"""
@@ -292,8 +285,7 @@ FROM modulos;
       			    , TipoModulo.ENTREGA_OBLIGATORIA, LocalDateTime.now(), "CARGAINICIAL")); 
 			}
 
-			if (moduloRepo.findByTituloContainingIgnoreCase("Documentación (Swagger/OpenAPI)") == null) { moduloRepo.save(new Modulo("Documentación (Swagger/OpenAPI)", "Documentación (Swagger/OpenAPI)", null, TipoModulo.FINALIZACION_MANUAL, LocalDateTime.now(), "CARGAINICIAL")); }
-			
+		
 			if (moduloRepo.findByTituloContainingIgnoreCase("Objetivo del Proyecto API REST") == null) { moduloRepo.save(new Modulo("Objetivo del Proyecto API REST", "Objetivo del Proyecto", 
 					"""
 			

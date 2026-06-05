@@ -16,12 +16,12 @@
         </div>
     </div>
 	<div th:if="${paginacion.contenido.empty}" class="alert alert-success d-flex align-items-center th-shadow-sm" role="alert">
-    <!-- El ícono verde de éxito indica que todo está corregido -->
-    <i class="bi bi-check-circle-fill me-2 fs-4 text-success"></i>
-    <div>
-        <strong th:text="#{panel.profesor.tareas}">Tareas</strong>: ¡Buen trabajo! No tienes tareas pendientes de corrección en este momento.
-    </div>
-</div>
+	    <!-- El ícono verde de éxito indica que todo está corregido -->
+	    <i class="bi bi-check-circle-fill me-2 fs-4 text-success"></i>
+	    <div>
+	        <strong th:text="#{panel.profesor.tareas}">Tareas</strong>: ¡Buen trabajo! No tienes tareas pendientes de corrección en este momento.
+	    </div>
+	</div>
 
 <!-- 2. TABLA: Solo se renderiza si SÍ existen tareas pendientes -->
 <div th:unless="${paginacion.contenido.empty}" class="table-responsive shadow-sm rounded">

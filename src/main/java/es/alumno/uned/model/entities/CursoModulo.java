@@ -20,13 +20,13 @@ public class CursoModulo {
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("cursoId")
     @JoinColumn(name = "curso_id", 
-    		foreignKey = @ForeignKey(name = "fk_cursosmodulo_curso"))
+    		foreignKey = @ForeignKey(name = "fk_cursomodulos_curso"))
     private Curso curso;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("moduloId")
     @JoinColumn(name = "modulo_id", 
-    		foreignKey = @ForeignKey(name = "fk_cursomodulo_modulo"))
+    		foreignKey = @ForeignKey(name = "fk_cursomodulos_modulo"))
     private Modulo modulo;
 
     @Column(name = "orden")

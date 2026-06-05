@@ -1,7 +1,7 @@
 <div th:fragment="frmChangePassOld">
-    <div class="mb-3" th:if="*{oldPassword}">
+    <div class="mb-3" th:if="${isUser}">
         <label class="form-label" th:text="#{mensaje.antigua} + ' ' + #{usuario.password}"></label>
-        <input type="password" th:field="*{oldPassword}" class="form-control"/>
+        <input type="password" th:field="*{oldPassword}" class="form-control input-small"/>
         <div class="text-danger" th:errors="*{oldPassword}"></div>
     </div>
 </div>

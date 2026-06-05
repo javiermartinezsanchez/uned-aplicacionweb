@@ -48,6 +48,7 @@ import jakarta.validation.Valid;
 @Controller
 public class CursoController extends BaseCrudController {
 
+	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(CursoController.class);
 	CursoService cursoService;
 	AreaTematicaService areaTematicaService;
 	UsuarioService usuarioService;
@@ -90,7 +91,6 @@ public class CursoController extends BaseCrudController {
 	 * @param userDetails Información del usuario "logado"
 	 * @param form Datos introducidos en el formulario de la vista.
 	 * @param result {@link BindingResult} de las validaciones de los campos.
-	 * @param imagen Imagen del curso si existe.
 	 * @param contenidoExtrasFile {@link MultipartHttpServletRequest} de los ficheros de contenidos extra, si los hubiera.
 	 * @param redirectAttributes Atributos del modelo no relacionados con el modelo.
 	 * @param model {@link Model} Modelo completo enviado
@@ -112,12 +112,15 @@ public class CursoController extends BaseCrudController {
 					imagen.getContentType(),
 					imagen.getBytes());
 		}
+		log.info("después de la imagen");
 	    if (result.hasErrors()) {
+	    	log.info("tiene errores");
+	    	log.info("errores: " + result.toString());
 	    	prepararVistaEdicion(form, model);
 	        model.addAttribute("usuarios", usuarioService.listarProfesores());
 	        return "curso/curso";
 	    }
-	    
+	    log.info("inicio de lectura de archivos extra");
 	    List<FicheroData> archivosExtra = contenidoExtrasFile.getFileMap()
 	    		.entrySet()
 	    		.stream()
@@ -142,9 +145,13 @@ public class CursoController extends BaseCrudController {
 	    	        }
 	    	    })
 	    	    .toList();
+	    log.info("FIN de lectura de archivos extra");
+	    log.info("LLAMA A cursoService.grabar");
 	    var cursoGrabado = cursoService.grabar(form, imagenData,archivosExtra,  userDetails.getUsername());
+	    log.info("DESPUÉS DE cursoService.grabar");
 	    model.addAttribute("curso", cursoGrabado);
 	    redirectAttributes.addFlashAttribute("success", "mensaje.grabacionOK");
+	    log.info("REDIRIGIMOS A: " + String.format("redirect:/curso/curso/%d", cursoGrabado.getId()));
 		return String.format("redirect:/curso/curso/%d", cursoGrabado.getId());
 	}
 	/**
@@ -265,14 +272,14 @@ public class CursoController extends BaseCrudController {
         if (datos.getValoracion() == null || datos.getValoracion() < 1 || datos.getValoracion() > 5) {
             Map<String, Object> error = new HashMap<>();
             error.put("success", false);
-            error.put("mensaje", "La valoración debe ser un número entre 1 y 5.");
+            error.put("mensaje", getMessage("error.valoracion.rango")); //"La valoración debe ser un número entre 1 y 5.");
             return ResponseEntity.badRequest().body(error);
         }
 
         BigDecimal mediaValoracion = cursoService.guardarValoracion(datos.getIdElemento(), datos.getValoracion(), userDetails.getUsername());
         Map<String, Object> respuesta = new HashMap<>();
             respuesta.put("success", true);
-            respuesta.put("mensaje", "¡Gracias por tu valoración!");
+            respuesta.put("mensaje", getMessage("curso.valoracion.exito")); //"¡Gracias por tu valoración!");
             respuesta.put("nuevaPromedio", mediaValoracion); 
             return ResponseEntity.ok(respuesta);
     }

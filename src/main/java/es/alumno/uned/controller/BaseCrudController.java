@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.ui.Model;
 
 import es.alumno.uned.model.records.PageParams;
@@ -112,7 +113,7 @@ public abstract class BaseCrudController {
     /**
      * Se genera un objeto {@link PageParams} encapsulando los datos para la paginación.
      * 
-     * @param page
+     * @param page Número de página.
      * @return Parámetros de paginación con el "default" de PageSize.
      */
     protected PageParams getParams(int page) {
@@ -151,5 +152,15 @@ public abstract class BaseCrudController {
 		return filtros;
 	}
 
+	/**
+	 * Utilizamos messagesource para traducir los textos.
+	 * 
+	 * @param claveTexto Clave del texto a traducir.
+	 * @return Traducción de la clave en el idioma actual.
+	 * 
+	 */
+	public String getMessage(String claveTexto) {
+		return messageSource.getMessage(claveTexto, null, LocaleContextHolder.getLocale());
+	}
 }
 

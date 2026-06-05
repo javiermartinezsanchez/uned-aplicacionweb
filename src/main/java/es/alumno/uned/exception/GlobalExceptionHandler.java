@@ -156,10 +156,9 @@ public class GlobalExceptionHandler {
 	 * Inyecta en el modelo un objeto constructor de URLs (ServletUriComponentsBuilder) guardado bajo la variable urlBuilder. 
 	 * <p>Este objeto viene precargado con todos los datos de la petición HTTP actual (protocolo, dominio, puerto, ruta y parámetros).
 	 * <p>Utiliza el contexto estático de Spring Web para capturar la petición activa (fromCurrentRequest()) y expone esta factoría dinámica directamente a la vista.
-	 * <p><b>Utilidad en las vistas (Thymeleaf/JSP):</b>
+	 * <p><b>Utilidad en las vistas (Thymeleaf/JSP)</b>
 	 * <p>Nos sirve para crear enlaces de paginación o filtros dinámicos.
 	 * <p>Permite a la vista modificar o añadir parámetros a la URL actual sin perder los que ya existían.
-	 * <p><b>Ejemplo en Thymeleaf:</b> Si estás en /cursos?buscar=java y quieres cambiar a la página 2, en el HTML puedes invocar al objeto de esta forma: {@code ${urlBuilder.replaceQueryParam('page', 2).toUriString()}}, lo que generará automáticamente /cursos?buscar=java&page=2.
 	 * <p>Se elimina el parámetro "lang" para no propagarlo en todas las URL's.
 	 * @return
 	 */

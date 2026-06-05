@@ -8,6 +8,9 @@ import jakarta.validation.constraints.NotBlank;
  */
 public class UserPasswordChangeDTO extends UserPasswordAdminChangeDTO{
 
+	public UserPasswordChangeDTO(String userName) {
+		super(userName);
+	}
     @NotBlank(message = "{validations.password.current.mandatory}")
     private String oldPassword;
 

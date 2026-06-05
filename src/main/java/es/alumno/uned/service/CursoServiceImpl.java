@@ -1,5 +1,7 @@
 package es.alumno.uned.service;
 
+
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -14,7 +16,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -39,15 +40,19 @@ import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;
+import lombok.extern.slf4j.Slf4j;
 /**
  * Clase implementadora de {@link CursoService}
  * 
  * 
  */
+@Slf4j
 @Transactional(readOnly = true)
 @Service
 public class  CursoServiceImpl implements CursoService{
 	
+	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(CursoServiceImpl.class);
+
 	@Autowired
 	CursoRepository cursoRepository;
 	
@@ -82,7 +87,7 @@ public class  CursoServiceImpl implements CursoService{
 
 	/**
 	 * Obtenemos un curso válido.
-	 * <
+	 * 
      *
 	 * <ul>
 	 *     <li>Si el id es null -> Nuevo Curso</li>
@@ -118,6 +123,7 @@ public class  CursoServiceImpl implements CursoService{
 	    // Subida de imagen
 	    if (imagen != null ) {
 //	    	if ((curso.getUriImagen() != null) && ())
+	    	log.info("[CursoServiceImpl] Hay imagen : '{}'", imagen.nombreOriginal());
 	        curso.setUriImagen(fileStorageService.saveImagen(imagen));
 	    }
 
@@ -139,7 +145,7 @@ public class  CursoServiceImpl implements CursoService{
 	            	contenido.setContentType(ficheroCorrespondiente.get().contentType());
 	            } else if (contenido.getUri() == null || contenido.getUri().isEmpty()) {
 	                // Error: Es contenido propio pero no hay archivo ni URI previa
-	                throw new MandatoryFileException("curso.contenidoextra.filenotexist", dto, "");
+	                throw new MandatoryFileException("curso.contenidoextra.filenotexist", dto, null);
 	            }
 	        }
 	        // Si es EXTERNO, la URI ya viene en el DTO/Entidad gracias al binding de Spring
