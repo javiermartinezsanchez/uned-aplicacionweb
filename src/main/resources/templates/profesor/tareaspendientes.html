@@ -39,11 +39,11 @@
 		</thead>
 		<tbody>
 			<tr th:each="ec : ${paginacion.contenido}">
-				<td > <th:block th:if="${ec.curso.uriImagen} != null and ${ec.curso.uriImagen} != ''">
-						<img th:src="@{/images/curso/{img}(img=${ec.curso.uriImagen})}"
-	                 class="img-thumbnail"
-	                 style="width: 40px; height: 40px; object-fit: cover; vertical-align: middle; margin-right: 8px;">
-	                 </th:block>
+				<td> 
+					<th:block th:if="${ec.curso.uriImagen} != null and ${ec.curso.uriImagen} != ''">
+						<img th:src="${ec.curso.uriImagen != null and !#strings.isEmpty(ec.curso.uriImagen)} ? (@{|/images/${#strings.length(ec.curso.uriImagen) > 36 and #strings.contains(ec.curso.uriImagen, '-') ? 'curso/' : ''}${ec.curso.uriImagen}|}) : @{/images/default-curso.png}" class="img-thumbnail" style="width: 40px; height: 40px; object-fit: cover; vertical-align: middle; margin-right: 8px;" alt="Imagen del curso">
+	
+		            </th:block>
 				<span th:text="${ec.curso.titulo}">ID</span>
 				</td>
 				<td class="align-middle fw-semibold" th:text="${ec.estudiante.nombreCompleto}">

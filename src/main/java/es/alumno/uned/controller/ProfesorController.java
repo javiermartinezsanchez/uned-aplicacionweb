@@ -3,6 +3,11 @@ package es.alumno.uned.controller;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import es.alumno.uned.dto.CursoDTO;
@@ -20,6 +26,7 @@ import es.alumno.uned.exception.CursoNotExistException;
 import es.alumno.uned.model.entities.Curso;
 import es.alumno.uned.model.entities.SecurityUser;
 import es.alumno.uned.model.util.Paginacion;
+import es.alumno.uned.service.ContenidoExtraService;
 import es.alumno.uned.service.CursoService;
 import es.alumno.uned.service.EstudianteCursoService;
 /**
@@ -35,6 +42,9 @@ public class ProfesorController extends BaseCrudController {
 	
 	@Autowired
 	EstudianteCursoService estudianteCursoService;
+	
+	@Autowired
+	ContenidoExtraService contenidoExtraService;
 	/**
 	 * Home principal del profesor
 	 * @param userConnected Usuario Conectado
@@ -76,6 +86,15 @@ public class ProfesorController extends BaseCrudController {
 		model.addAttribute("paginacion", paginacion);
 		return model.getAttribute("viewName").toString();
 	}
+	/**
+	 * Se obtiene el listado de los cursos de un profesr.
+	 * @param userConnected
+	 * @param idCurso
+	 * @param paramsBusqueda
+	 * @param page
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/seguimientocurso/{idCurso}")
 	public String seguimientoCurso(
 			@AuthenticationPrincipal SecurityUser userConnected,
@@ -123,7 +142,46 @@ public class ProfesorController extends BaseCrudController {
 			model.addAttribute("isProfesor", true);
 		return model.getAttribute("viewName").toString();
 	}
-	
+	/**
+	 * VerEntrega de un trabajo de un curso.
+	 * 
+	 * @param estudianteId Identificador del estudiante que ha realizado la entrega.
+	 * @param cursoId Identificador del curso.
+	 * @param moduloId Identificador del Módulo que se ha entregado.
+	 * @param userConnected Usuario conectado (Profesor)
+	 * @return El documento para su revisión en una ventana nueva.
+	 */
+	@GetMapping("/{estudianteId}/curso/{cursoId}/modulo/{moduloId}/verEntrega")
+	public ResponseEntity<?> descargarEntrega(
+			@PathVariable Long estudianteId,
+	        @PathVariable Long cursoId,
+	        @PathVariable Long moduloId,
+	        @AuthenticationPrincipal SecurityUser userConnected) {
+
+	    	EstudianteCursoDTO ec = estudianteCursoService.getCursoModulo(userConnected.getId(), estudianteId, cursoId, moduloId);        
+			if (ec == null) {
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No estás inscrito a este curso");
+			}
+		
+			String nombreArchivo = ec.getModulos().get(0).getUrlEntrega();
+//	    	String nombreArchivo = ec.getModulos().stream()
+//	    						   .filter(m -> m.getModuloId().equals(moduloId))
+//	    						   .filter(m -> m.getUrlEntrega() != null && !m.getUrlEntrega().isBlank())
+//	    						   .map(m -> m.getUrlEntrega())
+//	    						   .findFirst()
+//	    						   .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe entrega."));
+				    						   
+			Resource resource = contenidoExtraService.getResource(nombreArchivo);
+			if (resource == null) {
+				throw new org.springframework.web.server.ResponseStatusException(HttpStatus.NOT_FOUND, "El archivo físico no se encuentra en el servidor");
+			}
+			
+			return ResponseEntity.ok()
+	                .contentType(MediaType.parseMediaType("application/pdf"))
+	                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + nombreArchivo.substring(nombreArchivo.indexOf("_") + 1) + "\"")
+	                .body(resource);
+	}
+
 	@PostMapping("/cursorevisado")
 	public String grabarRevision(
 			@AuthenticationPrincipal SecurityUser userConnected,
@@ -133,6 +191,15 @@ public class ProfesorController extends BaseCrudController {
 			estudianteCursoService.calificarModulo(form.getModulos().get(0));
 		return "redirect:/profesor/pendientes";
 	}
+	/**
+	 * Actualización de mis curso por llamada Ajax desde el paginador de la home.
+	 * 
+	 * @param userConnected Usuario Conectado (Profesor)
+	 * @param paramsBusqueda Mapa de parámetros del formulario de búsqueda.
+	 * @param page Número de página
+	 * @param model mdelo a rellenar.
+	 * @return Vista :: fragmento que se va a refrescar.
+	 */
 	@GetMapping("/cursos/ajax/miscursos")
 	public String paginarMisCursosAJAX(
 			@AuthenticationPrincipal SecurityUser userConnected,

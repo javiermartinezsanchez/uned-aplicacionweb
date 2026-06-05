@@ -46,7 +46,7 @@ import lombok.extern.slf4j.Slf4j;
  * 
  * 
  */
-@Slf4j
+
 @Transactional(readOnly = true)
 @Service
 public class  CursoServiceImpl implements CursoService{
