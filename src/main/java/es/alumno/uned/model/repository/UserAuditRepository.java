@@ -29,6 +29,7 @@ public interface UserAuditRepository extends JpaRepository<UserAudit, Long>{
 	@Query("SELECT new es.alumno.uned.dto.AccesoPorDia(CAST(a.fechaAudit AS LocalDate), COUNT(a)) " +
 	           "FROM UserAudit a " +
 	           "WHERE a.fechaAudit BETWEEN :fechaIni AND :fechaFin " +
+	           " and a.mensaje = 'Login usuario' " +
 	           "GROUP BY CAST(a.fechaAudit AS LocalDate) " +
 	           "ORDER BY CAST(a.fechaAudit AS LocalDate) ASC")    
 	List<AccesoPorDia> contarAccesosPorDia(
