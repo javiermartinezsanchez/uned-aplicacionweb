@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+	th:replace="~{plantilla::layout(~{::section})}"><head>
+<meta charset="utf-8">
+<title>Usuarios</title>
+</head>
+<body>
+<section>
+
+<div class="container mt-5">
+    <div class="card shadow-sm border-0">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+	        <h1 class="mb-0" th:text="#{admin.auditoria.grafica.titulo}">Título</h1>
+	        <div class="d-flex gap-2">
+	            <a th:replace="~{fragments/botones :: btnVolver(${urlBack})}"></a>
+	        </div>
+	    </div>
+		<form th:action="@{/admin/auditoria}" method="get" class="row g-2 mb-3 align-items-end">
+		
+		    <div class="col-auto">
+		        <label for="fechaIni" class="form-label mb-0" th:text="#{comun.fini}">Fecha Inicial</label>
+		        <input type="date"
+		               id="fechaIni"
+		               name="fechaIni"
+		               class="form-control"
+		               th:value="${paramsBusqueda.get('fechaIni')}">
+		    </div>
+		
+		    <div class="col-auto">
+		        <label for="fechaFin" class="form-label mb-0" th:text="#{comun.fFin}">Fecha Final</label>
+		        <input type="date"
+		               id="fechaFin"
+		               name="fechaFin"
+		               class="form-control"
+		               th:value="${paramsBusqueda.get('fechaFin')}">
+		    </div>
+		
+		    <div class="col-auto">
+		        <boton th:replace="~{fragments/botones :: btnSubmit(#{command.buscar}, 'btn-primary', 'bi-search')}"/>
+		    </div>
+		    		    <div class="col-auto">
+		    <a th:replace="~{fragments/botones :: btnLink(
+     			 #{admin.auditoria.listado.accesos} ,
+	       		 @{/admin/accesos(fechaIni=${paramsBusqueda.get('fechaIni')}, fechaFin=${paramsBusqueda.get('fechaFin')})},
+	        	'btn-dark', 'bi-table me-2'
+                )}">
+            </a>
+		    </div>
+		    
+		</form>
+        
+<!--         <div class="card-header bg-dark text-white py-3"> -->
+<!--             <h5 class="card-title mb-0 fw-bold"> -->
+<!--                 <i class="bi bi-bar-chart-fill me-2"></i> <span th:text="#{auditoria.grafica.titulo}">defecto</span> -->
+<!--             </h5> -->
+<!--         </div> -->
+        
+        <div class="card-body p-4">
+            
+            <!-- CONTENEDOR DEL GRÁFICO: 
+                 'overflow-x-auto' activa el scroll horizontal si hay muchas barras.
+                 'align-items-end' ancla todas las barras al suelo del contenedor. -->
+            <div class="d-flex align-items-end justify-content-start bg-white border rounded p-4 overflow-x-auto" 
+                 style="height: 380px; gap: 15px;">
+                
+                <div th:if="${#lists.isEmpty(resultados)}" class="w-100 text-center text-muted my-auto">
+                    <p class="mb-0" th:text="#{auditoria.grafica.sin.registros}">No se encontraron registros de auditoría para el rango de fechas seleccionado.</p>
+                </div>
+
+                <div th:unless="${#lists.isEmpty(resultados)}" 
+                     th:each="registro : ${resultados}" 
+                     class="d-flex flex-column align-items-center h-100 justify-content-end" 
+                     style="min-width: 85px;">
+                    
+                    <span class="badge bg-dark mb-2 px-2 py-1 small shadow-sm" 
+                          th:text="${registro.cantidad}">0</span>
+
+                    <div class="progress d-flex flex-column justify-content-end bg-light border" 
+                         th:style="'height: ' + (${registro.cantidad} * 100 / ${maxAccesos}) + '%; width: 32px;'"
+                         style="width: 32px; min-height: 8px;">
+                         
+                        <div class="progress-bar bg-info progress-bar-striped progress-bar-animated w-100" 
+                             role="progressbar"
+                             th:style="'height: 100%;'"
+                             th:aria-valuenow="${registro.cantidad}" 
+                             aria-valuemin="0" 
+                             th:aria-valuemax="${maxAccesos}">
+                        </div>
+                    </div>
+<span class="mt-2 small fw-semibold text-secondary text-center text-nowrap" 
+      th:text="${registro.dia.format(T(java.time.format.DateTimeFormatter).ofPattern('dd/MM/yyyy'))}">
+      01/01/2026
+</span>
+                   
+                </div> 
+
+            </div> 
+            
+        </div>
+        
+
+    </div>
+</div>
+</section>
+</body>
+</html>

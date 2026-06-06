@@ -1,5 +1,8 @@
 package es.alumno.uned.exception;
 
+/**
+ * Excepción por "módulo no encontrado" al buscarlo en un curso.
+ */
 public final class ModuloNotFoundException extends NotDataFoundException {
 
 	/**

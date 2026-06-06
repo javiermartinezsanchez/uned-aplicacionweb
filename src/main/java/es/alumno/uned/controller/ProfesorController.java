@@ -144,6 +144,8 @@ public class ProfesorController extends BaseCrudController {
 	}
 	/**
 	 * VerEntrega de un trabajo de un curso.
+	 * <p> Se reciben los datos del estudiante, curso y módulo del trabajo entregado.
+	 * 
 	 * 
 	 * @param estudianteId Identificador del estudiante que ha realizado la entrega.
 	 * @param cursoId Identificador del curso.
@@ -164,13 +166,6 @@ public class ProfesorController extends BaseCrudController {
 			}
 		
 			String nombreArchivo = ec.getModulos().get(0).getUrlEntrega();
-//	    	String nombreArchivo = ec.getModulos().stream()
-//	    						   .filter(m -> m.getModuloId().equals(moduloId))
-//	    						   .filter(m -> m.getUrlEntrega() != null && !m.getUrlEntrega().isBlank())
-//	    						   .map(m -> m.getUrlEntrega())
-//	    						   .findFirst()
-//	    						   .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe entrega."));
-				    						   
 			Resource resource = contenidoExtraService.getResource(nombreArchivo);
 			if (resource == null) {
 				throw new org.springframework.web.server.ResponseStatusException(HttpStatus.NOT_FOUND, "El archivo físico no se encuentra en el servidor");
@@ -181,7 +176,15 @@ public class ProfesorController extends BaseCrudController {
 	                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + nombreArchivo.substring(nombreArchivo.indexOf("_") + 1) + "\"")
 	                .body(resource);
 	}
-
+	/** 
+	 * Se graban los datos de la revisión.
+	 * 
+	 * @param userConnected Usuario conectado (Profesor)
+	 * @param form Datos de la revisión.
+	 * @param redirectAttributes Para añadir mensajes.
+	 * @param model Modelo que vamos a visualizar.
+	 * @return Redirección a la lista de trabajos pendientes del profesor.
+	 */
 	@PostMapping("/cursorevisado")
 	public String grabarRevision(
 			@AuthenticationPrincipal SecurityUser userConnected,
@@ -208,7 +211,6 @@ public class ProfesorController extends BaseCrudController {
 		paramsBusqueda.put("responsableId", userConnected.getId().toString());
 		Paginacion<Curso, CursoDTO> paginacion = cursoService.listadoPaginado( getParams( page, 3), paramsToMap(paramsBusqueda));
 	    model.addAttribute("paginacion", paginacion);
-	    // Retorna la vista de cursos, pero solo el fragmento del bloque seleccionado
 	    model.addAttribute("isProfesor", true);
 	    return "profesor/home :: #bloqueMisCursos"; 
 	}

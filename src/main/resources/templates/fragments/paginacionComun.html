@@ -3,7 +3,7 @@
         <li class="page-item"
             th:classappend="${paginacion.first} ? ' disabled'">
             <a class="page-link"
-               th:href="${paginacion.first} ? null : ${urlBuilder.cloneBuilder().replaceQueryParam('page', 0).replaceQueryParam('lang','').toUriString()}">
+               th:href="${paginacion.first} ? null : ${urlBuilder.cloneBuilder().replaceQueryParam('page', 0).replaceQueryParam('lang',#locale.language).toUriString()}">
                 <i class="bi bi-skip-start-fill"></i>
             </a>
         </li>
@@ -11,7 +11,7 @@
         <li class="page-item"
             th:classappend="${not paginacion.hasPrevious} ? ' disabled'">
             <a class="page-link"
-               th:href="${not paginacion.hasPrevious} ? null : ${urlBuilder.cloneBuilder().replaceQueryParam('page', paginacion.pagActual - 2).replaceQueryParam('lang','').toUriString()}">
+               th:href="${not paginacion.hasPrevious} ? null : ${urlBuilder.cloneBuilder().replaceQueryParam('page', paginacion.pagActual - 2).replaceQueryParam('lang',#locale.language).toUriString()}">
                 <i class="bi bi-chevron-left"></i>
             </a>
         </li>
@@ -20,7 +20,7 @@
             th:each="elemento : ${paginacion.paginas}"
             th:classappend="${elemento.numero == paginacion.pagActual} ? ' active'">
             <a class="page-link"
-               th:href="${elemento.numero == paginacion.pagActual} ? null : ${urlBuilder.cloneBuilder().replaceQueryParam('page', elemento.numero - 1).replaceQueryParam('lang','').toUriString()}"
+               th:href="${elemento.numero == paginacion.pagActual} ? null : ${urlBuilder.cloneBuilder().replaceQueryParam('page', elemento.numero - 1).replaceQueryParam('lang',#locale.language).toUriString()}"
                th:text="${elemento.numero}">
             </a>
         </li>
@@ -28,7 +28,7 @@
         <li class="page-item"
             th:classappend="${not paginacion.hasNext} ? ' disabled'">
             <a class="page-link"
-               th:href="${not paginacion.hasNext} ? null : ${urlBuilder.cloneBuilder().replaceQueryParam('page', paginacion.pagActual).replaceQueryParam('lang','').toUriString()}">
+               th:href="${not paginacion.hasNext} ? null : ${urlBuilder.cloneBuilder().replaceQueryParam('page', paginacion.pagActual).replaceQueryParam('lang',#locale.language).toUriString()}">
                 <i class="bi bi-chevron-right"></i>
             </a>
         </li>
@@ -36,7 +36,7 @@
         <li class="page-item"
             th:classappend="${paginacion.last} ? ' disabled'">
             <a class="page-link"
-               th:href="${paginacion.last} ? null : ${urlBuilder.cloneBuilder().replaceQueryParam('page', paginacion.totalPag - 1).replaceQueryParam('lang','').toUriString()}">
+               th:href="${paginacion.last} ? null : ${urlBuilder.cloneBuilder().replaceQueryParam('page', paginacion.totalPag - 1).replaceQueryParam('lang',#locale.language).toUriString()}">
                 <i class="bi bi-skip-end-fill"></i>
             </a>
         </li>

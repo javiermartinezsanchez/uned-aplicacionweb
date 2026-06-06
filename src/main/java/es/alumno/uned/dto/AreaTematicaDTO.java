@@ -13,7 +13,7 @@ public class AreaTematicaDTO {
 	@NotBlank(message = "{validations.areatematica.titulo.mandatory}")
 	private String titulo;
 	
-	@NotBlank(message = "{validations.descripcion.mandatory}")
+	@NotBlank(message = "{validations.areatematica.descripcion.mandatory}")
 	private String descripcion;
 	
 	private Integer numCursos;

@@ -29,6 +29,7 @@
 				<th th:text="#{curso.titulo}">default</th>
 				<th th:text="#{comun.descripcion}">default</th>
 				<th th:text="#{areatematica.title}">default</th>
+				<th th:text="#{curso.nivel}">default</th>
 				<th th:text="#{curso.duracion}">default</th>
 				<th th:text="#{curso.inscritos}">default</th>
 				<th th:text="#{comun.fini}">default</th>
@@ -47,6 +48,7 @@
 				</td>
 				<td class="text-truncate" style="max-width: 350px;" th:text="${curso.descripcion}" th:title="${curso.descripcion}">ID</td>
 				<td th:text="${curso.areaTematicaText}">ID</td>
+				<td th:text="${curso.nivel}"></td>
 				<td class="text-end"><span th:text="${curso.duracion}"></span> h.</td>
 				<td class="text-center" >
 				<span th:if="${curso.usuariosRegistrados == 0}" th:text="${curso.usuariosRegistrados}">0</span>

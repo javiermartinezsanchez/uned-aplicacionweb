@@ -1,5 +1,7 @@
 package es.alumno.uned.exception;
-
+/**
+ * Excepción por no existir el Contenido Extra de un curso.
+ */
 public class ContenidoExtraNotFoundException extends Exception {
 
 	/**

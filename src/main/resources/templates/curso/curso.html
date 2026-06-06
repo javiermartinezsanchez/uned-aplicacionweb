@@ -50,60 +50,6 @@ th:replace="~{plantilla::layout(~{::section})}">
     </div>
 </div>
 
-<!--     <div class="row g-3 align-items-end mb-1"> -->
-<!--       <div class="col-md-3"> -->
-<!--         <label class="form-label fw-bold" th:text="#{areatematica.title}">Área Temática</label> -->
-<!--         <select class="form-select" th:field="*{areaTematicaId}"> -->
-<!--             <option th:value="${''}" th:text="#{comun.select.any}"></option> -->
-<!--             <option th:each="a : ${areas}" -->
-<!--                     th:value="${a.id}" -->
-<!--                     th:text="${a.titulo}"> -->
-<!--             </option> -->
-<!--         </select> -->
-<!--         <div class="text-danger" th:errors="*{areaTematicaId}"></div> -->
-<!--       </div> -->
-<!--       <div class="col-auto"> -->
-<!--         <label class="form-label fw-bold" th:text="#{curso.nivel}">Nivel</label> -->
-<!--         <input type="number" class="form-control" style="width: 7ch;" th:field="*{nivel}"> -->
-<!--         <div class="text-danger" th:errors="*{nivel}"></div> -->
-<!--       </div> -->
-<!--       <div class="col-auto"> -->
-<!--         <label class="form-label fw-bold" th:text="#{curso.duracion}"></label> -->
-<!--  		<input type="number" class="form-control" style="width: 8ch;" th:field="*{duracion}">        <div class="text-danger" th:errors="*{areaTematicaId}"></div> -->
-<!--       </div> -->
-<!--       <div class="col-auto"> -->
-<!--             <label class="form-label" th:text="#{comun.fini}">Fecha Inicio</label> -->
-<!--             <input type="date" class="form-control" th:field="*{fIni}"> -->
-<!--             <div class="text-danger" th:errors="*{fIni}"></div> -->
-<!--       </div> -->
-<!--       <div class="col-auto"> -->
-<!--             <label class="form-label"th:text="#{comun.fFin}">Fecha Fin</label> -->
-<!--             <input type="date" class="form-control" th:field="*{fFin}"> -->
-<!--             <div class="text-danger" th:errors="*{fFin}"></div> -->
-<!--       </div> -->
-<!--       <div class="col-md-3" sec:authorize="hasAnyRole('ADMIN')"> -->
-<!--         <label class="form-label" th:text="#{curso.responsable}">Responsable</label> -->
-<!--         <select class="form-select" th:field="*{responsableId}"> -->
-<!--             <option th:value="${''}" th:text="#{responsable.select}"></option> -->
-<!--             <option th:each="u : ${usuarios}" -->
-<!--                     th:value="${u.id}" -->
-<!--                     th:text="${u.nombreCompleto}"> -->
-<!--             </option> -->
-<!--         </select> -->
-<!--         <div class="text-danger" th:errors="*{responsableId}"></div> -->
-<!--       </div> -->
-<!--       <div sec:authorize="hasAnyRole('PROFE')"> -->
-<!--          <input type="hidden" th:field="*{responsableId}"/> -->
-<!--       </div> -->
-<!--       <div> -->
-<!-- 		<select class="form-select" th:field="*{estado}"> -->
-<!-- 		    <option th:each="est : ${T(es.alumno.uned.model.entities.EstadoCursoModulo).values()}" -->
-<!-- 		            th:if="${est.esValidoParaCurso()}" -->
-<!-- 		            th:value="${est}" -->
-<!-- 		            th:text="${est}">ACTIVO</option> -->
-<!-- 		</select> -->
-<!--       </div> -->
-<!--     </div> -->
 <div class="row g-3 align-items-end mb-4">
   
   <!-- 1. Área Temática (Compactado) -->

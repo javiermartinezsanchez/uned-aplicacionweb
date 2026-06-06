@@ -1,5 +1,8 @@
 package es.alumno.uned.exception;
 
+/**
+ * Excepción por el tamaño excesivo del fichero a subir (entrega de alumno o contenido extra).
+ */
 public class FileSizeExcedeedException extends RuntimeException {
 	/**
 	 * 

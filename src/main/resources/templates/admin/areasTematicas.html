@@ -57,8 +57,8 @@
 			<tbody>
 				<tr th:each="tema : ${paginacion.contenido}">
 					<td th:text="${tema.titulo}">ID</td>
-					<td th:text="${tema.descripcion}">ID</td>
-					<td th:text="${tema.numCursos}">ID</td>
+					<td class="text-truncate" style="max-width: 400px;" th:text="${tema.descripcion}">ID</td>
+					<td class="text-center" th:text="${tema.numCursos}">ID</td>
 					<td><a th:href="@{|${url}/${tema.id}|}" class="btn btn-primary" ><i class="bi bi-pencil-square"></i></a></td>
 				</tr>
 			</tbody>

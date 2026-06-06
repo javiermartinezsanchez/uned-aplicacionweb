@@ -67,8 +67,8 @@
 			</thead>
 			<tbody>
 				<tr th:each="modulo : ${paginacion.contenido}">
-					<td th:text="${modulo.titulo}">ID</td>
-					<td th:text="${modulo.descripcion}">ID</td>
+					<td class="text-truncate" style="max-width: 150px;" th:text="${modulo.titulo}">ID</td>
+					<td class="text-truncate" style="max-width: 350px;" th:text="${modulo.descripcion}">ID</td>
 					<td th:text="${modulo.tipo}">ID</td>
 					<td th:text="${modulo.userIns}">ID</td>
 					<td th:text="${#temporals.format(modulo.fIns, 'dd/MM/yyyy')}">ID</td>

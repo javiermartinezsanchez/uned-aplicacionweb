@@ -1,5 +1,8 @@
 package es.alumno.uned.exception;
 
+/**
+ * Excepción por faltar el "Responsable"  en un curso.
+ */
 public final class CursoResponsableMandatoryException extends SinDTOException {
 
 	/**

@@ -40,7 +40,6 @@ import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;
-import lombok.extern.slf4j.Slf4j;
 /**
  * Clase implementadora de {@link CursoService}
  * 
@@ -122,7 +121,6 @@ public class  CursoServiceImpl implements CursoService{
 	    }
 	    // Subida de imagen
 	    if (imagen != null ) {
-//	    	if ((curso.getUriImagen() != null) && ())
 	    	log.info("[CursoServiceImpl] Hay imagen : '{}'", imagen.nombreOriginal());
 	        curso.setUriImagen(fileStorageService.saveImagen(imagen));
 	    }
@@ -144,8 +142,7 @@ public class  CursoServiceImpl implements CursoService{
 	            	contenido.setNombreReal(ficheroCorrespondiente.get().nombreOriginal());
 	            	contenido.setContentType(ficheroCorrespondiente.get().contentType());
 	            } else if (contenido.getUri() == null || contenido.getUri().isEmpty()) {
-	                // Error: Es contenido propio pero no hay archivo ni URI previa
-	                throw new MandatoryFileException("curso.contenidoextra.filenotexist", dto, null);
+	                throw new MandatoryFileException("curso.contenidoextra.filenotexist", dto, "");
 	            }
 	        }
 	        // Si es EXTERNO, la URI ya viene en el DTO/Entidad gracias al binding de Spring
@@ -252,6 +249,7 @@ public class  CursoServiceImpl implements CursoService{
 	                .build();
 	    }
 	
+	
 	@Transactional
 	@Override
 	public BigDecimal guardarValoracion(Long cursoId, Integer valoracion, String usuario) {
@@ -267,14 +265,11 @@ public class  CursoServiceImpl implements CursoService{
 	        }
 	        
 	        if (addValoracion) {
-	            // 1. Instanciamos la nueva valoración
 	            CursoValoracion nuevaValoracion = new CursoValoracion(curso, usuario, valoracion);
 	            cursoValoracionRepository.save(nuevaValoracion);
 	            
-	            // 2. ¡CLAVE!: Sincronizamos la lista en memoria para que el Stream la tenga en cuenta
 	            curso.getValoraciones().add(nuevaValoracion);
 
-	            // 3. Calculamos la media real con el nuevo elemento incluido
 	            BigDecimal suma = curso.getValoraciones().stream()
 	                    .map(v -> BigDecimal.valueOf(v.getValoracion()))
 	                    .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -284,11 +279,10 @@ public class  CursoServiceImpl implements CursoService{
 	            try {
 	                media = suma.divide(
 	                    BigDecimal.valueOf(total),
-	                    1, // un decimal
+	                    1, 
 	                    RoundingMode.HALF_UP
 	                );
 	                
-	                // 4. Guardamos la nueva media fija en el curso para que el carrusel la lea rápido
 	                curso.setValoracion(media);
 	                cursoRepository.save(curso);
 
