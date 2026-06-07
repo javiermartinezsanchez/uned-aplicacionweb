@@ -3,11 +3,11 @@ package es.alumno.uned.controller;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,7 +26,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import es.alumno.uned.dto.ContenidoExtraDTO;
 import es.alumno.uned.dto.CursoDTO;
+import es.alumno.uned.dto.CursoModuloDTO;
 import es.alumno.uned.dto.ModuloDTO;
 import es.alumno.uned.dto.ValoracionDTO;
 import es.alumno.uned.exception.FileSizeExcedeedException;
@@ -39,6 +41,7 @@ import es.alumno.uned.service.CursoService;
 import es.alumno.uned.service.ModuloService;
 import es.alumno.uned.service.UsuarioService;
 import jakarta.validation.Valid;
+import tools.jackson.databind.ObjectMapper;
 /**
  * Controlador de Curso
  * 
@@ -88,6 +91,8 @@ public class CursoController extends BaseCrudController {
 	/**
 	 * Método para guardar la información del Curso.
 	 * <p>Se invoca mediate POST y con el mapping "/curso/guardar"
+	 * <p>Por configuración de Tomcat en el contenedor, se ha "empaquetado" la lista de módulos y de
+	 * contenidos extra en un JSON (problema de enviar + de 50 campos en un formulario).
 	 * @param userDetails Información del usuario "logado"
 	 * @param form Datos introducidos en el formulario de la vista.
 	 * @param result {@link BindingResult} de las validaciones de los campos.
@@ -100,11 +105,30 @@ public class CursoController extends BaseCrudController {
 	public String guarda(@AuthenticationPrincipal UserDetails userDetails,
 			@Valid @ModelAttribute("curso") CursoDTO form,
 	        BindingResult result,
+	        @RequestParam(value = "jsonModulos", required = false) String jsonModulos,
+	        @RequestParam(value = "jsonContenidos", required = false) String jsonContenidos, 
 	        MultipartHttpServletRequest contenidoExtrasFile,
 	        RedirectAttributes redirectAttributes, 
 	        Model model) throws IOException {
 
-		MultipartFile imagen = contenidoExtrasFile.getFile("imagen");
+		ObjectMapper objectMapper = new ObjectMapper();
+
+	    // Reconstruimos la lista de Módulos en el DTO principal desde el json
+	    if (jsonModulos != null && !jsonModulos.isEmpty()) {
+	        try {
+	        	CursoModuloDTO[] arrayModulos = objectMapper.readValue(jsonModulos, CursoModuloDTO[].class);
+	            form.setModulos(Arrays.asList(arrayModulos));
+	        } catch (Exception e) { log.error("Error Módulos: " + e.getMessage()); }
+	    }
+	 // Reconstruimos la lista de contenidosExtra en el DTO principal desde el json
+	    if (jsonContenidos != null && !jsonContenidos.isEmpty()) {
+	        try {
+	            ContenidoExtraDTO[] arrayContenidos = objectMapper.readValue(jsonContenidos, ContenidoExtraDTO[].class);
+	            form.setContenidosExtra(Arrays.asList(arrayContenidos));
+	        } catch (Exception e) { log.error("Error Contenidos: " + e.getMessage()); }
+	    }
+	    
+	    MultipartFile imagen = contenidoExtrasFile.getFile("imagen");
 		FicheroData imagenData = null;
 		if (!imagen.isEmpty()) {
 			imagenData = new FicheroData(0,
@@ -145,14 +169,14 @@ public class CursoController extends BaseCrudController {
 	    	        }
 	    	    })
 	    	    .toList();
-	    log.info("FIN de lectura de archivos extra");
-	    log.info("LLAMA A cursoService.grabar");
+	    log.debug("FIN de lectura de archivos extra");
+	    log.debug("LLAMA A cursoService.grabar");
 	    var cursoGrabado = cursoService.grabar(form, imagenData,archivosExtra,  userDetails.getUsername());
-	    log.info("DESPUÉS DE cursoService.grabar");
+	    log.debug("DESPUÉS DE cursoService.grabar");
 	    model.addAttribute("curso", cursoGrabado);
 	    redirectAttributes.addFlashAttribute("success", "mensaje.grabacionOK");
-	    log.info("REDIRIGIMOS A: " + String.format("redirect:/curso/curso/%d", cursoGrabado.getId()));
-		return String.format("redirect:/curso/curso/%d", cursoGrabado.getId());
+	    log.debug("REDIRIGIMOS A: " + String.format("redirect:/curso/curso/%d", cursoGrabado.getId()));
+		return String.format("redirect:/curso/curso/%d?success=true", cursoGrabado.getId());
 	}
 	/**
 	 * Para definir los módulos existentes y los disponibles en el modelo.
@@ -189,9 +213,13 @@ public class CursoController extends BaseCrudController {
 	@GetMapping("/curso/curso/{id}")
     public String modifica(@AuthenticationPrincipal SecurityUser userConnected, 
     		@PathVariable("id") Long id,
+    		@RequestParam(value = "success", required = false) String success,
     		Model model) {
 		var curso = cursoService.getCurso(id);
 		prepararVistaEdicion(curso,model);
+		if (success != null) {
+	        model.addAttribute("success", "mensaje.grabacionOK");
+	    }
 		model.addAttribute("url", "/curso/guardar");
 		model.addAttribute("urlCancel", getUrlBack("/curso",userConnected.getRol()));
 	    if (!model.containsAttribute("curso")) {

@@ -16,7 +16,6 @@ import es.alumno.uned.model.entities.EstudianteCursoId;
 import es.alumno.uned.model.repository.CursoRepository;
 import es.alumno.uned.model.repository.EstudianteCursoRepository;
 import es.alumno.uned.model.repository.EstudianteRepository;
-import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class InscripcionServiceImpl implements InscripcionService {

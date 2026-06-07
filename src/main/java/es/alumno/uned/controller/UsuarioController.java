@@ -30,7 +30,6 @@ import es.alumno.uned.validation.OnUpdate;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Controlador de mantenimiento de usuarios.
@@ -38,7 +37,7 @@ import lombok.extern.slf4j.Slf4j;
  * Accedemos al listado y mantenimiento de usuarios para el Administrador.
  * Se accede al registro y la modificación en "mi Perfil" para cada usuario.
  */
-@Slf4j
+
 @Controller
 public class UsuarioController extends BaseCrudController {
 

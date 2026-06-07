@@ -15,6 +15,9 @@ th:replace="~{plantilla::layout(~{::section})}">
 
     <input type="hidden" th:field="*{id}"/>
     <input type="hidden" th:field="*{uriImagen}"/>
+    <input type="hidden" id="jsonModulos" name="jsonModulos" value="" />
+    <input type="hidden" id="jsonContenidos" name="jsonContenidos" value="" />
+    
 <div class="row p-3 g-4">
     <!-- COLUMNA IZQUIERDA: Imagen y su botón de carga -->
     <div class="col-md-4">
@@ -254,7 +257,7 @@ function addContenidoExtraRow() {
     const index = tableBody.rows.length;
     
     const row = `
-        <tr>
+        <tr class="fila-contenido-extra">
             <td>
                 <input type="text" name="contenidosExtra[${index}].descripcion" class="form-control" required />
             </td>
@@ -289,6 +292,91 @@ function toggleInputType(select, index) {
     }
 }
 </script>
+
+<script th:inline="javascript">
+/*
+ * 
+ Script substitutivo al "commit" por limitaciones en el Tomcat de la 
+ plataforma de DOCKER.
+
+ Al añadir módulos o contenidos extra no aceptaba un número mayor de 9
+ módulos + contenidos.
+
+ Se serializa el formulario en JS para evitar este problema que requiere 
+ la modificación del Tomcat embebido en Docker.
+ 
+ */
+ document.querySelector("form[enctype='multipart/form-data']").addEventListener("submit", function(e) {
+     const form = this;
+     
+     // 1. COMPACTAR Y REINDEXAR MÓDULOS (Evita el límite de partes)
+     const listaModulos = [];
+     form.querySelectorAll("#tablaItinerario tbody tr").forEach((fila, nuevoIndex) => {
+         const cursoIdInput = fila.querySelector("input[name*='.cursoId']");
+         const moduloIdInput = fila.querySelector("input[name*='.moduloId']");
+         const ordenInput = fila.querySelector("input[name*='.orden']");
+         const pesoInput = fila.querySelector("input[name*='.peso']");
+         
+         if (moduloIdInput && moduloIdInput.value) {
+             listaModulos.push({
+                 cursoId: cursoIdInput && cursoIdInput.value ? parseInt(cursoIdInput.value, 10) : null,
+                 moduloId: parseInt(moduloIdInput.value, 10),
+                 orden: ordenInput && ordenInput.value ? parseInt(ordenInput.value, 10) : 1,
+                 peso: pesoInput && pesoInput.value ? parseInt(pesoInput.value, 10) : 0
+             });
+             if (cursoIdInput) cursoIdInput.removeAttribute("name");
+             moduloIdInput.removeAttribute("name");
+             if (ordenInput) ordenInput.removeAttribute("name");
+             if (pesoInput) pesoInput.removeAttribute("name");
+         }
+     });
+     document.getElementById("jsonModulos").value = JSON.stringify(listaModulos);
+     
+     // 2. COMPACTAR TEXTOS Y CLONAR PARTE DE ARCHIVOS CON EL FORMATO QUE TU JAVA ESPERA
+     const listaContenidosTextos = [];
+     let contadorArchivos = 0;
+
+     form.querySelectorAll("#tablaContenidos tbody tr.fila-contenido-extra").forEach((fila) => {
+         const idInput = fila.querySelector("input[name*='.id']");
+         const descripcionInput = fila.querySelector("[name*='.descripcion']");
+         const tipoInput = fila.querySelector("[name*='.tipoContenido']");
+         const uriInput = fila.querySelector("input[type='url'], [name*='.uri']");
+         const fileInput = fila.querySelector("input[type='file']");
+         
+         if (descripcionInput) {
+             // TRUCO: Extraemos el número original del name (ej: de "contenidosExtra[3].descripcion" sacamos el 3)
+             const match = descripcionInput.name.match(/\[(\d+)\]/);
+             const indiceRealFila = match ? parseInt(match[1], 10) : 0;
+             
+             listaContenidosTextos.push({
+                 id: idInput && idInput.value ? parseInt(idInput.value, 10) : null,
+                 descripcion: descripcionInput.value,
+                 tipoContenido: tipoInput ? tipoInput.value : "EXTERNO",
+                 uri: uriInput ? uriInput.value : "",
+                 indiceOriginal: indiceRealFila // <-- GUARDAMOS EL ÍNDICE VERDADERO AQUÍ
+             });
+             if (idInput) idInput.disabled = true;
+             descripcionInput.disabled = true;
+             if (tipoInput) tipoInput.disabled = true;
+             if (uriInput) uriInput.disabled = true;
+             
+             // Renombramos el archivo usando su índice real e inalterable
+             if (fileInput) {
+                 if (fileInput.files.length > 0) {
+                     fileInput.name = "archivoExtra_" + indiceRealFila; 
+                 } else {
+                     fileInput.disabled = true;
+                 }
+             }
+         }
+     });
+     document.getElementById("jsonContenidos").value = JSON.stringify(listaContenidosTextos);
+     
+     // El formulario se envía de forma nativa. Tu controlador recibe todo impecable.
+ });
+ </script>
+
+
 </section>
 </body>
 </html>

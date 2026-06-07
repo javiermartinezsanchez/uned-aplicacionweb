@@ -93,9 +93,9 @@ public class FileStorageService {
     private String saveFile(FicheroData file, String basePath) throws IOException {
 
         String nombreArchivo = UUID.randomUUID() + "_" + file.nombreOriginal();
-        log.info("[FileStorageService] fichero : '{}'", file.nombreOriginal());
-        log.info("[FileStorageService] nombre : '{}'", nombreArchivo);
-        log.info("[FileStorageService] basePath : '{}'", basePath);
+        log.debug("[FileStorageService] fichero : '{}'", file.nombreOriginal());
+        log.debug("[FileStorageService] nombre : '{}'", nombreArchivo);
+        log.debug("[FileStorageService] basePath : '{}'", basePath);
        
         Path ruta = Paths.get(basePath);
         if (!Files.exists(ruta)) {
@@ -103,7 +103,7 @@ public class FileStorageService {
         }
 
         Files.copy(new ByteArrayInputStream(file.contenido()), ruta.resolve(nombreArchivo), StandardCopyOption.REPLACE_EXISTING);
-        log.info("[FileStorageService] basePath : '{}'", ruta.resolve(nombreArchivo));
+        log.debug("[FileStorageService] basePath : '{}'", ruta.resolve(nombreArchivo));
         return nombreArchivo;
     }
     

@@ -1,9 +1,0 @@
-Al inscribirse ──> Módulo 1: [ACTIVO] ──> Módulos 2, 3, N...: [BLOQUEADO]
-                       │
-             (El estudiante trabaja)
-                       │
-                       ▼
-             [PENDIENTE_REVISION] ──> (El profesor evalúa) ──> [REVISADO] 
-                                                                  │
-                                                                  ▼
-             Próximo Módulo cambia de [BLOQUEADO] ──> [ACTIVO] ◄── [COMPLETADO]

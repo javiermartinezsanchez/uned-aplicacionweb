@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.alumno.uned.model.entities.EstadoCursoModulo;
-
+/**
+ * DTO que encapsula la información de la entidad EstudianteModulo
+ */
 public class EstudianteCursoDTO {
         private EstudianteDTO estudiante;
         private CursoDTO curso;

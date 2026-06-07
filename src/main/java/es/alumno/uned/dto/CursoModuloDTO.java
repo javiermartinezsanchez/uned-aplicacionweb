@@ -21,7 +21,7 @@ public class CursoModuloDTO implements Serializable {
 	private Integer orden;
 
 	@NotNull(message = "{validations.cursomodulo.peso.requerido}")
-	@Min(value = 10, message = "{validations.cursomodulo.peso.rango}")
+	@Min(value = 5, message = "{validations.cursomodulo.peso.rango}")
 	@Max(value = 100, message = "{validations.cursomodulo.peso.rango}")
 	private Integer peso;
 

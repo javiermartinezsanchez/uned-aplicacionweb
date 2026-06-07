@@ -1,7 +1,5 @@
 package es.alumno.uned.service;
 
-
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -119,7 +117,6 @@ public class  CursoServiceImpl implements CursoService{
 	    	curso.setfIns(LocalDateTime.now());
 	    	curso.setUserIns(usuario);
 	    }
-	    // Subida de imagen
 	    if (imagen != null ) {
 	    	log.info("[CursoServiceImpl] Hay imagen : '{}'", imagen.nombreOriginal());
 	        curso.setUriImagen(fileStorageService.saveImagen(imagen));
@@ -132,10 +129,6 @@ public class  CursoServiceImpl implements CursoService{
 	                .filter(f -> f.indice() == indiceActual)
 	                .findFirst();
 	        
-	        // Buscamos si hay un archivo asociado a este índice en el mapa
-	       // String key = "archivoExtra_" + ;
-	       // MultipartFile archivoFisico = contenidoExtraFiles.get(key);
-	        
 	        if (contenido.getTipoContenido() == TipoContenido.PROPIO) {
 	            if (ficheroCorrespondiente.isPresent()) {
 	            	contenido.setUri( fileStorageService.saveDocumento(ficheroCorrespondiente.get()));
@@ -145,9 +138,8 @@ public class  CursoServiceImpl implements CursoService{
 	                throw new MandatoryFileException("curso.contenidoextra.filenotexist", dto, "");
 	            }
 	        }
-	        // Si es EXTERNO, la URI ya viene en el DTO/Entidad gracias al binding de Spring
 	        
-	        contenido.setCurso(curso); // Mantenemos la bidireccionalidad
+	        contenido.setCurso(curso); 
 	    }	    
 	    return cursoMapper.toDTO(cursoRepository.save(curso));
 		

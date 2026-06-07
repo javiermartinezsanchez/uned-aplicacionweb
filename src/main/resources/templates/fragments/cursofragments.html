@@ -420,7 +420,7 @@
                 </tr>
             </thead>
             <tbody>
-        		<tr th:each="contenido, stat : *{contenidosExtra}">
+        		<tr th:each="contenido, stat : *{contenidosExtra}" class="fila-contenido-extra">
             		<input type="hidden" th:field="*{contenidosExtra[__${stat.index}__].id}" />
             		<td>
                 		<input type="text" th:field="*{contenidosExtra[__${stat.index}__].descripcion}" 
